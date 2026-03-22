@@ -213,7 +213,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">C1 Phrase Test</p>
         <p class="text-teal-300 font-bold text-[10px] tracking-[0.3em] mb-4 uppercase italic">Vocabulary Deep Check</p>
         <div class="space-y-4 max-w-sm mx-auto">
-            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
+            <input type="text" id="student-name" placeholder="Enter your name" class="input-field">
             <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Vizsga indítása</button>
         </div>
         </div>
@@ -227,7 +227,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         <div class="progress-track mb-8"><div id="progress-fill" class="progress-bar-inner"></div></div>
         <div class="text-center mb-8">
             <div id="category-tag" class="hint-tag">-</div>
-            <p class="text-slate-400 text-xs font-black uppercase tracking-widest mb-3">Angolul:</p>
+            <p class="text-slate-400 text-xs font-black uppercase tracking-widest mb-3">Englishul:</p>
             <h2 id="hu-word" class="text-2xl md:text-3xl font-black text-white leading-tight px-2">-</h2>
         </div>
         <div class="space-y-4">
@@ -257,7 +257,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Ezeket tanuld még:</h3>
             <div id="wrong-list" class="max-h-[220px] overflow-y-auto pr-2 custom-scroll"></div>
         </div>
-        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">Újrakezdés</button>
+        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">Restartés</button>
     </div>
 </div>
 
@@ -345,7 +345,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     function checkName() {
         const input = document.getElementById('student-name');
         const name = input.value.trim();
-        if (name.length < 3) { alert("Kérlek írj be legalább 3 karaktert a névhez."); input.focus(); return; }
+        if (name.length < 3) { alert("Please enter your name."); input.focus(); return; }
         studentName = name;
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('test-ui').classList.remove('hidden');
@@ -377,13 +377,13 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 
         if (input === correct) {
             score++;
-            feedback.innerText = "Helyes! ✓";
+            feedback.innerText = "Correct! ✓";
             feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold text-sm feedback-good";
         } else {
             errors++;
             document.getElementById('error-counter').innerText = errors;
             wrongWords.push({ hu: testList[currentIndex].hu, en: testList[currentIndex].en, typed: raw });
-            feedback.innerText = `Helytelen! A helyes: "${testList[currentIndex].en}"`;
+            feedback.innerText = `Incorrect! A helyes: "${testList[currentIndex].en}"`;
             feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold text-sm feedback-bad";
         }
 
@@ -423,7 +423,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                     <div class="wrong-list-item">
                         <strong>${w.hu}</strong><br>
                         <span class="opacity-60 text-xs">Gépelted: ${w.typed}</span><br>
-                        <span class="text-teal-300 font-bold">✓ Helyes: ${w.en}</span>
+                        <span class="text-teal-300 font-bold">✓ Correct: ${w.en}</span>
                     </div>
                 `;
             });
@@ -453,13 +453,13 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 
             clearTimeout(timeout);
             const text = await response.text();
-            document.getElementById('final-feedback').innerText = text || "Szép munka! Folytasd a gyakorlást!";
+            document.getElementById('final-feedback').innerText = text || "Well done! Folytasd a gyakorlást!";
 
         } catch (e) {
             console.error("Error:", e);
             document.getElementById('final-feedback').innerText =
                 percent >= 80 ? "Zseniális! Valódi C1 kifejezéskészlet! 🌟" :
-                percent >= 60 ? "Szép munka! Még egy kis gyakorlással tökéletes leszel!" :
+                percent >= 60 ? "Well done! Még egy kis gyakorlással tökéletes leszel!" :
                 "Ne add fel — minden hibából tanulsz!";
         }
     }
@@ -544,34 +544,33 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 <script>
 function speakEnglish(text) {
     if (!text) return;
-    const clean = text.replace(/\(.*?\)/g,'').replace(/["\']/g,'').trim();
-    if (!clean) return;
-    // ElevenLabs — Charlotte voice
+    var clean = text.replace(/[(][^)]*[)]/g,'').replace(/[^a-zA-Z0-9 \-\'.,!?]/g,'').trim();
+    if (!clean || clean.length < 1) return;
     fetch('https://api.elevenlabs.io/v1/text-to-speech/XB0fDUnXU5powFXDhCwa', {
         method: 'POST',
         headers: {
             'xi-api-key': 'sk_64910ef40b3275ba1d86e96cfe3b947d498aaacda971163b',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'audio/mpeg'
         },
         body: JSON.stringify({
             text: clean,
             model_id: 'eleven_multilingual_v2',
-            voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }
+            voice_settings: { stability: 0.5, similarity_boost: 0.8 }
         })
     })
-    .then(r => r.arrayBuffer())
-    .then(buf => {
-        const blob = new Blob([buf], {type: 'audio/mpeg'});
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+    .then(function(r) { if (!r.ok) throw new Error('err'); return r.arrayBuffer(); })
+    .then(function(buf) {
+        var blob = new Blob([buf], {type: 'audio/mpeg'});
+        var url = URL.createObjectURL(blob);
+        var audio = new Audio(url);
         audio.play();
-        audio.onended = () => URL.revokeObjectURL(url);
+        audio.onended = function() { URL.revokeObjectURL(url); };
     })
-    .catch(() => {
-        // Fallback to browser voice if ElevenLabs fails
+    .catch(function() {
         if ('speechSynthesis' in window) {
             speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(clean);
+            var u = new SpeechSynthesisUtterance(clean);
             u.lang = 'en-GB'; u.rate = 0.9;
             speechSynthesis.speak(u);
         }

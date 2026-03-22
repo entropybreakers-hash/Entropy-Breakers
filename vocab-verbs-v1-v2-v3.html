@@ -248,8 +248,8 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         </div>
 
         <div style="max-width:340px;margin:0 auto;display:flex;flex-direction:column;gap:12px;">
-            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="name-input">
-            <button onclick="startApp()" class="go-btn">Tanulás indítása</button>
+            <input type="text" id="student-name" placeholder="Enter your name" class="name-input">
+            <button onclick="startApp()" class="go-btn">Start Learning</button>
         </div>
 
         </div>
@@ -266,7 +266,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
             <div class="flip-inner" id="flip-inner">
                 <div class="f-front">
                     <div id="badge-f" class="badge b-irr">🔴 Szabálytalan</div>
-                    <p style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:#475569;margin-bottom:4px;">Magyar jelentés</p>
+                    <p style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:#475569;margin-bottom:4px;">Hungarian jelentés</p>
                     <div id="card-hu" class="hu-word">-</div>
                     <span class="hint" style="color:#94a3b8;">Koppints a 3 alakért →</span>
                 </div>
@@ -285,7 +285,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                         </tr></tbody>
                     </table>
                     <p id="c-ex" class="ex">-</p>
-                    <span class="hint" style="color:#5eead4;">← Vissza</span>
+                    <span class="hint" style="color:#5eead4;">← Back</span>
                 </div>
             </div>
         </div>
@@ -294,21 +294,21 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
             <button class="nav-btn" onclick="prevCard()">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <p style="flex:1;text-align:center;font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#1e293b;">Koppints a fordításért</p>
+            <p style="flex:1;text-align:center;font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#1e293b;">Tap to reveal</p>
             <button class="nav-btn" onclick="nextCard()">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <button onclick="shuffleCards()" class="sec-btn">🔀 Keverés</button>
-            <button onclick="showResult()" class="pri-sm">✅ Kész!</button>
+            <button onclick="shuffleCards()" class="sec-btn">🔀 Shuffle</button>
+            <button onclick="showResult()" class="pri-sm">✅ Done</button>
         </div>
     </div>
 
     <!-- RESULT -->
     <div id="s-result" class="hidden" style="text-align:center;">
         <div style="font-size:3rem;margin-bottom:14px;">⚡</div>
-        <h2 style="font-size:1.6rem;font-weight:900;color:white;text-transform:uppercase;margin-bottom:6px;">Szép munka!</h2>
+        <h2 style="font-size:1.6rem;font-weight:900;color:white;text-transform:uppercase;margin-bottom:6px;">Well done!</h2>
         <p style="color:#64748b;margin-bottom:18px;font-size:0.88rem;"><span id="r-name" style="color:#2dd4bf;text-shadow:0 0 14px rgba(45,212,191,0.6);"></span>, átmenté a kártyákat!</p>
         <div class="res-card">
             <div style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.15em;color:#2dd4bf;margin-bottom:8px;">Essential Verbs · <span id="r-filter">Mind</span></div>
@@ -317,7 +317,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
             <div id="r-msg" style="margin-top:12px;color:#5eead4;font-weight:700;font-style:italic;font-size:0.82rem;">-</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <button onclick="restartFromStart()" class="sec-btn">🔄 Újrakezdés</button>
+            <button onclick="restartFromStart()" class="sec-btn">🔄 Restartés</button>
             <button onclick="shuffleAndRestart()" class="pri-sm">🔀 Új sorrend</button>
         </div>
     </div>
@@ -403,7 +403,7 @@ function setFilter(f){
 
 function startApp(){
     const name=document.getElementById('student-name').value.trim();
-    if(name.length<3){alert("Kérlek írj be legalább 3 karaktert!");return;}
+    if(name.length<3){alert("Please enter at least 2 characters!");return;}
     studentName=name;
     cardList=selectedFilter==='ALL'?[...ALL_CARDS]:ALL_CARDS.filter(c=>c.type===selectedFilter);
     shuffle(cardList);
@@ -519,34 +519,33 @@ document.addEventListener('keydown',e=>{
 <script>
 function speakEnglish(text) {
     if (!text) return;
-    const clean = text.replace(/\(.*?\)/g,'').replace(/["\']/g,'').trim();
-    if (!clean) return;
-    // ElevenLabs — Charlotte voice
+    var clean = text.replace(/[(][^)]*[)]/g,'').replace(/[^a-zA-Z0-9 \-\'.,!?]/g,'').trim();
+    if (!clean || clean.length < 1) return;
     fetch('https://api.elevenlabs.io/v1/text-to-speech/XB0fDUnXU5powFXDhCwa', {
         method: 'POST',
         headers: {
             'xi-api-key': 'sk_64910ef40b3275ba1d86e96cfe3b947d498aaacda971163b',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'audio/mpeg'
         },
         body: JSON.stringify({
             text: clean,
             model_id: 'eleven_multilingual_v2',
-            voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }
+            voice_settings: { stability: 0.5, similarity_boost: 0.8 }
         })
     })
-    .then(r => r.arrayBuffer())
-    .then(buf => {
-        const blob = new Blob([buf], {type: 'audio/mpeg'});
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+    .then(function(r) { if (!r.ok) throw new Error('err'); return r.arrayBuffer(); })
+    .then(function(buf) {
+        var blob = new Blob([buf], {type: 'audio/mpeg'});
+        var url = URL.createObjectURL(blob);
+        var audio = new Audio(url);
         audio.play();
-        audio.onended = () => URL.revokeObjectURL(url);
+        audio.onended = function() { URL.revokeObjectURL(url); };
     })
-    .catch(() => {
-        // Fallback to browser voice if ElevenLabs fails
+    .catch(function() {
         if ('speechSynthesis' in window) {
             speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(clean);
+            var u = new SpeechSynthesisUtterance(clean);
             u.lang = 'en-GB'; u.rate = 0.9;
             speechSynthesis.speak(u);
         }

@@ -226,7 +226,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         </div>
 
         <div class="space-y-4 max-w-sm mx-auto">
-            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
+            <input type="text" id="student-name" placeholder="Enter your name" class="input-field">
             <button onclick="startApp()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Teszt indítása ✍️</button>
         </div>
         </div>
@@ -278,7 +278,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                 💡 Megmutat
             </button>
             <button onclick="nextQuestion()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">
-                Következő →
+                Next →
             </button>
         </div>
     </div>
@@ -295,7 +295,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
             <div class="score-breakdown">
                 <div class="score-box">
                     <div class="text-2xl font-black text-green-400" id="res-correct">0</div>
-                    <div class="text-[10px] font-black uppercase text-slate-500 mt-1">Helyes</div>
+                    <div class="text-[10px] font-black uppercase text-slate-500 mt-1">Correct</div>
                 </div>
                 <div class="score-box">
                     <div class="text-2xl font-black text-red-400" id="res-wrong">0</div>
@@ -415,7 +415,7 @@ function checkMatch(input, accepted) {
 function startApp() {
     const input = document.getElementById('student-name');
     const name = input.value.trim();
-    if (name.length < 3) { alert("Kérlek írj be legalább 3 karaktert!"); input.focus(); return; }
+    if (name.length < 3) { alert("Please enter at least 2 characters!"); input.focus(); return; }
     studentName = name;
 
     let pool = selectedFilter === 'ALL' ? [...ALL_VERBS] : ALL_VERBS.filter(v => v.type === selectedFilter);
@@ -493,16 +493,16 @@ function checkAnswer() {
     elV2.className = `input-field ${v2Correct ? 'correct' : 'wrong'}`;
     elV2.disabled = true;
     document.getElementById('feedback-v2').innerHTML = v2Correct
-        ? `<span style="color:#86efac">✅ Helyes!</span>`
-        : `<span style="color:#fca5a5">❌ Helyes: <strong>${q.v2.join(' / ')}</strong></span>`;
+        ? `<span style="color:#86efac">✅ Correct!</span>`
+        : `<span style="color:#fca5a5">❌ Correct: <strong>${q.v2.join(' / ')}</strong></span>`;
 
     // style V3
     const elV3 = document.getElementById('input-v3');
     elV3.className = `input-field ${v3Correct ? 'correct' : 'wrong'}`;
     elV3.disabled = true;
     document.getElementById('feedback-v3').innerHTML = v3Correct
-        ? `<span style="color:#86efac">✅ Helyes!</span>`
-        : `<span style="color:#fca5a5">❌ Helyes: <strong>${q.v3.join(' / ')}</strong></span>`;
+        ? `<span style="color:#86efac">✅ Correct!</span>`
+        : `<span style="color:#fca5a5">❌ Correct: <strong>${q.v3.join(' / ')}</strong></span>`;
 
     // scoring: both correct = 1 point
     if (v2Correct && v3Correct) correctCount++;
@@ -558,8 +558,8 @@ function showResult() {
 
     document.getElementById('feedback-msg').innerText = pct === 100
         ? "Tökéletes! Minden igealak helyes! ⚡"
-        : pct >= 80 ? "Kiváló! Nagyon jól teljesítettél!"
-        : pct >= 60 ? "Szép munka! Még egy kis gyakorlás és tökéletes leszel!"
+        : pct >= 80 ? "Excellent! Nagyon jól teljesítettél!"
+        : pct >= 60 ? "Well done! Még egy kis gyakorlás és tökéletes leszel!"
         : "Jó kezdés! Ismételd át a flashcards-t és próbáld újra!";
 
     // send to Make.com
@@ -592,7 +592,7 @@ function showResult() {
             CompletedAt: new Date().toISOString()
         })
     }).then(r => r.text()).then(t => {
-        document.getElementById('ai-text').innerText = t || "Szép munka! Folytasd a gyakorlást! ⚡";
+        document.getElementById('ai-text').innerText = t || "Well done! Folytasd a gyakorlást! ⚡";
     }).catch(() => {
         document.getElementById('ai-text').innerText = pct >= 80
             ? "Kiváló teljesítmény! Az igealakokat magabiztosan használod. ⚡"
@@ -670,34 +670,33 @@ function adminAccess() {
 <script>
 function speakEnglish(text) {
     if (!text) return;
-    const clean = text.replace(/\(.*?\)/g,'').replace(/["\']/g,'').trim();
-    if (!clean) return;
-    // ElevenLabs — Charlotte voice
+    var clean = text.replace(/[(][^)]*[)]/g,'').replace(/[^a-zA-Z0-9 \-\'.,!?]/g,'').trim();
+    if (!clean || clean.length < 1) return;
     fetch('https://api.elevenlabs.io/v1/text-to-speech/XB0fDUnXU5powFXDhCwa', {
         method: 'POST',
         headers: {
             'xi-api-key': 'sk_64910ef40b3275ba1d86e96cfe3b947d498aaacda971163b',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'audio/mpeg'
         },
         body: JSON.stringify({
             text: clean,
             model_id: 'eleven_multilingual_v2',
-            voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }
+            voice_settings: { stability: 0.5, similarity_boost: 0.8 }
         })
     })
-    .then(r => r.arrayBuffer())
-    .then(buf => {
-        const blob = new Blob([buf], {type: 'audio/mpeg'});
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+    .then(function(r) { if (!r.ok) throw new Error('err'); return r.arrayBuffer(); })
+    .then(function(buf) {
+        var blob = new Blob([buf], {type: 'audio/mpeg'});
+        var url = URL.createObjectURL(blob);
+        var audio = new Audio(url);
         audio.play();
-        audio.onended = () => URL.revokeObjectURL(url);
+        audio.onended = function() { URL.revokeObjectURL(url); };
     })
-    .catch(() => {
-        // Fallback to browser voice if ElevenLabs fails
+    .catch(function() {
         if ('speechSynthesis' in window) {
             speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(clean);
+            var u = new SpeechSynthesisUtterance(clean);
             u.lang = 'en-GB'; u.rate = 0.9;
             speechSynthesis.speak(u);
         }

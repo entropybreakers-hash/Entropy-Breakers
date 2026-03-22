@@ -259,34 +259,33 @@ document.addEventListener('keydown',function(e){if(document.getElementById('test
 
 function speakEnglish(text) {
     if (!text) return;
-    const clean = text.replace(/\(.*?\)/g,'').replace(/["\']/g,'').trim();
-    if (!clean) return;
-    // ElevenLabs — Charlotte voice
+    var clean = text.replace(/[(][^)]*[)]/g,'').replace(/[^a-zA-Z0-9 \-\'.,!?]/g,'').trim();
+    if (!clean || clean.length < 1) return;
     fetch('https://api.elevenlabs.io/v1/text-to-speech/XB0fDUnXU5powFXDhCwa', {
         method: 'POST',
         headers: {
             'xi-api-key': 'sk_64910ef40b3275ba1d86e96cfe3b947d498aaacda971163b',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'audio/mpeg'
         },
         body: JSON.stringify({
             text: clean,
             model_id: 'eleven_multilingual_v2',
-            voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }
+            voice_settings: { stability: 0.5, similarity_boost: 0.8 }
         })
     })
-    .then(r => r.arrayBuffer())
-    .then(buf => {
-        const blob = new Blob([buf], {type: 'audio/mpeg'});
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+    .then(function(r) { if (!r.ok) throw new Error('err'); return r.arrayBuffer(); })
+    .then(function(buf) {
+        var blob = new Blob([buf], {type: 'audio/mpeg'});
+        var url = URL.createObjectURL(blob);
+        var audio = new Audio(url);
         audio.play();
-        audio.onended = () => URL.revokeObjectURL(url);
+        audio.onended = function() { URL.revokeObjectURL(url); };
     })
-    .catch(() => {
-        // Fallback to browser voice if ElevenLabs fails
+    .catch(function() {
         if ('speechSynthesis' in window) {
             speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(clean);
+            var u = new SpeechSynthesisUtterance(clean);
             u.lang = 'en-GB'; u.rate = 0.9;
             speechSynthesis.speak(u);
         }
