@@ -72,6 +72,7 @@ body{background:#020F09;color:rgba(255,255,255,0.90);font-family:'Manrope',sans-
 .result-msg{font-size:.74rem;color:rgba(255,255,255,0.35);font-style:italic}
 .hidden{display:none!important}
 </style>
+<script>if(new URLSearchParams(location.search).get('name')){document.documentElement.classList.add('eb-autostart');}</script><style>.eb-autostart #start-screen,.eb-autostart #s-start{display:none!important}</style>
 </head>
 <body>
 <div class="bg-wrap"><div class="mesh"></div><div class="light-rays"></div><div class="grid-bg"></div><div class="floor-glow"></div></div>
@@ -218,7 +219,8 @@ function setFilter(f){
 }
 
 function startApp(){
-    const name=document.getElementById('student-name').value.trim();
+    const input=document.getElementById('student-name');
+    const name=(window.__eb_student_name||input.value.trim());
     if (name.length < 2) { input.focus(); return; }
     studentName=name;
     cardList=selectedFilter==='ALL'?[...ALL_CARDS]:ALL_CARDS.filter(c=>c.type===selectedFilter);
