@@ -351,7 +351,7 @@ window.addEventListener('load', () => {
 
 function startPlatform() {
   const input = document.getElementById('name-input');
-  const name = input.value.trim();
+  const name = (window.__eb_student_name || input.value.trim());
   if (name.length < 2) {
     input.style.borderColor = 'rgba(139,92,246,0.6)';
     input.placeholder = 'Please enter your name!';

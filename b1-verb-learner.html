@@ -258,7 +258,7 @@ body{background:#020818 !important;font-family:'Manrope',sans-serif !important}
   background:rgba(255,255,255,0.08) !important}
 
 /* TITLE TEXT */
-.aurora-title,.hero-title,h1{
+.aurora-title,.hero-title{
   font-family:'Exo 2',sans-serif !important;font-weight:900 !important;letter-spacing:-.02em !important;
   background:linear-gradient(135deg,#fff 20%,#60A5FA 65%,#93C5FD) !important;
   -webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important}
@@ -412,13 +412,9 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 
     function checkName() {
         const input = document.getElementById('student-name');
-        const name = input.value.trim();
+        const name = (window.__eb_student_name || input.value.trim());
 
-        if (name.length < 3) {
-            alert("Please enter your name.");
-            input.focus();
-            return;
-        }
+        if (name.length < 2) { input.focus(); return; }
 
         studentName = name;
         document.getElementById('start-screen').classList.add('hidden');
