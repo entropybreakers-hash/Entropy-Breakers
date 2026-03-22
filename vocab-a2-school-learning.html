@@ -380,14 +380,39 @@ document.addEventListener('keydown',e=>{if(document.getElementById('card-screen'
 
 <script>
 function speakEnglish(text) {
-    if (!text || !('speechSynthesis' in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-GB'; u.rate = 0.82; u.pitch = 1;
-    const voices = speechSynthesis.getVoices();
-    const v = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en'));
-    if (v) u.voice = v;
-    speechSynthesis.speak(u);
+    if (!text) return;
+    const clean = text.replace(/\(.*?\)/g,'').replace(/["\']/g,'').trim();
+    if (!clean) return;
+    // ElevenLabs — Charlotte voice
+    fetch('https://api.elevenlabs.io/v1/text-to-speech/XB0fDUnXU5powFXDhCwa', {
+        method: 'POST',
+        headers: {
+            'xi-api-key': 'sk_64910ef40b3275ba1d86e96cfe3b947d498aaacda971163b',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            text: clean,
+            model_id: 'eleven_multilingual_v2',
+            voice_settings: { stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }
+        })
+    })
+    .then(r => r.arrayBuffer())
+    .then(buf => {
+        const blob = new Blob([buf], {type: 'audio/mpeg'});
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.play();
+        audio.onended = () => URL.revokeObjectURL(url);
+    })
+    .catch(() => {
+        // Fallback to browser voice if ElevenLabs fails
+        if ('speechSynthesis' in window) {
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(clean);
+            u.lang = 'en-GB'; u.rate = 0.9;
+            speechSynthesis.speak(u);
+        }
+    });
 }
 </script>
 </body>
