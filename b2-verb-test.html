@@ -157,21 +157,6 @@ body{background:#0D0520 !important;font-family:'Manrope',sans-serif !important}
 /* TYPOGRAPHY */
 body,p,span,div,button{font-family:'Manrope',sans-serif}
 h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
-
-
-.speak-card-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: 6px;
-    margin-top: 14px;
-    padding: 8px 18px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 100px;
-    color: rgba(255,255,255,0.7);
-    font-family: inherit; font-size: 0.72rem; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s;
-}
 .speak-card-btn:hover { background: rgba(255,255,255,0.14); color: #fff; transform: scale(1.05); }
 .speak-card-btn:active { transform: scale(0.96); }
 
@@ -483,40 +468,6 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 </script>
 
 <script>
-function speakEnglish(text) {
-    if (!text) return;
-    var clean = text.replace(/[(][^)]*[)]/g,'').replace(/[^a-zA-Z0-9 \-\'.,!?]/g,'').trim();
-    if (!clean || clean.length < 1) return;
-    fetch('https://api.elevenlabs.io/v1/text-to-speech/XB0fDUnXU5powFXDhCwa', {
-        method: 'POST',
-        headers: {
-            'xi-api-key': 'sk_64910ef40b3275ba1d86e96cfe3b947d498aaacda971163b',
-            'Content-Type': 'application/json',
-            'Accept': 'audio/mpeg'
-        },
-        body: JSON.stringify({
-            text: clean,
-            model_id: 'eleven_multilingual_v2',
-            voice_settings: { stability: 0.5, similarity_boost: 0.8 }
-        })
-    })
-    .then(function(r) { if (!r.ok) throw new Error('err'); return r.arrayBuffer(); })
-    .then(function(buf) {
-        var blob = new Blob([buf], {type: 'audio/mpeg'});
-        var url = URL.createObjectURL(blob);
-        var audio = new Audio(url);
-        audio.play();
-        audio.onended = function() { URL.revokeObjectURL(url); };
-    })
-    .catch(function() {
-        if ('speechSynthesis' in window) {
-            speechSynthesis.cancel();
-            var u = new SpeechSynthesisUtterance(clean);
-            u.lang = 'en-GB'; u.rate = 0.9;
-            speechSynthesis.speak(u);
-        }
-    });
-}
 </script>
 </body>
 </html>
