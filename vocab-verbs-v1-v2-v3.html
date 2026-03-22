@@ -59,6 +59,19 @@
         .pri-sm { padding: 14px; background: linear-gradient(135deg, #0d9488, #4f46e5); border: none; border-radius: 14px; color: white; font-weight: 900; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; }
         .res-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 26px; padding: 26px; margin-bottom: 18px; }
         .hidden { display: none !important; }
+    
+    /* ── LEVEL COLOUR THEME ── */
+    :root {
+        --accent:    #10B981;
+        --accent-l:  #34D399;
+        --accent-ll: #6EE7B7;
+        --border-hi: rgba(16,185,129,0.30);
+        --border-lo: rgba(16,185,129,0.15);
+    }
+    .orb-theme-1 { background: radial-gradient(circle, rgba(16,185,129,0.55), transparent 70%) !important; }
+    .orb-theme-2 { background: radial-gradient(circle, rgba(52,211,153,0.40), transparent 70%) !important; }
+    .orb-theme-3 { background: radial-gradient(circle, rgba(6,214,160,0.18), transparent 70%) !important; }
+    
     </style>
 </head>
 <body>
@@ -100,8 +113,7 @@
             <button onclick="startApp()" class="go-btn">Tanulás indítása</button>
         </div>
 
-        <p style="margin-top:28px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.22em;color:#1e293b;">Designed by Entropy Breakers</p>
-    </div>
+        </div>
 
     <!-- CARDS -->
     <div id="s-cards" class="hidden">
@@ -316,28 +328,22 @@ document.addEventListener('keydown',e=>{
 </script>
 
 <script>
-// Auto-start if name provided via URL
+// EB Auto-start: read name from URL and skip login screen
 window.addEventListener('load', function() {
     if (window.__eb_student_name) {
-        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.value = window.__eb_student_name;
-            // Auto trigger start
-            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
-            if (startBtn) {
-                setTimeout(function(){ startBtn.click(); }, 100);
-            } else {
-                // Try calling start functions directly
-                setTimeout(function(){
-                    if (typeof startApp === 'function') startApp();
-                    else if (typeof startQuiz === 'function') startQuiz();
-                    else if (typeof start === 'function') start();
-                }, 100);
-            }
+        var inputs = ['student-name','name-input','nameInput','studentName'];
+        for (var i=0; i<inputs.length; i++) {
+            var el = document.getElementById(inputs[i]);
+            if (el) { el.value = window.__eb_student_name; break; }
         }
+        setTimeout(function(){
+            if (typeof startApp === 'function') startApp();
+            else if (typeof startQuiz === 'function') startQuiz();
+            else if (typeof start === 'function') start();
+            else if (typeof startTest === 'function') startTest();
+        }, 80);
     }
 });
 </script>
-
 </body>
 </html>

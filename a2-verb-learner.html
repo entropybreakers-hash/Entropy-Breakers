@@ -174,6 +174,19 @@
             border-radius: 32px;
             box-shadow: 0 0 30px rgba(45, 212, 191, 0.08);
         }
+    
+    /* ── LEVEL COLOUR THEME ── */
+    :root {
+        --accent:    #10B981;
+        --accent-l:  #34D399;
+        --accent-ll: #6EE7B7;
+        --border-hi: rgba(16,185,129,0.30);
+        --border-lo: rgba(16,185,129,0.15);
+    }
+    .orb-theme-1 { background: radial-gradient(circle, rgba(16,185,129,0.55), transparent 70%) !important; }
+    .orb-theme-2 { background: radial-gradient(circle, rgba(52,211,153,0.40), transparent 70%) !important; }
+    .orb-theme-3 { background: radial-gradient(circle, rgba(6,214,160,0.18), transparent 70%) !important; }
+    
     </style>
 </head>
 <body>
@@ -201,8 +214,6 @@
         </h1>
 
         <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">A2 Verb Learner</p>
-        <p class="text-slate-400 mb-8 font-medium">Párosítsd az angol és magyar igéket!</p>
-
         <div class="space-y-4 max-w-sm mx-auto">
             <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
             <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">
@@ -210,10 +221,7 @@
             </button>
         </div>
 
-        <p class="mt-10 text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">
-            Designed by Entropy Breakers
-        </p>
-    </div>
+        </div>
 
     <!-- GAME SCREEN -->
     <div id="game-screen" class="hidden animate-slide">
@@ -234,7 +242,6 @@
         <div class="cyber-shell p-8 w-full max-w-md text-center">
             <div class="text-4xl mb-4">✨</div>
             <h2 class="text-2xl font-bold text-white mb-2">Szép volt!</h2>
-            <p class="text-slate-400 mb-6">A következő körben újabb 10 igét kapsz.</p>
             <button onclick="loadNextChunk()" class="w-full py-4 primary-btn text-white font-black rounded-xl uppercase tracking-widest">
                 Következő kör
             </button>
@@ -247,8 +254,6 @@
         <h2 class="text-3xl font-black text-white mb-2">
             Gratulálok, <span id="display-name" class="mint-glow-text"></span>!
         </h2>
-        <p class="text-slate-400 font-medium mb-8">Mind az 50 igét teljesítetted.</p>
-
         <div class="result-card p-8 mb-8">
             <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-[0.2em]">Összesített lépésszám</div>
             <div class="text-7xl font-black text-white" id="final-moves">0</div>
@@ -454,28 +459,22 @@
 </script>
 
 <script>
-// Auto-start if name provided via URL
+// EB Auto-start: read name from URL and skip login screen
 window.addEventListener('load', function() {
     if (window.__eb_student_name) {
-        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.value = window.__eb_student_name;
-            // Auto trigger start
-            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
-            if (startBtn) {
-                setTimeout(function(){ startBtn.click(); }, 100);
-            } else {
-                // Try calling start functions directly
-                setTimeout(function(){
-                    if (typeof startApp === 'function') startApp();
-                    else if (typeof startQuiz === 'function') startQuiz();
-                    else if (typeof start === 'function') start();
-                }, 100);
-            }
+        var inputs = ['student-name','name-input','nameInput','studentName'];
+        for (var i=0; i<inputs.length; i++) {
+            var el = document.getElementById(inputs[i]);
+            if (el) { el.value = window.__eb_student_name; break; }
         }
+        setTimeout(function(){
+            if (typeof startApp === 'function') startApp();
+            else if (typeof startQuiz === 'function') startQuiz();
+            else if (typeof start === 'function') start();
+            else if (typeof startTest === 'function') startTest();
+        }, 80);
     }
 });
 </script>
-
 </body>
 </html>

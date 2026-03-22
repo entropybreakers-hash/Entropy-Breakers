@@ -358,6 +358,10 @@ function openQuiz(url, title) {
   const loading = document.getElementById('overlay-loading');
   const titleEl = document.getElementById('overlay-title');
   frame.src = '';
+  var loader = document.getElementById('overlay-loader');
+  if (loader) { loader.style.display = 'flex'; loader.style.opacity = '1'; }
+  var lt = document.getElementById('loader-title');
+  if (lt) { lt.innerText = (title || 'Loading...'); }
   loading.style.display = 'block';
   titleEl.innerText = title || '';
   overlay.style.display = 'flex';
@@ -391,26 +395,30 @@ function speak(event,text){
 <!-- ═══════════════════════ QUIZ OVERLAY ═══════════════════════ -->
 <div id="quiz-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#00000f;flex-direction:column;">
 
-  <!-- Overlay top bar -->
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(0,0,15,0.95);border-bottom:1px solid rgba(0,255,231,0.15);flex-shrink:0;">
-    <div style="font-family:'Orbitron',sans-serif;font-size:.68rem;font-weight:900;color:var(--neon-t);letter-spacing:.1em;text-transform:uppercase;">⚡ Entropy Breakers</div>
+  <!-- Top bar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(0,0,15,0.98);border-bottom:1px solid rgba(0,255,231,0.15);flex-shrink:0;position:relative;z-index:2;">
+    <div style="font-family:'Orbitron',sans-serif;font-size:.68rem;font-weight:900;color:#00ffe7;letter-spacing:.1em;text-transform:uppercase;">⚡ Entropy Breakers</div>
     <div id="overlay-title" style="font-family:'Syne Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);flex:1;text-align:center;padding:0 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
     <button onclick="closeQuiz()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:rgba(255,255,255,0.7);font-family:'Syne Mono',monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 16px;cursor:pointer;transition:all .2s;white-space:nowrap;" onmouseover="this.style.borderColor='rgba(0,255,231,0.4)';this.style.color='#00ffe7'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='rgba(255,255,255,0.7)'">✕ Back</button>
   </div>
 
-  <!-- Loading bar -->
-  <div id="overlay-loading" style="height:2px;background:linear-gradient(90deg,var(--neon-t),var(--indigo),var(--neon-p));animation:load-bar 1.5s ease-in-out infinite;flex-shrink:0;"></div>
+  <!-- Loading screen — covers iframe until ready -->
+  <div id="overlay-loader" style="position:absolute;inset:0;top:45px;background:#00000f;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
+    <div style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:900;color:#00ffe7;letter-spacing:.2em;text-transform:uppercase;" id="loader-title">Loading...</div>
+    <div style="width:200px;height:2px;background:rgba(255,255,255,0.08);border-radius:999px;overflow:hidden;">
+      <div style="height:100%;background:linear-gradient(90deg,#00ffe7,#5b4fff,#bf00ff);border-radius:999px;animation:load-sweep 1.2s ease-in-out infinite;"></div>
+    </div>
+    <div style="font-family:'Syne Mono',monospace;font-size:.55rem;letter-spacing:.18em;color:rgba(255,255,255,0.25);text-transform:uppercase;">academy.entropybreakers.com</div>
+  </div>
 
-  <!-- Iframe -->
-  <iframe id="quiz-frame" src="" style="flex:1;width:100%;border:none;background:#00000f;" onload="document.getElementById('overlay-loading').style.display='none';"></iframe>
+  <!-- Iframe — hidden until loaded -->
+  <iframe id="quiz-frame" src="" style="flex:1;width:100%;border:none;background:#00000f;position:relative;z-index:0;" onload="hideLoader();"></iframe>
 </div>
 
 <style>
-@keyframes load-bar {
-  0% { opacity: 1; transform: scaleX(0); transform-origin: left; }
-  50% { opacity: 1; transform: scaleX(1); transform-origin: left; }
-  51% { transform-origin: right; }
-  100% { opacity: 0; transform: scaleX(0); transform-origin: right; }
+@keyframes load-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
 }
 </style>
 

@@ -35,6 +35,19 @@
         .example { font-size: 0.78rem; color: #94a3b8; font-style: italic; line-height: 1.4; }
         .flip-hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.3; }
         .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; }
+    
+    /* ── LEVEL COLOUR THEME ── */
+    :root {
+        --accent:    #10B981;
+        --accent-l:  #34D399;
+        --accent-ll: #6EE7B7;
+        --border-hi: rgba(16,185,129,0.30);
+        --border-lo: rgba(16,185,129,0.15);
+    }
+    .orb-theme-1 { background: radial-gradient(circle, rgba(16,185,129,0.55), transparent 70%) !important; }
+    .orb-theme-2 { background: radial-gradient(circle, rgba(52,211,153,0.40), transparent 70%) !important; }
+    .orb-theme-3 { background: radial-gradient(circle, rgba(6,214,160,0.18), transparent 70%) !important; }
+    
     </style>
 </head>
 <body>
@@ -61,13 +74,11 @@
         </h1>
         <p class="text-xl font-black text-white mb-1 uppercase tracking-tight">Home & Daily Routine</p>
         <p class="text-teal-300 font-bold text-[10px] tracking-[0.3em] mb-3 uppercase">🟢 A2 · Vocabulary Flashcards</p>
-        <p class="text-slate-400 text-sm font-medium mb-8 max-w-xs mx-auto">Fordítsd meg a kártyát az angol szóért! Magyar szó elöl · Angol + példa hátul</p>
         <div class="space-y-4 max-w-sm mx-auto">
             <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
             <button onclick="startApp()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Tanulás indítása</button>
         </div>
-        <p class="mt-10 text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">Designed by Entropy Breakers</p>
-    </div>
+        </div>
 
     <!-- CARD SCREEN -->
     <div id="card-screen" class="hidden animate-slide">
@@ -81,7 +92,6 @@
             <div class="flip-inner" id="flip-inner">
                 <div class="flip-front">
                     <div class="cat-pill" id="front-cat">-</div>
-                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3">Magyar</p>
                     <h2 id="card-hu" class="text-3xl font-black text-white leading-snug">-</h2>
                     <span class="flip-hint text-slate-500">Koppints →</span>
                 </div>
@@ -286,28 +296,22 @@
 </script>
 
 <script>
-// Auto-start if name provided via URL
+// EB Auto-start: read name from URL and skip login screen
 window.addEventListener('load', function() {
     if (window.__eb_student_name) {
-        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.value = window.__eb_student_name;
-            // Auto trigger start
-            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
-            if (startBtn) {
-                setTimeout(function(){ startBtn.click(); }, 100);
-            } else {
-                // Try calling start functions directly
-                setTimeout(function(){
-                    if (typeof startApp === 'function') startApp();
-                    else if (typeof startQuiz === 'function') startQuiz();
-                    else if (typeof start === 'function') start();
-                }, 100);
-            }
+        var inputs = ['student-name','name-input','nameInput','studentName'];
+        for (var i=0; i<inputs.length; i++) {
+            var el = document.getElementById(inputs[i]);
+            if (el) { el.value = window.__eb_student_name; break; }
         }
+        setTimeout(function(){
+            if (typeof startApp === 'function') startApp();
+            else if (typeof startQuiz === 'function') startQuiz();
+            else if (typeof start === 'function') start();
+            else if (typeof startTest === 'function') startTest();
+        }, 80);
     }
 });
 </script>
-
 </body>
 </html>

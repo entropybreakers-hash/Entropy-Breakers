@@ -40,6 +40,19 @@
         .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; box-shadow: 0 0 30px rgba(45,212,191,0.08); }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.5); border-radius: 10px; }
+    
+    /* ── LEVEL COLOUR THEME ── */
+    :root {
+        --accent:    #8B5CF6;
+        --accent-l:  #A78BFA;
+        --accent-ll: #C4B5FD;
+        --border-hi: rgba(139,92,246,0.30);
+        --border-lo: rgba(139,92,246,0.15);
+    }
+    .orb-theme-1 { background: radial-gradient(circle, rgba(109,40,217,0.55), transparent 70%) !important; }
+    .orb-theme-2 { background: radial-gradient(circle, rgba(168,85,247,0.40), transparent 70%) !important; }
+    .orb-theme-3 { background: radial-gradient(circle, rgba(236,72,153,0.18), transparent 70%) !important; }
+    
     </style>
 </head>
 <body>
@@ -68,12 +81,10 @@
         <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">B2 Verb Test</p>
         <p class="text-teal-300 font-bold text-[10px] tracking-[0.3em] mb-10 uppercase italic">Vocabulary Deep Check</p>
         <div class="space-y-4 max-w-sm mx-auto">
-            <p class="text-slate-400 text-sm font-medium">Gépeld be az angol igét a magyar jelentés alapján!</p>
             <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
             <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Vizsga indítása</button>
         </div>
-        <p class="mt-12 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">Designed by Entropy Breakers</p>
-    </div>
+        </div>
 
     <!-- TEST UI -->
     <div id="test-ui" class="hidden animate-slide">
@@ -295,28 +306,22 @@
 </script>
 
 <script>
-// Auto-start if name provided via URL
+// EB Auto-start: read name from URL and skip login screen
 window.addEventListener('load', function() {
     if (window.__eb_student_name) {
-        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.value = window.__eb_student_name;
-            // Auto trigger start
-            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
-            if (startBtn) {
-                setTimeout(function(){ startBtn.click(); }, 100);
-            } else {
-                // Try calling start functions directly
-                setTimeout(function(){
-                    if (typeof startApp === 'function') startApp();
-                    else if (typeof startQuiz === 'function') startQuiz();
-                    else if (typeof start === 'function') start();
-                }, 100);
-            }
+        var inputs = ['student-name','name-input','nameInput','studentName'];
+        for (var i=0; i<inputs.length; i++) {
+            var el = document.getElementById(inputs[i]);
+            if (el) { el.value = window.__eb_student_name; break; }
         }
+        setTimeout(function(){
+            if (typeof startApp === 'function') startApp();
+            else if (typeof startQuiz === 'function') startQuiz();
+            else if (typeof start === 'function') start();
+            else if (typeof startTest === 'function') startTest();
+        }, 80);
     }
 });
 </script>
-
 </body>
 </html>

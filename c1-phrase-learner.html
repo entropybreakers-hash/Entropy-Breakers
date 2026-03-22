@@ -42,6 +42,19 @@
         .animate-slide { animation: slideIn 0.35s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; box-shadow: 0 0 30px rgba(45,212,191,0.08); }
+    
+    /* ── LEVEL COLOUR THEME ── */
+    :root {
+        --accent:    #F59E0B;
+        --accent-l:  #FBBF24;
+        --accent-ll: #FDE68A;
+        --border-hi: rgba(245,158,11,0.30);
+        --border-lo: rgba(245,158,11,0.15);
+    }
+    .orb-theme-1 { background: radial-gradient(circle, rgba(217,119,6,0.55), transparent 70%) !important; }
+    .orb-theme-2 { background: radial-gradient(circle, rgba(245,158,11,0.40), transparent 70%) !important; }
+    .orb-theme-3 { background: radial-gradient(circle, rgba(252,211,77,0.18), transparent 70%) !important; }
+    
     </style>
 </head>
 <body>
@@ -69,13 +82,11 @@
         </h1>
         <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">C1 Phrase Learner</p>
         <p class="text-teal-300 font-bold text-[10px] tracking-[0.3em] mb-4 uppercase">50 Essential C1 Phrases</p>
-        <p class="text-slate-400 text-sm font-medium mb-8 max-w-xs mx-auto">Vélemény · Érvelés · Összekötők · Mondatnyitók · Lezárók</p>
         <div class="space-y-4 max-w-sm mx-auto">
             <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
             <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active-tap">Játék indítása</button>
         </div>
-        <p class="mt-12 text-[10px] text-slate-500 font-black uppercase tracking-[0.2em]">Designed by Entropy Breakers</p>
-    </div>
+        </div>
 
     <!-- GAME UI -->
     <div id="game-screen" class="hidden animate-slide">
@@ -91,7 +102,6 @@
         <div class="cyber-shell p-8 shadow-2xl w-full text-center max-w-md">
             <div class="text-4xl mb-4">🎓</div>
             <h2 class="text-2xl font-black text-white mb-2 uppercase">Kör kész!</h2>
-            <p class="text-slate-400 mb-6 italic">Szuperül haladsz!</p>
             <button onclick="loadNextChunk()" class="w-full py-4 primary-btn text-white font-black rounded-xl uppercase tracking-widest shadow-lg">Következő 10 kifejezés</button>
         </div>
     </div>
@@ -333,28 +343,22 @@
 </script>
 
 <script>
-// Auto-start if name provided via URL
+// EB Auto-start: read name from URL and skip login screen
 window.addEventListener('load', function() {
     if (window.__eb_student_name) {
-        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.value = window.__eb_student_name;
-            // Auto trigger start
-            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
-            if (startBtn) {
-                setTimeout(function(){ startBtn.click(); }, 100);
-            } else {
-                // Try calling start functions directly
-                setTimeout(function(){
-                    if (typeof startApp === 'function') startApp();
-                    else if (typeof startQuiz === 'function') startQuiz();
-                    else if (typeof start === 'function') start();
-                }, 100);
-            }
+        var inputs = ['student-name','name-input','nameInput','studentName'];
+        for (var i=0; i<inputs.length; i++) {
+            var el = document.getElementById(inputs[i]);
+            if (el) { el.value = window.__eb_student_name; break; }
         }
+        setTimeout(function(){
+            if (typeof startApp === 'function') startApp();
+            else if (typeof startQuiz === 'function') startQuiz();
+            else if (typeof start === 'function') start();
+            else if (typeof startTest === 'function') startTest();
+        }, 80);
     }
 });
 </script>
-
 </body>
 </html>

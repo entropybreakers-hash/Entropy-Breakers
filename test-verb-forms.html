@@ -37,6 +37,19 @@
         .score-breakdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 16px; }
         .score-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 12px 8px; text-align: center; }
         .hu-hint { font-size: 0.78rem; color: #64748b; font-style: italic; margin-top: 4px; }
+    
+    /* ── LEVEL COLOUR THEME ── */
+    :root {
+        --accent:    #10B981;
+        --accent-l:  #34D399;
+        --accent-ll: #6EE7B7;
+        --border-hi: rgba(16,185,129,0.30);
+        --border-lo: rgba(16,185,129,0.15);
+    }
+    .orb-theme-1 { background: radial-gradient(circle, rgba(16,185,129,0.55), transparent 70%) !important; }
+    .orb-theme-2 { background: radial-gradient(circle, rgba(52,211,153,0.40), transparent 70%) !important; }
+    .orb-theme-3 { background: radial-gradient(circle, rgba(6,214,160,0.18), transparent 70%) !important; }
+    
     </style>
 </head>
 <body>
@@ -63,8 +76,6 @@
         </h1>
         <p class="text-xl font-black text-white mb-1 uppercase tracking-tight">Verb Forms Test</p>
         <p class="text-teal-300 font-bold text-[10px] tracking-[0.3em] mb-2 uppercase">V1 adott → írd be a V2 és V3 alakot!</p>
-        <p class="text-slate-400 text-sm font-medium mb-6 max-w-xs mx-auto">60 ige · azonnali visszajelzés · pontszám a végén</p>
-
         <div class="space-y-4 max-w-sm mx-auto mb-4">
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Szűrés:</p>
             <div class="flex gap-2 justify-center flex-wrap">
@@ -78,8 +89,7 @@
             <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
             <button onclick="startApp()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Teszt indítása ✍️</button>
         </div>
-        <p class="mt-8 text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">Designed by Entropy Breakers</p>
-    </div>
+        </div>
 
     <!-- QUIZ SCREEN -->
     <div id="quiz-screen" class="hidden animate-slide">
@@ -96,7 +106,6 @@
         <!-- VERB DISPLAY -->
         <div class="verb-display mb-6">
             <div id="type-badge" class="type-badge irregular">🔴 Szabálytalan</div>
-            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Magyar jelentés</p>
             <p id="hu-meaning" class="hu-hint mb-3">-</p>
             <p class="text-teal-300 text-[10px] font-black uppercase tracking-widest mb-2">Infinitive (V1)</p>
             <div id="v1-word" class="v1-word">-</div>
@@ -471,28 +480,22 @@ function adminAccess() {
 </script>
 
 <script>
-// Auto-start if name provided via URL
+// EB Auto-start: read name from URL and skip login screen
 window.addEventListener('load', function() {
     if (window.__eb_student_name) {
-        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
-        if (nameInput) {
-            nameInput.value = window.__eb_student_name;
-            // Auto trigger start
-            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
-            if (startBtn) {
-                setTimeout(function(){ startBtn.click(); }, 100);
-            } else {
-                // Try calling start functions directly
-                setTimeout(function(){
-                    if (typeof startApp === 'function') startApp();
-                    else if (typeof startQuiz === 'function') startQuiz();
-                    else if (typeof start === 'function') start();
-                }, 100);
-            }
+        var inputs = ['student-name','name-input','nameInput','studentName'];
+        for (var i=0; i<inputs.length; i++) {
+            var el = document.getElementById(inputs[i]);
+            if (el) { el.value = window.__eb_student_name; break; }
         }
+        setTimeout(function(){
+            if (typeof startApp === 'function') startApp();
+            else if (typeof startQuiz === 'function') startQuiz();
+            else if (typeof start === 'function') start();
+            else if (typeof startTest === 'function') startTest();
+        }, 80);
     }
 });
 </script>
-
 </body>
 </html>
