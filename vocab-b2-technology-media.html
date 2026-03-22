@@ -1,0 +1,163 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B2 Technology & Media | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        :root { --glass-bg: rgba(255,255,255,0.04); --card-border: rgba(168,85,247,0.2); }
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at 15% 15%, rgba(168,85,247,0.1), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(168,85,247,0.1); border-radius: 32px; width: 100%; max-width: 560px; overflow: hidden; }
+        .mint-glow-text { color: #2dd4bf; }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; font-size: 1rem; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: #a855f7; box-shadow: 0 0 20px rgba(168,85,247,0.2); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #7e22ce 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(168,85,247,0.25); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; cursor: pointer; }
+        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; }
+        .nav-btn:hover { background: rgba(168,85,247,0.15); border-color: #a855f7; }
+        .nav-btn:active { transform: scale(0.94); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; background: linear-gradient(90deg, #a855f7, #6366f1); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .flip-container { perspective: 1200px; width: 100%; height: 270px; cursor: pointer; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+        .flip-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.25); }
+        .flip-back { background: linear-gradient(135deg, rgba(88,28,135,0.22), rgba(79,70,229,0.22)); border: 1px solid rgba(168,85,247,0.35); transform: rotateY(180deg); }
+        .cat-pill { display: inline-flex; background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.25); color: #d8b4fe; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .back-pill { display: inline-flex; background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.25); color: #5eead4; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .en-word { font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 8px; }
+        .example { font-size: 0.78rem; color: #94a3b8; font-style: italic; line-height: 1.4; }
+        .flip-hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.3; }
+        .result-card { background: linear-gradient(135deg, rgba(88,28,135,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(168,85,247,0.2); border-radius: 32px; }
+    </style>
+</head>
+<body>
+<div id="app" class="cyber-shell p-6 md:p-10">
+    <div id="card-screen" class="animate-slide">
+        <header class="flex justify-between items-center mb-5">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-purple-300 tracking-widest"><span id="cat-label">-</span></div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest"><span id="card-counter">1 / 50</span></div>
+        </header>
+        <div class="progress-track mb-5"><div id="progress-fill" class="progress-bar-inner" style="width:0%"></div></div>
+        <div class="flip-container mb-5" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="flip-front">
+                    <div class="cat-pill" id="front-cat">-</div>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3">Magyar</p>
+                    <h2 id="card-hu" class="text-2xl font-black text-white leading-snug">-</h2>
+                    <span class="flip-hint text-slate-500">Koppints →</span>
+                </div>
+                <div class="flip-back">
+                    <div class="back-pill" id="back-cat">-</div>
+                    <p class="text-purple-300 text-[10px] font-black uppercase tracking-widest mb-1">Angol</p>
+                    <div id="card-en" class="en-word">-</div>
+                    <p id="card-example" class="example">-</p>
+                    <span class="flip-hint text-purple-400">← Vissza</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-between gap-4 mb-5">
+            <button class="nav-btn" onclick="prevCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="flex-1 text-center text-slate-500 text-[10px] font-black uppercase tracking-widest">Koppints a fordításért</p>
+            <button class="nav-btn" onclick="nextCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="shuffleCards()" class="py-4 glass-panel text-slate-300 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition rounded-2xl">🔀 Keverés</button>
+            <button onclick="showResult()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">✅ Kész!</button>
+        </div>
+    </div>
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">💻</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Szép munka!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, átmenté a kártyákat!</p>
+        <div class="result-card p-8 mb-8">
+            <div class="text-purple-300 font-black uppercase text-xs mb-2 tracking-widest">🟣 B2 · Technology & Media</div>
+            <div class="text-7xl font-black text-white" id="seen-count">0</div>
+            <div class="text-slate-400 text-sm mt-1">/ 50 szó</div>
+            <div id="feedback-msg" class="mt-4 text-purple-200 font-bold italic text-sm">-</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Újrakezdés</button>
+            <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
+        </div>
+    </div>
+</div>
+<script>
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+    const CARDS = [
+        { cat:"📱 Eszközök", hu:"Okostelefon", en:"Smartphone", example:"Smartphones have changed the way we communicate." },
+        { cat:"📱 Eszközök", hu:"Táblagép", en:"Tablet", example:"She uses a tablet for reading and browsing." },
+        { cat:"📱 Eszközök", hu:"Hordozható számítógép", en:"Laptop", example:"I take my laptop to every meeting." },
+        { cat:"📱 Eszközök", hu:"Viselhető technológia", en:"Wearable technology", example:"Wearable technology like smartwatches is becoming more popular." },
+        { cat:"📱 Eszközök", hu:"Streaming eszköz", en:"Streaming device", example:"We use a streaming device to watch content on our TV." },
+        { cat:"🌐 Internet", hu:"Sávszélesség", en:"Bandwidth", example:"You need high bandwidth for video conferencing." },
+        { cat:"🌐 Internet", hu:"Felhőalapú tárolás", en:"Cloud storage", example:"I store all my documents in cloud storage." },
+        { cat:"🌐 Internet", hu:"Adatvédelem", en:"Data privacy", example:"Data privacy is a growing concern for internet users." },
+        { cat:"🌐 Internet", hu:"Kiberbiztonság", en:"Cybersecurity", example:"Companies invest heavily in cybersecurity." },
+        { cat:"🌐 Internet", hu:"Titkosítás", en:"Encryption", example:"Encryption protects your personal data online." },
+        { cat:"🤖 Mesterséges intelligencia", hu:"Mesterséges intelligencia", en:"Artificial intelligence", example:"Artificial intelligence is transforming many industries." },
+        { cat:"🤖 Mesterséges intelligencia", hu:"Gépi tanulás", en:"Machine learning", example:"Machine learning allows computers to learn from data." },
+        { cat:"🤖 Mesterséges intelligencia", hu:"Algoritmus", en:"Algorithm", example:"Social media algorithms decide what content you see." },
+        { cat:"🤖 Mesterséges intelligencia", hu:"Automatizálás", en:"Automation", example:"Automation is replacing many manual jobs." },
+        { cat:"🤖 Mesterséges intelligencia", hu:"Chatbot", en:"Chatbot", example:"The website uses a chatbot for customer support." },
+        { cat:"📺 Média", hu:"Közösségi média", en:"Social media", example:"Social media has transformed political communication." },
+        { cat:"📺 Média", hu:"Befolyásoló személy", en:"Influencer", example:"She is a well-known influencer in the fitness world." },
+        { cat:"📺 Média", hu:"Tartalom alkotó", en:"Content creator", example:"Being a content creator is now a full-time career for many." },
+        { cat:"📺 Média", hu:"Vírusos tartalom", en:"Viral content", example:"The video became viral overnight." },
+        { cat:"📺 Média", hu:"Podkeszt", en:"Podcast", example:"I listen to a business podcast on my commute." },
+        { cat:"📺 Média", hu:"Streaming szolgáltatás", en:"Streaming service", example:"Most households subscribe to at least one streaming service." },
+        { cat:"📺 Média", hu:"Álhír", en:"Fake news", example:"Fake news spreads rapidly on social media platforms." },
+        { cat:"📺 Média", hu:"Digitális lábnyom", en:"Digital footprint", example:"Be aware of the digital footprint you leave online." },
+        { cat:"📺 Média", hu:"Buborék-hatás", en:"Filter bubble", example:"Social media creates a filter bubble around users." },
+        { cat:"📺 Média", hu:"Média írástudás", en:"Media literacy", example:"Media literacy is an essential skill in the modern world." },
+        { cat:"💾 Szoftver & Fejlesztés", hu:"Szoftverfrissítés", en:"Software update", example:"Always install software updates for security reasons." },
+        { cat:"💾 Szoftver & Fejlesztés", hu:"Alkalmazás", en:"Application / App", example:"There is an app for almost everything nowadays." },
+        { cat:"💾 Szoftver & Fejlesztés", hu:"Felhasználói felület", en:"User interface", example:"A good user interface makes software easy to use." },
+        { cat:"💾 Szoftver & Fejlesztés", hu:"Nyílt forráskódú", en:"Open source", example:"Linux is a well-known open source operating system." },
+        { cat:"💾 Szoftver & Fejlesztés", hu:"Programozás", en:"Programming / Coding", example:"Learning coding is becoming as important as learning a language." },
+        { cat:"🏭 Ipar & Innováció", hu:"Megzavaró technológia", en:"Disruptive technology", example:"Uber is an example of disruptive technology in transport." },
+        { cat:"🏭 Ipar & Innováció", hu:"Startup", en:"Start-up", example:"She launched a tech start-up with two friends." },
+        { cat:"🏭 Ipar & Innováció", hu:"Innováció", en:"Innovation", example:"Innovation is the key to staying ahead of competitors." },
+        { cat:"🏭 Ipar & Innováció", hu:"Digitális átalakulás", en:"Digital transformation", example:"Many traditional companies are undergoing digital transformation." },
+        { cat:"🏭 Ipar & Innováció", hu:"Internet of Things", en:"Internet of Things (IoT)", example:"Smart home devices are part of the Internet of Things." },
+        { cat:"🔒 Adatok & Biztonság", hu:"Adatszivárgás", en:"Data breach", example:"The company suffered a major data breach last year." },
+        { cat:"🔒 Adatok & Biztonság", hu:"Adathalászat", en:"Phishing", example:"Never click on suspicious links — it could be phishing." },
+        { cat:"🔒 Adatok & Biztonság", hu:"Kártékony szoftver", en:"Malware", example:"Malware can cause serious damage to your computer." },
+        { cat:"🔒 Adatok & Biztonság", hu:"Kétlépéses azonosítás", en:"Two-factor authentication", example:"Enable two-factor authentication on all important accounts." },
+        { cat:"🔒 Adatok & Biztonság", hu:"Személyazonosság-lopás", en:"Identity theft", example:"Identity theft can destroy your financial reputation." },
+        { cat:"🌍 Társadalmi hatás", hu:"Digitális szakadék", en:"Digital divide", example:"The digital divide separates those with and without internet access." },
+        { cat:"🌍 Társadalmi hatás", hu:"Képernyőfüggőség", en:"Screen addiction", example:"Screen addiction is a growing problem among teenagers." },
+        { cat:"🌍 Társadalmi hatás", hu:"Online zaklatás", en:"Cyberbullying", example:"Cyberbullying has serious psychological effects on victims." },
+        { cat:"🌍 Társadalmi hatás", hu:"Digitális jólét", en:"Digital wellbeing", example:"Many people are trying to improve their digital wellbeing." },
+        { cat:"🌍 Társadalmi hatás", hu:"Technológiai függőség", en:"Tech dependency", example:"Our tech dependency has grown significantly over the last decade." },
+        { cat:"🔋 Fenntarthatóság", hu:"E-hulladék", en:"E-waste", example:"E-waste is one of the fastest-growing waste streams globally." },
+        { cat:"🔋 Fenntarthatóság", hu:"Energia-felhasználás (adatközpont)", en:"Carbon footprint (of data centres)", example:"Data centres have a significant carbon footprint." },
+        { cat:"🔋 Fenntarthatóság", hu:"Zöld technológia", en:"Green technology", example:"Investment in green technology is increasing rapidly." },
+        { cat:"🔋 Fenntarthatóság", hu:"Megújuló energia (tech)", en:"Renewable energy technology", example:"Renewable energy technology is becoming more affordable." },
+        { cat:"🔋 Fenntarthatóság", hu:"Okos város", en:"Smart city", example:"Barcelona is often cited as a leading smart city." },
+    ];
+    let studentName = "", cardList = [...CARDS], currentIndex = 0, isFlipped = false;
+    function startApp() {     currentIndex = 0; document.getElementById('start-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); renderCard(); }
+     });
+    function renderCard() { const card = cardList[currentIndex]; const total = cardList.length; document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${total}`; document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`; document.getElementById('cat-label').innerText = card.cat; document.getElementById('front-cat').innerText = card.cat; document.getElementById('back-cat').innerText = card.cat; document.getElementById('card-hu').innerText = card.hu; document.getElementById('card-en').innerText = card.en; document.getElementById('card-example').innerText = `"${card.example}"`; isFlipped = false; document.getElementById('flip-inner').classList.remove('is-flipped'); }
+    function flipCard() { isFlipped = !isFlipped; document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped); }
+    function nextCard() { if (currentIndex < cardList.length - 1) { currentIndex++; renderCard(); } else showResult(); }
+    function prevCard() { if (currentIndex > 0) { currentIndex--; renderCard(); } }
+    function shuffleCards() { for (let i = cardList.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cardList[i], cardList[j]] = [cardList[j], cardList[i]]; } currentIndex = 0; renderCard(); }
+    function showResult() { document.getElementById('card-screen').classList.add('hidden'); document.getElementById('result-screen').classList.remove('hidden'); document.getElementById('display-name').innerText = studentName; document.getElementById('seen-count').innerText = currentIndex + 1; const pct = Math.round(((currentIndex + 1) / cardList.length) * 100); document.getElementById('feedback-msg').innerText = pct === 100 ? "Zseniális! Az összes tech szót megtanultad! 💻" : pct >= 60 ? "Szép haladás! Folytasd!" : "Jó kezdés! Ismételj és magabiztos leszel!"; fetch(MAKE_WEBHOOK_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ Student: studentName, Quiz:"B2 Vocabulary - Technology & Media", Score: currentIndex+1, TotalQuestions: cardList.length, Level:"B2", Skill:"Vocabulary", Percentage: pct, CompletedAt: new Date().toISOString() }) }).catch(()=>{}); }
+    function restartFromStart() { currentIndex = 0; document.getElementById('result-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); renderCard(); }
+    function shuffleAndRestart() { shuffleCards(); document.getElementById('result-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); }
+    function adminAccess() { if (prompt("Jelszó:") === "bettina2026") alert("Az eredmények a Make → Airtable rendszerben mentődnek."); }
+    document.addEventListener('keydown', e => { if (document.getElementById('card-screen').classList.contains('hidden')) return; if (e.key === 'ArrowRight') nextCard(); if (e.key === 'ArrowLeft') prevCard(); if (e.key === ' ') { e.preventDefault(); flipCard(); } });
+</script>
+</body>
+</html>

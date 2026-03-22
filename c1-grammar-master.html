@@ -1,0 +1,340 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C1 Grammar Master | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --neon-mint: #2dd4bf;
+            --neon-indigo: #6366f1;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(45, 212, 191, 0.16);
+            --correct: #22c55e;
+            --wrong: #ef4444;
+        }
+        body {
+            background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #f1f5f9; min-height: 100vh; display: flex;
+            align-items: center; justify-content: center; padding: 20px; margin: 0;
+        }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 760px; overflow: hidden; }
+        .mint-glow-text { color: var(--neon-mint); text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: var(--neon-mint); box-shadow: 0 0 20px rgba(45,212,191,0.15); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(45,212,191,0.22); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; }
+        .primary-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 0 30px rgba(45,212,191,0.35); }
+        .option-btn { width: 100%; text-align: left; padding: 14px 18px; margin-bottom: 8px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: #e2e8f0; font-weight: 700; transition: all 0.2s ease; font-size: 0.95rem; line-height: 1.45; }
+        .option-btn:hover:not(:disabled) { border-color: var(--neon-mint); background: rgba(45,212,191,0.08); transform: translateX(4px); }
+        .option-btn.correct { border-color: var(--correct); background: rgba(34,197,94,0.12); color: #bbf7d0; }
+        .option-btn.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.12); color: #fecaca; }
+        .mode-btn { padding: 14px; border-radius: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; font-weight: 700; transition: all 0.2s ease; text-align: center; color: #c7d2fe; }
+        .mode-btn.selected { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); color: white; border-color: rgba(255,255,255,0.14); box-shadow: 0 0 20px rgba(45,212,191,0.22); }
+        .progress-track { width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; width: 0; background: linear-gradient(90deg, var(--neon-mint), var(--neon-indigo)); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; box-shadow: 0 0 30px rgba(45,212,191,0.08); }
+    </style>
+</head>
+<body>
+
+<div class="cyber-shell p-8 md:p-12">
+
+    <!-- START SCREEN -->
+    <!-- QUIZ UI -->
+    <div id="quiz-ui" class="animate-slide">
+        <div class="flex justify-between items-center mb-6">
+            <div class="px-4 py-2 glass-panel text-[10px] font-black text-teal-300 uppercase tracking-widest"><span id="mode-label">-</span></div>
+            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Haladás: <span id="q-counter" class="text-teal-300">1 / 40</span></div>
+        </div>
+        <div class="progress-track mb-8"><div id="progress-fill" class="progress-bar-inner"></div></div>
+        <div class="text-center mb-8">
+            <p id="instruction-label" class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Válaszd ki a legtermészetesebb angol megfelelőt!</p>
+            <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white leading-tight">-</h2>
+        </div>
+        <div id="options-container" class="grid grid-cols-1"></div>
+        <div id="explanation-box" class="hidden mt-6 p-6 glass-panel overflow-y-auto max-h-[220px]">
+            <div id="answer-status" class="text-sm font-black uppercase tracking-widest mb-2"></div>
+            <p id="answer-explanation" class="text-slate-300 leading-relaxed text-sm font-medium"></p>
+            <button onclick="nextQuestion()" class="mt-6 w-full py-4 primary-btn text-white rounded-2xl font-black uppercase tracking-widest">Következő →</button>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">🎯</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Kész vagy!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, remek munka!</p>
+        <div class="result-card p-8 mb-8">
+            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-[0.2em]">Végső eredményed</div>
+            <div class="text-7xl font-black text-white"><span id="final-score">0</span><span class="text-2xl text-slate-500" id="final-total"> / 40</span></div>
+            <div id="feedback-rating" class="mt-4 text-teal-200 font-bold italic">-</div>
+        </div>
+        <div class="glass-panel p-5 mb-8">
+            <div class="flex justify-between items-center text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                <span>Teljesítmény</span><span id="result-percent-text" class="text-teal-300">0%</span>
+            </div>
+            <div class="progress-track"><div id="result-progress-fill" class="progress-bar-inner"></div></div>
+        </div>
+        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">Újrakezdés</button>
+    </div>
+</div>
+
+<script>
+    // ── API KEY STORED SAFELY IN MAKE.COM — NOT HERE ──
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+    const QUIZ_NAME = "C1 Grammar Master";
+    const QUIZ_LEVEL = "C1";
+    const QUIZ_SKILL = "Grammar";
+
+    const DATA = {
+        FIX: [
+            { q: "Magyar logika: 'Jól érzem magam.'", options: ["I feel good / I am having a great time.", "I feel myself well.", "I feel me good.", "I am feeling myself."], correct: 0, exp: "Hiba: A 'feel' angolul nem visszaható ige. A 'myself' használata tükörfordítás a magyarból." },
+            { q: "Magyar logika: 'Hogy hívják ezt?'", options: ["What is this called?", "How is this called?", "How do you name this?", "What's the name?"], correct: 0, exp: "Hiba: Angolul a 'What' kérdőszót használjuk a név megkérdezésére, sosem a 'How'-t." },
+            { q: "Magyar logika: 'Ez tőled függ.'", options: ["It depends on you.", "It depends from you.", "It hangs on you.", "It stays with you."], correct: 0, exp: "Vonzat: depend on, nem depend from." },
+            { q: "Hogyan válaszolnál a legtermészetesebben a 'How are you?' kérdésre?", options: ["Can't complain, things are looking up!", "I am fine, and you?", "I am well, thanks.", "Not bad."], correct: 0, exp: "A természetes, idiomatikus válaszok C1 szinten erősebbek, mint a túl tankönyviek." },
+            { q: "Magyar logika: 'Ez eszembe jutott.'", options: ["It occurred to me / It crossed my mind.", "It came into my head.", "It jumped in my mind.", "I got it into my brain."], correct: 0, exp: "Az 'occur to me' és a 'cross my mind' a helyes, természetes angol szerkezet." },
+            { q: "Hogyan zárnál le egy professzionális C1-es levelet?", options: ["I am looking forward to hearing from you.", "I wait for your reply.", "Give me your answer please.", "Reply to me soon!"], correct: 0, exp: "A 'look forward to' után -ing alak jön, és ez a legtermészetesebb lezárás." },
+            { q: "Magyar logika: 'Sokat tanultam a hibáimból.'", options: ["I have gained a lot of insight from my mistakes.", "I learned much from my mistakes.", "Insight was learned by me.", "Many wrongs taught me."], correct: 0, exp: "A 'gain insight' választékosabb, fejlettebb megfogalmazás." },
+            { q: "Melyik idiómát használnád, ha bizonytalan vagy két lehetőség között?", options: ["I'm in two minds about this.", "I can't decide.", "I don't know the choice.", "Decision is hard."], correct: 0, exp: "'In two minds' = kételkedem, bizonytalan vagyok." },
+            { q: "Magyar logika: 'Elegem van belőle.'", options: ["I'm fed up with it.", "I have enough from it.", "I am full with this.", "Enough is this."], correct: 0, exp: "A helyes szerkezet: fed up with something." },
+            { q: "Melyik a helyes reported speech forma: 'He promised he will come.'", options: ["He promised he would come.", "He promised he will come.", "He said he comes.", "He is coming he said."], correct: 0, exp: "Függő beszédben a will általában would-ra változik." },
+            { q: "Magyar logika: 'Gyakorolnom kell az angolt.' (Felfrissíteni)", options: ["I need to brush up on my English.", "I must practice English.", "I have to do English.", "More English needed."], correct: 0, exp: "'Brush up on' = felfrissíteni a meglévő tudást." },
+            { q: "Hogyan kérnél elnézést választékosan a késésért?", options: ["Please accept my apologies for the delay.", "I am sorry for my late.", "Sorry I'm late.", "My late is bad."], correct: 0, exp: "Ez a legprofibb és legtermészetesebb megoldás formális helyzetben." },
+            { q: "Melyik szerkezet helyes egy dolog külsejének leírására?", options: ["What does it look like? / How does it look?", "How is it look like?", "What is it look?", "Look like what?"], correct: 0, exp: "'What does it look like?' és 'How does it look?' helyes. A kettőt nem keverjük." },
+            { q: "Magyar logika: 'Közel lakom hozzád.'", options: ["I live close to you.", "I live close from you.", "I am near from you.", "Close at you."], correct: 0, exp: "A helyes vonzat: close to." },
+            { q: "Hogyan mondanád, hogy 'Végül sikerült' (választékosan)?", options: ["I eventually succeeded in doing it.", "Finally I did it.", "At the end I won.", "In the finish I made it."], correct: 0, exp: "'Eventually succeeded' sokkal természetesebb és erősebb C1 megoldás." },
+            { q: "Magyar logika: 'Gratulálok a vizsgádhoz.'", options: ["Congratulations on passing your exam.", "Congrats for your exam.", "I congratulate to you.", "Good for your test."], correct: 0, exp: "A helyes szerkezet: congratulate someone on something." },
+            { q: "Melyik kifejezés a legjobb egy C1 szintű vitában véleményünk bevezetésére?", options: ["I am of the opinion that this is accurate.", "I think it is true.", "In my brain it is true.", "Me think true."], correct: 0, exp: "A 'I am of the opinion that...' kifinomult, formális megoldás." },
+            { q: "Magyar logika: 'Unom már ezt.'", options: ["I am bored with this.", "I am bored from this.", "I am boring.", "I have boredom."], correct: 0, exp: "A bored with/of helyes, a bored from hibás." },
+            { q: "Magyar logika: 'Kölcsönkértem tőle egy tollat.'", options: ["I borrowed a pen from him.", "I borrowed him a pen.", "I lent from him a pen.", "I took him a pen."], correct: 0, exp: "Borrow from someone; lend to someone." },
+            { q: "Magyar logika: 'Vitatkoztunk a tervről.' (Megbeszéltük)", options: ["We discussed the plan.", "We discussed about the plan.", "We talked the plan.", "Discussing was on."], correct: 0, exp: "A discuss után nem kell about." },
+            { q: "Válaszd ki a helyes mondatot: 'Elmagyaráztam neki.'", options: ["I explained it to him.", "I explained him.", "I told him explanation.", "I made him understand."], correct: 0, exp: "Explain something to someone." },
+            { q: "Magyar logika: 'A végén minden jó lett.'", options: ["In the end, everything turned out fine.", "At the end everything was good.", "Finnally it was ok.", "For the finish it was good."], correct: 0, exp: "'In the end' = végül. 'At the end' inkább fizikai vagy időbeli végpontra utal." },
+            { q: "Mikor használnád az 'opportunity' szót?", options: ["I have no opportunity to travel.", "I have no possibility to travel.", "I don't have option.", "Travel is not possible."], correct: 0, exp: "'Opportunity' = kedvező alkalom, nem pusztán elméleti lehetőség." },
+            { q: "Melyik ige kapcsolódik a hibához?", options: ["I made a mistake.", "I did a mistake.", "I committed a wrong.", "It was a fail."], correct: 0, exp: "A helyes kollokáció: make a mistake." },
+            { q: "Magyar logika: 'Sok információt kaptam.'", options: ["I received a wealth of information.", "I got many informations.", "Informations were many.", "I got much info."], correct: 0, exp: "Az information megszámlálhatatlan, ezért nincs többes száma." },
+            { q: "Hogyan vezetnél be egy vitában egy ellenérvet?", options: ["On the other hand", "In the other side", "By the other part", "Otherly"], correct: 0, exp: "A helyes és természetes kötőelem: on the other hand." },
+            { q: "Magyar logika: 'Házas vagyok egy orvossal.'", options: ["I am married to a doctor.", "I am married with a doctor.", "I am marry to a doctor.", "I am married doctor."], correct: 0, exp: "A helyes vonzat: married to." },
+            { q: "Melyik a helyes: 'Hasonlítok rád.'", options: ["I am similar to you.", "I am similar with you.", "I am like you same.", "Same to you."], correct: 0, exp: "A similar helyes vonzata: to." },
+            { q: "Magyar logika: 'Kérdeznék valamit tőled.'", options: ["I'd like to ask you a question.", "I'd like to ask a question from you.", "I ask you question.", "Can I question from you?"], correct: 0, exp: "Ask someone something. Nincs from." },
+            { q: "Magyar logika: 'Válaszolj a kérdésemre!'", options: ["Answer my question.", "Answer to my question.", "Give answer to question.", "Reply my question."], correct: 0, exp: "Answer után nincs to, reply után igen." },
+            { q: "Magyar logika: 'Szerintem' (Választékos forma)", options: ["From my perspective...", "According to me...", "In my head...", "I say that..."], correct: 0, exp: "Az according to me kerülendő; helyette from my perspective / in my view." },
+            { q: "Magyar logika: 'Jó vagyok angolból.'", options: ["I am good at English.", "I am good in English.", "I am good from English.", "I do English good."], correct: 0, exp: "Good at something." },
+            { q: "Magyar logika: 'Félek a pókoktól.'", options: ["I am afraid of spiders.", "I am afraid from spiders.", "I fear from spiders.", "Spiders make me afraid."], correct: 0, exp: "Afraid of something." },
+            { q: "Magyar logika: 'Felelős vagyok érte.'", options: ["I am responsible for this.", "I am responsible from this.", "It is my response.", "I take responsibility from it."], correct: 0, exp: "Responsible for something." },
+            { q: "Magyar logika: 'Érdekel a zene.'", options: ["I am interested in music.", "I am interested for music.", "Music is interesting for me.", "I have interest for music."], correct: 0, exp: "Interested in something." },
+            { q: "Magyar logika: 'Gondolj rám.'", options: ["Think of me / Think about me.", "Think on me.", "Think me.", "Make a thought of me."], correct: 0, exp: "Think of / think about." },
+            { q: "Magyar logika: 'Vitatkoztunk rajta.'", options: ["We argued about it.", "We argued on it.", "We had an argue.", "We were arguing from it."], correct: 0, exp: "Argue about something." },
+            { q: "Magyar logika: 'Emlékeztetsz az apámra.'", options: ["You remind me of my father.", "You remind me to my father.", "You make me remember my father.", "You are same as my father."], correct: 0, exp: "Remind someone of someone." },
+            { q: "Magyar logika: 'Megérkeztünk a hotelbe.'", options: ["We arrived at the hotel.", "We arrived to the hotel.", "We made it in the hotel.", "Arriving to hotel was good."], correct: 0, exp: "Arrive at/in, nem arrive to." },
+            { q: "Melyik a helyes: 'Keresem a kulcsom.'", options: ["I am looking for my keys.", "I am looking my keys.", "I search my keys.", "I am in look of keys."], correct: 0, exp: "Look for = keresni." }
+        ],
+        UPGRADE: [
+            { q: "B2 szint: 'But' ➔ C1 választékosabb megfelelője:", options: ["Nevertheless / However", "And", "Also", "So"], correct: 0, exp: "A nevertheless és a however erős kohéziót ad a szövegnek." },
+            { q: "B2 szint: 'Very important' ➔ C1 választékosabb megfelelője:", options: ["Of paramount importance / Crucial", "Big thing", "Much important", "Crucial important"], correct: 0, exp: "A paramount különösen erős, formális szó." },
+            { q: "B2 szint: 'I think' helyett mit használjunk a TELC vitában?", options: ["I am of the opinion that... / From my perspective...", "Me think is...", "In my thought...", "As I am thinking..."], correct: 0, exp: "A think helyett ezek magasabb szintű, profibb panelek." },
+            { q: "B2 szint: 'A lot of problems' professzionálisabb formája:", options: ["A multitude of challenges / A wide range of issues", "Many bad things", "Great many bads", "Plenties of trouble"], correct: 0, exp: "A multitude of challenges sokkal erősebb kifejezés." },
+            { q: "B2 szint: 'To solve a problem' helyett használt akadémiai ige:", options: ["To tackle / address an issue", "To fix it", "To do a problem", "To finish a bad"], correct: 0, exp: "A tackle és az address akadémiai, professzionális igék." },
+            { q: "B2 szint: 'Small difference' (finom különbség) leírása:", options: ["A subtle distinction", "Little change", "Tiny error", "Small variation"], correct: 0, exp: "A subtle distinction nagyon jó C1-es panel." },
+            { q: "B2 szint: 'Bad for the environment' szintemelése:", options: ["Detrimental to the environment", "Bad for nature", "Not good for Earth", "Toxic stuff"], correct: 0, exp: "Detrimental = káros, ártalmas." },
+            { q: "B2 szint: 'Rich people' kifejezése választékosabban:", options: ["Affluent individuals / Wealthy citizens", "Money people", "Rich ones", "Wealthy guys"], correct: 0, exp: "Affluent = tehetős, választékosabb szó." },
+            { q: "B2 szint: 'Famous' (híres/elismert) C1 megfelelője:", options: ["Renowned / Prestigious", "Big name", "Very known", "Star"], correct: 0, exp: "Renowned és prestigious emeltebb stílusú." },
+            { q: "B2 szint: 'To use' (használni) akadémiai szinonimája:", options: ["To utilize / To employ", "To do with", "To have it", "To use more"], correct: 0, exp: "Akadémiai közegben a utilize és employ természetesebb." },
+            { q: "B2 szint: 'Clear' (egyértelmű) szintemelése:", options: ["Evident / Manifest", "Simple", "Easy to see", "Visible"], correct: 0, exp: "It is evident that... = nyilvánvaló, hogy..." },
+            { q: "B2 szint: 'Helpful' (segítő/előmozdító) C1 szinonimája:", options: ["Instrumental / Conducive", "Good helper", "Very nice", "Useful"], correct: 0, exp: "Instrumental = döntő szerepet játszó." },
+            { q: "B2 szint: 'Old' (elavult) kifejezése precízen:", options: ["Dated / Ancient / Obsolete", "Very old", "History", "Past"], correct: 0, exp: "Obsolete = elavult." },
+            { q: "B2 szint: 'Cheap' (olcsó/költséghatékony) üzleti angolul:", options: ["Inexpensive / Cost-effective", "Cheap price", "Low money", "No expensive"], correct: 0, exp: "Cost-effective üzleti közegben erősebb." },
+            { q: "B2 szint: 'To ask' (érdeklődni) formális formája:", options: ["To inquire", "To question", "To request", "To demand"], correct: 0, exp: "To inquire = érdeklődni, formálisabb ige." },
+            { q: "B2 szint: 'To show' (szemléltetni) prezentációs igéje:", options: ["To demonstrate / To illustrate", "To look", "To point", "To see"], correct: 0, exp: "Prezentációkban a demonstrate és illustrate nagyon jó választás." },
+            { q: "B2 szint: 'Important person' (kiemelkedő alak) leírása:", options: ["A prominent figure", "Big man", "Vip", "Known person"], correct: 0, exp: "A prominent figure = kiemelkedő személyiség." },
+            { q: "B2 szint: 'To change' (módosítani) akadémiai szinonimája:", options: ["To alter / To modify", "To switch", "To make new", "To move"], correct: 0, exp: "Az alter és modify sokkal formálisabb." },
+            { q: "B2 szint: 'Good result' (kedvező kimenetel) kifejezése:", options: ["A favorable outcome", "Nice finish", "Good end", "Positive result"], correct: 0, exp: "A favorable outcome kifinomultabb megfogalmazás." },
+            { q: "B2 szint: 'I like it' (tetszik/vonzó) érzelmi kifejezése:", options: ["It appeals to me / I am fond of it", "I love it", "This is my like", "I like it very"], correct: 0, exp: "It appeals to me és I am fond of it sokkal választékosabb." },
+            { q: "B2 szint: 'Because' (mivel/annak ténye miatt) kiváltása:", options: ["Owing to the fact that / Due to", "So", "As", "Because of"], correct: 0, exp: "Owing to the fact that és due to erősebb, formálisabb." },
+            { q: "B2 szint: 'Everywhere' (mindenütt jelenlévő) tudományos szava:", options: ["Ubiquitous", "All places", "Every point", "Whole world"], correct: 0, exp: "Ubiquitous = mindenütt jelenlévő." },
+            { q: "B2 szint: 'To start' (elkezdeni egy projektet) C1 igéje:", options: ["To embark on / To initiate", "To begin", "To open", "To start out"], correct: 0, exp: "Embark on és initiate erősebb, professzionálisabb igék." },
+            { q: "B2 szint: 'To understand' (felfogni az értelmét) szintemelése:", options: ["To grasp the concept / To comprehend", "To get it", "To know it", "To feel it"], correct: 0, exp: "Comprehend és grasp sokkal emeltebb szint." },
+            { q: "B2 szint: 'To make better' (fokozni/javítani) kifejezése:", options: ["To enhance / To refine", "To do good", "To fix well", "To up it"], correct: 0, exp: "Enhance = fokozni, javítani; refine = finomítani." },
+            { q: "B2 szint: 'Difficult' (fáradságos feladat) leírása:", options: ["Arduous / Demanding", "Hard", "Very tough", "Complex"], correct: 0, exp: "Arduous = rendkívül fáradságos." },
+            { q: "B2 szint: 'Danger' (veszélyben) C1 kifejezése:", options: ["Jeopardy / Peril", "Problem", "Bad situation", "Risk"], correct: 0, exp: "In jeopardy = veszélyben van." },
+            { q: "B2 szint: 'To reduce' (megnyirbálni/csökkenteni) igéje:", options: ["To curtail / To diminish", "To lower", "To make small", "To cut"], correct: 0, exp: "Curtail és diminish kifinomultabb szavak." },
+            { q: "B2 szint: 'To strengthen' (megerősíteni egy érvet) szintemelése:", options: ["To bolster / To reinforce", "To make strong", "To power up", "To build"], correct: 0, exp: "Bolster = megerősít, alátámaszt." },
+            { q: "B2 szint: 'Agreement' (konszenzus/egyetértés) szava:", options: ["Consensus", "Deal", "Ok", "Meeting of minds"], correct: 0, exp: "Reach a consensus = konszenzusra jutni." },
+            { q: "B2 szint: 'Result' (következmény/hatás) C1 formája:", options: ["Consequence / Implication", "End", "Finish", "After thing"], correct: 0, exp: "Consequence és implication pontosabb, fejlettebb szavak." },
+            { q: "B2 szint: 'Help' (segítség/támogatás) formális formája:", options: ["Assistance", "Help", "Give hand", "Support"], correct: 0, exp: "Assistance formális, professzionális szó." },
+            { q: "B2 szint: 'Many' (számos) választékos megfelelője:", options: ["Numerous / Countless", "Lots", "A lot", "Plenties"], correct: 0, exp: "Numerous = számos." },
+            { q: "B2 szint: 'Big' (jelentős mértékű) akadémiai szava:", options: ["Substantial / Enormous", "Large", "Giant", "Mega"], correct: 0, exp: "Substantial growth = jelentős növekedés." },
+            { q: "B2 szint: 'To encourage' (elősegíteni/táplálni) C1 igéje:", options: ["To foster / To stimulate", "To say go", "To help", "To push"], correct: 0, exp: "Foster growth = elősegíteni a fejlődést." },
+            { q: "B2 szint: 'Fast' (gyors/hatékony) üzleti szinonimája:", options: ["Rapid / Expeditious", "Quick", "Speedy", "High velocity"], correct: 0, exp: "Rapid change természetesebb, erősebb szerkezet." },
+            { q: "B2 szint: 'Maybe' (vélhetően/vitathatóan) érvrendszerben:", options: ["Arguably / Perchance", "Perhaps", "Maybe", "Possibility"], correct: 0, exp: "Arguably egy nagyon erős C1-es vitakifejezés." },
+            { q: "B2 szint: 'To explain' (megvilágítani a részleteket) igéje:", options: ["To elucidate", "To say why", "To make clear", "To show"], correct: 0, exp: "Elucidate = részletesen megvilágítani." },
+            { q: "B2 szint: 'Necessary' (nélkülözhetetlen) szintemelése:", options: ["Indispensable / Vital", "Needful", "Important", "Required"], correct: 0, exp: "Indispensable = nélkülözhetetlen." },
+            { q: "B2 szint: 'Enough' (elegendő) precíz szinonimája:", options: ["Sufficient / Adequate", "Okay", "Full", "Plentiful"], correct: 0, exp: "Sufficient és adequate = elegendő." }
+        ]
+    };
+
+    let studentName = "";
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+    let currentMode = "FIX";
+    let score = 0;
+    let currentIndex = 0;
+    let activeList = [];
+    let answered = false;
+
+    function selectMode(mode) {
+        currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById(`m-${mode}`).classList.add('selected');
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function startTraining() { const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student'); document.getElementById('start-screen').classList.add('hidden'); document.getElementById('quiz-ui').classList.remove('hidden'); loadQuestion(); }
+
+    
+    });
+
+    function loadQuestion() {
+        answered = false;
+        const qData = activeList[currentIndex];
+        document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${activeList.length}`;
+        document.getElementById('progress-fill').style.width = `${(currentIndex / activeList.length) * 100}%`;
+        document.getElementById('question-text').innerText = qData.q;
+        document.getElementById('explanation-box').classList.add('hidden');
+
+        let optionsWithMeta = qData.options.map((opt, idx) => ({ text: opt, isCorrect: idx === qData.correct }));
+        shuffleArray(optionsWithMeta);
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        optionsWithMeta.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => handleAnswer(opt.isCorrect, btn, qData.options[qData.correct]);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(isCorrect, clickedBtn, correctText) {
+        if (answered) return;
+        answered = true;
+        const qData = activeList[currentIndex];
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((btn) => { btn.disabled = true; });
+
+        if (isCorrect) {
+            score++;
+            clickedBtn.classList.add('correct');
+            document.getElementById('answer-status').innerText = "Helyes! ✓";
+            document.getElementById('answer-status').className = "text-sm font-black uppercase tracking-widest mb-2 text-emerald-400";
+        } else {
+            clickedBtn.classList.add('wrong');
+            btns.forEach(btn => { if (btn.innerText === correctText) btn.classList.add('correct'); });
+            document.getElementById('answer-status').innerText = "C1 Logic Check! ✗";
+            document.getElementById('answer-status').className = "text-sm font-black uppercase tracking-widest mb-2 text-rose-400";
+        }
+
+        document.getElementById('answer-explanation').innerText = qData.exp;
+        document.getElementById('explanation-box').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if (currentIndex < activeList.length) loadQuestion();
+        else finishQuiz();
+    }
+
+    async function finishQuiz() {
+        document.getElementById('quiz-ui').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('display-name').innerText = studentName;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('final-total').innerText = ` / ${activeList.length}`;
+        document.getElementById('progress-fill').style.width = '100%';
+
+        const percent = Math.round((score / activeList.length) * 100);
+        document.getElementById('result-percent-text').innerText = `${percent}%`;
+        document.getElementById('result-progress-fill').style.width = `${percent}%`;
+        document.getElementById('feedback-rating').innerText = "⚡ AI elemzés folyamatban...";
+
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
+
+            const response = await fetch(MAKE_WEBHOOK_URL, {
+                signal: controller.signal,
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Student: studentName,
+                    Quiz: QUIZ_NAME,
+                    Score: score,
+                    TotalQuestions: activeList.length,
+                    Level: QUIZ_LEVEL,
+                    Skill: QUIZ_SKILL,
+                    Percentage: percent,
+                    Mode: currentMode,
+                    CompletedAt: new Date().toISOString()
+                })
+            });
+
+            clearTimeout(timeout);
+            const text = await response.text();
+            document.getElementById('feedback-rating').innerText = text || "Szép munka! Folytasd a gyakorlást!";
+
+        } catch (e) {
+            console.error("Error:", e);
+            document.getElementById('feedback-rating').innerText =
+                percent >= 80 ? "Zseniális! Valódi C1 szint!" :
+                percent >= 60 ? "Szép munka, de gyakorolj még!" :
+                "Ne add fel, próbáld újra!";
+        }
+    }
+
+    function adminAccess() {
+        if (prompt("Jelszó:") === "bettina2026") {
+            alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+        }
+    }
+
+    function restartQuiz() {
+        studentName = ""; currentMode = "FIX"; score = 0; currentIndex = 0; activeList = []; answered = false;
+        document.getElementById('student-name').value = "";
+        document.getElementById('mode-label').innerText = "-";
+        document.getElementById('q-counter').innerText = "1 / 40";
+        document.getElementById('progress-fill').style.width = "0%";
+        document.getElementById('result-progress-fill').style.width = "0%";
+        document.getElementById('result-percent-text').innerText = "0%";
+        document.getElementById('final-score').innerText = "0";
+        document.getElementById('final-total').innerText = " / 40";
+        document.getElementById('feedback-rating').innerText = "-";
+        document.getElementById('display-name').innerText = "";
+        document.getElementById('question-text').innerText = "-";
+        document.getElementById('options-container').innerHTML = "";
+        document.getElementById('explanation-box').classList.add('hidden');
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
+        document.getElementById('m-FIX').classList.add('selected');
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('quiz-ui').classList.add('hidden');
+        
+    }
+</script>
+</body>
+</html>

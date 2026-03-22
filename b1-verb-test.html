@@ -1,0 +1,266 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B1 Verb Test | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --neon-mint: #2dd4bf;
+            --neon-indigo: #6366f1;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(45, 212, 191, 0.16);
+            --correct: #22c55e;
+            --wrong: #ef4444;
+        }
+        body {
+            background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #f1f5f9; min-height: 100vh; display: flex;
+            align-items: center; justify-content: center; padding: 15px; margin: 0;
+        }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 580px; overflow: hidden; }
+        .mint-glow-text { color: var(--neon-mint); text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; font-size: 1.2rem; text-align: center; outline: none; transition: all 0.25s ease; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: var(--neon-mint); background: rgba(255,255,255,0.06); box-shadow: 0 0 20px rgba(45,212,191,0.15); transform: scale(1.02); }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 10px 20px -5px rgba(99,102,241,0.35); transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.14); }
+        .primary-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); box-shadow: 0 0 30px rgba(45,212,191,0.22); }
+        .feedback-good { background: rgba(34,197,94,0.12); color: #bbf7d0; border: 1px solid rgba(34,197,94,0.25); }
+        .feedback-bad { background: rgba(239,68,68,0.12); color: #fecaca; border: 1px solid rgba(239,68,68,0.25); }
+        .wrong-list-item { border-left: 4px solid var(--wrong); background: rgba(239,68,68,0.10); padding: 12px; border-radius: 12px; margin-bottom: 8px; font-size: 0.9rem; color: #e2e8f0; }
+        .animate-slide { animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.5); border-radius: 10px; }
+        .progress-track { width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; width: 0; background: linear-gradient(90deg, var(--neon-mint), var(--neon-indigo)); transition: width 0.45s ease; }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 40px; box-shadow: 0 0 30px rgba(45,212,191,0.08); }
+    </style>
+</head>
+<body>
+
+<div id="app" class="cyber-shell p-8 md:p-12 relative overflow-hidden">
+
+    <!-- TEST UI -->
+    <div id="test-ui" class=" animate-slide">
+        <header class="flex justify-between items-center mb-8">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-teal-300 tracking-widest">Szó: <span id="q-counter">1 / 50</span></div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-rose-300 tracking-widest">Hiba: <span id="error-counter">0</span></div>
+        </header>
+        <div class="progress-track mb-10"><div id="progress-fill" class="progress-bar-inner"></div></div>
+        <div class="text-center mb-12">
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-4 italic">Angolul:</p>
+            <h2 id="hu-word" class="text-4xl md:text-5xl font-black text-white leading-tight">-</h2>
+        </div>
+        <div class="space-y-6">
+            <input type="text" id="en-input" placeholder="Ide gépelj..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="input-field">
+            <button id="submit-btn" onclick="handleSubmit()" class="w-full py-5 primary-btn text-white font-black rounded-2xl uppercase tracking-widest shadow-lg active:scale-95 transition-all">Ellenőrzés</button>
+        </div>
+        <div id="instant-feedback" class="hidden mt-8 p-5 rounded-2xl text-center font-bold text-sm"></div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-7xl mb-8">🏆</div>
+        <h2 class="text-4xl font-black text-white mb-2 uppercase tracking-tighter">Teszt kész!</h2>
+        <p class="text-slate-400 font-medium mb-10"><span id="display-name" class="mint-glow-text font-bold"></span>, íme az eredményed:</p>
+        <div class="result-card p-10 mb-8 relative overflow-hidden">
+            <div class="text-teal-300 font-black uppercase text-[10px] tracking-widest mb-3">Összesített pontszám</div>
+            <div class="text-8xl font-black text-white"><span id="final-score">0</span><span class="text-3xl text-slate-500"> / 50</span></div>
+            <div id="final-feedback" class="mt-6 text-teal-200 font-bold italic text-sm">-</div>
+        </div>
+        <div class="glass-panel p-5 mb-8">
+            <div class="flex justify-between items-center text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                <span>Teljesítmény</span><span id="result-percent-text" class="text-teal-300">0%</span>
+            </div>
+            <div class="progress-track"><div id="result-progress-fill" class="progress-bar-inner"></div></div>
+        </div>
+        <div id="wrong-container" class="hidden text-left mb-10">
+            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-5 ml-2 text-center">Ezeket tanuld még:</h3>
+            <div id="wrong-list" class="max-h-[200px] overflow-y-auto pr-3 custom-scroll"></div>
+        </div>
+        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition-all">Újrakezdés</button>
+    </div>
+</div>
+
+<script>
+    // ── API KEY STORED SAFELY IN MAKE.COM — NOT HERE ──
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+    const QUIZ_NAME = "B1 Verb Test";
+    const QUIZ_LEVEL = "B1";
+    const QUIZ_SKILL = "Vocabulary";
+
+    const VERB_DATA = [
+        {en:"Agree",hu:"Egyetért"},{en:"Allow",hu:"Megenged"},{en:"Believe",hu:"Hisz"},{en:"Borrow",hu:"Kölcsönkér"},{en:"Choose",hu:"Választ"},
+        {en:"Complain",hu:"Panaszkodik"},{en:"Decide",hu:"Eldönt"},{en:"Describe",hu:"Leír / Jellemez"},{en:"Discover",hu:"Felfedez"},{en:"Explain",hu:"Megmagyaráz"},
+        {en:"Forget",hu:"Elfelejt"},{en:"Guess",hu:"Kitalál / Tippel"},{en:"Happen",hu:"Történik"},{en:"Hope",hu:"Remél"},{en:"Imagine",hu:"Elképzel"},
+        {en:"Improve",hu:"Javít / Fejlődik"},{en:"Join",hu:"Csatlakozik"},{en:"Laugh",hu:"Nevet"},{en:"Learn",hu:"Tanul"},{en:"Listen",hu:"Hallgat"},
+        {en:"Mention",hu:"Említ"},{en:"Notice",hu:"Észrevesz"},{en:"Offer",hu:"Felajánl"},{en:"Organize",hu:"Szervez"},{en:"Prepare",hu:"Előkészít"},
+        {en:"Promise",hu:"Megígér"},{en:"Realize",hu:"Rájön / Felismer"},{en:"Receive",hu:"Megkap"},{en:"Remember",hu:"Emlékszik"},{en:"Repair",hu:"Megjavít"},
+        {en:"Repeat",hu:"Megismétel"},{en:"Return",hu:"Visszatér"},{en:"Save",hu:"Megment / Megtakarít"},{en:"Search",hu:"Keres"},{en:"Seem",hu:"Tűnik"},
+        {en:"Share",hu:"Megoszt"},{en:"Smile",hu:"Mosolyog"},{en:"Solve",hu:"Megold"},{en:"Spend",hu:"Költ / Tölt (időt)"},{en:"Suggest",hu:"Javasol"},
+        {en:"Support",hu:"Támogat"},{en:"Travel",hu:"Utazik"},{en:"Trust",hu:"Bízik benne"},{en:"Understand",hu:"Megért"},{en:"Visit",hu:"Meglátogat"},
+        {en:"Wait",hu:"Vár"},{en:"Wish",hu:"Kíván"},{en:"Worry",hu:"Aggódik"},{en:"Arrive",hu:"Megérkezik"},{en:"Collect",hu:"Gyűjt"}
+    ];
+
+    let studentName = "";
+    // Read student name from URL ?name=...
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+    let currentIndex = 0;
+    let score = 0;
+    let errors = 0;
+    let wrongWords = [];
+    let testList = [...VERB_DATA].sort(() => Math.random() - 0.5);
+
+    
+        studentName = name;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('test-ui').classList.remove('hidden');
+        loadWord();
+    }
+
+    
+    });
+
+    function loadWord() {
+        const word = testList[currentIndex];
+        document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${testList.length}`;
+        document.getElementById('progress-fill').style.width = `${(currentIndex / testList.length) * 100}%`;
+        document.getElementById('hu-word').innerText = word.hu;
+        document.getElementById('en-input').value = "";
+        document.getElementById('en-input').focus();
+        document.getElementById('instant-feedback').classList.add('hidden');
+    }
+
+    function handleSubmit() {
+        const input = document.getElementById('en-input').value.trim().toLowerCase();
+        const correct = testList[currentIndex].en.toLowerCase();
+        const feedback = document.getElementById('instant-feedback');
+        if (input === "") return;
+
+        if (input === correct) {
+            score++;
+            feedback.innerText = "Kiváló! ✓";
+            feedback.className = "mt-8 p-5 rounded-2xl text-center font-bold text-sm feedback-good";
+        } else {
+            errors++;
+            document.getElementById('error-counter').innerText = errors;
+            wrongWords.push({ hu: testList[currentIndex].hu, en: testList[currentIndex].en, typed: input });
+            feedback.innerText = `Sajnos nem. A helyes: ${testList[currentIndex].en}`;
+            feedback.className = "mt-8 p-5 rounded-2xl text-center font-bold text-sm feedback-bad";
+        }
+
+        feedback.classList.remove('hidden');
+        document.getElementById('submit-btn').disabled = true;
+
+        setTimeout(() => {
+            document.getElementById('submit-btn').disabled = false;
+            currentIndex++;
+            if (currentIndex < testList.length) loadWord();
+            else finishTest();
+        }, 1200);
+    }
+
+    document.getElementById('en-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSubmit();
+    });
+
+    async function finishTest() {
+        document.getElementById('test-ui').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('display-name').innerText = studentName;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('progress-fill').style.width = '100%';
+
+        const percent = Math.round((score / testList.length) * 100);
+        document.getElementById('result-percent-text').innerText = `${percent}%`;
+        document.getElementById('result-progress-fill').style.width = `${percent}%`;
+        document.getElementById('final-feedback').innerText = "⚡ AI elemzés folyamatban...";
+
+        if (wrongWords.length > 0) {
+            document.getElementById('wrong-container').classList.remove('hidden');
+            const list = document.getElementById('wrong-list');
+            list.innerHTML = "";
+            wrongWords.forEach(w => {
+                list.innerHTML += `
+                    <div class="wrong-list-item">
+                        <strong>${w.hu}</strong><br>
+                        <span class="opacity-60 text-xs uppercase">Gépelted: ${w.typed} |</span>
+                        <span class="text-teal-300 font-bold"> Helyes: ${w.en}</span>
+                    </div>
+                `;
+            });
+        }
+
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
+
+            const response = await fetch(MAKE_WEBHOOK_URL, {
+                signal: controller.signal,
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Student: studentName,
+                    Quiz: QUIZ_NAME,
+                    Score: score,
+                    TotalQuestions: testList.length,
+                    Level: QUIZ_LEVEL,
+                    Skill: QUIZ_SKILL,
+                    Errors: errors,
+                    Percentage: percent,
+                    CompletedAt: new Date().toISOString()
+                })
+            });
+
+            clearTimeout(timeout);
+            const text = await response.text();
+            document.getElementById('final-feedback').innerText = text || "Szép munka! Folytasd a gyakorlást!";
+
+        } catch (e) {
+            console.error("Error:", e);
+            document.getElementById('final-feedback').innerText =
+                percent >= 80 ? "Szuper! Magabiztos B1 tudás! ✨" :
+                percent >= 60 ? "Szép munka! Még egy kis gyakorlással tökéletes leszel!" :
+                "Ne add fel — minden hibából tanulsz!";
+        }
+    }
+
+    function adminAccess() {
+        if (prompt("Jelszó:") === "bettina2026") {
+            alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+        }
+    }
+
+    function restartQuiz() {
+        studentName = ""; currentIndex = 0; score = 0; errors = 0; wrongWords = [];
+        testList = [...VERB_DATA].sort(() => Math.random() - 0.5);
+
+        document.getElementById('student-name').value = "";
+        document.getElementById('en-input').value = "";
+        document.getElementById('q-counter').innerText = `1 / ${testList.length}`;
+        document.getElementById('error-counter').innerText = "0";
+        document.getElementById('progress-fill').style.width = "0%";
+        document.getElementById('result-progress-fill').style.width = "0%";
+        document.getElementById('result-percent-text').innerText = "0%";
+        document.getElementById('final-score').innerText = "0";
+        document.getElementById('final-feedback').innerText = "-";
+        document.getElementById('display-name').innerText = "";
+        document.getElementById('hu-word').innerText = "-";
+        document.getElementById('wrong-list').innerHTML = "";
+        document.getElementById('wrong-container').classList.add('hidden');
+        document.getElementById('instant-feedback').classList.add('hidden');
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('test-ui').classList.add('hidden');
+        
+    }
+</script>
+</body>
+</html>

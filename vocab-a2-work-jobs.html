@@ -1,0 +1,161 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A2 Work & Jobs | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid rgba(45,212,191,0.16); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 560px; overflow: hidden; }
+        .mint-glow { color: #2dd4bf; text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, #2dd4bf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; font-size: 1rem; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: #2dd4bf; box-shadow: 0 0 20px rgba(45,212,191,0.15); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(45,212,191,0.22); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; cursor: pointer; }
+        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+        .nav-btn:hover { background: rgba(45,212,191,0.12); border-color: #2dd4bf; }
+        .nav-btn:active { transform: scale(0.94); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #2dd4bf, #6366f1); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .flip-container { perspective: 1200px; width: 100%; height: 260px; cursor: pointer; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px 24px; text-align: center; }
+        .flip-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(45,212,191,0.2); }
+        .flip-back { background: linear-gradient(135deg, rgba(13,148,136,0.22), rgba(79,70,229,0.22)); border: 1px solid rgba(45,212,191,0.3); transform: rotateY(180deg); }
+        .cat-pill { display: inline-flex; background: rgba(45,212,191,0.12); border: 1px solid rgba(45,212,191,0.25); color: #5eead4; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .en-word { font-size: 2rem; font-weight: 900; color: white; margin-bottom: 8px; }
+        .example { font-size: 0.78rem; color: #94a3b8; font-style: italic; line-height: 1.4; }
+        .flip-hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.3; }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; }
+    </style>
+</head>
+<body>
+<div id="app" class="cyber-shell p-6 md:p-10">
+    <div id="card-screen" class="animate-slide">
+        <header class="flex justify-between items-center mb-5">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-teal-300 tracking-widest"><span id="cat-label">-</span></div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest"><span id="card-counter">1 / 50</span></div>
+        </header>
+        <div class="progress-track mb-5"><div id="progress-fill" class="progress-bar" style="width:0%"></div></div>
+        <div class="flip-container mb-5" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="flip-front">
+                    <div class="cat-pill" id="front-cat">-</div>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3">Magyar</p>
+                    <h2 id="card-hu" class="text-3xl font-black text-white leading-snug">-</h2>
+                    <span class="flip-hint text-slate-500">Koppints →</span>
+                </div>
+                <div class="flip-back">
+                    <div class="cat-pill" id="back-cat">-</div>
+                    <p class="text-teal-300 text-[10px] font-black uppercase tracking-widest mb-2">Angol</p>
+                    <div id="card-en" class="en-word">-</div>
+                    <p id="card-example" class="example">-</p>
+                    <span class="flip-hint text-teal-400">← Vissza</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-between gap-4 mb-5">
+            <button class="nav-btn" onclick="prevCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="flex-1 text-center text-slate-500 text-[10px] font-black uppercase tracking-widest">Koppints a fordításért</p>
+            <button class="nav-btn" onclick="nextCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="shuffleCards()" class="py-4 glass-panel text-slate-300 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition rounded-2xl">🔀 Keverés</button>
+            <button onclick="showResult()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">✅ Kész!</button>
+        </div>
+    </div>
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">💼</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Szép munka!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow"></span>, átmenté a kártyákat!</p>
+        <div class="result-card p-8 mb-8">
+            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-widest">🟢 A2 · Work & Jobs</div>
+            <div class="text-7xl font-black text-white" id="seen-count">0</div>
+            <div class="text-slate-400 text-sm mt-1">/ 50 szó</div>
+            <div id="feedback-msg" class="mt-4 text-teal-200 font-bold italic text-sm">-</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Újrakezdés</button>
+            <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
+        </div>
+    </div>
+</div>
+<script>
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+const CARDS = [
+    { cat:"👷 Foglalkozások", hu:"Orvos", en:"Doctor", example:"My sister is training to be a doctor." },
+    { cat:"👷 Foglalkozások", hu:"Tanár", en:"Teacher", example:"She has been a teacher for twenty years." },
+    { cat:"👷 Foglalkozások", hu:"Mérnök", en:"Engineer", example:"He works as an engineer at a car factory." },
+    { cat:"👷 Foglalkozások", hu:"Szakács / séf", en:"Cook / Chef", example:"The chef cooked a fantastic meal." },
+    { cat:"👷 Foglalkozások", hu:"Sofőr", en:"Driver", example:"He works as a taxi driver at night." },
+    { cat:"👷 Foglalkozások", hu:"Boltos / Eladó", en:"Shop assistant", example:"She works as a shop assistant in a supermarket." },
+    { cat:"👷 Foglalkozások", hu:"Titkár / Titkárnő", en:"Secretary", example:"The secretary organises all the meetings." },
+    { cat:"👷 Foglalkozások", hu:"Ügyvéd", en:"Lawyer", example:"You should speak to a lawyer about this." },
+    { cat:"👷 Foglalkozások", hu:"Rendőr", en:"Police officer", example:"A police officer stopped the car." },
+    { cat:"👷 Foglalkozások", hu:"Tűzoltó", en:"Firefighter", example:"Firefighters are very brave people." },
+    { cat:"👷 Foglalkozások", hu:"Ápolónő / Ápoló", en:"Nurse", example:"The nurse took my blood pressure." },
+    { cat:"👷 Foglalkozások", hu:"Könyvelő", en:"Accountant", example:"Our accountant handles the company taxes." },
+    { cat:"👷 Foglalkozások", hu:"Újságíró", en:"Journalist", example:"She is a journalist for a national newspaper." },
+    { cat:"👷 Foglalkozások", hu:"Programozó", en:"Programmer / Developer", example:"He is a software developer at a tech company." },
+    { cat:"👷 Foglalkozások", hu:"Építész", en:"Architect", example:"The architect designed a stunning building." },
+    { cat:"🏢 Munkahely", hu:"Iroda", en:"Office", example:"I work in an open-plan office." },
+    { cat:"🏢 Munkahely", hu:"Gyár", en:"Factory", example:"She works in a car factory." },
+    { cat:"🏢 Munkahely", hu:"Bolt / Üzlet", en:"Shop / Store", example:"He manages a clothing store." },
+    { cat:"🏢 Munkahely", hu:"Kórház", en:"Hospital", example:"She works night shifts at the hospital." },
+    { cat:"🏢 Munkahely", hu:"Iskola", en:"School", example:"He teaches at a primary school." },
+    { cat:"⏰ Munkaidő", hu:"Teljes munkaidő", en:"Full-time", example:"She works full-time, five days a week." },
+    { cat:"⏰ Munkaidő", hu:"Részmunkaidő", en:"Part-time", example:"I work part-time while studying." },
+    { cat:"⏰ Munkaidő", hu:"Túlóra", en:"Overtime", example:"He often does overtime at the end of the month." },
+    { cat:"⏰ Munkaidő", hu:"Szabadság", en:"Holiday / Annual leave", example:"I have ten days of annual leave left." },
+    { cat:"⏰ Munkaidő", hu:"Betegszabadság", en:"Sick leave", example:"She was on sick leave for two weeks." },
+    { cat:"💰 Fizetés", hu:"Fizetés", en:"Salary / Pay", example:"Her salary increased after the promotion." },
+    { cat:"💰 Fizetés", hu:"Minimálbér", en:"Minimum wage", example:"The minimum wage increased at the start of the year." },
+    { cat:"💰 Fizetés", hu:"Bónusz", en:"Bonus", example:"He got a bonus for his excellent performance." },
+    { cat:"💰 Fizetés", hu:"Juttatás", en:"Benefit", example:"The job comes with great benefits." },
+    { cat:"💰 Fizetés", hu:"Fizetésemelés", en:"Pay rise", example:"I asked my manager for a pay rise." },
+    { cat:"📋 Munka igék", hu:"Dolgozik", en:"Work", example:"She works from home three days a week." },
+    { cat:"📋 Munka igék", hu:"Alkalmaz", en:"Hire / Employ", example:"The company hired twenty new employees." },
+    { cat:"📋 Munka igék", hu:"Elbocsát", en:"Fire / Dismiss", example:"He was fired for being late every day." },
+    { cat:"📋 Munka igék", hu:"Felmond", en:"Resign / Quit", example:"She resigned after ten years with the company." },
+    { cat:"📋 Munka igék", hu:"Visszavonul", en:"Retire", example:"He plans to retire at the age of sixty-five." },
+    { cat:"📋 Munka igék", hu:"Jelentkezik állásra", en:"Apply for a job", example:"I applied for three jobs this week." },
+    { cat:"📋 Munka igék", hu:"Találkozón vesz részt", en:"Attend a meeting", example:"I attend three meetings every Monday." },
+    { cat:"📋 Munka igék", hu:"Határidőt tart", en:"Meet a deadline", example:"It is important to always meet your deadlines." },
+    { cat:"📋 Munka igék", hu:"Hazudik a munkáról", en:"Call in sick", example:"He called in sick on Monday." },
+    { cat:"📋 Munka igék", hu:"Ingázik", en:"Commute", example:"I commute by train every morning." },
+    { cat:"💬 Hasznos kifejezések", hu:"Főnök / Vezető", en:"Boss / Manager", example:"My boss is very supportive." },
+    { cat:"💬 Hasznos kifejezések", hu:"Csapat", en:"Team", example:"We work as a team on all our projects." },
+    { cat:"💬 Hasznos kifejezések", hu:"Ügyfél", en:"Client / Customer", example:"Always treat customers with respect." },
+    { cat:"💬 Hasznos kifejezések", hu:"Értekezlet / Megbeszélés", en:"Meeting", example:"We have a team meeting every Monday." },
+    { cat:"💬 Hasznos kifejezések", hu:"Projekt", en:"Project", example:"I am working on a new project." },
+    { cat:"💬 Hasznos kifejezések", hu:"Határidő", en:"Deadline", example:"The deadline is Friday at five o'clock." },
+    { cat:"💬 Hasznos kifejezések", hu:"Önéletrajz", en:"CV", example:"I updated my CV before applying." },
+    { cat:"💬 Hasznos kifejezések", hu:"Interjú", en:"Interview", example:"I have a job interview tomorrow." },
+    { cat:"💬 Hasznos kifejezések", hu:"Tapasztalat", en:"Experience", example:"Do you have any work experience?" },
+    { cat:"💬 Hasznos kifejezések", hu:"Készség", en:"Skill", example:"Communication is an important skill at work." },
+];
+let studentName="",cardList=[...CARDS],currentIndex=0,isFlipped=false;
+function startApp() {currentIndex = 0;document.getElementById('start-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
+});
+function renderCard(){const c=cardList[currentIndex];const t=cardList.length;document.getElementById('card-counter').innerText=`${currentIndex+1} / ${t}`;document.getElementById('progress-fill').style.width=`${((currentIndex+1)/t)*100}%`;document.getElementById('cat-label').innerText=c.cat;document.getElementById('front-cat').innerText=c.cat;document.getElementById('back-cat').innerText=c.cat;document.getElementById('card-hu').innerText=c.hu;document.getElementById('card-en').innerText=c.en;document.getElementById('card-example').innerText=`"${c.example}"`;isFlipped=false;document.getElementById('flip-inner').classList.remove('is-flipped');}
+function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('is-flipped',isFlipped);}
+function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
+function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}
+function shuffleCards(){for(let i=cardList.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cardList[i],cardList[j]]=[cardList[j],cardList[i]];}currentIndex=0;renderCard();}
+function showResult(){document.getElementById('card-screen').classList.add('hidden');document.getElementById('result-screen').classList.remove('hidden');document.getElementById('display-name').innerText=studentName;document.getElementById('seen-count').innerText=currentIndex+1;const pct=Math.round(((currentIndex+1)/cardList.length)*100);document.getElementById('feedback-msg').innerText=pct===100?"Zseniális! Az összes szót megtanultad! 💼":pct>=60?"Szép haladás! Folytasd!":"Jó kezdés! Ismételj és magabiztos leszel!";fetch(MAKE_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({Student:studentName,Quiz:"A2 Vocabulary - Work & Jobs",Score:currentIndex+1,TotalQuestions:cardList.length,Level:"A2",Skill:"Vocabulary",Percentage:pct,CompletedAt:new Date().toISOString()})}).catch(()=>{});}
+function restartFromStart(){currentIndex=0;document.getElementById('result-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
+function shuffleAndRestart(){shuffleCards();document.getElementById('result-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');}
+function adminAccess(){if(prompt("Jelszó:")==="bettina2026")alert("Az eredmények a Make → Airtable rendszerben mentődnek.");}
+document.addEventListener('keydown',e=>{if(document.getElementById('card-screen').classList.contains('hidden'))return;if(e.key==='ArrowRight')nextCard();if(e.key==='ArrowLeft')prevCard();if(e.key===' '){e.preventDefault();flipCard();}});
+</script>
+</body>
+</html>

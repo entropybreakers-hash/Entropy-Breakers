@@ -1,0 +1,162 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B2 Society & Politics | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at 15% 15%, rgba(168,85,247,0.1), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid rgba(168,85,247,0.2); box-shadow: 0 0 30px rgba(168,85,247,0.1); border-radius: 32px; width: 100%; max-width: 560px; overflow: hidden; }
+        .mint-glow { color: #2dd4bf; }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; font-size: 1rem; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: #a855f7; box-shadow: 0 0 20px rgba(168,85,247,0.2); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #7e22ce 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(168,85,247,0.25); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; cursor: pointer; }
+        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+        .nav-btn:hover { background: rgba(168,85,247,0.15); border-color: #a855f7; }
+        .nav-btn:active { transform: scale(0.94); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #a855f7, #6366f1); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .flip-container { perspective: 1200px; width: 100%; height: 270px; cursor: pointer; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+        .flip-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.25); }
+        .flip-back { background: linear-gradient(135deg, rgba(88,28,135,0.22), rgba(79,70,229,0.22)); border: 1px solid rgba(168,85,247,0.35); transform: rotateY(180deg); }
+        .cat-pill { display: inline-flex; background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.25); color: #d8b4fe; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .back-pill { display: inline-flex; background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.25); color: #5eead4; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .en-word { font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 8px; }
+        .example { font-size: 0.78rem; color: #94a3b8; font-style: italic; line-height: 1.4; }
+        .flip-hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.3; }
+        .result-card { background: linear-gradient(135deg, rgba(88,28,135,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(168,85,247,0.2); border-radius: 32px; }
+    </style>
+</head>
+<body>
+<div id="app" class="cyber-shell p-6 md:p-10">
+    <div id="card-screen" class="animate-slide">
+        <header class="flex justify-between items-center mb-5">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-purple-300 tracking-widest"><span id="cat-label">-</span></div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest"><span id="card-counter">1 / 50</span></div>
+        </header>
+        <div class="progress-track mb-5"><div id="progress-fill" class="progress-bar" style="width:0%"></div></div>
+        <div class="flip-container mb-5" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="flip-front">
+                    <div class="cat-pill" id="front-cat">-</div>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3">Magyar</p>
+                    <h2 id="card-hu" class="text-2xl font-black text-white leading-snug">-</h2>
+                    <span class="flip-hint text-slate-500">Koppints →</span>
+                </div>
+                <div class="flip-back">
+                    <div class="back-pill" id="back-cat">-</div>
+                    <p class="text-purple-300 text-[10px] font-black uppercase tracking-widest mb-1">Angol</p>
+                    <div id="card-en" class="en-word">-</div>
+                    <p id="card-example" class="example">-</p>
+                    <span class="flip-hint text-purple-400">← Vissza</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-between gap-4 mb-5">
+            <button class="nav-btn" onclick="prevCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="flex-1 text-center text-slate-500 text-[10px] font-black uppercase tracking-widest">Koppints a fordításért</p>
+            <button class="nav-btn" onclick="nextCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="shuffleCards()" class="py-4 glass-panel text-slate-300 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition rounded-2xl">🔀 Keverés</button>
+            <button onclick="showResult()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">✅ Kész!</button>
+        </div>
+    </div>
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">🏛️</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Szép munka!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow"></span>, átmenté a kártyákat!</p>
+        <div class="result-card p-8 mb-8">
+            <div class="text-purple-300 font-black uppercase text-xs mb-2 tracking-widest">🟣 B2 · Society & Politics</div>
+            <div class="text-7xl font-black text-white" id="seen-count">0</div>
+            <div class="text-slate-400 text-sm mt-1">/ 50 szó</div>
+            <div id="feedback-msg" class="mt-4 text-purple-200 font-bold italic text-sm">-</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Újrakezdés</button>
+            <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
+        </div>
+    </div>
+</div>
+<script>
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+const CARDS = [
+    { cat:"🏛️ Politikai rendszer", hu:"Demokrácia", en:"Democracy", example:"Democracy gives citizens the right to vote." },
+    { cat:"🏛️ Politikai rendszer", hu:"Diktatúra", en:"Dictatorship", example:"A dictatorship limits individual freedoms." },
+    { cat:"🏛️ Politikai rendszer", hu:"Alkotmány", en:"Constitution", example:"The constitution protects citizens' basic rights." },
+    { cat:"🏛️ Politikai rendszer", hu:"Parlament", en:"Parliament", example:"Parliament voted on the new legislation." },
+    { cat:"🏛️ Politikai rendszer", hu:"Kormány", en:"Government", example:"The government announced new economic measures." },
+    { cat:"🏛️ Politikai rendszer", hu:"Ellenzék", en:"Opposition", example:"The opposition criticised the government's decision." },
+    { cat:"🏛️ Politikai rendszer", hu:"Választás", en:"Election", example:"Elections take place every four years." },
+    { cat:"🏛️ Politikai rendszer", hu:"Szavazat", en:"Vote", example:"Every citizen has the right to vote." },
+    { cat:"🏛️ Politikai rendszer", hu:"Politikai párt", en:"Political party", example:"She joined a political party at the age of eighteen." },
+    { cat:"🏛️ Politikai rendszer", hu:"Törvényhozás", en:"Legislation", example:"New legislation was introduced to protect workers." },
+    { cat:"⚖️ Jog & Rend", hu:"Jogállamiság", en:"Rule of law", example:"The rule of law must be respected by all." },
+    { cat:"⚖️ Jog & Rend", hu:"Emberi jogok", en:"Human rights", example:"Human rights must be protected everywhere." },
+    { cat:"⚖️ Jog & Rend", hu:"Szólásszabadság", en:"Freedom of speech", example:"Freedom of speech is a fundamental right." },
+    { cat:"⚖️ Jog & Rend", hu:"Cenzúra", en:"Censorship", example:"Censorship suppresses free expression." },
+    { cat:"⚖️ Jog & Rend", hu:"Korrupció", en:"Corruption", example:"Corruption undermines trust in public institutions." },
+    { cat:"⚖️ Jog & Rend", hu:"Átláthatóság", en:"Transparency", example:"Transparency in government builds public trust." },
+    { cat:"⚖️ Jog & Rend", hu:"Elszámoltathatóság", en:"Accountability", example:"Politicians must be held accountable for their actions." },
+    { cat:"👥 Társadalom", hu:"Egyenlőség", en:"Equality", example:"We must work towards equality for all people." },
+    { cat:"👥 Társadalom", hu:"Egyenlőtlenség", en:"Inequality", example:"Income inequality is growing in many countries." },
+    { cat:"👥 Társadalom", hu:"Diszkrimináció", en:"Discrimination", example:"Discrimination based on race is illegal." },
+    { cat:"👥 Társadalom", hu:"Befogadás", en:"Inclusion", example:"Inclusion means ensuring no one is left behind." },
+    { cat:"👥 Társadalom", hu:"Sokszínűség", en:"Diversity", example:"Diversity in the workplace improves creativity." },
+    { cat:"👥 Társadalom", hu:"Integráció", en:"Integration", example:"Integration of migrants takes time and effort." },
+    { cat:"👥 Társadalom", hu:"Bevándorlás", en:"Immigration", example:"Immigration is a complex political issue." },
+    { cat:"👥 Társadalom", hu:"Menekült", en:"Refugee", example:"Thousands of refugees fled the conflict." },
+    { cat:"📰 Média & Közvélemény", hu:"Közvélemény", en:"Public opinion", example:"Public opinion shifted after the scandal." },
+    { cat:"📰 Média & Közvélemény", hu:"Propaganda", en:"Propaganda", example:"Propaganda is used to manipulate public opinion." },
+    { cat:"📰 Média & Közvélemény", hu:"Lobbizás", en:"Lobbying", example:"Corporate lobbying influences government decisions." },
+    { cat:"📰 Média & Közvélemény", hu:"Tiltakozás", en:"Protest", example:"Thousands joined the protest in the capital." },
+    { cat:"📰 Média & Közvélemény", hu:"Aktivizmus", en:"Activism", example:"Climate activism has grown significantly in recent years." },
+    { cat:"🌐 Nemzetközi kapcsolatok", hu:"Szuverenitás", en:"Sovereignty", example:"Nations have the right to sovereignty." },
+    { cat:"🌐 Nemzetközi kapcsolatok", hu:"Diplomácia", en:"Diplomacy", example:"Diplomacy is preferable to conflict." },
+    { cat:"🌐 Nemzetközi kapcsolatok", hu:"Szankció", en:"Sanction", example:"Economic sanctions were imposed on the country." },
+    { cat:"🌐 Nemzetközi kapcsolatok", hu:"Szövetség", en:"Alliance", example:"NATO is a military and political alliance." },
+    { cat:"🌐 Nemzetközi kapcsolatok", hu:"Multilateralizmus", en:"Multilateralism", example:"Multilateralism means working with many countries together." },
+    { cat:"💰 Gazdasági politika", hu:"Jóléti állam", en:"Welfare state", example:"The welfare state provides support for vulnerable citizens." },
+    { cat:"💰 Gazdasági politika", hu:"Privatizáció", en:"Privatisation", example:"The privatisation of utilities was controversial." },
+    { cat:"💰 Gazdasági politika", hu:"Nacionalizálás", en:"Nationalisation", example:"Some politicians support the nationalisation of railways." },
+    { cat:"💰 Gazdasági politika", hu:"Megszorítás", en:"Austerity", example:"Austerity measures led to public protests." },
+    { cat:"💰 Gazdasági politika", hu:"Munkanélküliség", en:"Unemployment", example:"Unemployment rose sharply during the recession." },
+    { cat:"💬 Igék", hu:"Törvényt alkot", en:"Legislate", example:"Governments must legislate on climate change." },
+    { cat:"💬 Igék", hu:"Szavaz", en:"Vote", example:"Citizens vote for their representatives every four years." },
+    { cat:"💬 Igék", hu:"Tüntet", en:"Protest / Demonstrate", example:"Thousands demonstrated outside the parliament." },
+    { cat:"💬 Igék", hu:"Vitázik", en:"Debate", example:"Politicians debated the new education bill." },
+    { cat:"💬 Igék", hu:"Reformál", en:"Reform", example:"The government plans to reform the healthcare system." },
+    { cat:"💬 Igék", hu:"Elnyom", en:"Suppress", example:"Authoritarian regimes suppress free expression." },
+    { cat:"💬 Igék", hu:"Képvisel", en:"Represent", example:"MPs represent their local communities in parliament." },
+    { cat:"💬 Igék", hu:"Együttműködik", en:"Cooperate", example:"Countries must cooperate to tackle global challenges." },
+    { cat:"💬 Igék", hu:"Ratifikál", en:"Ratify", example:"Parliament ratified the international treaty." },
+    { cat:"💬 Igék", hu:"Megvalósít (politikát)", en:"Implement (a policy)", example:"The government plans to implement the new policy next year." },
+];
+let studentName="",cardList=[...CARDS],currentIndex=0,isFlipped=false;
+function startApp() {currentIndex = 0;document.getElementById('start-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
+});
+function renderCard(){const c=cardList[currentIndex];const t=cardList.length;document.getElementById('card-counter').innerText=`${currentIndex+1} / ${t}`;document.getElementById('progress-fill').style.width=`${((currentIndex+1)/t)*100}%`;document.getElementById('cat-label').innerText=c.cat;document.getElementById('front-cat').innerText=c.cat;document.getElementById('back-cat').innerText=c.cat;document.getElementById('card-hu').innerText=c.hu;document.getElementById('card-en').innerText=c.en;document.getElementById('card-example').innerText=`"${c.example}"`;isFlipped=false;document.getElementById('flip-inner').classList.remove('is-flipped');}
+function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('is-flipped',isFlipped);}
+function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
+function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}
+function shuffleCards(){for(let i=cardList.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cardList[i],cardList[j]]=[cardList[j],cardList[i]];}currentIndex=0;renderCard();}
+function showResult(){document.getElementById('card-screen').classList.add('hidden');document.getElementById('result-screen').classList.remove('hidden');document.getElementById('display-name').innerText=studentName;document.getElementById('seen-count').innerText=currentIndex+1;const pct=Math.round(((currentIndex+1)/cardList.length)*100);document.getElementById('feedback-msg').innerText=pct===100?"Zseniális! Az összes szót megtanultad! 🏛️":pct>=60?"Szép haladás! Folytasd!":"Jó kezdés! Ismételj és magabiztos leszel!";fetch(MAKE_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({Student:studentName,Quiz:"B2 Vocabulary - Society & Politics",Score:currentIndex+1,TotalQuestions:cardList.length,Level:"B2",Skill:"Vocabulary",Percentage:pct,CompletedAt:new Date().toISOString()})}).catch(()=>{});}
+function restartFromStart(){currentIndex=0;document.getElementById('result-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
+function shuffleAndRestart(){shuffleCards();document.getElementById('result-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');}
+function adminAccess(){if(prompt("Jelszó:")==="bettina2026")alert("Az eredmények a Make → Airtable rendszerben mentődnek.");}
+document.addEventListener('keydown',e=>{if(document.getElementById('card-screen').classList.contains('hidden'))return;if(e.key==='ArrowRight')nextCard();if(e.key==='ArrowLeft')prevCard();if(e.key===' '){e.preventDefault();flipCard();}});
+</script>
+</body>
+</html>

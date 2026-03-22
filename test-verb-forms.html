@@ -1,0 +1,440 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verb Forms Test | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid rgba(45,212,191,0.16); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 580px; overflow: hidden; }
+        .mint-glow { color: #2dd4bf; text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, #2dd4bf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 16px 20px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 900; text-align: center; outline: none; transition: all 0.25s ease; font-size: 1.1rem; letter-spacing: 0.03em; }
+        .input-field::placeholder { color: #475569; font-weight: 600; font-size: 0.9rem; }
+        .input-field:focus { border-color: #2dd4bf; box-shadow: 0 0 20px rgba(45,212,191,0.15); background: rgba(255,255,255,0.06); }
+        .input-field.correct { border-color: #22c55e; background: rgba(34,197,94,0.08); color: #86efac; }
+        .input-field.wrong { border-color: #ef4444; background: rgba(239,68,68,0.08); color: #fca5a5; animation: shake 0.3s ease; }
+        .input-field.revealed { border-color: #f59e0b; background: rgba(245,158,11,0.08); color: #fde68a; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(45,212,191,0.22); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; cursor: pointer; }
+        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .filter-btn { padding: 8px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); font-size: 0.72rem; font-weight: 700; transition: all 0.2s ease; color: #cbd5e1; cursor: pointer; }
+        .filter-btn.active { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); color: white; border-color: rgba(255,255,255,0.14); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #2dd4bf, #6366f1); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .verb-display { background: linear-gradient(135deg, rgba(13,148,136,0.15), rgba(79,70,229,0.15)); border: 1px solid rgba(45,212,191,0.25); border-radius: 24px; padding: 28px 24px; text-align: center; }
+        .v1-word { font-size: 2.8rem; font-weight: 900; color: white; letter-spacing: -0.02em; }
+        .type-badge { display: inline-block; border-radius: 8px; padding: 3px 10px; font-size: 0.62rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+        .irregular { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .regular { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #86efac; }
+        .input-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; color: #64748b; margin-bottom: 6px; }
+        .feedback-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; margin-top: 6px; min-height: 20px; }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; }
+        .score-breakdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 16px; }
+        .score-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 12px 8px; text-align: center; }
+        .hu-hint { font-size: 0.78rem; color: #64748b; font-style: italic; margin-top: 4px; }
+    </style>
+</head>
+<body>
+<div id="app" class="cyber-shell p-6 md:p-10">
+
+    <!-- START SCREEN -->
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden animate-slide">
+        <div class="flex justify-between items-center mb-5">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-teal-300 tracking-widest">
+                <span id="score-display">✅ 0 &nbsp;❌ 0</span>
+            </div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest">
+                <span id="q-counter">1 / 60</span>
+            </div>
+        </div>
+        <div class="progress-track mb-6"><div id="progress-fill" class="progress-bar" style="width:0%"></div></div>
+
+        <!-- VERB DISPLAY -->
+        <div class="verb-display mb-6">
+            <div id="type-badge" class="type-badge irregular">🔴 Szabálytalan</div>
+            <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Magyar jelentés</p>
+            <p id="hu-meaning" class="hu-hint mb-3">-</p>
+            <p class="text-teal-300 text-[10px] font-black uppercase tracking-widest mb-2">Infinitive (V1)</p>
+            <div id="v1-word" class="v1-word">-</div>
+        </div>
+
+        <!-- INPUT FIELDS -->
+        <div class="space-y-4 mb-6">
+            <!-- V2 -->
+            <div>
+                <p class="input-label">Past Simple (V2)</p>
+                <input type="text" id="input-v2" placeholder="Írd be a Past Simple alakot..." class="input-field" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <div id="feedback-v2" class="feedback-row"></div>
+            </div>
+            <!-- V3 -->
+            <div>
+                <p class="input-label">Past Participle (V3)</p>
+                <input type="text" id="input-v3" placeholder="Írd be a Past Participle alakot..." class="input-field" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <div id="feedback-v3" class="feedback-row"></div>
+            </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div id="check-area" class="grid grid-cols-1 gap-3">
+            <button onclick="checkAnswer()" id="check-btn" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest">
+                ✅ Ellenőrzés
+            </button>
+        </div>
+        <div id="next-area" class="hidden grid grid-cols-2 gap-3 mt-3">
+            <button onclick="showAnswer()" id="show-btn" class="py-4 glass-panel text-slate-300 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition rounded-2xl">
+                💡 Megmutat
+            </button>
+            <button onclick="nextQuestion()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">
+                Következő →
+            </button>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-4">✍️</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Teszt kész!</h2>
+        <p class="text-slate-400 font-medium mb-6"><span id="display-name" class="mint-glow"></span>, itt az eredményed!</p>
+        <div class="result-card p-8 mb-6">
+            <div class="text-teal-300 font-black uppercase text-xs mb-3 tracking-widest">Végeredmény · <span id="result-filter">Mind</span></div>
+            <div class="text-7xl font-black text-white mb-1"><span id="final-score">0</span><span class="text-2xl text-slate-500"> / <span id="final-total">60</span></span></div>
+            <div id="feedback-msg" class="mt-3 text-teal-200 font-bold italic text-sm mb-4">-</div>
+            <div class="score-breakdown">
+                <div class="score-box">
+                    <div class="text-2xl font-black text-green-400" id="res-correct">0</div>
+                    <div class="text-[10px] font-black uppercase text-slate-500 mt-1">Helyes</div>
+                </div>
+                <div class="score-box">
+                    <div class="text-2xl font-black text-red-400" id="res-wrong">0</div>
+                    <div class="text-[10px] font-black uppercase text-slate-500 mt-1">Hibás</div>
+                </div>
+                <div class="score-box">
+                    <div class="text-2xl font-black text-teal-300" id="res-pct">0%</div>
+                    <div class="text-[10px] font-black uppercase text-slate-500 mt-1">Pontosság</div>
+                </div>
+            </div>
+        </div>
+        <div id="ai-feedback" class="glass-panel p-5 mb-6 text-left">
+            <p class="text-[10px] font-black uppercase tracking-widest text-teal-300 mb-2">⚡ AI Értékelés</p>
+            <p id="ai-text" class="text-slate-300 text-sm font-medium italic">Betöltés...</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="restartQuiz()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Újra</button>
+            <button onclick="goToStart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🏠 Főmenü</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+const ALL_VERBS = [
+    { type:"IRREGULAR", hu:"Van / Lesz",            v1:"be",         v2:["was","were"],          v3:["been"] },
+    { type:"IRREGULAR", hu:"Megy",                  v1:"go",         v2:["went"],                v3:["gone"] },
+    { type:"IRREGULAR", hu:"Jön",                   v1:"come",       v2:["came"],                v3:["come"] },
+    { type:"IRREGULAR", hu:"Csinál / Elvégez",      v1:"do",         v2:["did"],                 v3:["done"] },
+    { type:"IRREGULAR", hu:"Vesz / Kap",            v1:"get",        v2:["got"],                 v3:["got","gotten"] },
+    { type:"IRREGULAR", hu:"Lát",                   v1:"see",        v2:["saw"],                 v3:["seen"] },
+    { type:"IRREGULAR", hu:"Tud / Ismer",           v1:"know",       v2:["knew"],                v3:["known"] },
+    { type:"IRREGULAR", hu:"Gondol / Gondolkodik",  v1:"think",      v2:["thought"],             v3:["thought"] },
+    { type:"IRREGULAR", hu:"Vesz / Elvesz",         v1:"take",       v2:["took"],                v3:["taken"] },
+    { type:"IRREGULAR", hu:"Ad",                    v1:"give",       v2:["gave"],                v3:["given"] },
+    { type:"IRREGULAR", hu:"Talál",                 v1:"find",       v2:["found"],               v3:["found"] },
+    { type:"IRREGULAR", hu:"Mond / Elmond",         v1:"tell",       v2:["told"],                v3:["told"] },
+    { type:"IRREGULAR", hu:"Eszik",                 v1:"eat",        v2:["ate"],                 v3:["eaten"] },
+    { type:"IRREGULAR", hu:"Iszik",                 v1:"drink",      v2:["drank"],               v3:["drunk"] },
+    { type:"IRREGULAR", hu:"Alszik",                v1:"sleep",      v2:["slept"],               v3:["slept"] },
+    { type:"IRREGULAR", hu:"Vezet (autót)",         v1:"drive",      v2:["drove"],               v3:["driven"] },
+    { type:"IRREGULAR", hu:"Ír",                    v1:"write",      v2:["wrote"],               v3:["written"] },
+    { type:"IRREGULAR", hu:"Olvas",                 v1:"read",       v2:["read"],                v3:["read"] },
+    { type:"IRREGULAR", hu:"Fut",                   v1:"run",        v2:["ran"],                 v3:["run"] },
+    { type:"IRREGULAR", hu:"Ül",                    v1:"sit",        v2:["sat"],                 v3:["sat"] },
+    { type:"IRREGULAR", hu:"Áll",                   v1:"stand",      v2:["stood"],               v3:["stood"] },
+    { type:"IRREGULAR", hu:"Hagy / Enged",          v1:"let",        v2:["let"],                 v3:["let"] },
+    { type:"IRREGULAR", hu:"Tesz / Helyez",         v1:"put",        v2:["put"],                 v3:["put"] },
+    { type:"IRREGULAR", hu:"Vág",                   v1:"cut",        v2:["cut"],                 v3:["cut"] },
+    { type:"IRREGULAR", hu:"Üt / Elüt",             v1:"hit",        v2:["hit"],                 v3:["hit"] },
+    { type:"IRREGULAR", hu:"Hoz",                   v1:"bring",      v2:["brought"],             v3:["brought"] },
+    { type:"IRREGULAR", hu:"Vásárol",               v1:"buy",        v2:["bought"],              v3:["bought"] },
+    { type:"IRREGULAR", hu:"Épít",                  v1:"build",      v2:["built"],               v3:["built"] },
+    { type:"IRREGULAR", hu:"Repül",                 v1:"fly",        v2:["flew"],                v3:["flown"] },
+    { type:"IRREGULAR", hu:"Nő / Növekszik",        v1:"grow",       v2:["grew"],                v3:["grown"] },
+    { type:"IRREGULAR", hu:"Dob / Eldob",           v1:"throw",      v2:["threw"],               v3:["thrown"] },
+    { type:"IRREGULAR", hu:"Választ / Kiválaszt",   v1:"choose",     v2:["chose"],               v3:["chosen"] },
+    { type:"IRREGULAR", hu:"Eltör / Megtör",        v1:"break",      v2:["broke"],               v3:["broken"] },
+    { type:"IRREGULAR", hu:"Visel (ruhát)",         v1:"wear",       v2:["wore"],                v3:["worn"] },
+    { type:"IRREGULAR", hu:"Nyer / Győz",           v1:"win",        v2:["won"],                 v3:["won"] },
+    { type:"IRREGULAR", hu:"Megért",                v1:"understand", v2:["understood"],          v3:["understood"] },
+    { type:"IRREGULAR", hu:"Fizet",                 v1:"pay",        v2:["paid"],                v3:["paid"] },
+    { type:"IRREGULAR", hu:"Elad",                  v1:"sell",       v2:["sold"],                v3:["sold"] },
+    { type:"IRREGULAR", hu:"Érez",                  v1:"feel",       v2:["felt"],                v3:["felt"] },
+    { type:"IRREGULAR", hu:"Elmegy / Elhagy",       v1:"leave",      v2:["left"],                v3:["left"] },
+    { type:"REGULAR",   hu:"Szeret / Kedvel",       v1:"like",       v2:["liked"],               v3:["liked"] },
+    { type:"REGULAR",   hu:"Szeret (nagyon)",       v1:"love",       v2:["loved"],               v3:["loved"] },
+    { type:"REGULAR",   hu:"Dolgozik",              v1:"work",       v2:["worked"],              v3:["worked"] },
+    { type:"REGULAR",   hu:"Sétál",                 v1:"walk",       v2:["walked"],              v3:["walked"] },
+    { type:"REGULAR",   hu:"Vár",                   v1:"wait",       v2:["waited"],              v3:["waited"] },
+    { type:"REGULAR",   hu:"Kérdez",                v1:"ask",        v2:["asked"],               v3:["asked"] },
+    { type:"REGULAR",   hu:"Válaszol",              v1:"answer",     v2:["answered"],            v3:["answered"] },
+    { type:"REGULAR",   hu:"Segít",                 v1:"help",       v2:["helped"],              v3:["helped"] },
+    { type:"REGULAR",   hu:"Megáll",                v1:"stop",       v2:["stopped"],             v3:["stopped"] },
+    { type:"REGULAR",   hu:"Megnyit / Kinyit",      v1:"open",       v2:["opened"],              v3:["opened"] },
+    { type:"REGULAR",   hu:"Bezár / Becsuk",        v1:"close",      v2:["closed"],              v3:["closed"] },
+    { type:"REGULAR",   hu:"Változtat / Megváltozik",v1:"change",    v2:["changed"],             v3:["changed"] },
+    { type:"REGULAR",   hu:"Mozog / Mozgat",        v1:"move",       v2:["moved"],               v3:["moved"] },
+    { type:"REGULAR",   hu:"Megtervez",             v1:"plan",       v2:["planned"],             v3:["planned"] },
+    { type:"REGULAR",   hu:"Folytat",               v1:"continue",   v2:["continued"],           v3:["continued"] },
+    { type:"REGULAR",   hu:"Megpróbál",             v1:"try",        v2:["tried"],               v3:["tried"] },
+    { type:"REGULAR",   hu:"Befejez",               v1:"finish",     v2:["finished"],            v3:["finished"] },
+    { type:"REGULAR",   hu:"Elkezd",                v1:"start",      v2:["started"],             v3:["started"] },
+    { type:"REGULAR",   hu:"Meglátogat",            v1:"visit",      v2:["visited"],             v3:["visited"] },
+    { type:"REGULAR",   hu:"Tanul / Megtanul",      v1:"learn",      v2:["learned","learnt"],    v3:["learned","learnt"] },
+];
+
+let studentName = "";
+    // Read student name from URL ?name=...
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+let selectedFilter = "ALL";
+let questions = [];
+let currentIndex = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let answered = false;
+let v2Correct = false;
+let v3Correct = false;
+
+function setFilter(f) {
+    selectedFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`f-${f}`).classList.add('active');
+}
+
+function normalise(str) {
+    return str.trim().toLowerCase().replace(/[^a-z\s\/]/g, '');
+}
+
+function checkMatch(input, accepted) {
+    const norm = normalise(input);
+    return accepted.some(a => normalise(a) === norm);
+}
+
+function startApp() {
+    
+    
+    
+    
+
+    let pool = selectedFilter === 'ALL' ? [...ALL_VERBS] : ALL_VERBS.filter(v => v.type === selectedFilter);
+    // shuffle
+    for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    questions = pool;
+    currentIndex = 0; correctCount = 0; wrongCount = 0; answered = false;
+
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    renderQuestion();
+}
+
+ });
+
+function renderQuestion() {
+    const q = questions[currentIndex];
+    const total = questions.length;
+    answered = false; v2Correct = false; v3Correct = false;
+
+    document.getElementById('q-counter').innerText = `${currentIndex + 1} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
+    document.getElementById('score-display').innerHTML = `✅ ${correctCount} &nbsp;❌ ${wrongCount}`;
+    document.getElementById('v1-word').innerText = q.v1;
+    document.getElementById('hu-meaning').innerText = q.hu;
+
+    const isIrr = q.type === 'IRREGULAR';
+    const badge = document.getElementById('type-badge');
+    badge.className = `type-badge ${isIrr ? 'irregular' : 'regular'}`;
+    badge.innerText = isIrr ? '🔴 Szabálytalan' : '🟢 Szabályos';
+
+    // reset inputs
+    ['input-v2','input-v3'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.className = 'input-field';
+        el.disabled = false;
+    });
+    document.getElementById('feedback-v2').innerHTML = '';
+    document.getElementById('feedback-v3').innerHTML = '';
+    document.getElementById('check-area').classList.remove('hidden');
+    document.getElementById('next-area').classList.add('hidden');
+    document.getElementById('input-v2').focus();
+}
+
+// allow Enter to jump from V2 to V3
+document.getElementById('input-v2').addEventListener('keypress', e => {
+    if (e.key === 'Enter') document.getElementById('input-v3').focus();
+});
+document.getElementById('input-v3').addEventListener('keypress', e => {
+    if (e.key === 'Enter' && !answered) checkAnswer();
+    else if (e.key === 'Enter' && answered) nextQuestion();
+});
+
+function checkAnswer() {
+    if (answered) return;
+    const q = questions[currentIndex];
+    const inV2 = document.getElementById('input-v2').value;
+    const inV3 = document.getElementById('input-v3').value;
+
+    if (!inV2.trim() && !inV3.trim()) {
+        document.getElementById('input-v2').focus();
+        return;
+    }
+
+    v2Correct = checkMatch(inV2, q.v2);
+    v3Correct = checkMatch(inV3, q.v3);
+    answered = true;
+
+    // style V2
+    const elV2 = document.getElementById('input-v2');
+    elV2.className = `input-field ${v2Correct ? 'correct' : 'wrong'}`;
+    elV2.disabled = true;
+    document.getElementById('feedback-v2').innerHTML = v2Correct
+        ? `<span style="color:#86efac">✅ Helyes!</span>`
+        : `<span style="color:#fca5a5">❌ Helyes: <strong>${q.v2.join(' / ')}</strong></span>`;
+
+    // style V3
+    const elV3 = document.getElementById('input-v3');
+    elV3.className = `input-field ${v3Correct ? 'correct' : 'wrong'}`;
+    elV3.disabled = true;
+    document.getElementById('feedback-v3').innerHTML = v3Correct
+        ? `<span style="color:#86efac">✅ Helyes!</span>`
+        : `<span style="color:#fca5a5">❌ Helyes: <strong>${q.v3.join(' / ')}</strong></span>`;
+
+    // scoring: both correct = 1 point
+    if (v2Correct && v3Correct) correctCount++;
+    else wrongCount++;
+
+    document.getElementById('score-display').innerHTML = `✅ ${correctCount} &nbsp;❌ ${wrongCount}`;
+    document.getElementById('check-area').classList.add('hidden');
+    document.getElementById('next-area').classList.remove('hidden');
+
+    // hide show-answer button if both correct
+    document.getElementById('show-btn').style.display = (v2Correct && v3Correct) ? 'none' : 'block';
+}
+
+function showAnswer() {
+    const q = questions[currentIndex];
+    if (!v2Correct) {
+        const el = document.getElementById('input-v2');
+        el.value = q.v2[0];
+        el.className = 'input-field revealed';
+    }
+    if (!v3Correct) {
+        const el = document.getElementById('input-v3');
+        el.value = q.v3[0];
+        el.className = 'input-field revealed';
+    }
+    document.getElementById('show-btn').style.display = 'none';
+}
+
+function nextQuestion() {
+    if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+    document.getElementById('display-name').innerText = studentName;
+
+    const total = questions.length;
+    const pct = Math.round((correctCount / total) * 100);
+    const filterLabel = selectedFilter === 'ALL' ? 'Mind' : selectedFilter === 'IRREGULAR' ? 'Szabálytalan' : 'Szabályos';
+
+    document.getElementById('final-score').innerText = correctCount;
+    document.getElementById('final-total').innerText = total;
+    document.getElementById('res-correct').innerText = correctCount;
+    document.getElementById('res-wrong').innerText = wrongCount;
+    document.getElementById('res-pct').innerText = `${pct}%`;
+    document.getElementById('result-filter').innerText = filterLabel;
+
+    document.getElementById('feedback-msg').innerText = pct === 100
+        ? "Tökéletes! Minden igealak helyes! ⚡"
+        : pct >= 80 ? "Kiváló! Nagyon jól teljesítettél!"
+        : pct >= 60 ? "Szép munka! Még egy kis gyakorlás és tökéletes leszel!"
+        : "Jó kezdés! Ismételd át a flashcards-t és próbáld újra!";
+
+    // send to Make.com
+    fetch(MAKE_WEBHOOK_URL, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            Student: studentName,
+            Quiz: `Verb Forms Test (${filterLabel})`,
+            Score: correctCount,
+            TotalQuestions: total,
+            Level: "A2-B2",
+            Skill: "Grammar",
+            Percentage: pct,
+            CompletedAt: new Date().toISOString()
+        })
+    }).catch(() => {});
+
+    // AI feedback via Make.com
+    document.getElementById('ai-text').innerText = "⚡ AI elemzés folyamatban...";
+    fetch(MAKE_WEBHOOK_URL, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            Student: studentName,
+            Quiz: `Verb Forms Test AI Feedback`,
+            Score: correctCount,
+            TotalQuestions: total,
+            Percentage: pct,
+            Level: "A2-B2",
+            Skill: "Grammar - Verb Forms",
+            CompletedAt: new Date().toISOString()
+        })
+    }).then(r => r.text()).then(t => {
+        document.getElementById('ai-text').innerText = t || "Szép munka! Folytasd a gyakorlást! ⚡";
+    }).catch(() => {
+        document.getElementById('ai-text').innerText = pct >= 80
+            ? "Kiváló teljesítmény! Az igealakokat magabiztosan használod. ⚡"
+            : "Érdemes átismételni a szabálytalan igéket a flashcard-ok segítségével!";
+    });
+}
+
+function restartQuiz() {
+    document.getElementById('result-screen').classList.add('hidden');
+    document.getElementById('quiz-screen').classList.remove('hidden');
+    // reshuffle same pool
+    for (let i = questions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
+    currentIndex = 0; correctCount = 0; wrongCount = 0;
+    renderQuestion();
+}
+
+function goToStart() {
+    document.getElementById('result-screen').classList.add('hidden');
+    
+}
+
+function adminAccess() {
+    if (prompt("Jelszó:") === "bettina2026") alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+}
+</script>
+</body>
+</html>

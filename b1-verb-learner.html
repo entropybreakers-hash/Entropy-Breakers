@@ -1,0 +1,409 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B1 Verb Learner | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --neon-mint: #2dd4bf;
+            --neon-indigo: #6366f1;
+            --neon-glow: rgba(45, 212, 191, 0.35);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(45, 212, 191, 0.16);
+            --correct: #22c55e;
+            --wrong: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background:
+                radial-gradient(circle at 15% 15%, rgba(45, 212, 191, 0.12), transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.12), transparent 40%),
+                #020617;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            margin: 0;
+        }
+
+        .cyber-shell {
+            background: rgba(2, 6, 23, 0.88);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.08);
+            border-radius: 32px;
+            width: 100%;
+            max-width: 560px;
+            overflow: hidden;
+        }
+
+        .mint-glow-text {
+            color: var(--neon-mint);
+            text-shadow: 0 0 14px rgba(45, 212, 191, 0.6);
+        }
+
+        .aurora-title {
+            background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .input-field::placeholder {
+            color: #94a3b8;
+        }
+
+        .input-field:focus {
+            border-color: var(--neon-mint);
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.15);
+            background: rgba(255,255,255,0.06);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%);
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.22);
+            border: 1px solid rgba(255,255,255,0.14);
+            transition: all 0.25s ease;
+        }
+
+        .primary-btn:hover:not(:disabled) {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.35);
+        }
+
+        .card-flip {
+            perspective: 1000px;
+            height: 80px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.45s ease;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card-inner.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            padding: 6px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%);
+            color: white;
+            font-size: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 0 16px rgba(45, 212, 191, 0.16);
+        }
+
+        .card-back {
+            background: rgba(255,255,255,0.06);
+            color: #e2e8f0;
+            transform: rotateY(180deg);
+            border: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.82rem;
+            line-height: 1.3;
+        }
+
+        .card-inner.is-matched .card-back {
+            background: rgba(34, 197, 94, 0.12);
+            border-color: var(--correct);
+            color: #bbf7d0;
+            opacity: 0.55;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .animate-slide {
+            animation: slideIn 0.35s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(13, 148, 136, 0.18), rgba(79, 70, 229, 0.18));
+            border: 1px solid rgba(45, 212, 191, 0.16);
+            border-radius: 32px;
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.08);
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" class="cyber-shell p-6 md:p-10">
+    <!-- START SCREEN -->
+    <!-- GAME SCREEN -->
+    <div id="game-screen" class="hidden animate-slide">
+        <header class="flex justify-between items-center mb-6">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-teal-300 tracking-widest">
+                Kör: <span id="round-info">1 / 5</span>
+            </div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest">
+                Lépés: <span id="move-count">0</span>
+            </div>
+        </header>
+
+        <div id="card-grid" class="grid-container"></div>
+    </div>
+
+    <!-- NEXT ROUND MODAL -->
+    <div id="next-round-modal" class="hidden fixed inset-0 bg-slate-950/90 flex items-center justify-center z-50 p-6 backdrop-blur-md">
+        <div class="cyber-shell p-8 text-center w-full max-w-md">
+            <div class="text-4xl mb-4">🚀</div>
+            <h2 class="text-2xl font-bold text-white mb-2">Remek tempó!</h2>
+            <p class="text-slate-400 mb-6 italic">Készen állsz a következő 10 szóra?</p>
+            <button onclick="loadNextChunk()" class="w-full py-4 primary-btn text-white font-black rounded-xl uppercase tracking-widest shadow-lg">
+                Folytatás
+            </button>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">🎓</div>
+        <h2 class="text-3xl font-black text-white mb-2">Szép volt!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, a B1-es igék megvannak!</p>
+
+        <div class="result-card p-8 mb-8">
+            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-[0.2em]">Összesített lépésszám</div>
+            <div class="text-7xl font-black text-white" id="final-moves">0</div>
+            <div id="feedback-rating" class="mt-4 text-teal-200 font-bold italic">-</div>
+        </div>
+
+        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">
+            Újrakezdés
+        </button>
+    </div>
+</div>
+
+<script>
+    // ── API KEY STORED SAFELY IN MAKE.COM — NOT HERE ──
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+    const QUIZ_NAME = "B1 Verb Learner";
+    const QUIZ_LEVEL = "B1";
+    const QUIZ_SKILL = "Vocabulary";
+
+    const VERB_DATA = [
+        {en:"Agree",hu:"Egyetért"},{en:"Allow",hu:"Megenged"},{en:"Believe",hu:"Hisz"},{en:"Borrow",hu:"Kölcsönkér"},{en:"Choose",hu:"Választ"},
+        {en:"Complain",hu:"Panaszkodik"},{en:"Decide",hu:"Eldönt"},{en:"Describe",hu:"Leír / Jellemez"},{en:"Discover",hu:"Felfedez"},{en:"Explain",hu:"Megmagyaráz"},
+        {en:"Forget",hu:"Elfelejt"},{en:"Guess",hu:"Kitalál / Tippel"},{en:"Happen",hu:"Történik"},{en:"Hope",hu:"Remél"},{en:"Imagine",hu:"Elképzel"},
+        {en:"Improve",hu:"Javít"},{en:"Join",hu:"Csatlakozik"},{en:"Laugh",hu:"Nevet"},{en:"Learn",hu:"Tanul"},{en:"Listen",hu:"Hallgat"},
+        {en:"Mention",hu:"Említ"},{en:"Notice",hu:"Észrevesz"},{en:"Offer",hu:"Felajánl"},{en:"Organize",hu:"Szervez"},{en:"Prepare",hu:"Előkészít"},
+        {en:"Promise",hu:"Megígér"},{en:"Realize",hu:"Rájön"},{en:"Receive",hu:"Megkap"},{en:"Remember",hu:"Emlékszik"},{en:"Repair",hu:"Megjavít"},
+        {en:"Repeat",hu:"Megismétel"},{en:"Return",hu:"Visszatér"},{en:"Save",hu:"Megment / Megtakarít"},{en:"Search",hu:"Keres"},{en:"Seem",hu:"Tűnik"},
+        {en:"Share",hu:"Megoszt"},{en:"Smile",hu:"Mosolyog"},{en:"Solve",hu:"Megold"},{en:"Spend",hu:"Költ"},{en:"Suggest",hu:"Javasol"},
+        {en:"Support",hu:"Támogat"},{en:"Travel",hu:"Utazik"},{en:"Trust",hu:"Bízik"},{en:"Understand",hu:"Megért"},{en:"Visit",hu:"Meglátogat"},
+        {en:"Wait",hu:"Vár"},{en:"Wish",hu:"Kíván"},{en:"Worry",hu:"Aggódik"},{en:"Arrive",hu:"Megérkezik"},{en:"Collect",hu:"Gyűjt"}
+    ];
+
+    const CHUNK_SIZE = 10;
+
+    let studentName = "";
+    // Read student name from URL ?name=...
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+    let moves = 0;
+    let matchedInTotal = 0;
+    let currentChunk = [];
+    let flippedCards = [];
+    let isProcessing = false;
+    let fullList = [...VERB_DATA].sort(() => Math.random() - 0.5);
+
+    
+
+        studentName = name;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        loadNextChunk();
+    }
+
+    
+    });
+
+    function loadNextChunk() {
+        document.getElementById('next-round-modal').classList.add('hidden');
+        currentChunk = fullList.slice(matchedInTotal, matchedInTotal + CHUNK_SIZE);
+        const roundNum = Math.floor(matchedInTotal / CHUNK_SIZE) + 1;
+        document.getElementById('round-info').innerText = `${roundNum} / 5`;
+
+        let displayCards = [];
+        currentChunk.forEach((pair, idx) => {
+            displayCards.push({ id: idx, text: pair.en, pairId: idx });
+            displayCards.push({ id: idx + 100, text: pair.hu, pairId: idx });
+        });
+
+        displayCards.sort(() => Math.random() - 0.5);
+
+        const grid = document.getElementById('card-grid');
+        grid.innerHTML = '';
+
+        displayCards.forEach(card => {
+            const el = document.createElement('div');
+            el.className = 'card-flip';
+            el.innerHTML = `
+                <div class="card-inner" id="card-${card.id}" onclick="handleCardClick(${card.id}, ${card.pairId})">
+                    <div class="card-front">?</div>
+                    <div class="card-back">${card.text}</div>
+                </div>
+            `;
+            grid.appendChild(el);
+        });
+
+        window.scrollTo(0, 0);
+    }
+
+    function handleCardClick(id, pairId) {
+        if (isProcessing) return;
+
+        const el = document.getElementById(`card-${id}`);
+        if (el.classList.contains('is-flipped') || el.classList.contains('is-matched')) return;
+
+        el.classList.add('is-flipped');
+        flippedCards.push({ id, pairId, el });
+
+        if (flippedCards.length === 2) {
+            moves++;
+            document.getElementById('move-count').innerText = moves;
+            isProcessing = true;
+
+            if (flippedCards[0].pairId === flippedCards[1].pairId) {
+                setTimeout(() => {
+                    flippedCards.forEach(c => c.el.classList.add('is-matched'));
+                    matchedInTotal++;
+                    flippedCards = [];
+                    isProcessing = false;
+
+                    if (matchedInTotal % CHUNK_SIZE === 0) {
+                        if (matchedInTotal === fullList.length) finishGame();
+                        else document.getElementById('next-round-modal').classList.remove('hidden');
+                    }
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    flippedCards.forEach(c => c.el.classList.remove('is-flipped'));
+                    flippedCards = [];
+                    isProcessing = false;
+                }, 750);
+            }
+        }
+    }
+
+    async function finishGame() {
+        document.getElementById('game-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('display-name').innerText = studentName;
+        document.getElementById('final-moves').innerText = moves;
+        document.getElementById('feedback-rating').innerText = "⚡ AI elemzés folyamatban...";
+
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
+
+            const response = await fetch(MAKE_WEBHOOK_URL, {
+                signal: controller.signal,
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Student: studentName,
+                    Quiz: QUIZ_NAME,
+                    Score: moves,
+                    TotalQuestions: VERB_DATA.length,
+                    Level: QUIZ_LEVEL,
+                    Skill: QUIZ_SKILL,
+                    CompletedAt: new Date().toISOString()
+                })
+            });
+
+            clearTimeout(timeout);
+            const text = await response.text();
+            document.getElementById('feedback-rating').innerText = text || "Szép munka! Folytasd a gyakorlást!";
+
+        } catch (e) {
+            console.error("Error:", e);
+            document.getElementById('feedback-rating').innerText =
+                moves <= 70 ? "Zseniális! Készen állsz a haladóbb szintre!" :
+                moves <= 95 ? "Szép munka, de gyakorolj még!" :
+                "Ne add fel, próbáld újra!";
+        }
+    }
+
+    function adminAccess() {
+        if (prompt("Jelszó:") === "bettina2026") {
+            alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+        }
+    }
+
+    function restartQuiz() {
+        studentName = "";
+        moves = 0;
+        matchedInTotal = 0;
+        currentChunk = [];
+        flippedCards = [];
+        isProcessing = false;
+        fullList = [...VERB_DATA].sort(() => Math.random() - 0.5);
+
+        document.getElementById('student-name').value = "";
+        document.getElementById('round-info').innerText = "1 / 5";
+        document.getElementById('move-count').innerText = "0";
+        document.getElementById('final-moves').innerText = "0";
+        document.getElementById('feedback-rating').innerText = "-";
+        document.getElementById('display-name').innerText = "";
+        document.getElementById('card-grid').innerHTML = "";
+
+        document.getElementById('next-round-modal').classList.add('hidden');
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.add('hidden');
+        
+    }
+</script>
+</body>
+</html>

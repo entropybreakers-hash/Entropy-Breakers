@@ -1,0 +1,163 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>B2 Business & Career | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        :root { --glass-bg: rgba(255,255,255,0.04); --card-border: rgba(168,85,247,0.2); }
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at 15% 15%, rgba(168,85,247,0.1), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(168,85,247,0.1); border-radius: 32px; width: 100%; max-width: 560px; overflow: hidden; }
+        .mint-glow-text { color: #2dd4bf; }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; font-size: 1rem; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: #a855f7; box-shadow: 0 0 20px rgba(168,85,247,0.2); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #7e22ce 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(168,85,247,0.25); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; cursor: pointer; }
+        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; }
+        .nav-btn:hover { background: rgba(168,85,247,0.15); border-color: #a855f7; }
+        .nav-btn:active { transform: scale(0.94); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; background: linear-gradient(90deg, #a855f7, #6366f1); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .flip-container { perspective: 1200px; width: 100%; height: 270px; cursor: pointer; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+        .flip-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(168,85,247,0.25); }
+        .flip-back { background: linear-gradient(135deg, rgba(88,28,135,0.22), rgba(79,70,229,0.22)); border: 1px solid rgba(168,85,247,0.35); transform: rotateY(180deg); }
+        .cat-pill { display: inline-flex; background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.25); color: #d8b4fe; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .back-pill { display: inline-flex; background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.25); color: #5eead4; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .en-word { font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 8px; }
+        .example { font-size: 0.78rem; color: #94a3b8; font-style: italic; line-height: 1.4; }
+        .flip-hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.3; }
+        .result-card { background: linear-gradient(135deg, rgba(88,28,135,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(168,85,247,0.2); border-radius: 32px; }
+    </style>
+</head>
+<body>
+<div id="app" class="cyber-shell p-6 md:p-10">
+    <div id="card-screen" class="animate-slide">
+        <header class="flex justify-between items-center mb-5">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-purple-300 tracking-widest"><span id="cat-label">-</span></div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest"><span id="card-counter">1 / 50</span></div>
+        </header>
+        <div class="progress-track mb-5"><div id="progress-fill" class="progress-bar-inner" style="width:0%"></div></div>
+        <div class="flip-container mb-5" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="flip-front">
+                    <div class="cat-pill" id="front-cat">-</div>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-3">Magyar</p>
+                    <h2 id="card-hu" class="text-2xl font-black text-white leading-snug">-</h2>
+                    <span class="flip-hint text-slate-500">Koppints →</span>
+                </div>
+                <div class="flip-back">
+                    <div class="back-pill" id="back-cat">-</div>
+                    <p class="text-purple-300 text-[10px] font-black uppercase tracking-widest mb-1">Angol</p>
+                    <div id="card-en" class="en-word">-</div>
+                    <p id="card-example" class="example">-</p>
+                    <span class="flip-hint text-purple-400">← Vissza</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-between gap-4 mb-5">
+            <button class="nav-btn" onclick="prevCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="flex-1 text-center text-slate-500 text-[10px] font-black uppercase tracking-widest">Koppints a fordításért</p>
+            <button class="nav-btn" onclick="nextCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="shuffleCards()" class="py-4 glass-panel text-slate-300 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition rounded-2xl">🔀 Keverés</button>
+            <button onclick="showResult()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">✅ Kész!</button>
+        </div>
+    </div>
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">💼</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Szép munka!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, átmenté a kártyákat!</p>
+        <div class="result-card p-8 mb-8">
+            <div class="text-purple-300 font-black uppercase text-xs mb-2 tracking-widest">🟣 B2 · Business & Career</div>
+            <div class="text-7xl font-black text-white" id="seen-count">0</div>
+            <div class="text-slate-400 text-sm mt-1">/ 50 szó</div>
+            <div id="feedback-msg" class="mt-4 text-purple-200 font-bold italic text-sm">-</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Újrakezdés</button>
+            <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
+        </div>
+    </div>
+</div>
+<script>
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+    const CARDS = [
+        { cat:"🏢 Szervezet", hu:"Vállalat / Cég", en:"Corporation / Company", example:"She works for a multinational corporation." },
+        { cat:"🏢 Szervezet", hu:"Részleg", en:"Department", example:"She manages the marketing department." },
+        { cat:"🏢 Szervezet", hu:"Hierarchia", en:"Hierarchy", example:"The company has a flat hierarchy with few management layers." },
+        { cat:"🏢 Szervezet", hu:"Igazgatótanács", en:"Board of directors", example:"The board of directors approved the new strategy." },
+        { cat:"🏢 Szervezet", hu:"Részvényes", en:"Shareholder", example:"Shareholders voted in favour of the merger." },
+        { cat:"🏢 Szervezet", hu:"Érdekelt fél", en:"Stakeholder", example:"All stakeholders were consulted before the decision." },
+        { cat:"👔 Karrier", hu:"Önéletrajz", en:"CV / Résumé", example:"Update your CV before applying for the job." },
+        { cat:"👔 Karrier", hu:"Állásinterjú", en:"Job interview", example:"She prepared thoroughly for the job interview." },
+        { cat:"👔 Karrier", hu:"Előléptetés", en:"Promotion", example:"He received a promotion after two years of hard work." },
+        { cat:"👔 Karrier", hu:"Elbocsátás", en:"Redundancy / Lay-off", example:"The company announced fifty redundancies last week." },
+        { cat:"👔 Karrier", hu:"Önkéntes kilépés", en:"Resignation", example:"She handed in her resignation after the disagreement." },
+        { cat:"👔 Karrier", hu:"Próbaidő", en:"Probationary period", example:"New employees have a three-month probationary period." },
+        { cat:"👔 Karrier", hu:"Mentorálás", en:"Mentoring", example:"Mentoring junior staff is part of her role." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Tárgyalás", en:"Negotiation", example:"The negotiation lasted three hours but ended successfully." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Ajánlat / Javaslat", en:"Proposal", example:"She submitted a detailed proposal for the new project." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Szerződés", en:"Contract", example:"Both parties signed the contract yesterday." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Határidő", en:"Deadline", example:"We must meet the deadline or lose the client." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Visszajelzés", en:"Feedback", example:"Constructive feedback helps employees improve." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Prezentáció", en:"Presentation", example:"He gave an impressive presentation to the board." },
+        { cat:"🤝 Üzleti kommunikáció", hu:"Telekonferencia", en:"Conference call", example:"We have a conference call every Monday morning." },
+        { cat:"📊 Stratégia", hu:"Stratégia", en:"Strategy", example:"The company needs a clear long-term strategy." },
+        { cat:"📊 Stratégia", hu:"Célkitűzés", en:"Objective / Target", example:"We met all our quarterly objectives." },
+        { cat:"📊 Stratégia", hu:"Teljesítménymutató", en:"KPI (Key Performance Indicator)", example:"Sales figures are one of our main KPIs." },
+        { cat:"📊 Stratégia", hu:"Piackutatás", en:"Market research", example:"Market research revealed a gap in the market." },
+        { cat:"📊 Stratégia", hu:"Versenytárs", en:"Competitor", example:"We need to monitor our competitors closely." },
+        { cat:"📊 Stratégia", hu:"Márkaépítés", en:"Branding", example:"Strong branding helps customers recognise your product." },
+        { cat:"📊 Stratégia", hu:"Ügyfélmegtartás", en:"Customer retention", example:"Customer retention is cheaper than acquiring new clients." },
+        { cat:"🏗️ Projektek", hu:"Projektmenedzsment", en:"Project management", example:"Good project management keeps costs under control." },
+        { cat:"🏗️ Projektek", hu:"Ütemterv", en:"Timeline / Schedule", example:"We are behind schedule on the current project." },
+        { cat:"🏗️ Projektek", hu:"Erőforrás", en:"Resource", example:"We don't have the resources to expand right now." },
+        { cat:"🏗️ Projektek", hu:"Kockázatkezelés", en:"Risk management", example:"Risk management is essential in large-scale projects." },
+        { cat:"🏗️ Projektek", hu:"Mérföldkő", en:"Milestone", example:"Reaching this milestone means we are on track." },
+        { cat:"💡 Vezetés", hu:"Vezető", en:"Leader", example:"A good leader motivates and inspires their team." },
+        { cat:"💡 Vezetés", hu:"Delegálás", en:"Delegation", example:"Effective delegation improves team productivity." },
+        { cat:"💡 Vezetés", hu:"Csapatmunka", en:"Teamwork", example:"Teamwork is essential for achieving shared goals." },
+        { cat:"💡 Vezetés", hu:"Döntéshozatal", en:"Decision-making", example:"Good decision-making requires clear information." },
+        { cat:"💡 Vezetés", hu:"Konfliktuskezelés", en:"Conflict resolution", example:"Conflict resolution skills are vital for managers." },
+        { cat:"💡 Vezetés", hu:"Empowerment", en:"Empowerment", example:"Empowerment means giving employees more autonomy." },
+        { cat:"🌐 Globális üzlet", hu:"Kiszervezés", en:"Outsourcing", example:"Many companies outsource their IT support." },
+        { cat:"🌐 Globális üzlet", hu:"Fúzió", en:"Merger", example:"The merger created the largest bank in the country." },
+        { cat:"🌐 Globális üzlet", hu:"Felvásárlás", en:"Acquisition", example:"The acquisition of the startup was worth 50 million." },
+        { cat:"🌐 Globális üzlet", hu:"Franchise", en:"Franchise", example:"He opened a franchise of a well-known coffee chain." },
+        { cat:"🌐 Globális üzlet", hu:"Ellátási lánc", en:"Supply chain", example:"Covid disrupted supply chains around the world." },
+        { cat:"🌐 Globális üzlet", hu:"Fenntartható üzleti modell", en:"Sustainable business model", example:"Investors prefer companies with a sustainable business model." },
+        { cat:"🌐 Globális üzlet", hu:"Vállalati felelősségvállalás", en:"Corporate social responsibility", example:"CSR is now a key part of many companies' identity." },
+        { cat:"📋 Munkahelyi feltételek", hu:"Rugalmas munkaidő", en:"Flexible working hours", example:"Flexible working hours improve work-life balance." },
+        { cat:"📋 Munkahelyi feltételek", hu:"Távmunka", en:"Remote working", example:"Remote working became common after the pandemic." },
+        { cat:"📋 Munkahelyi feltételek", hu:"Szülési/apasági szabadság", en:"Parental leave", example:"The company offers generous parental leave." },
+        { cat:"📋 Munkahelyi feltételek", hu:"Juttatáscsomag", en:"Benefits package", example:"The benefits package includes health insurance and a pension." },
+        { cat:"📋 Munkahelyi feltételek", hu:"Munkahelyi jólét", en:"Employee wellbeing", example:"Employee wellbeing programmes reduce staff turnover." },
+    ];
+    let studentName = "", cardList = [...CARDS], currentIndex = 0, isFlipped = false;
+    function startApp() {     currentIndex = 0; document.getElementById('start-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); renderCard(); }
+     });
+    function renderCard() { const card = cardList[currentIndex]; const total = cardList.length; document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${total}`; document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`; document.getElementById('cat-label').innerText = card.cat; document.getElementById('front-cat').innerText = card.cat; document.getElementById('back-cat').innerText = card.cat; document.getElementById('card-hu').innerText = card.hu; document.getElementById('card-en').innerText = card.en; document.getElementById('card-example').innerText = `"${card.example}"`; isFlipped = false; document.getElementById('flip-inner').classList.remove('is-flipped'); }
+    function flipCard() { isFlipped = !isFlipped; document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped); }
+    function nextCard() { if (currentIndex < cardList.length - 1) { currentIndex++; renderCard(); } else showResult(); }
+    function prevCard() { if (currentIndex > 0) { currentIndex--; renderCard(); } }
+    function shuffleCards() { for (let i = cardList.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cardList[i], cardList[j]] = [cardList[j], cardList[i]]; } currentIndex = 0; renderCard(); }
+    function showResult() { document.getElementById('card-screen').classList.add('hidden'); document.getElementById('result-screen').classList.remove('hidden'); document.getElementById('display-name').innerText = studentName; document.getElementById('seen-count').innerText = currentIndex + 1; const pct = Math.round(((currentIndex + 1) / cardList.length) * 100); document.getElementById('feedback-msg').innerText = pct === 100 ? "Zseniális! Az összes üzleti szót megtanultad! 💼" : pct >= 60 ? "Szép haladás! Folytasd!" : "Jó kezdés! Ismételj és magabiztos leszel!"; fetch(MAKE_WEBHOOK_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ Student: studentName, Quiz:"B2 Vocabulary - Business & Career", Score: currentIndex+1, TotalQuestions: cardList.length, Level:"B2", Skill:"Vocabulary", Percentage: pct, CompletedAt: new Date().toISOString() }) }).catch(()=>{}); }
+    function restartFromStart() { currentIndex = 0; document.getElementById('result-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); renderCard(); }
+    function shuffleAndRestart() { shuffleCards(); document.getElementById('result-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); }
+    function adminAccess() { if (prompt("Jelszó:") === "bettina2026") alert("Az eredmények a Make → Airtable rendszerben mentődnek."); }
+    document.addEventListener('keydown', e => { if (document.getElementById('card-screen').classList.contains('hidden')) return; if (e.key === 'ArrowRight') nextCard(); if (e.key === 'ArrowLeft') prevCard(); if (e.key === ' ') { e.preventDefault(); flipCard(); } });
+</script>
+</body>
+</html>

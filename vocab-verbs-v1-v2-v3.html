@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Essential Verbs | Entropy Breakers</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { width: 100%; min-height: 100vh; }
+        body {
+            background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617;
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .shell {
+            background: rgba(2,6,23,0.88);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(45,212,191,0.16);
+            box-shadow: 0 0 30px rgba(45,212,191,0.08);
+            border-radius: 32px;
+            width: 100%;
+            max-width: 560px;
+            padding: 32px 28px;
+        }
+        .aurora { background: linear-gradient(135deg, #fff 35%, #2dd4bf 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 6px 14px; }
+        .name-input { width: 100%; padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; font-size: 1rem; }
+        .name-input::placeholder { color: #475569; }
+        .name-input:focus { border-color: #2dd4bf; }
+        .go-btn { width: 100%; padding: 17px; background: linear-gradient(135deg, #0d9488, #4f46e5); border: none; border-radius: 16px; color: white; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; }
+        .f-btn { padding: 8px 14px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); font-size: 0.72rem; font-weight: 700; color: #94a3b8; cursor: pointer; }
+        .f-btn.on { background: linear-gradient(135deg, #0d9488, #4f46e5); color: white; border-color: transparent; }
+        .progress-wrap { height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; margin-bottom: 20px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #2dd4bf, #6366f1); border-radius: 999px; transition: width 0.4s; }
+        .badge { display: inline-block; border-radius: 8px; padding: 3px 10px; font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+        .b-irr { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
+        .b-reg { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #86efac; }
+        .flip-wrap { perspective: 1200px; height: 275px; cursor: pointer; margin-bottom: 18px; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+        .flip-inner.flipped { transform: rotateY(180deg); }
+        .f-front, .f-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 22px; text-align: center; }
+        .f-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(45,212,191,0.2); }
+        .f-back { background: linear-gradient(135deg, rgba(13,148,136,0.2), rgba(79,70,229,0.2)); border: 1px solid rgba(45,212,191,0.28); transform: rotateY(180deg); }
+        .hu-word { font-size: 2.2rem; font-weight: 900; color: white; margin-top: 8px; }
+        .hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.28; }
+        .vtable { width: 100%; border-collapse: collapse; border-radius: 12px; overflow: hidden; margin-top: 8px; }
+        .vtable th { background: rgba(45,212,191,0.12); color: #5eead4; font-size: 0.58rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 4px; }
+        .vtable td { background: rgba(255,255,255,0.05); color: white; font-size: 0.95rem; font-weight: 900; padding: 11px 6px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .ex { font-size: 0.73rem; color: #64748b; font-style: italic; margin-top: 10px; line-height: 1.4; }
+        .nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+        .nav-btn:hover { background: rgba(45,212,191,0.1); border-color: #2dd4bf; }
+        .sec-btn { padding: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; color: #cbd5e1; font-weight: 900; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; }
+        .pri-sm { padding: 14px; background: linear-gradient(135deg, #0d9488, #4f46e5); border: none; border-radius: 14px; color: white; font-weight: 900; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; }
+        .res-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 26px; padding: 26px; margin-bottom: 18px; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="shell">
+
+    <!-- START -->
+    <div id="s-start" style="text-align:center;">
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:22px;background:rgba(45,212,191,0.08);border:1px solid rgba(45,212,191,0.18);margin-bottom:22px;">
+            <span style="font-size:1.5rem;">⚡</span>
+        </div>
+        <h1 onclick="adminAccess()" style="cursor:pointer;font-size:2.4rem;font-weight:900;letter-spacing:-0.03em;margin-bottom:10px;">
+            <span class="aurora">ENTROPY BREAKERS 🚀</span>
+        </h1>
+        <p style="color:white;font-weight:900;font-size:1.1rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Essential Verbs</p>
+        <p style="color:#2dd4bf;font-size:0.62rem;font-weight:900;text-transform:uppercase;letter-spacing:0.22em;margin-bottom:26px;">A2–B2 · V1 → V2 · V3 · 60 IGE</p>
+
+        <div style="margin-bottom:22px;">
+            <p style="font-size:0.62rem;font-weight:900;text-transform:uppercase;letter-spacing:0.15em;color:#475569;margin-bottom:10px;">Szűrés:</p>
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                <button onclick="setFilter('ALL')" class="f-btn on" id="f-ALL">⚡ Mind (60)</button>
+                <button onclick="setFilter('IRREGULAR')" class="f-btn" id="f-IRREGULAR">🔴 Szabálytalan</button>
+                <button onclick="setFilter('REGULAR')" class="f-btn" id="f-REGULAR">🟢 Szabályos</button>
+            </div>
+        </div>
+
+        <div style="max-width:340px;margin:0 auto;display:flex;flex-direction:column;gap:12px;">
+            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="name-input">
+            <button onclick="startApp()" class="go-btn">Tanulás indítása</button>
+        </div>
+
+        <p style="margin-top:28px;font-size:0.58rem;font-weight:900;text-transform:uppercase;letter-spacing:0.22em;color:#1e293b;">Designed by Entropy Breakers</p>
+    </div>
+
+    <!-- CARDS -->
+    <div id="s-cards" class="hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div class="glass" style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#2dd4bf;" id="cat-label">-</div>
+            <div class="glass" style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#94a3b8;" id="q-counter">1 / 60</div>
+        </div>
+        <div class="progress-wrap"><div id="prog" class="progress-bar" style="width:0%"></div></div>
+
+        <div class="flip-wrap" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="f-front">
+                    <div id="badge-f" class="badge b-irr">🔴 Szabálytalan</div>
+                    <p style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.14em;color:#475569;margin-bottom:4px;">Magyar jelentés</p>
+                    <div id="card-hu" class="hu-word">-</div>
+                    <span class="hint" style="color:#94a3b8;">Koppints a 3 alakért →</span>
+                </div>
+                <div class="f-back">
+                    <div id="badge-b" class="badge b-irr">🔴 Szabálytalan</div>
+                    <table class="vtable">
+                        <thead><tr>
+                            <th>Infinitive</th>
+                            <th>Past Simple</th>
+                            <th>Past Participle</th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td id="c-v1">-</td>
+                            <td id="c-v2">-</td>
+                            <td id="c-v3">-</td>
+                        </tr></tbody>
+                    </table>
+                    <p id="c-ex" class="ex">-</p>
+                    <span class="hint" style="color:#5eead4;">← Vissza</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <button class="nav-btn" onclick="prevCard()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <p style="flex:1;text-align:center;font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.12em;color:#1e293b;">Koppints a fordításért</p>
+            <button class="nav-btn" onclick="nextCard()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button onclick="shuffleCards()" class="sec-btn">🔀 Keverés</button>
+            <button onclick="showResult()" class="pri-sm">✅ Kész!</button>
+        </div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="s-result" class="hidden" style="text-align:center;">
+        <div style="font-size:3rem;margin-bottom:14px;">⚡</div>
+        <h2 style="font-size:1.6rem;font-weight:900;color:white;text-transform:uppercase;margin-bottom:6px;">Szép munka!</h2>
+        <p style="color:#64748b;margin-bottom:18px;font-size:0.88rem;"><span id="r-name" style="color:#2dd4bf;text-shadow:0 0 14px rgba(45,212,191,0.6);"></span>, átmenté a kártyákat!</p>
+        <div class="res-card">
+            <div style="font-size:0.6rem;font-weight:900;text-transform:uppercase;letter-spacing:0.15em;color:#2dd4bf;margin-bottom:8px;">Essential Verbs · <span id="r-filter">Mind</span></div>
+            <div style="font-size:4rem;font-weight:900;color:white;" id="r-seen">0</div>
+            <div style="color:#475569;font-size:0.82rem;margin-top:4px;" id="r-total">/ 60 ige</div>
+            <div id="r-msg" style="margin-top:12px;color:#5eead4;font-weight:700;font-style:italic;font-size:0.82rem;">-</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button onclick="restartFromStart()" class="sec-btn">🔄 Újrakezdés</button>
+            <button onclick="shuffleAndRestart()" class="pri-sm">🔀 Új sorrend</button>
+        </div>
+    </div>
+
+</div>
+<script>
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+const ALL_CARDS = [
+    {type:"IRREGULAR",hu:"Van / Lesz",v1:"be",v2:"was / were",v3:"been",ex:"She has been a teacher for ten years."},
+    {type:"IRREGULAR",hu:"Megy",v1:"go",v2:"went",v3:"gone",ex:"Have you ever gone abroad alone?"},
+    {type:"IRREGULAR",hu:"Jön",v1:"come",v2:"came",v3:"come",ex:"She has come a long way since last year."},
+    {type:"IRREGULAR",hu:"Csinál / Elvégez",v1:"do",v2:"did",v3:"done",ex:"Have you done your homework yet?"},
+    {type:"IRREGULAR",hu:"Vesz / Kap",v1:"get",v2:"got",v3:"got / gotten",ex:"He has got a new job."},
+    {type:"IRREGULAR",hu:"Lát",v1:"see",v2:"saw",v3:"seen",ex:"I have never seen anything like it."},
+    {type:"IRREGULAR",hu:"Tud / Ismer",v1:"know",v2:"knew",v3:"known",ex:"Have you known her for long?"},
+    {type:"IRREGULAR",hu:"Gondol / Gondolkodik",v1:"think",v2:"thought",v3:"thought",ex:"I have thought about it carefully."},
+    {type:"IRREGULAR",hu:"Vesz / Elvesz",v1:"take",v2:"took",v3:"taken",ex:"She has taken three exams this week."},
+    {type:"IRREGULAR",hu:"Ad",v1:"give",v2:"gave",v3:"given",ex:"He has given a lot to this project."},
+    {type:"IRREGULAR",hu:"Talál",v1:"find",v2:"found",v3:"found",ex:"Have you found your keys yet?"},
+    {type:"IRREGULAR",hu:"Mond / Elmond",v1:"tell",v2:"told",v3:"told",ex:"She told me the news yesterday."},
+    {type:"IRREGULAR",hu:"Eszik",v1:"eat",v2:"ate",v3:"eaten",ex:"I have eaten here before."},
+    {type:"IRREGULAR",hu:"Iszik",v1:"drink",v2:"drank",v3:"drunk",ex:"He had drunk too much coffee."},
+    {type:"IRREGULAR",hu:"Alszik",v1:"sleep",v2:"slept",v3:"slept",ex:"I haven't slept well all week."},
+    {type:"IRREGULAR",hu:"Vezet (autót)",v1:"drive",v2:"drove",v3:"driven",ex:"She has driven to work every day."},
+    {type:"IRREGULAR",hu:"Ír",v1:"write",v2:"wrote",v3:"written",ex:"Have you written the report yet?"},
+    {type:"IRREGULAR",hu:"Olvas",v1:"read",v2:"read",v3:"read",ex:"I have read this book twice."},
+    {type:"IRREGULAR",hu:"Fut",v1:"run",v2:"ran",v3:"run",ex:"He has run a marathon before."},
+    {type:"IRREGULAR",hu:"Ül",v1:"sit",v2:"sat",v3:"sat",ex:"We sat in the park all afternoon."},
+    {type:"IRREGULAR",hu:"Áll",v1:"stand",v2:"stood",v3:"stood",ex:"She stood at the door for a minute."},
+    {type:"IRREGULAR",hu:"Hagy / Enged",v1:"let",v2:"let",v3:"let",ex:"She let me borrow her car."},
+    {type:"IRREGULAR",hu:"Tesz / Helyez",v1:"put",v2:"put",v3:"put",ex:"Have you put the milk in the fridge?"},
+    {type:"IRREGULAR",hu:"Vág",v1:"cut",v2:"cut",v3:"cut",ex:"She cut her finger while cooking."},
+    {type:"IRREGULAR",hu:"Üt / Elüt",v1:"hit",v2:"hit",v3:"hit",ex:"The ball hit the window."},
+    {type:"IRREGULAR",hu:"Hoz",v1:"bring",v2:"brought",v3:"brought",ex:"She has brought cakes every Friday."},
+    {type:"IRREGULAR",hu:"Vásárol",v1:"buy",v2:"bought",v3:"bought",ex:"I have bought a new laptop."},
+    {type:"IRREGULAR",hu:"Épít",v1:"build",v2:"built",v3:"built",ex:"They built the house in six months."},
+    {type:"IRREGULAR",hu:"Repül",v1:"fly",v2:"flew",v3:"flown",ex:"She has flown to New York twice."},
+    {type:"IRREGULAR",hu:"Nő / Növekszik",v1:"grow",v2:"grew",v3:"grown",ex:"The company has grown rapidly."},
+    {type:"IRREGULAR",hu:"Dob / Eldob",v1:"throw",v2:"threw",v3:"thrown",ex:"He threw the ball too hard."},
+    {type:"IRREGULAR",hu:"Választ / Kiválaszt",v1:"choose",v2:"chose",v3:"chosen",ex:"She chose the blue dress."},
+    {type:"IRREGULAR",hu:"Eltör / Megtör",v1:"break",v2:"broke",v3:"broken",ex:"He has broken his arm twice."},
+    {type:"IRREGULAR",hu:"Visel (ruhát)",v1:"wear",v2:"wore",v3:"worn",ex:"She wore a red dress to the party."},
+    {type:"IRREGULAR",hu:"Nyer / Győz",v1:"win",v2:"won",v3:"won",ex:"Our team has won every game."},
+    {type:"IRREGULAR",hu:"Megért",v1:"understand",v2:"understood",v3:"understood",ex:"Have you understood the instructions?"},
+    {type:"IRREGULAR",hu:"Fizet",v1:"pay",v2:"paid",v3:"paid",ex:"I have already paid the bill."},
+    {type:"IRREGULAR",hu:"Elad",v1:"sell",v2:"sold",v3:"sold",ex:"They sold the house last month."},
+    {type:"IRREGULAR",hu:"Érez",v1:"feel",v2:"felt",v3:"felt",ex:"I have felt tired all day."},
+    {type:"IRREGULAR",hu:"Elmegy / Elhagy",v1:"leave",v2:"left",v3:"left",ex:"She left the office at five o'clock."},
+    {type:"REGULAR",hu:"Szeret / Kedvel",v1:"like",v2:"liked",v3:"liked",ex:"I have always liked jazz music."},
+    {type:"REGULAR",hu:"Szeret (nagyon)",v1:"love",v2:"loved",v3:"loved",ex:"She has loved travelling since she was young."},
+    {type:"REGULAR",hu:"Dolgozik",v1:"work",v2:"worked",v3:"worked",ex:"He has worked here for five years."},
+    {type:"REGULAR",hu:"Sétál",v1:"walk",v2:"walked",v3:"walked",ex:"We walked to the park after lunch."},
+    {type:"REGULAR",hu:"Vár",v1:"wait",v2:"waited",v3:"waited",ex:"I have waited for an hour already."},
+    {type:"REGULAR",hu:"Kérdez",v1:"ask",v2:"asked",v3:"asked",ex:"She asked a very good question."},
+    {type:"REGULAR",hu:"Válaszol",v1:"answer",v2:"answered",v3:"answered",ex:"He answered every question correctly."},
+    {type:"REGULAR",hu:"Segít",v1:"help",v2:"helped",v3:"helped",ex:"She has helped me a lot this year."},
+    {type:"REGULAR",hu:"Megáll",v1:"stop",v2:"stopped",v3:"stopped",ex:"The bus stopped at every corner."},
+    {type:"REGULAR",hu:"Megnyit / Kinyit",v1:"open",v2:"opened",v3:"opened",ex:"He opened the window to let in some air."},
+    {type:"REGULAR",hu:"Bezár / Becsuk",v1:"close",v2:"closed",v3:"closed",ex:"Have you closed all the windows?"},
+    {type:"REGULAR",hu:"Változtat",v1:"change",v2:"changed",v3:"changed",ex:"She has changed a lot since school."},
+    {type:"REGULAR",hu:"Mozog / Mozgat",v1:"move",v2:"moved",v3:"moved",ex:"They moved to a new city last year."},
+    {type:"REGULAR",hu:"Megtervez",v1:"plan",v2:"planned",v3:"planned",ex:"We have planned the trip carefully."},
+    {type:"REGULAR",hu:"Folytat",v1:"continue",v2:"continued",v3:"continued",ex:"She continued working after the break."},
+    {type:"REGULAR",hu:"Megpróbál",v1:"try",v2:"tried",v3:"tried",ex:"I have tried this recipe before."},
+    {type:"REGULAR",hu:"Befejez",v1:"finish",v2:"finished",v3:"finished",ex:"Have you finished your homework?"},
+    {type:"REGULAR",hu:"Elkezd",v1:"start",v2:"started",v3:"started",ex:"The meeting started ten minutes late."},
+    {type:"REGULAR",hu:"Meglátogat",v1:"visit",v2:"visited",v3:"visited",ex:"I have visited Paris three times."},
+    {type:"REGULAR",hu:"Tanul / Megtanul",v1:"learn",v2:"learned",v3:"learned",ex:"She has learned a lot this semester."},
+];
+
+let studentName="", selectedFilter="ALL", cardList=[], currentIndex=0, isFlipped=false;
+
+function show(id){document.getElementById(id).classList.remove('hidden');}
+function hide(id){document.getElementById(id).classList.add('hidden');}
+
+function setFilter(f){
+    selectedFilter=f;
+    ['ALL','IRREGULAR','REGULAR'].forEach(k=>document.getElementById('f-'+k).classList.toggle('on',k===f));
+}
+
+function startApp() {
+    const name=document.getElementById('student-name').value.trim();
+    
+    
+    cardList=selectedFilter==='ALL'?[...ALL_CARDS]:ALL_CARDS.filter(c=>c.type===selectedFilter);
+    shuffle(cardList);
+    currentIndex = 0;
+    hide('s-start');show('s-cards');
+    renderCard();
+}
+
+});
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+
+function renderCard(){
+    const c=cardList[currentIndex];
+    const total=cardList.length;
+    const irr=c.type==='IRREGULAR';
+    document.getElementById('q-counter').innerText=(currentIndex+1)+' / '+total;
+    document.getElementById('prog').style.width=(((currentIndex+1)/total)*100)+'%';
+    document.getElementById('cat-label').innerText=irr?'🔴 Szabálytalan':'🟢 Szabályos';
+    document.getElementById('card-hu').innerText=c.hu;
+    document.getElementById('c-v1').innerText=c.v1;
+    document.getElementById('c-v2').innerText=c.v2;
+    document.getElementById('c-v3').innerText=c.v3;
+    document.getElementById('c-ex').innerText='"'+c.ex+'"';
+    const bc=irr?'badge b-irr':'badge b-reg';
+    const bt=irr?'🔴 Szabálytalan':'🟢 Szabályos';
+    document.getElementById('badge-f').className=bc;
+    document.getElementById('badge-f').innerText=bt;
+    document.getElementById('badge-b').className=bc;
+    document.getElementById('badge-b').innerText=bt;
+    isFlipped=false;
+    document.getElementById('flip-inner').classList.remove('flipped');
+}
+
+function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('flipped',isFlipped);}
+function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
+function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}
+function shuffleCards(){shuffle(cardList);currentIndex=0;renderCard();}
+
+function showResult(){
+    hide('s-cards');show('s-result');
+    const total=cardList.length;
+    const pct=Math.round(((currentIndex+1)/total)*100);
+    const fl=selectedFilter==='ALL'?'Mind':selectedFilter==='IRREGULAR'?'Szabálytalan':'Szabályos';
+    document.getElementById('r-name').innerText=studentName;
+    document.getElementById('r-seen').innerText=currentIndex+1;
+    document.getElementById('r-total').innerText='/ '+total+' ige';
+    document.getElementById('r-filter').innerText=fl;
+    document.getElementById('r-msg').innerText=pct===100?"Zseniális! Az összes igét átmenté! ⚡":pct>=60?"Szép haladás! Folytasd!":"Jó kezdés! Ismételj és magabiztos leszel!";
+    fetch(MAKE_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({Student:studentName,Quiz:"Essential Verbs ("+fl+")",Score:currentIndex+1,TotalQuestions:total,Level:"A2-B2",Skill:"Vocabulary",Percentage:pct,CompletedAt:new Date().toISOString()})}).catch(()=>{});
+}
+
+function restartFromStart(){currentIndex=0;hide('s-result');show('s-cards');renderCard();}
+function shuffleAndRestart(){shuffle(cardList);currentIndex=0;hide('s-result');show('s-cards');renderCard();}
+function adminAccess(){if(prompt("Jelszó:")==="bettina2026")alert("Az eredmények a Make → Airtable rendszerben mentődnek.");}
+
+document.addEventListener('keydown',e=>{
+    if(!document.getElementById('s-cards').classList.contains('hidden')){
+        if(e.key==='ArrowRight')nextCard();
+        else if(e.key==='ArrowLeft')prevCard();
+        else if(e.key===' '){e.preventDefault();flipCard();}
+    }
+});
+</script>
+</body>
+</html>

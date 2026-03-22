@@ -1,0 +1,283 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B1 Grammar Master | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --neon-mint: #2dd4bf;
+            --neon-indigo: #6366f1;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(45, 212, 191, 0.16);
+            --correct: #22c55e;
+            --wrong: #ef4444;
+        }
+        body {
+            background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617;
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #f1f5f9; min-height: 100vh; display: flex;
+            align-items: center; justify-content: center; padding: 20px; margin: 0;
+        }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 760px; overflow: hidden; }
+        .mint-glow-text { color: var(--neon-mint); text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: var(--neon-mint); box-shadow: 0 0 20px rgba(45,212,191,0.15); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(45,212,191,0.22); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; }
+        .primary-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: #e2e8f0; font-weight: 700; transition: all 0.2s ease; margin-bottom: 10px; }
+        .option-btn:hover:not(:disabled) { border-color: var(--neon-mint); background: rgba(45,212,191,0.08); transform: translateX(4px); }
+        .option-btn.correct { border-color: var(--correct); background: rgba(34,197,94,0.12); color: #bbf7d0; }
+        .option-btn.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.12); color: #fecaca; }
+        .progress-track { width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; width: 0; background: linear-gradient(90deg, var(--neon-mint), var(--neon-indigo)); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; box-shadow: 0 0 30px rgba(45,212,191,0.08); }
+    </style>
+</head>
+<body>
+<div class="cyber-shell p-8 md:p-12">
+
+    <!-- QUIZ UI -->
+    <div id="quiz-ui" class=" animate-slide">
+        <div class="flex justify-between items-center mb-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+            <span>Kérdés: <span id="q-counter" class="text-teal-400">1 / 40</span></span>
+            <span>Pont: <span id="live-score" class="text-indigo-300">0</span></span>
+        </div>
+        <div class="progress-track mb-10"><div id="progress-fill" class="progress-bar-inner"></div></div>
+        <div class="min-h-[100px] mb-10 text-center">
+            <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white leading-snug">-</h2>
+        </div>
+        <div id="options-container"></div>
+        <div id="explanation-box" class="hidden mt-8 p-6 glass-panel">
+            <div id="answer-status" class="text-sm font-black uppercase tracking-widest mb-2"></div>
+            <p id="answer-explanation" class="text-slate-300 text-sm leading-relaxed font-medium"></p>
+            <button onclick="nextQuestion()" class="mt-6 w-full py-4 primary-btn text-white rounded-2xl font-black uppercase tracking-widest">Következő →</button>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">🎓</div>
+        <h2 class="text-3xl font-black text-white mb-2">Szép volt, <span id="display-name" class="mint-glow-text"></span>!</h2>
+        <div class="result-card p-8 mb-8">
+            <div class="text-teal-300 font-black uppercase tracking-[0.2em] text-xs mb-2">Végső eredményed</div>
+            <div class="text-7xl font-black text-white"><span id="final-score">0</span><span class="text-2xl text-slate-500"> / 40</span></div>
+            <div id="feedback-rating" class="mt-4 text-teal-200 font-bold italic">-</div>
+        </div>
+        <div class="glass-panel p-5 mb-8">
+            <div class="flex justify-between items-center text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                <span>Teljesítmény</span><span id="result-percent-text" class="text-teal-300">0%</span>
+            </div>
+            <div class="progress-track"><div id="result-progress-fill" class="progress-bar-inner"></div></div>
+        </div>
+        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">Újrakezdés</button>
+    </div>
+</div>
+
+<script>
+    // ── API KEY STORED SAFELY IN MAKE.COM — NOT HERE ──
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+    const QUIZ_NAME = "B1 Grammar Master";
+    const QUIZ_LEVEL = "B1";
+    const QUIZ_SKILL = "Grammar";
+
+    const QUESTIONS = [
+        { q: "I __________ English since I was ten years old.", options: ["studied", "was studying", "have studied", "study"], correct: 2, exp: "Present Perfect: A cselekvés a múltban kezdődött és ma is tart." },
+        { q: "If it __________ tomorrow, we will stay at home.", options: ["rains", "will rain", "rained", "is raining"], correct: 0, exp: "First Conditional: Az 'if' utáni tagmondatban jelen időt használunk." },
+        { q: "She asked me where __________ from.", options: ["I came", "did I come", "I come", "come I"], correct: 0, exp: "Reported speech: Függő kérdésben az igealak nem kérdő sorrendű." },
+        { q: "By the time we arrived, the film __________.", options: ["had already started", "already started", "has already started", "was already starting"], correct: 0, exp: "Past Perfect: Egy múltbeli cselekvés, amely egy másik előtt történt." },
+        { q: "You __________ take an umbrella — it's not going to rain.", options: ["don't have to", "mustn't", "shouldn't", "can't"], correct: 0, exp: "Don't have to: Nincs szükség rá, de nem tiltott." },
+        { q: "The report __________ by the manager every month.", options: ["is written", "writes", "is writing", "has written"], correct: 0, exp: "Passive voice (Present Simple): A cselekvés tárgya az alany." },
+        { q: "I wish I __________ more time to travel.", options: ["had", "have", "will have", "would have"], correct: 0, exp: "Wish + past simple: Jelenlegi valóságtól eltérő vágyat fejez ki." },
+        { q: "He suggested __________ to the new restaurant.", options: ["going", "to go", "go", "went"], correct: 0, exp: "Suggest + -ing: A 'suggest' után gerund (főnévi igenév -ing alakja) áll." },
+        { q: "If I __________ you, I would apologize.", options: ["were", "am", "was", "would be"], correct: 0, exp: "Second Conditional: Képzeletbeli helyzet — 'if I were you' fix kifejezés." },
+        { q: "They __________ for three hours when the storm started.", options: ["had been driving", "drove", "were driving", "have been driving"], correct: 0, exp: "Past Perfect Continuous: Folyamatban lévő múltbeli cselekvés, mielőtt egy másik bekövetkezett." },
+        { q: "The new bridge __________ next year.", options: ["will be opened", "will open", "is opening", "opens"], correct: 0, exp: "Future Passive: A jövőbeli cselekvés szenvedő szerkezetben." },
+        { q: "I'd rather you __________ so loudly.", options: ["didn't talk", "don't talk", "won't talk", "not talk"], correct: 0, exp: "I'd rather + past subjunctive: Mást kérünk meg valamire." },
+        { q: "Despite __________ hard, she failed the exam.", options: ["studying", "study", "studied", "to study"], correct: 0, exp: "Despite + -ing: A 'despite' elöljáró után gerund következik." },
+        { q: "He __________ be at home — his car is in the driveway.", options: ["must", "should", "might", "can"], correct: 0, exp: "Must: Logikai következtetés — majdnem biztosan igaz." },
+        { q: "The letter __________ before I got to the office.", options: ["had been sent", "was sent", "has been sent", "is sent"], correct: 0, exp: "Past Perfect Passive: Szenvedő szerkezet múlt idejű befejezett aspektussal." },
+        { q: "She __________ to speak to the director when I saw her.", options: ["was trying", "tried", "has tried", "tries"], correct: 0, exp: "Past Continuous: Folyamatban lévő cselekvés a múltban." },
+        { q: "We need someone __________ can speak both French and English.", options: ["who", "which", "whose", "whom"], correct: 0, exp: "Relative pronoun: 'who' személyekre vonatkozik." },
+        { q: "I haven't seen her __________ last Monday.", options: ["since", "for", "during", "ago"], correct: 0, exp: "Since: Egy konkrét időponttól kezdve (Present Perfect-tel)." },
+        { q: "__________ the weather was bad, we enjoyed the trip.", options: ["Although", "Despite", "However", "Because"], correct: 0, exp: "Although: Ellentétes tagmondat bevezetésére (+ mondat)." },
+        { q: "He told me that he __________ the project the day before.", options: ["had finished", "finished", "has finished", "would finish"], correct: 0, exp: "Reported speech: Az egyenes beszéd múlt idejű alakja past perfect lesz." },
+        { q: "You look tired. You __________ get some rest.", options: ["should", "must", "would", "shall"], correct: 0, exp: "Should: Tanács vagy javaslat kifejezése." },
+        { q: "The book __________ I recommended is now a film.", options: ["that", "who", "what", "whose"], correct: 0, exp: "Relative pronoun: 'that' tárgyakra és személyekre is vonatkozhat." },
+        { q: "I'm used to __________ early every morning.", options: ["getting up", "get up", "got up", "gets up"], correct: 0, exp: "Be used to + -ing: Megszokott cselekvést jelöl." },
+        { q: "She __________ be a doctor when she grows up.", options: ["is going to", "will", "would", "shall"], correct: 0, exp: "Be going to: Személyes szándékot vagy tervet fejez ki." },
+        { q: "He __________ the window when the ball hit it.", options: ["was cleaning", "cleaned", "has cleaned", "cleans"], correct: 0, exp: "Past Continuous: Folyamatban lévő cselekvés, amelyet egy másik megszakít." },
+        { q: "This is the city __________ I was born.", options: ["where", "which", "that", "who"], correct: 0, exp: "Relative adverb: 'where' helyre vonatkozik." },
+        { q: "__________ you mind closing the window?", options: ["Would", "Do", "Could", "Should"], correct: 0, exp: "Would you mind + -ing: Udvarias kérés formulája." },
+        { q: "They __________ in Paris for five years before moving to London.", options: ["had lived", "lived", "have lived", "were living"], correct: 0, exp: "Past Perfect: Múlt előtti cselekvés — megelőzte a londoni költözést." },
+        { q: "The students __________ to bring their own dictionaries.", options: ["were told", "told", "have told", "are told"], correct: 0, exp: "Passive voice (Past Simple): A cselekvés alanya nem fontos vagy ismeretlen." },
+        { q: "I can't help __________ when I watch that film.", options: ["laughing", "laugh", "to laugh", "laughed"], correct: 0, exp: "Can't help + -ing: Nem tudja megállni, hogy ne tegye." },
+        { q: "__________ having a large salary, he was unhappy.", options: ["In spite of", "Although", "Even though", "However"], correct: 0, exp: "In spite of + noun/gerund: Ellentét kifejezése főnévi szerkezettel." },
+        { q: "You __________ have told me earlier — now it's too late.", options: ["should", "must", "would", "could"], correct: 0, exp: "Should have + past participle: Múltbeli mulasztás kifejezése." },
+        { q: "I don't know __________ she passed the test or not.", options: ["whether", "if", "that", "what"], correct: 0, exp: "Whether: Kétféle lehetőség esetén használjuk, főleg 'or not'-tal." },
+        { q: "The harder you work, __________ you will become.", options: ["the better", "better", "the more better", "most better"], correct: 0, exp: "The + comparative … the + comparative: Párhuzamos fokozás." },
+        { q: "She __________ for the job when she heard about the salary.", options: ["had already applied", "already applied", "has already applied", "was already applying"], correct: 0, exp: "Past Perfect: A jelentkezés megelőzte a fizetésről való értesülést." },
+        { q: "He admitted __________ the money from the till.", options: ["taking", "to take", "take", "took"], correct: 0, exp: "Admit + -ing: Az 'admit' után gerund következik." },
+        { q: "The concert __________ at eight o'clock sharp.", options: ["starts", "is starting", "will start", "started"], correct: 0, exp: "Present Simple: Menetrend szerinti, rögzített jövőbeli esemény." },
+        { q: "__________ she studied a lot, she didn't pass the exam.", options: ["Even though", "Despite", "In spite of", "Because"], correct: 0, exp: "Even though: Erős ellentétet hangsúlyoz (+ teljes mondat)." },
+        { q: "He is __________ to get the promotion — his work is excellent.", options: ["likely", "probably", "surely", "maybe"], correct: 0, exp: "Likely (adjective): 'He is likely to' = valószínűleg meg fogja kapni." },
+        { q: "We __________ finish the project by Friday if we start now.", options: ["will be able to", "can", "could", "would"], correct: 0, exp: "Will be able to: Jövőbeli képesség kifejezése." }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let studentName = "";
+    // Read student name from URL ?name=...
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+    let answered = false;
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    
+        studentName = name;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-ui').classList.remove('hidden');
+        loadQuestion();
+    }
+
+    
+    });
+
+    function loadQuestion() {
+        answered = false;
+        const q = QUESTIONS[currentQuestion];
+        document.getElementById('q-counter').innerText = `${currentQuestion + 1} / ${QUESTIONS.length}`;
+        document.getElementById('progress-fill').style.width = `${(currentQuestion / QUESTIONS.length) * 100}%`;
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('explanation-box').classList.add('hidden');
+
+        let optionsWithMeta = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.correct }));
+        shuffleArray(optionsWithMeta);
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        optionsWithMeta.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => handleAnswer(opt.isCorrect, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(isCorrect, clickedBtn) {
+        if (answered) return;
+        answered = true;
+        const q = QUESTIONS[currentQuestion];
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((btn) => { btn.disabled = true; });
+
+        if (isCorrect) {
+            score++;
+            clickedBtn.classList.add('correct');
+            document.getElementById('answer-status').innerText = "Helyes! ✓";
+            document.getElementById('answer-status').className = "text-sm font-black uppercase tracking-widest mb-2 text-emerald-400";
+        } else {
+            clickedBtn.classList.add('wrong');
+            btns.forEach(btn => { if (btn.innerText === q.options[q.correct]) btn.classList.add('correct'); });
+            document.getElementById('answer-status').innerText = "Helytelen. ✗";
+            document.getElementById('answer-status').className = "text-sm font-black uppercase tracking-widest mb-2 text-rose-400";
+        }
+
+        document.getElementById('live-score').innerText = score;
+        document.getElementById('answer-explanation').innerText = q.exp;
+        document.getElementById('explanation-box').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < QUESTIONS.length) loadQuestion();
+        else finishQuiz();
+    }
+
+    async function finishQuiz() {
+        document.getElementById('quiz-ui').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('display-name').innerText = studentName;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('progress-fill').style.width = '100%';
+
+        const percent = Math.round((score / QUESTIONS.length) * 100);
+        document.getElementById('result-percent-text').innerText = `${percent}%`;
+        document.getElementById('result-progress-fill').style.width = `${percent}%`;
+        document.getElementById('feedback-rating').innerText = "⚡ AI elemzés folyamatban...";
+
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
+
+            const response = await fetch(MAKE_WEBHOOK_URL, {
+                signal: controller.signal,
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Student: studentName,
+                    Quiz: QUIZ_NAME,
+                    Score: score,
+                    TotalQuestions: QUESTIONS.length,
+                    Level: QUIZ_LEVEL,
+                    Skill: QUIZ_SKILL,
+                    Percentage: percent,
+                    CompletedAt: new Date().toISOString()
+                })
+            });
+
+            clearTimeout(timeout);
+            const text = await response.text();
+            document.getElementById('feedback-rating').innerText = text || "Szép munka! Folytasd a gyakorlást!";
+
+        } catch (e) {
+            console.error("Error:", e);
+            document.getElementById('feedback-rating').innerText =
+                percent >= 80 ? "Zseniális! Készen állsz a haladóbb szintre!" :
+                percent >= 60 ? "Szép munka, de gyakorolj még!" :
+                "Ne add fel, próbáld újra!";
+        }
+    }
+
+    function adminAccess() {
+        if (prompt("Jelszó:") === "bettina2026") {
+            alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+        }
+    }
+
+    function restartQuiz() {
+        studentName = ""; score = 0; currentQuestion = 0; answered = false;
+        document.getElementById('student-name').value = "";
+        document.getElementById('live-score').innerText = "0";
+        document.getElementById('q-counter').innerText = `1 / ${QUESTIONS.length}`;
+        document.getElementById('progress-fill').style.width = "0%";
+        document.getElementById('result-progress-fill').style.width = "0%";
+        document.getElementById('result-percent-text').innerText = "0%";
+        document.getElementById('final-score').innerText = "0";
+        document.getElementById('feedback-rating').innerText = "-";
+        document.getElementById('display-name').innerText = "";
+        document.getElementById('question-text').innerText = "-";
+        document.getElementById('options-container').innerHTML = "";
+        document.getElementById('explanation-box').classList.add('hidden');
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('quiz-ui').classList.add('hidden');
+        
+    }
+</script>
+</body>
+</html>

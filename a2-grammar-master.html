@@ -1,0 +1,321 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A2 Grammar Master | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --neon-mint: #2dd4bf;
+            --neon-indigo: #6366f1;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(45, 212, 191, 0.16);
+            --correct: #22c55e;
+            --wrong: #ef4444;
+        }
+        body {
+            background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617;
+            font-family: -apple-system, system-ui, sans-serif;
+            color: #f1f5f9; min-height: 100vh; display: flex;
+            align-items: center; justify-content: center; padding: 20px; margin: 0;
+        }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 760px; overflow: hidden; }
+        .mint-glow-text { color: var(--neon-mint); text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: var(--neon-mint); box-shadow: 0 0 20px rgba(45,212,191,0.15); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(45,212,191,0.22); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; }
+        .primary-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+        .option-btn { width: 100%; text-align: left; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: #e2e8f0; font-weight: 700; transition: all 0.2s ease; margin-bottom: 10px; }
+        .option-btn:hover:not(:disabled) { border-color: var(--neon-mint); background: rgba(45,212,191,0.08); transform: translateX(4px); }
+        .option-btn.correct { border-color: var(--correct); background: rgba(34,197,94,0.12); color: #bbf7d0; }
+        .option-btn.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.12); color: #fecaca; }
+        .progress-track { width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; width: 0; background: linear-gradient(90deg, var(--neon-mint), var(--neon-indigo)); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; box-shadow: 0 0 30px rgba(45,212,191,0.08); }
+    </style>
+</head>
+<body>
+<div class="cyber-shell p-8 md:p-12">
+
+    <!-- QUIZ UI -->
+    <div id="quiz-ui" class=" animate-slide">
+        <div class="flex justify-between items-center mb-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+            <span>Kérdés: <span id="q-counter" class="text-teal-400">1 / 60</span></span>
+            <span>Pont: <span id="live-score" class="text-indigo-300">0</span></span>
+        </div>
+        <div class="progress-track mb-10"><div id="progress-fill" class="progress-bar-inner"></div></div>
+        <div class="min-h-[100px] mb-10 text-center">
+            <h2 id="question-text" class="text-xl md:text-2xl font-bold text-white leading-snug">-</h2>
+        </div>
+        <div id="options-container" class="grid grid-cols-1 gap-3"></div>
+        <div id="explanation-box" class="hidden mt-8 p-6 glass-panel">
+            <div id="answer-status" class="text-sm font-black uppercase tracking-widest mb-2"></div>
+            <p id="answer-explanation" class="text-slate-300 text-sm leading-relaxed font-medium"></p>
+            <button onclick="nextQuestion()" class="mt-6 w-full py-4 primary-btn text-white rounded-2xl font-black uppercase tracking-widest">Következő →</button>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">🏆</div>
+        <h2 class="text-3xl font-black text-white mb-2">Szép volt, <span id="display-name" class="mint-glow-text"></span>!</h2>
+        <div class="result-card p-8 mb-8">
+            <div class="text-teal-300 font-black uppercase tracking-[0.2em] text-xs mb-2">Végső eredményed</div>
+            <div class="text-7xl font-black text-white"><span id="final-score">0</span><span class="text-2xl text-slate-500"> / 60</span></div>
+            <div id="feedback-rating" class="mt-4 text-teal-200 font-bold italic">-</div>
+        </div>
+        <div class="glass-panel p-5 mb-8">
+            <div class="flex justify-between items-center text-xs font-black uppercase tracking-widest text-slate-400 mb-3">
+                <span>Teljesítmény</span><span id="result-percent-text" class="text-teal-300">0%</span>
+            </div>
+            <div class="progress-track"><div id="result-progress-fill" class="progress-bar-inner"></div></div>
+        </div>
+        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">Újrakezdés</button>
+    </div>
+</div>
+
+<script>
+    // ── API KEY STORED SAFELY IN MAKE.COM — NOT HERE ──
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+    const QUIZ_NAME = "A2 Grammar Master";
+    const QUIZ_LEVEL = "A2";
+    const QUIZ_SKILL = "Grammar";
+
+    const quizData = [
+        // ── PRESENT SIMPLE ──
+        { q: "My brother __________ football every Saturday.", options: ["plays", "play", "is playing", "played"], correct: 0, exp: "Present Simple: E/3 személyben az ige -s/-es ragot kap rendszeres cselekvésnél." },
+        { q: "__________ she speak French?", options: ["Does", "Do", "Is", "Has"], correct: 0, exp: "Present Simple kérdés: E/3-ban 'Does' a segédige, az ige szótári alakban marad." },
+        { q: "I __________ like coffee. I prefer tea.", options: ["don't", "doesn't", "isn't", "aren't"], correct: 0, exp: "Present Simple tagadás: I/you/we/they után 'don't' (do not)." },
+        { q: "The sun __________ in the east.", options: ["rises", "rise", "is rising", "rose"], correct: 0, exp: "Present Simple: Általánosan igaz tényeknél (tudományos állítás)." },
+        { q: "How often __________ you go to the gym?", options: ["do", "does", "are", "have"], correct: 0, exp: "Present Simple kérdés: I/you/we/they alannyal 'do' a segédige." },
+        // ── PRESENT CONTINUOUS ──
+        { q: "Listen! The birds __________.", options: ["are singing", "sing", "sings", "sang"], correct: 0, exp: "Present Continuous: A 'Listen!' jelzi, hogy a cselekvés most éppen zajlik." },
+        { q: "We __________ a new house at the moment.", options: ["are building", "build", "builds", "built"], correct: 0, exp: "Present Continuous: 'At the moment' jelzi a folyamatban lévő cselekvést." },
+        { q: "She __________ TV right now — she's studying.", options: ["isn't watching", "doesn't watch", "not watching", "don't watch"], correct: 0, exp: "Present Continuous tagadás: is/am/are + not + -ing." },
+        { q: "Why __________ you wearing a coat? It's warm outside!", options: ["are", "do", "is", "does"], correct: 0, exp: "Present Continuous kérdés: are/am/is + alany + -ing." },
+        // ── PAST SIMPLE ──
+        { q: "I __________ a great film last night.", options: ["watched", "watch", "am watching", "watches"], correct: 0, exp: "Past Simple: 'last night' lezárt múltbeli időpontra utal." },
+        { q: "She __________ to Paris two years ago.", options: ["went", "go", "goes", "has gone"], correct: 0, exp: "Past Simple: A 'go' rendhagyó igének 'went' a múlt ideje. 'Ago' múlt időt jelez." },
+        { q: "__________ you enjoy the party last Saturday?", options: ["Did", "Do", "Were", "Have"], correct: 0, exp: "Past Simple kérdés: 'Did' segédigét használunk, az ige szótári alakban áll." },
+        { q: "They __________ football yesterday because it was raining.", options: ["didn't play", "don't play", "weren't play", "not played"], correct: 0, exp: "Past Simple tagadás: didn't + szótári alak." },
+        { q: "Where __________ you born?", options: ["were", "was", "did", "are"], correct: 0, exp: "Past Simple (to be): 'Where were you born?' — to be múlt ideje: was/were." },
+        // ── PAST CONTINUOUS ──
+        { q: "I __________ a book when the phone rang.", options: ["was reading", "read", "reads", "am reading"], correct: 0, exp: "Past Continuous: Folyamatban lévő múltbeli cselekvés, amelyet egy másik megszakít." },
+        { q: "At 8 o'clock yesterday, we __________ dinner.", options: ["were having", "had", "have had", "are having"], correct: 0, exp: "Past Continuous: Egy múltbeli időpontban zajló cselekvés." },
+        // ── PRESENT PERFECT ──
+        { q: "I __________ never eaten sushi.", options: ["have", "did", "am", "was"], correct: 0, exp: "Present Perfect: 'Never' az élettapasztalat hiányát fejezi ki." },
+        { q: "She __________ already finished her homework.", options: ["has", "have", "did", "is"], correct: 0, exp: "Present Perfect: 'Already' jelzi, hogy a cselekvés korábban befejeződött, mint várták." },
+        { q: "__________ you ever visited Rome?", options: ["Have", "Did", "Do", "Are"], correct: 0, exp: "Present Perfect: Élettapasztalat megkérdezése 'ever' szóval." },
+        { q: "I haven't seen him __________ last Monday.", options: ["since", "for", "ago", "before"], correct: 0, exp: "Since: Egy konkrét időponttól kezdve (Present Perfect-tel)." },
+        { q: "They have lived here __________ ten years.", options: ["for", "since", "ago", "during"], correct: 0, exp: "For: Egy időtartamot jelöl (Present Perfect-tel)." },
+        // ── FUTURE FORMS ──
+        { q: "Look at those clouds! It __________ rain.", options: ["is going to", "will", "rains", "is raining"], correct: 0, exp: "Be going to: Jelenbeli bizonyíték alapján következtetünk a közeli jövőre." },
+        { q: "I think I __________ stay at home tonight.", options: ["will", "am going to", "am", "shall"], correct: 0, exp: "Will: Azonnali döntés vagy jóslat bizonyíték nélkül." },
+        { q: "We __________ our friends this weekend — it's all planned.", options: ["are visiting", "visit", "will visit", "visited"], correct: 0, exp: "Present Continuous jövő jelentéssel: Előre eltervezett cselekvés." },
+        { q: "The train __________ at 9:15. Don't be late.", options: ["leaves", "is leaving", "will leave", "left"], correct: 0, exp: "Present Simple jövő: Menetrend szerinti esemény." },
+        // ── TO BE ──
+        { q: "My parents __________ doctors.", options: ["are", "is", "be", "am"], correct: 0, exp: "To be (Present Simple): Többes szám → 'are'." },
+        { q: "__________ he at home yesterday?", options: ["Was", "Were", "Did", "Is"], correct: 0, exp: "To be (Past Simple): E/3 alannyal 'was' a múlt idő." },
+        { q: "There __________ a lot of people at the concert.", options: ["were", "was", "are", "is"], correct: 0, exp: "There were: Többes szám múltban." },
+        { q: "There __________ any milk left in the fridge.", options: ["isn't", "aren't", "wasn't", "weren't"], correct: 0, exp: "There isn't any: Megszámlálhatatlan főnév → egyes szám tagadás." },
+        // ── ARTICLES ──
+        { q: "She plays __________ piano every evening.", options: ["the", "a", "an", "-"], correct: 0, exp: "Hangszerek előtt 'the' névelőt használunk." },
+        { q: "I saw __________ interesting film last night.", options: ["an", "a", "the", "-"], correct: 0, exp: "Határozatlan névelő: Mássalhangzó hangzással kezdődő szó előtt 'a', magánhangzó előtt 'an' ('an interesting')." },
+        { q: "__________ Nile is the longest river in Africa.", options: ["The", "A", "An", "-"], correct: 0, exp: "Határozott névelő: Egyedi földrajzi nevek (folyók, hegyek) előtt 'the'." },
+        // ── PREPOSITIONS ──
+        { q: "My birthday is __________ July.", options: ["in", "on", "at", "by"], correct: 0, exp: "Időelöljárók: Hónapok és évek előtt 'in'." },
+        { q: "The meeting starts __________ 10 o'clock.", options: ["at", "in", "on", "by"], correct: 0, exp: "Időelöljárók: Pontos időpont előtt 'at'." },
+        { q: "She was born __________ 5th March.", options: ["on", "in", "at", "by"], correct: 0, exp: "Időelöljárók: Dátumok előtt 'on'." },
+        { q: "The keys are __________ the table.", options: ["on", "in", "at", "by"], correct: 0, exp: "Helyhatározós elöljáró: 'on' = valami felszínén." },
+        { q: "He lives __________ a small flat __________ the city centre.", options: ["in / in", "at / in", "on / at", "in / on"], correct: 0, exp: "In: Elzárt terekben (lakás, város) egyaránt 'in'-t használunk." },
+        // ── QUANTIFIERS ──
+        { q: "There isn't __________ sugar in the bowl.", options: ["any", "some", "a", "many"], correct: 0, exp: "Any: Tagadó mondatokban megszámlálhatatlan főnevekkel." },
+        { q: "Would you like __________ coffee?", options: ["some", "any", "a", "many"], correct: 0, exp: "Some: Kínálatnál és kérésnél igenlő választ várunk." },
+        { q: "How __________ students are in your class?", options: ["many", "much", "any", "some"], correct: 0, exp: "Many: Megszámlálható főnevekkel kérdő mondatban." },
+        { q: "I only have __________ money left.", options: ["a little", "a few", "many", "any"], correct: 0, exp: "A little: Kis mennyiség megszámlálhatatlan főnévnél (pozitív értelemben)." },
+        { q: "She has __________ friends in this city — maybe three or four.", options: ["a few", "a little", "much", "any"], correct: 0, exp: "A few: Kis mennyiség megszámlálható főnévnél (pozitív értelemben)." },
+        // ── COMPARATIVES & SUPERLATIVES ──
+        { q: "This test is __________ than the last one.", options: ["more difficult", "difficulter", "most difficult", "difficult"], correct: 0, exp: "Comparative: Hosszú mellékneveknél 'more + melléknév' alakot használunk." },
+        { q: "She is the __________ student in the class.", options: ["best", "good", "better", "more good"], correct: 0, exp: "Superlative: A 'good' rendhagyó felsőfoka 'the best'." },
+        { q: "My bag is __________ than yours.", options: ["heavier", "more heavy", "heaviest", "heavy"], correct: 0, exp: "Comparative: -y végű mellékneveknél az -y helyett -ier ragot kapunk." },
+        { q: "This is __________ pizza I've ever eaten!", options: ["the most delicious", "more delicious", "the deliciouser", "most delicious"], correct: 0, exp: "Superlative: 'the most + melléknév' + 'I've ever' + Past Participle." },
+        // ── MODAL VERBS ──
+        { q: "You __________ wear a seatbelt. It's the law.", options: ["must", "can", "might", "should"], correct: 0, exp: "Must: Kötelezettség kifejezése (külső vagy belső kényszer)." },
+        { q: "__________ I borrow your pen, please?", options: ["Can", "Must", "Will", "Should"], correct: 0, exp: "Can: Engedélykérés informális helyzetben." },
+        { q: "You __________ smoke in the restaurant — it's not allowed.", options: ["can't", "don't have to", "mustn't", "shouldn't"], correct: 0, exp: "Mustn't / Can't: Tilalom (nem szabad)." },
+        { q: "You __________ come if you're busy — it's optional.", options: ["don't have to", "mustn't", "can't", "shouldn't"], correct: 0, exp: "Don't have to: Nincs szükség rá, de nincs tiltva (nem kötelező)." },
+        { q: "You __________ eat more vegetables — it's good for you.", options: ["should", "must", "can", "would"], correct: 0, exp: "Should: Javaslat vagy tanács (nem kötelezettség)." },
+        // ── PRONOUNS & POSSESSIVES ──
+        { q: "That bag is not mine. Is it __________?", options: ["yours", "your", "you", "you're"], correct: 0, exp: "Yours: Önálló birtokos névmás — főnév nélkül áll." },
+        { q: "I hurt __________ arm when I fell.", options: ["my", "me", "mine", "I"], correct: 0, exp: "My: Jelzői (attributive) birtokos melléknév — főnév előtt áll." },
+        { q: "Can you help __________? I can't open this jar.", options: ["me", "I", "my", "mine"], correct: 0, exp: "Me: Tárgyes névmás — ige után tárgyesetben áll." },
+        // ── CONJUNCTIONS & LINKING ──
+        { q: "I wanted to go out, __________ it was raining heavily.", options: ["but", "and", "so", "because"], correct: 0, exp: "But: Ellentétes összekötő szó két tagmondat között." },
+        { q: "She studied hard __________ she passed the exam.", options: ["so", "but", "although", "however"], correct: 0, exp: "So: Következményt fejez ki (tehát, ezért)." },
+        { q: "I didn't go to the party __________ I was tired.", options: ["because", "so", "but", "and"], correct: 0, exp: "Because: Okot, magyarázatot vezet be." },
+        { q: "He is tall __________ his brother is short.", options: ["but", "so", "because", "although"], correct: 0, exp: "But: Ellentétet fejez ki két mondat között." },
+        // ── ADJECTIVE ORDER & USAGE ──
+        { q: "She wore a __________ dress to the party.", options: ["beautiful red", "red beautiful", "beautifully red", "red beauty"], correct: 0, exp: "Melléknévsorend: Vélemény (beautiful) megelőzi a színt (red)." },
+        { q: "The weather was __________ yesterday.", options: ["terrible", "terribly", "more terrible", "terriblest"], correct: 0, exp: "Melléknév: A 'was' (to be) után melléknév áll, nem határozószó." },
+        // ── QUESTION WORDS ──
+        { q: "__________ did you buy that jacket? — At the market.", options: ["Where", "When", "What", "Who"], correct: 0, exp: "Where: Helyre vonatkozó kérdőszó." },
+        { q: "__________ does it take to get to school? — About 20 minutes.", options: ["How long", "How much", "How many", "How far"], correct: 0, exp: "How long: Időtartam megkérdezésére." }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let studentName = "";
+    // Read student name from URL ?name=...
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+    let answered = false;
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    
+        studentName = name;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-ui').classList.remove('hidden');
+        loadQuestion();
+    }
+
+    
+    });
+
+    function loadQuestion() {
+        answered = false;
+        const q = quizData[currentQuestion];
+        document.getElementById('q-counter').innerText = `${currentQuestion + 1} / ${quizData.length}`;
+        document.getElementById('progress-fill').style.width = `${(currentQuestion / quizData.length) * 100}%`;
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('explanation-box').classList.add('hidden');
+
+        let optionsWithMeta = q.options.map((opt, idx) => ({ text: opt, isCorrect: idx === q.correct }));
+        shuffleArray(optionsWithMeta);
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        optionsWithMeta.forEach((opt) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn animate-slide';
+            btn.innerText = opt.text;
+            btn.onclick = () => handleAnswer(opt.isCorrect, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(isCorrect, clickedBtn) {
+        if (answered) return;
+        answered = true;
+        const q = quizData[currentQuestion];
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach((btn) => { btn.disabled = true; });
+
+        if (isCorrect) {
+            score++;
+            clickedBtn.classList.add('correct');
+            document.getElementById('answer-status').innerText = "Helyes! ✓";
+            document.getElementById('answer-status').className = "text-sm font-black uppercase tracking-widest mb-2 text-emerald-400";
+        } else {
+            clickedBtn.classList.add('wrong');
+            btns.forEach(btn => { if (btn.innerText === q.options[q.correct]) btn.classList.add('correct'); });
+            document.getElementById('answer-status').innerText = "Helytelen. ✗";
+            document.getElementById('answer-status').className = "text-sm font-black uppercase tracking-widest mb-2 text-rose-400";
+        }
+
+        document.getElementById('live-score').innerText = score;
+        document.getElementById('answer-explanation').innerText = q.exp;
+        document.getElementById('explanation-box').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) loadQuestion();
+        else finishQuiz();
+    }
+
+    async function finishQuiz() {
+        document.getElementById('quiz-ui').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('display-name').innerText = studentName;
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('progress-fill').style.width = '100%';
+
+        const percent = Math.round((score / quizData.length) * 100);
+        document.getElementById('result-percent-text').innerText = `${percent}%`;
+        document.getElementById('result-progress-fill').style.width = `${percent}%`;
+        document.getElementById('feedback-rating').innerText = "⚡ AI elemzés folyamatban...";
+
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 30000);
+
+            const response = await fetch(MAKE_WEBHOOK_URL, {
+                signal: controller.signal,
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Student: studentName,
+                    Quiz: QUIZ_NAME,
+                    Score: score,
+                    TotalQuestions: quizData.length,
+                    Level: QUIZ_LEVEL,
+                    Skill: QUIZ_SKILL,
+                    Percentage: percent,
+                    CompletedAt: new Date().toISOString()
+                })
+            });
+
+            clearTimeout(timeout);
+            const text = await response.text();
+            document.getElementById('feedback-rating').innerText = text || "Szép munka! Folytasd a gyakorlást!";
+
+        } catch (e) {
+            console.error("Error:", e);
+            document.getElementById('feedback-rating').innerText =
+                percent >= 80 ? "Fantasztikus! Készen állsz a B1 szintre!" :
+                percent >= 60 ? "Szép munka! Még egy kis gyakorlással tökéletes leszel!" :
+                "Ne add fel — minden hibából tanulsz!";
+        }
+    }
+
+    function adminAccess() {
+        if (prompt("Jelszó:") === "bettina2026") {
+            alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+        }
+    }
+
+    function restartQuiz() {
+        studentName = ""; score = 0; currentQuestion = 0; answered = false;
+        document.getElementById('student-name').value = "";
+        document.getElementById('live-score').innerText = "0";
+        document.getElementById('q-counter').innerText = `1 / ${quizData.length}`;
+        document.getElementById('progress-fill').style.width = "0%";
+        document.getElementById('result-progress-fill').style.width = "0%";
+        document.getElementById('result-percent-text').innerText = "0%";
+        document.getElementById('final-score').innerText = "0";
+        document.getElementById('feedback-rating').innerText = "-";
+        document.getElementById('display-name').innerText = "";
+        document.getElementById('question-text').innerText = "-";
+        document.getElementById('options-container').innerHTML = "";
+        document.getElementById('explanation-box').classList.add('hidden');
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('quiz-ui').classList.add('hidden');
+        
+    }
+</script>
+</body>
+</html>

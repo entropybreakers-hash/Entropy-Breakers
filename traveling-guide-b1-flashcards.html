@@ -1,0 +1,272 @@
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Traveling Guide B1 | Entropy Breakers 🚀</title>
+    <script src="https://cdn.tailwindcss.com">
+    window.addEventListener("load", startApp);
+</script>
+    <style>
+        :root { --neon-mint: #2dd4bf; --neon-indigo: #6366f1; --glass-bg: rgba(255,255,255,0.04); --card-border: rgba(45,212,191,0.16); }
+        * { box-sizing: border-box; }
+        body { background: radial-gradient(circle at 15% 15%, rgba(45,212,191,0.12), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
+        .cyber-shell { background: rgba(2,6,23,0.88); backdrop-filter: blur(16px); border: 1px solid var(--card-border); box-shadow: 0 0 30px rgba(45,212,191,0.08); border-radius: 32px; width: 100%; max-width: 560px; overflow: hidden; }
+        .mint-glow-text { color: var(--neon-mint); text-shadow: 0 0 14px rgba(45,212,191,0.6); }
+        .aurora-title { background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-panel { background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; }
+        .input-field { width: 100%; padding: 18px 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04); color: white; font-weight: 700; text-align: center; outline: none; transition: all 0.25s ease; font-size: 1rem; }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus { border-color: var(--neon-mint); box-shadow: 0 0 20px rgba(45,212,191,0.15); background: rgba(255,255,255,0.06); }
+        .primary-btn { background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%); box-shadow: 0 0 20px rgba(45,212,191,0.22); border: 1px solid rgba(255,255,255,0.14); transition: all 0.25s ease; cursor: pointer; }
+        .primary-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .nav-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; }
+        .nav-btn:hover { background: rgba(45,212,191,0.12); border-color: var(--neon-mint); }
+        .nav-btn:active { transform: scale(0.94); }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }
+        .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--neon-mint), var(--neon-indigo)); transition: width 0.45s ease; }
+        .animate-slide { animation: slideIn 0.35s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .flip-container { perspective: 1200px; width: 100%; height: 270px; cursor: pointer; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 22px; text-align: center; }
+        .flip-front { background: rgba(255,255,255,0.04); border: 1px solid rgba(234,179,8,0.25); box-shadow: 0 0 20px rgba(234,179,8,0.06); }
+        .flip-back { background: linear-gradient(135deg, rgba(13,148,136,0.2), rgba(79,70,229,0.2)); border: 1px solid rgba(45,212,191,0.25); box-shadow: 0 0 20px rgba(45,212,191,0.1); transform: rotateY(180deg); }
+        .cat-pill { display: inline-flex; align-items: center; background: rgba(234,179,8,0.12); border: 1px solid rgba(234,179,8,0.25); color: #fde047; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .back-cat-pill { display: inline-flex; align-items: center; background: rgba(45,212,191,0.15); border: 1px solid rgba(45,212,191,0.3); color: #5eead4; border-radius: 999px; padding: 4px 12px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+        .flip-hint { position: absolute; bottom: 12px; right: 16px; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.35; color: #94a3b8; }
+        .result-card { background: linear-gradient(135deg, rgba(13,148,136,0.18), rgba(79,70,229,0.18)); border: 1px solid rgba(45,212,191,0.16); border-radius: 32px; }
+    </style>
+</head>
+<body>
+<div id="app" class="cyber-shell p-6 md:p-10">
+
+    <!-- START SCREEN -->
+    <!-- FLASHCARD SCREEN -->
+    <div id="card-screen" class="animate-slide">
+        <header class="flex justify-between items-center mb-5">
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-yellow-300 tracking-widest"><span id="cat-label">-</span></div>
+            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest"><span id="card-counter">1 / 60</span></div>
+        </header>
+        <div class="progress-track mb-5"><div id="progress-fill" class="progress-bar-inner" style="width:0%"></div></div>
+
+        <div class="flip-container mb-5" onclick="flipCard()">
+            <div class="flip-inner" id="flip-inner">
+                <div class="flip-front">
+                    <div class="cat-pill" id="front-cat">-</div>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Magyar szituáció</p>
+                    <h2 id="card-hu" class="text-lg font-black text-white leading-snug">-</h2>
+                    <span class="flip-hint">Koppints →</span>
+                </div>
+                <div class="flip-back">
+                    <div class="back-cat-pill" id="back-cat">-</div>
+                    <p class="text-teal-300 text-[10px] font-black uppercase tracking-widest mb-2">Angol kifejezés</p>
+                    <h2 id="card-en" class="text-lg font-black text-white leading-snug mb-2">-</h2>
+                    <p id="card-tip" class="text-slate-400 text-xs font-medium leading-relaxed">-</p>
+                    <span class="flip-hint" style="color:#5eead4;">← Vissza</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-4 mb-5">
+            <button class="nav-btn" onclick="prevCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="flex-1 text-center text-slate-500 text-[10px] font-black uppercase tracking-widest">Koppints a fordításért</p>
+            <button class="nav-btn" onclick="nextCard()"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="shuffleCards()" class="py-4 glass-panel text-slate-300 font-black text-xs uppercase tracking-widest hover:bg-white/10 transition rounded-2xl">🔀 Keverés</button>
+            <button onclick="showResult()" class="py-4 primary-btn text-white font-black text-xs uppercase tracking-widest rounded-2xl">✅ Kész!</button>
+        </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="hidden text-center animate-slide">
+        <div class="text-6xl mb-6">🌍</div>
+        <h2 class="text-3xl font-black text-white mb-2 uppercase">Szép munka!</h2>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, átmenté a kártyákat!</p>
+        <div class="result-card p-8 mb-8">
+            <div class="text-yellow-300 font-black uppercase text-xs mb-2 tracking-widest">🟡 B1 · Megtanult kártyák</div>
+            <div class="text-7xl font-black text-white" id="seen-count">0</div>
+            <div class="text-slate-400 text-sm mt-1">/ 60 szituáció</div>
+            <div id="feedback-msg" class="mt-4 text-teal-200 font-bold italic text-sm">-</div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Újrakezdés</button>
+            <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+    const CARDS = [
+        { cat:"✈️ Reptér",     hu:"Megkérdezed, késik-e a londoni járat.",                     en:"Is the flight to London delayed?",                              tip:"Delayed = késik. On time = menetrend szerint. Cancelled = törölve." },
+        { cat:"✈️ Reptér",     hu:"A csomagod túl nehéz, ezt jelzed.",                          en:"My luggage is overweight.",                                     tip:"Overweight = túlsúlyos. Excess baggage fee = túlsúly díj." },
+        { cat:"✈️ Reptér",     hu:"Segítséget kérsz a kapu megtalálásához.",                   en:"Could you tell me how to get to gate 12?",                      tip:"Could you tell me...? = Meg tudná mondani...? Udvariasabb forma." },
+        { cat:"✈️ Reptér",     hu:"Elveszett a csomagod, bejelented.",                          en:"I'd like to report a missing suitcase.",                         tip:"Report = bejelent. Missing = hiányzó. Lost luggage desk = elveszett poggyász pult." },
+        { cat:"✈️ Reptér",     hu:"Megkérdezed, mennyi az átszállási idő.",                    en:"How long is the layover?",                                       tip:"Layover = átszállási idő. Connecting flight = csatlakozó járat." },
+        { cat:"✈️ Reptér",     hu:"A beszállókártyádat kéred.",                                 en:"Can I have my boarding pass, please?",                           tip:"Boarding pass = beszállókártya. Gate closes = kapu bezár." },
+
+        { cat:"🍽️ Étterem",   hu:"Asztalt foglalsz estére.",                                   en:"I'd like to book a table for 8 PM, please.",                    tip:"Book a table = asztalt foglal. For two = két személyre." },
+        { cat:"🍽️ Étterem",   hu:"Külön szeretnétek fizetni.",                                 en:"We'd like to pay separately, please.",                           tip:"Separately = külön. Split the bill = felosztja a számlát." },
+        { cat:"🍽️ Étterem",   hu:"Megkérdezed, mi a napi ajánlat.",                           en:"What are today's specials?",                                     tip:"Specials = napi ajánlatok. Chef's recommendation = séf ajánlása." },
+        { cat:"🍽️ Étterem",   hu:"Jelzed, hogy allergiás vagy diókra.",                       en:"I'm allergic to nuts. Does this contain any?",                  tip:"Allergic to = allergiás vmire. Contains = tartalmaz. Gluten-free = gluténmentes." },
+        { cat:"🍽️ Étterem",   hu:"Ajánlást kérsz az étteremtől.",                             en:"What would you recommend from the menu?",                       tip:"Recommend = ajánl. Signature dish = jellegzetes fogás." },
+        { cat:"🍽️ Étterem",   hu:"Köret cserét kérsz.",                                        en:"Could I have rice instead of chips, please?",                   tip:"Instead of = helyett. Side dish = köret." },
+
+        { cat:"🏨 Szálloda",   hu:"Megkérdezed, hol van a reggeliző.",                         en:"Could you tell me where the breakfast room is?",                tip:"Could you tell me...? = Meg tudná mondani? Udvariasabb mint 'Where is...?'" },
+        { cat:"🏨 Szálloda",   hu:"Késői kijelentkezést kérsz.",                                en:"Is it possible to have a late check-out?",                      tip:"Late check-out = késői kijelentkezés. Usually costs extra." },
+        { cat:"🏨 Szálloda",   hu:"Zajos a szobád, cserét kérsz.",                             en:"My room is very noisy. Could I possibly change rooms?",          tip:"Noisy = zajos. Could I possibly...? = Esetleg lehetséges...?" },
+        { cat:"🏨 Szálloda",   hu:"Ébresztő hívást kérsz.",                                     en:"I'd like to request a wake-up call at 7 AM, please.",            tip:"Wake-up call = ébresztő hívás." },
+        { cat:"🏨 Szálloda",   hu:"Csomagmegőrzést kérsz kijelentkezés után.",                 en:"Can I leave my luggage here after check-out?",                  tip:"Luggage storage = csomagmegőrzés." },
+        { cat:"🏨 Szálloda",   hu:"Közeli éttermet kérsz ajánlani.",                            en:"Could you recommend a good restaurant nearby?",                 tip:"Nearby = a közelben. Within walking distance = gyalog elérhető." },
+
+        { cat:"🚕 Taxi",       hu:"Megkérdezed, mennyi a becsült menetidő.",                   en:"How long will it take to get there?",                           tip:"How long will it take? = Mennyi ideig tart?" },
+        { cat:"🚕 Taxi",       hu:"Kéred, hogy kapcsolja be a taxiórát.",                       en:"Could you put the meter on, please?",                           tip:"Meter = taxióra. Fixed rate = rögzített díj." },
+        { cat:"🚕 Taxi",       hu:"Kéred, hogy lassabban vezessen.",                            en:"Could you slow down a little, please?",                         tip:"Slow down = lassít. I'm in no hurry = nem sietem." },
+        { cat:"🚕 Taxi",       hu:"Megkérdezed, hol vehetsz napi bérletet a metróra.",         en:"Where can I buy a day pass for the metro?",                     tip:"Day pass = napi bérlet. Ticket office = jegypénztár." },
+        { cat:"🚕 Taxi",       hu:"Kéred, hogy várjon rád.",                                    en:"Could you wait for me here? I'll be back in ten minutes.",       tip:"Wait for me = várj rám. Keep the meter running = hagyd futni az órát." },
+        { cat:"🚕 Taxi",       hu:"Megkérdezed, melyik busz megy a városközpontba.",           en:"Which bus goes to the city centre from here?",                  tip:"Which bus goes to...? = Melyik busz megy...?" },
+
+        { cat:"💊 Gyógyszertár", hu:"Láz ellen gyógyszert keresel.",                            en:"Do you have anything for a fever?",                             tip:"Fever = láz. Ibuprofen / Paracetamol = alap lázcsillapítók." },
+        { cat:"💊 Gyógyszertár", hu:"Napégésre krémre van szükséged.",                          en:"Do you have something for sunburn?",                            tip:"Sunburn = napégés. After-sun = nap utáni krém." },
+        { cat:"💊 Gyógyszertár", hu:"Allergiás vagy penicillinre, ezt közlöd.",                 en:"I'm allergic to penicillin. Is there an alternative?",           tip:"Allergic to = allergiás vmire. Alternative = alternatíva." },
+        { cat:"💊 Gyógyszertár", hu:"Hasmenés ellen kérsz valamit.",                             en:"I have an upset stomach and diarrhoea. What do you recommend?", tip:"Upset stomach = gyomorpanasz. Diarrhoea = hasmenés." },
+        { cat:"💊 Gyógyszertár", hu:"Rovarcsípést kaptál, megmutatod az orvosnak.",             en:"I've been bitten by an insect. Should I see a doctor?",          tip:"Bitten = megcsípte. Insect bite = rovarcsípés. Swollen = megdagadt." },
+        { cat:"💊 Gyógyszertár", hu:"Szédülsz és hányingered van.",                             en:"I feel dizzy and nauseous. What should I take?",                tip:"Dizzy = szédül. Nauseous = hányingere van." },
+
+        { cat:"🛍️ Bevásárlás", hu:"Megkérdezed, van-e akció.",                                 en:"Is there a sale on at the moment?",                             tip:"Sale = akció. Discount = kedvezmény. Up to 50% off = akár 50% kedvezmény." },
+        { cat:"🛍️ Bevásárlás", hu:"Ajándékcsomagolást kérsz.",                                 en:"Could you gift wrap this, please?",                             tip:"Gift wrap = ajándékba csomagol. Ribbon = szalag." },
+        { cat:"🛍️ Bevásárlás", hu:"Megkérdezed, meddig lehet visszahozni az árut.",            en:"What is your returns policy?",                                  tip:"Returns policy = visszaváltási szabályzat. Receipt = nyugta." },
+        { cat:"🛍️ Bevásárlás", hu:"Biztosra kérdezed a méretedet.",                            en:"Could you measure me for the right size?",                      tip:"Measure = megmér. Size chart = mérettáblázat." },
+        { cat:"🛍️ Bevásárlás", hu:"Megkérdezed, ez valódi bőr-e.",                             en:"Is this genuine leather?",                                      tip:"Genuine leather = valódi bőr. Synthetic = műanyag." },
+        { cat:"🛍️ Bevásárlás", hu:"Olcsóbbat keresel ugyanabból.",                             en:"Do you have anything similar but less expensive?",              tip:"Less expensive = olcsóbb. Budget option = gazdaságos lehetőség." },
+
+        { cat:"🏖️ Strand / Spa", hu:"Vízi sportot szeretnél kipróbálni.",                      en:"I'd like to try jet skiing. How do I book?",                    tip:"Jet skiing = jetski. Water sports = vízi sportok." },
+        { cat:"🏖️ Strand / Spa", hu:"Megkérdezed, milyen spa kezelések érhetők el.",           en:"What treatments do you offer at the spa?",                      tip:"Treatments = kezelések. Facial = arckezelés. Hot stone = forró köves." },
+        { cat:"🏖️ Strand / Spa", hu:"Medencés napijegyet kérsz.",                               en:"I'd like a day pass for the pool, please.",                     tip:"Day pass = napijegy. Towel hire = törölköző bérlés." },
+        { cat:"🏖️ Strand / Spa", hu:"Megkérdezed, milyen mély a tenger.",                       en:"How deep is the sea here? Is it safe for children?",            tip:"Deep = mély. Shallow = sekély. Lifeguard = víziőr." },
+        { cat:"🏖️ Strand / Spa", hu:"Snorkeling felszerelést akarsz bérelni.",                  en:"I'd like to rent snorkelling equipment, please.",               tip:"Snorkelling = snorkelezés. Flippers = uszony. Mask = búvármaszk." },
+        { cat:"🏖️ Strand / Spa", hu:"Szauna / gőzfürdő foglalást kérsz.",                      en:"I'd like to book the sauna for an hour, please.",               tip:"Sauna = szauna. Steam room = gőzfürdő. Jacuzzi = pezsgőfürdő." },
+
+        { cat:"🚂 Vonat / Busz", hu:"Visszaváltható jegyet akarsz venni.",                      en:"Is this ticket refundable if I miss the train?",                tip:"Refundable = visszaváltható. Miss = lekés. Amendment fee = módosítási díj." },
+        { cat:"🚂 Vonat / Busz", hu:"Poggyászmegőrzőt keresel az állomáson.",                  en:"Is there a left luggage facility at the station?",              tip:"Left luggage = csomagmegőrzés. Locker = önkiszolgáló tároló." },
+        { cat:"🚂 Vonat / Busz", hu:"Segítséget kérsz a jegyautomatához.",                      en:"Could you help me use the ticket machine, please?",            tip:"Ticket machine = jegyautomata. Touch screen = érintőképernyő." },
+        { cat:"🚂 Vonat / Busz", hu:"Az ülőhelyedet valaki foglalja el.",                       en:"Excuse me, I believe this is my reserved seat.",                tip:"Reserved seat = foglalt hely. Could you check your ticket?" },
+        { cat:"🚂 Vonat / Busz", hu:"Megkérdezed, van-e étkezőkocsi.",                         en:"Is there a dining car on this train?",                          tip:"Dining car = étkezőkocsi. Buffet = büfé." },
+        { cat:"🚂 Vonat / Busz", hu:"Lekésed a buszt, a következőre kérdezel.",                en:"I missed the bus. When is the next one?",                       tip:"Missed = lekést. Next one = következő. Timetable = menetrend." },
+
+        { cat:"🆘 Vészhelyzet", hu:"Autóbaleseted volt, rendőrséget kell hívni.",              en:"There's been an accident. Please call the police immediately.",tip:"Accident = baleset. Immediately = azonnal. Europe: 112." },
+        { cat:"🆘 Vészhelyzet", hu:"Elvesztetted a hitelkártyádat, letiltod.",                  en:"I need to cancel my credit card — it has been lost.",           tip:"Cancel = letilt. Lost = elveszett. Stolen = ellopták." },
+        { cat:"🆘 Vészhelyzet", hu:"Tűz van az épületben.",                                     en:"Fire! Everyone needs to evacuate the building now!",            tip:"Fire = tűz. Evacuate = kiürít. Fire exit = tűzkijárat." },
+        { cat:"🆘 Vészhelyzet", hu:"Gyermek eltűnt a strandon.",                                en:"My child is missing. They were last seen near the water.",      tip:"Missing = eltűnt. Last seen = utoljára látva." },
+        { cat:"🆘 Vészhelyzet", hu:"Szállodádban betörés volt.",                                en:"My room has been broken into and my valuables are missing.",    tip:"Broken into = betörtek. Valuables = értéktárgyak." },
+        { cat:"🆘 Vészhelyzet", hu:"Valaki vízbe fúl, mentőket kéred.",                        en:"Someone is drowning! Call the lifeguard immediately!",          tip:"Drowning = fullad. Lifeguard = víziőr. CPR = újraélesztés." },
+
+        { cat:"🗺️ Városnézés",  hu:"Városnéző túrát szeretnél foglalni.",                      en:"I'd like to book a guided city tour for tomorrow.",             tip:"Guided tour = idegenvezetős túra. Half-day = félnapos." },
+        { cat:"🗺️ Városnézés",  hu:"Megkérdezed, van-e diákkedvezmény.",                       en:"Is there a student discount for the entrance fee?",             tip:"Student discount = diákkedvezmény. Student ID = diákigazolvány." },
+        { cat:"🗺️ Városnézés",  hu:"Hangos túravezetőt kérsz a múzeumban.",                   en:"Could I have an audio guide in English, please?",               tip:"Audio guide = hangos túravezetés. Self-guided = önálló." },
+        { cat:"🗺️ Városnézés",  hu:"Megkérdezed a történelmi épület korát.",                   en:"When was this building constructed? What is its history?",      tip:"Constructed = felépítve. Heritage = örökség. Monument = emlékmű." },
+        { cat:"🗺️ Városnézés",  hu:"A csoportodtól lemaradtál.",                               en:"I've become separated from my tour group. Can you help?",      tip:"Separated from = leszakadt. Meeting point = találkozási pont." },
+        { cat:"🗺️ Városnézés",  hu:"Megkérdezed, hol lehet jó nézetből fényképezni.",         en:"Where is the best spot to take photos of the skyline?",        tip:"Skyline = városkörvonal. Viewpoint = kilátópont." }
+    ];
+
+    let studentName = "";
+    // Read student name from URL ?name=...
+    const urlParams = new URLSearchParams(window.location.search);
+    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
+    let cardList = [...CARDS];
+    let currentIndex = 0;
+    let isFlipped = false;
+
+    function startApp() {
+        
+        
+        
+        
+        currentIndex = 0;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('card-screen').classList.remove('hidden');
+        renderCard();
+    }
+
+     });
+
+    function renderCard() {
+        const card = cardList[currentIndex];
+        const total = cardList.length;
+        document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${total}`;
+        document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
+        document.getElementById('cat-label').innerText = card.cat;
+        document.getElementById('front-cat').innerText = card.cat;
+        document.getElementById('back-cat').innerText = card.cat;
+        document.getElementById('card-hu').innerText = card.hu;
+        document.getElementById('card-en').innerText = card.en;
+        document.getElementById('card-tip').innerText = card.tip;
+        isFlipped = false;
+        document.getElementById('flip-inner').classList.remove('is-flipped');
+    }
+
+    function flipCard() {
+        isFlipped = !isFlipped;
+        document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped);
+    }
+
+    function nextCard() {
+        if (currentIndex < cardList.length - 1) { currentIndex++; renderCard(); }
+        else showResult();
+    }
+
+    function prevCard() {
+        if (currentIndex > 0) { currentIndex--; renderCard(); }
+    }
+
+    function shuffleCards() {
+        for (let i = cardList.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cardList[i], cardList[j]] = [cardList[j], cardList[i]];
+        }
+        currentIndex = 0; renderCard();
+    }
+
+    function showResult() {
+        document.getElementById('card-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('display-name').innerText = studentName;
+        document.getElementById('seen-count').innerText = currentIndex + 1;
+        const pct = Math.round(((currentIndex + 1) / cardList.length) * 100);
+        document.getElementById('feedback-msg').innerText = pct === 100
+            ? "Zseniális! Mind a 60 B1 kártyát átmenté! ✈️"
+            : pct >= 60 ? "Szép haladás! Folytasd a tanulást!"
+            : "Jó kezdés! Ismételj még és magabiztos leszel!";
+        fetch(MAKE_WEBHOOK_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ Student: studentName, Quiz:"Traveling Guide B1 Flashcards", Score: currentIndex+1, TotalQuestions: cardList.length, Level:"B1", Skill:"Speaking", Percentage: pct, CompletedAt: new Date().toISOString() }) }).catch(()=>{});
+    }
+
+    function restartFromStart() {
+        currentIndex = 0;
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('card-screen').classList.remove('hidden');
+        renderCard();
+    }
+
+    function shuffleAndRestart() {
+        shuffleCards();
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('card-screen').classList.remove('hidden');
+    }
+
+    function adminAccess() {
+        if (prompt("Jelszó:") === "bettina2026") alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
+    }
+
+    document.addEventListener('keydown', e => {
+        if (document.getElementById('card-screen').classList.contains('hidden')) return;
+        if (e.key === 'ArrowRight') nextCard();
+        if (e.key === 'ArrowLeft') prevCard();
+        if (e.key === ' ') { e.preventDefault(); flipCard(); }
+    });
+</script>
+</body>
+</html>
