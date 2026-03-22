@@ -203,7 +203,9 @@ function handleSubmit(){
 }
 function revealAnswer(){
     revealed=true;
-    document.getElementById('q-hint').innerText='\u2192 '+VERBS[qIdx].en;
+    var fb=document.getElementById('feedback-msg');
+    fb.innerText='\u2192 '+VERBS[qIdx].en;
+    fb.className='feedback-msg wrong';
     document.getElementById('reveal-btn').style.display='none';
 }
 function showResult(){
