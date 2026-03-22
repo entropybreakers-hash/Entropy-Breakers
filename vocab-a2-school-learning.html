@@ -229,6 +229,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                     <div class="cat-pill" id="back-cat">-</div>
                     <p class="text-teal-300 text-[10px] font-black uppercase tracking-widest mb-2">English</p>
                     <div id="card-en" class="en-word">-</div>
+                    <button class="speak-card-btn" onclick="speakEnglish(document.getElementById('card-en').innerText)">&#128266; Listen</button>
                     <p id="card-example" class="example">-</p>
                     <span class="flip-hint text-teal-400">← Back</span>
                 </div>
@@ -318,10 +319,9 @@ let studentName="",cardList=[...CARDS],currentIndex=0,isFlipped=false;
 function startApp(){const i=document.getElementById('student-name');const n=i.value.trim();if(n.length<3){alert("Please enter at least 2 characters!");i.focus();return;}studentName=n;currentIndex=0;document.getElementById('start-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
 document.getElementById('student-name').addEventListener('keypress',e=>{if(e.key==='Enter')startApp();});
 function renderCard(){const c=cardList[currentIndex];const t=cardList.length;document.getElementById('card-counter').innerText=`${currentIndex+1} / ${t}`;document.getElementById('progress-fill').style.width=`${((currentIndex+1)/t)*100}%`;document.getElementById('cat-label').innerText=c.cat;document.getElementById('front-cat').innerText=c.cat;document.getElementById('back-cat').innerText=c.cat;document.getElementById('card-hu').innerText=c.hu;document.getElementById('card-en').innerText=c.en;document.getElementById('card-example').innerText=`"${c.example}"`;isFlipped=false;document.getElementById('flip-inner').classList.remove('is-flipped');}
-function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('is-flipped',isFlipped);
-    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); 
-    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); }
-}
+function flipCard() {
+    isFlipped = !isFlipped;
+    document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped);
 }
 function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
 function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}

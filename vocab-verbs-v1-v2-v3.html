@@ -438,8 +438,9 @@ function renderCard(){
     document.getElementById('flip-inner').classList.remove('flipped');
 }
 
-function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('flipped',isFlipped);
-    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); }
+function flipCard() {
+    isFlipped = !isFlipped;
+    document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped);
 }
 function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
 function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}

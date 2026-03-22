@@ -242,6 +242,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                     <div class="back-pill" id="back-cat">-</div>
                     <p class="text-purple-300 text-[10px] font-black uppercase tracking-widest mb-1">English</p>
                     <div id="card-en" class="en-word">-</div>
+                    <button class="speak-card-btn" onclick="speakEnglish(document.getElementById('card-en').innerText)">&#128266; Listen</button>
                     <p id="card-example" class="example">-</p>
                     <span class="flip-hint text-purple-400">← Back</span>
                 </div>
@@ -380,12 +381,8 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     }
 
     function flipCard() {
-        isFlipped = !isFlipped;
-        document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped);
-    
-    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); 
-    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); }
-}
+    isFlipped = !isFlipped;
+    document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped);
 }
 
     function nextCard() {
