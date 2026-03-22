@@ -48,7 +48,9 @@ body{background:#020F09;color:rgba(255,255,255,0.90);font-family:'Manrope',sans-
 .answer-input.wrong{border-color:#EF4444;background:rgba(239,68,68,0.08)}
 .feedback-msg{font-size:.82rem;font-weight:600;text-align:center;min-height:24px;margin-bottom:12px}
 .feedback-msg.correct{color:#34D399}.feedback-msg.wrong{color:#F87171}
-.btn-row{display:grid;grid-template-columns:1fr 1.6fr;gap:10px}
+.feedback-bad{background:rgba(239,68,68,0.12);color:#fecaca;border:1px solid rgba(239,68,68,0.25);border-radius:16px;padding:20px;font-weight:700;font-size:.9rem;text-align:center;margin-top:8px}
+.feedback-good{background:rgba(34,197,94,0.12);color:#bbf7d0;border:1px solid rgba(34,197,94,0.25);border-radius:16px;padding:20px;font-weight:700;font-size:.9rem;text-align:center;margin-top:8px}
+.btn-row{display:flex;flex-direction:column;gap:10px}
 .btn-ghost{padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.30);border-radius:14px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:600;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s}
 .btn-ghost:hover{border-color:#10B981;color:#34D399}
 .btn-main{padding:14px;background:linear-gradient(135deg,#065F46,#10B981);border:none;border-radius:14px;font-family:'Exo 2',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 0 24px rgba(16,185,129,0.45)}
@@ -106,9 +108,10 @@ body{background:#020F09;color:rgba(255,255,255,0.90);font-family:'Manrope',sans-
     </div>
     <input type="text" id="en-input" class="answer-input" placeholder="Type the English verb..." autocomplete="off">
     <div id="feedback-msg" class="feedback-msg"></div>
+    <div id="instant-feedback" class="hidden feedback-bad" style="display:none"></div>
     <div class="btn-row">
-      <button class="btn-ghost" id="reveal-btn" onclick="revealAnswer()" style="width:100%;margin-bottom:8px;display:block">&#128161; Reveal</button>
-      <button class="btn-main" id="next-btn" onclick="handleSubmit()" style="width:100%;display:block">Check &#8594;</button>
+      <button class="btn-ghost" id="reveal-btn" onclick="revealAnswer()">&#128161; Reveal</button>
+      <button class="btn-main" id="next-btn" onclick="handleSubmit()">Check &#8594;</button>
     </div>
   </div>
 
@@ -176,6 +179,9 @@ function loadWord(){
     document.getElementById('en-input').className='answer-input';
     document.getElementById('feedback-msg').innerText='';
     document.getElementById('feedback-msg').className='feedback-msg';
+    document.getElementById('feedback-msg').style.cssText='';
+    var inf=document.getElementById('instant-feedback');
+    inf.style.display='none';inf.innerText='';inf.className='feedback-bad';
     document.getElementById('reveal-btn').style.display='';
     document.getElementById('next-btn').innerText='Check \u2192';
     revealed=false;
@@ -188,25 +194,29 @@ function handleSubmit(){
     var input=document.getElementById('en-input');
     var ans=norm(input.value);
     var correct=norm(VERBS[qIdx].en);
-    var fb=document.getElementById('feedback-msg');
+    var feedback=document.getElementById('instant-feedback');
     var isOk=(ans===correct||ans===correct.replace(' (tv)','').trim());
     if(isOk){
         score++;
         input.className='answer-input correct';
-        fb.innerText='\u2705 Correct!';fb.className='feedback-msg correct';
+        feedback.innerText='Excellent! ✓';
+        feedback.className='feedback-good';
     }else{
         if(!revealed)wrongAnswers.push({hu:VERBS[qIdx].hu,correct:VERBS[qIdx].en});
         input.className='answer-input wrong';
-        fb.innerText='\u274c '+VERBS[qIdx].en;fb.className='feedback-msg wrong';
+        feedback.innerText='Sajnos nem. A helyes: '+VERBS[qIdx].en;
+        feedback.className='feedback-bad';
     }
+    feedback.style.display='';
     btn.innerText='Next \u2192';
     document.getElementById('reveal-btn').style.display='none';
 }
 function revealAnswer(){
     revealed=true;
-    var fb=document.getElementById('feedback-msg');
-    fb.innerText='\u2192 '+VERBS[qIdx].en;
-    fb.className='feedback-msg wrong';
+    var feedback=document.getElementById('instant-feedback');
+    feedback.innerText='→ '+VERBS[qIdx].en;
+    feedback.className='feedback-bad';
+    feedback.style.display='';
     document.getElementById('reveal-btn').style.display='none';
 }
 async function showResult(){
