@@ -287,8 +287,6 @@ body{background:#020818 !important;font-family:'Manrope',sans-serif !important}
 /* TYPOGRAPHY */
 body,p,span,div,button{font-family:'Manrope',sans-serif}
 h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
-.speak-card-btn:hover { background: rgba(255,255,255,0.14); color: #fff; transform: scale(1.05); }
-.speak-card-btn:active { transform: scale(0.96); }
 
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -459,7 +457,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     }
 
     function handleCardClick(id, pairId) {
-    var txt = arguments[0] && arguments[0].dataset ? arguments[0].dataset.en : ""; if(txt) speakEnglish(txt);
+    var txt = arguments[0] && arguments[0].dataset ? arguments[0].dataset.en : ""; if(txt)
         if (isProcessing) return;
 
         const el = document.getElementById(`card-${id}`);
