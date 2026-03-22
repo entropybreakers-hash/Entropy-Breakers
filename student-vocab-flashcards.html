@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vocabulary Flashcards</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#060C18;color:#fff;font-family:'Manrope',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+
+/* ── BACKGROUND ── */
+.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none}
+.mesh{position:absolute;inset:0;background:
+  radial-gradient(ellipse 100% 60% at 50% 0%,rgba(6,78,59,0.7) 0%,rgba(4,120,87,0.3) 35%,transparent 65%),
+  radial-gradient(ellipse 60% 50% at 0% 60%,rgba(16,185,129,0.15) 0%,transparent 55%),
+  radial-gradient(ellipse 60% 50% at 100% 60%,rgba(16,185,129,0.12) 0%,transparent 55%),
+  #060C18}
+.rays{position:absolute;inset:0;background:conic-gradient(from 270deg at 50% -5%,transparent 0deg,rgba(16,185,129,0.05) 8deg,transparent 20deg,transparent 180deg);mask-image:linear-gradient(to bottom,black 0%,transparent 55%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(52,211,153,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(52,211,153,0.04) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,black 20%,transparent 80%)}
+
+/* ── SHELL / CARD CONTAINER ── */
+.shell{
+  position:relative;z-index:1;width:100%;max-width:460px;
+  background:rgba(10,20,30,0.75);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:28px;
+  padding:28px 24px;
+  backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  box-shadow:
+    0 0 0 1px rgba(16,185,129,0.08),
+    0 30px 80px rgba(0,0,0,0.6),
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.shell::before{
+  content:'';position:absolute;top:0;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(16,185,129,0.4),transparent);
+  border-radius:999px;
+}
+
+/* ── STATUS ── */
+.status-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cat-tag{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#10B981;opacity:.8}
+.counter{font-size:.7rem;font-weight:600;color:rgba(255,255,255,0.28);font-variant-numeric:tabular-nums}
+.prog-track{height:2px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden;margin-bottom:24px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#065F46,#10B981,#34D399);border-radius:999px;box-shadow:0 0 8px rgba(16,185,129,0.6);transition:width .5s ease}
+
+/* ── FLIP CARD ── */
+.flip-wrap{perspective:1200px;width:100%;height:240px;cursor:pointer;margin-bottom:20px}
+.flip-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{
+  position:absolute;width:100%;height:100%;backface-visibility:hidden;
+  border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 24px;text-align:center;
+}
+/* Front — darker, more contrast against the shell */
+.flip-front{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(16,185,129,0.20);
+  box-shadow:0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.04);
+}
+/* Back — green tinted, clearly different */
+.flip-back{
+  background:linear-gradient(145deg,rgba(6,95,70,0.55),rgba(5,150,105,0.40));
+  border:1px solid rgba(16,185,129,0.45);
+  box-shadow:0 4px 24px rgba(0,0,0,0.3),0 0 40px rgba(16,185,129,0.08),inset 0 1px 0 rgba(52,211,153,0.15);
+  transform:rotateY(180deg);
+}
+.flip-back::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(52,211,153,0.6),transparent)}
+
+.cat-pill{
+  display:inline-flex;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.25);
+  border-radius:999px;padding:4px 14px;font-size:.6rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#34D399;margin-bottom:16px;
+}
+.hu-word{font-family:'Exo 2',sans-serif;font-size:clamp(1.7rem,7vw,2.4rem);font-weight:900;color:#fff;line-height:1.1}
+.tap-hint{font-size:.56rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.18);position:absolute;bottom:14px;right:18px}
+.en-label{font-size:.56rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(52,211,153,0.75);margin-bottom:10px}
+.en-word{font-family:'Exo 2',sans-serif;font-size:clamp(1.7rem,7vw,2.4rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:10px}
+.example{font-size:.73rem;color:rgba(255,255,255,0.45);font-style:italic;line-height:1.55;max-width:280px}
+
+/* ── BUTTONS ── */
+.nav-row{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;margin-bottom:10px}
+.btn-ghost{
+  padding:13px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.10);border-radius:14px;
+  font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:600;
+  color:rgba(255,255,255,0.35);cursor:pointer;transition:all .2s;
+}
+.btn-ghost:hover{border-color:rgba(16,185,129,0.4);color:#34D399}
+.btn-main{
+  padding:13px;background:linear-gradient(135deg,#065F46,#10B981);border:none;
+  border-radius:14px;font-family:'Exo 2',sans-serif;font-size:.74rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;
+  box-shadow:0 0 20px rgba(16,185,129,0.35),0 4px 12px rgba(0,0,0,0.3);
+  transition:all .2s;
+}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(16,185,129,0.5)}
+.btn-shuffle{
+  width:100%;padding:12px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:600;
+  color:rgba(255,255,255,0.28);cursor:pointer;transition:all .2s;
+}
+.btn-shuffle:hover{border-color:rgba(16,185,129,0.35);color:#34D399}
+
+/* ── RESULT ── */
+#result-view{display:none;text-align:center}
+.result-icon{width:76px;height:76px;border-radius:20px;margin:0 auto 18px;
+  background:linear-gradient(135deg,rgba(6,95,70,0.8),rgba(16,185,129,0.6));
+  border:1px solid rgba(16,185,129,0.35);display:flex;align-items:center;justify-content:center;
+  font-size:1.8rem;box-shadow:0 0 40px rgba(16,185,129,0.35)}
+.result-title{font-family:'Exo 2',sans-serif;font-size:2rem;font-weight:900;
+  background:linear-gradient(135deg,#fff 30%,#34D399 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.result-sub{font-size:.8rem;color:rgba(255,255,255,0.3);margin-bottom:22px}
+.result-panel{background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.2);
+  border-radius:18px;padding:24px;margin-bottom:14px;position:relative;overflow:hidden}
+.result-panel::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(16,185,129,0.4),transparent)}
+.result-count{font-family:'Exo 2',sans-serif;font-size:3.8rem;font-weight:900;color:#fff;line-height:1;margin-bottom:4px}
+.result-denom{font-size:.72rem;color:rgba(255,255,255,0.28);margin-bottom:12px}
+.result-msg{font-size:.76rem;color:rgba(255,255,255,0.35);font-style:italic}
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="mesh"></div><div class="rays"></div><div class="grid"></div><div class="floor"></div></div>
+
+<div class="shell">
+  <div id="card-view">
+    <div class="status-row">
+      <span class="cat-tag" id="cat-label">—</span>
+      <span class="counter" id="counter">1 / 65</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+
+    <div class="flip-wrap" onclick="flipCard()" id="flip-wrap">
+      <div class="flip-inner" id="flip-inner">
+        <div class="flip-front">
+          <div class="cat-pill" id="front-cat">—</div>
+          <div class="hu-word" id="hu-word">—</div>
+          <span class="tap-hint">Tap to reveal →</span>
+        </div>
+        <div class="flip-back">
+          <div class="en-label">English</div>
+          <div class="en-word" id="en-word">—</div>
+          <div class="example" id="example-text">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-ghost" onclick="prevCard()">← Back</button>
+      <button class="btn-main" onclick="nextCard()">Next →</button>
+    </div>
+    <button class="btn-shuffle" onclick="shuffleCards()">⇄ Shuffle</button>
+  </div>
+
+  <div id="result-view">
+    <div class="result-icon">✅</div>
+    <div class="result-title">All done!</div>
+    <div class="result-sub">You reviewed all the cards</div>
+    <div class="result-panel">
+      <div class="result-count" id="res-count">65</div>
+      <div class="result-denom">words reviewed</div>
+      <div class="result-msg" id="res-msg">Great work! Review again to remember them better.</div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-ghost" onclick="restart()">↺ Restart</button>
+      <button class="btn-main" onclick="shuffleRestart()">⇄ Shuffle & Restart</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CARDS = [
+    {cat:"Kindness",hu:"Kedvesség",en:"Kindness",ex:"Her kindness made everyone feel welcome."},
+    {cat:"Kindness",hu:"Adakozás",en:"Giving",ex:"Giving to others brings real happiness."},
+    {cat:"Kindness",hu:"Ünnepi",en:"Festive",ex:"The town had a festive atmosphere at Christmas."},
+    {cat:"Society",hu:"Bolti lopás",en:"Shoplifting",ex:"Shoplifting is a crime, even if you are desperate."},
+    {cat:"Society",hu:"Élelmiszerek",en:"Groceries",ex:"She could not afford to buy groceries."},
+    {cat:"Society",hu:"Megengedheti magának",en:"Afford",ex:"Not everyone can afford to eat healthy food."},
+    {cat:"Society",hu:"Kétségbeesett",en:"Desperate",ex:"He was desperate and did not know what to do."},
+    {cat:"Society",hu:"Megfelelő",en:"Proper",ex:"Everyone deserves a proper meal every day."},
+    {cat:"Society",hu:"Ideiglenesen",en:"Temporarily",ex:"The shop was temporarily closed."},
+    {cat:"Society",hu:"Vádat emel",en:"Press charges",ex:"She decided not to press charges against him."},
+    {cat:"Society",hu:"Helyette",en:"Instead",ex:"Instead of calling the police, she bought him food."},
+    {cat:"Society",hu:"Hálás",en:"Thankful",ex:"I am so thankful for your help."},
+    {cat:"Society",hu:"Bíróság",en:"Court",ex:"The case was taken to court."},
+    {cat:"Society",hu:"Jelentés",en:"Report",ex:"The manager wrote a report about the incident."},
+    {cat:"Kindness",hu:"Jellem",en:"Character",ex:"Honesty is an important part of character."},
+    {cat:"Kindness",hu:"Példáz",en:"Exemplify",ex:"She exemplifies everything a good leader should be."},
+    {cat:"Kindness",hu:"Nagylelkű",en:"Generous",ex:"She was generous with her time and money."},
+    {cat:"Resources",hu:"Biztosít",en:"Ensure",ex:"We must ensure everyone has clean water."},
+    {cat:"Resources",hu:"Védő",en:"Protective",ex:"Wear protective clothing near chemicals."},
+    {cat:"Resources",hu:"Sugárzás",en:"Radiation",ex:"Too much radiation can be dangerous."},
+    {cat:"Resources",hu:"Hatékony",en:"Efficient",ex:"This machine is very efficient and saves energy."},
+    {cat:"Resources",hu:"Készlet",en:"Supply",ex:"The supply of clean water is essential."},
+    {cat:"Resources",hu:"Szükséglet",en:"Necessity",ex:"Food and shelter are basic necessities."},
+    {cat:"Resources",hu:"Alapvető",en:"Essential",ex:"Sleep is essential for good health."},
+    {cat:"Resources",hu:"Szárított",en:"Dried",ex:"Dried fruit lasts much longer than fresh fruit."},
+    {cat:"Resources",hu:"Morzsálódik",en:"Crumble",ex:"The old bread started to crumble."},
+    {cat:"Resources",hu:"Árt",en:"Harm",ex:"Too much sugar can harm your health."},
+    {cat:"Resources",hu:"Megőriz",en:"Preserve",ex:"Salt was used to preserve food for centuries."},
+    {cat:"Anxiety",hu:"Szorongás",en:"Anxiety",ex:"Many students feel anxiety before exams."},
+    {cat:"Anxiety",hu:"Ideges",en:"Nervous",ex:"She felt nervous before her presentation."},
+    {cat:"Anxiety",hu:"Leblokkol",en:"Blank out",ex:"He blanked out completely during the test."},
+    {cat:"Anxiety",hu:"Reagál",en:"Respond",ex:"How do you respond when you feel under pressure?"},
+    {cat:"Anxiety",hu:"Várakozás",en:"Anticipation",ex:"The anticipation before results can be stressful."},
+    {cat:"Anxiety",hu:"Remegő",en:"Shaky",ex:"My hands were shaky before the interview."},
+    {cat:"Anxiety",hu:"Izzadt",en:"Sweaty",ex:"His palms were sweaty with nerves."},
+    {cat:"Anxiety",hu:"Aggódik",en:"Worry",ex:"Try not to worry too much about the exam."},
+    {cat:"Anxiety",hu:"Nyomás",en:"Pressure",ex:"She works well under pressure."},
+    {cat:"Anxiety",hu:"Hatalmas",en:"Enormous",ex:"The pressure she felt was enormous."},
+    {cat:"Language",hu:"Azonban",en:"However",ex:"I was nervous. However, I did very well."},
+    {cat:"Language",hu:"Vajon / Hogy (pl. 'hogy-e')",en:"Whether",ex:"I was not sure whether I would pass the exam."},
+    {cat:"Language",hu:"Valaki szerint",en:"According to",ex:"According to scientists, stress can be useful."},
+    {cat:"Language",hu:"Stressz alatt",en:"Under stress",ex:"People behave differently under stress."},
+    {cat:"Anxiety",hu:"(Hormont) kibocsát",en:"Release a hormone",ex:"Exercise releases a hormone that makes you happy."},
+    {cat:"Anxiety",hu:"Felkészít",en:"Prepare",ex:"Adrenaline prepares your body for action."},
+    {cat:"Anxiety",hu:"Tulajdonság",en:"Trait",ex:"Resilience is an important personality trait."},
+    {cat:"Anxiety",hu:"Idegesség",en:"Nervousness",ex:"A little nervousness before a test is normal."},
+    {cat:"Anxiety",hu:"Megzavar / Akadályoz",en:"Interfere with",ex:"Anxiety can interfere with your concentration."},
+    {cat:"Anxiety",hu:"Koncentráció",en:"Concentration",ex:"Stress affects concentration and memory."},
+    {cat:"Anxiety",hu:"Teljesítmény",en:"Performance",ex:"Nervousness can sometimes improve your performance."},
+    {cat:"Anxiety",hu:"Megbirkózik valamivel",en:"Cope with",ex:"Exercise helps you cope with stress."},
+    {cat:"Anxiety",hu:"Hányinger",en:"Nausea",ex:"Stress can cause nausea and stomach problems."},
+    {cat:"Anxiety",hu:"Gyomorfájás",en:"Stomach ache",ex:"He got a stomach ache from worrying too much."},
+    {cat:"Health",hu:"Abban az esetben, ha",en:"In case of",ex:"In case of emergency, call 112."},
+    {cat:"Health",hu:"Súlyos",en:"Severe",ex:"Severe anxiety needs professional help."},
+    {cat:"Health",hu:"Ajánlott",en:"Advisable",ex:"It is advisable to see a doctor if symptoms continue."},
+    {cat:"Health",hu:"Védőfelszerelés",en:"Protective gear",ex:"Always wear protective gear in the laboratory."},
+    {cat:"Health",hu:"Azonnal",en:"Immediately",ex:"Call a doctor immediately if you feel chest pain."},
+    {cat:"Health",hu:"Jelentős mennyiség",en:"Significant amount",ex:"A significant amount of vitamin D comes from sunlight."},
+    {cat:"Resources",hu:"Íz",en:"Flavour",ex:"This soup has a wonderful flavour."},
+    {cat:"Health",hu:"Rendszeres testmozgás",en:"Regular exercise",ex:"Regular exercise reduces stress and anxiety."},
+    {cat:"Language",hu:"Számol / Megszámol",en:"Count",ex:"Count to ten slowly to calm down."},
+    {cat:"Life",hu:"Nehéz idők",en:"Rough times",ex:"Friends help you through rough times."},
+    {cat:"Life",hu:"Figyelmet vonz",en:"Attract attention",ex:"His generous act attracted a lot of attention."},
+    {cat:"Life",hu:"Médiafigyelem",en:"Media attention",ex:"The story received huge media attention."},
+    {cat:"Kindness",hu:"Nagylelkű cselekedet",en:"Generous act",ex:"Buying food for a stranger was a generous act."},
+];
+
+let cards = [...CARDS];
+let idx = 0;
+let isFlipped = false;
+
+function render() {
+    var card = cards[idx];
+    var tot = cards.length;
+    document.getElementById('cat-label').innerText = card.cat;
+    document.getElementById('counter').innerText = (idx+1) + ' / ' + tot;
+    document.getElementById('prog-fill').style.width = (((idx+1)/tot)*100) + '%';
+    document.getElementById('front-cat').innerText = card.cat;
+    document.getElementById('hu-word').innerText = card.hu;
+    document.getElementById('en-word').innerText = card.en;
+    document.getElementById('example-text').innerText = card.ex;
+    // Reset flip
+    isFlipped = false;
+    document.getElementById('flip-inner').classList.remove('flipped');
+}
+
+function flipCard() {
+    isFlipped = !isFlipped;
+    document.getElementById('flip-inner').classList.toggle('flipped', isFlipped);
+}
+
+function nextCard() {
+    if (idx >= cards.length - 1) {
+        document.getElementById('card-view').style.display = 'none';
+        document.getElementById('result-view').style.display = 'block';
+        document.getElementById('res-count').innerText = cards.length;
+        return;
+    }
+    idx++;
+    render();
+}
+
+function prevCard() {
+    if (idx > 0) { idx--; render(); }
+}
+
+function shuffleCards() {
+    for (var i = cards.length-1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i+1));
+        var tmp = cards[i]; cards[i] = cards[j]; cards[j] = tmp;
+    }
+    idx = 0;
+    render();
+}
+
+function restart() {
+    cards = [...CARDS];
+    idx = 0;
+    document.getElementById('result-view').style.display = 'none';
+    document.getElementById('card-view').style.display = 'block';
+    render();
+}
+
+function shuffleRestart() {
+    cards = [...CARDS];
+    shuffleCards();
+    document.getElementById('result-view').style.display = 'none';
+    document.getElementById('card-view').style.display = 'block';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') nextCard();
+    if (e.key === 'ArrowLeft') prevCard();
+    if (e.key === ' ') flipCard();
+});
+
+render();
+</script>
+</body>
+</html>
