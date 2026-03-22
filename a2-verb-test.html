@@ -107,8 +107,8 @@ body{background:#020F09;color:rgba(255,255,255,0.90);font-family:'Manrope',sans-
     <input type="text" id="en-input" class="answer-input" placeholder="Type the English verb..." autocomplete="off">
     <div id="feedback-msg" class="feedback-msg"></div>
     <div class="btn-row">
-      <button class="btn-ghost" id="reveal-btn" onclick="revealAnswer()">&#128161; Reveal</button>
-      <button class="btn-main" id="next-btn" onclick="handleSubmit()">Check &#8594;</button>
+      <button class="btn-ghost" id="reveal-btn" onclick="revealAnswer()" style="width:100%;margin-bottom:8px;display:block">&#128161; Reveal</button>
+      <button class="btn-main" id="next-btn" onclick="handleSubmit()" style="width:100%;display:block">Check &#8594;</button>
     </div>
   </div>
 
@@ -121,6 +121,7 @@ body{background:#020F09;color:rgba(255,255,255,0.90);font-family:'Manrope',sans-
       <div class="res-score" id="r-score">0</div>
       <div class="res-denom" id="r-denom">/ 47 correct</div>
       <div class="res-msg" id="r-msg"></div>
+      <div id="ai-feedback" style="margin-top:16px;padding:14px 16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:14px;font-size:.82rem;color:#6EE7B7;font-style:italic;min-height:44px;text-align:center">⚡ AI elemzés folyamatban...</div>
       <div class="wrong-section" id="wrong-section">
         <div class="wrong-title">Review these:</div>
         <div id="wrong-list"></div>
@@ -208,7 +209,7 @@ function revealAnswer(){
     fb.className='feedback-msg wrong';
     document.getElementById('reveal-btn').style.display='none';
 }
-function showResult(){
+async function showResult(){
     document.getElementById('test-ui').style.display='none';
     document.getElementById('result-screen').style.display='block';
     var tot=VERBS.length,pct=Math.round((score/tot)*100);
@@ -220,7 +221,14 @@ function showResult(){
         document.getElementById('wrong-section').style.display='block';
         document.getElementById('wrong-list').innerHTML=wrongAnswers.map(function(w){return '<div class="wrong-item"><strong>'+w.hu+'</strong> \u2192 '+w.correct+'</div>';}).join('');
     }
-    fetch(MAKE_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({Student:studentName,Quiz:'A2 Verb Test',Score:score,TotalQuestions:tot,Level:'A2',Skill:'Verbs',Percentage:pct,CompletedAt:new Date().toISOString()})}).catch(function(){});
+    document.getElementById('ai-feedback').innerText='\u26a1 AI elem\u00e9zes folyamatban...';
+    try {
+        var response = await fetch(MAKE_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({Student:studentName,Quiz:'A2 Verb Test',Score:score,TotalQuestions:tot,Level:'A2',Skill:'Verbs',Percentage:pct,CompletedAt:new Date().toISOString()})});
+        var text = await response.text();
+        document.getElementById('ai-feedback').innerText = text || (pct>=80?'Szuper! Magabiztos A2 tud\u00e1s! \u2728':pct>=60?'Well done! M\u00e9g egy kis gyakorl\u00e1ssal t\u00f6k\u00e9letes leszel!':'Ne add fel \u2014 minden hib\u00e1b\u00f3l tanulsz!');
+    } catch(e) {
+        document.getElementById('ai-feedback').innerText = pct>=80?'Szuper! Magabiztos A2 tud\u00e1s! \u2728':pct>=60?'Well done! M\u00e9g egy kis gyakorl\u00e1ssal t\u00f6k\u00e9letes leszel!':'Ne add fel \u2014 minden hib\u00e1b\u00f3l tanulsz!';
+    }
 }
 function restartQuiz(){qIdx=0;score=0;wrongAnswers=[];document.getElementById('result-screen').style.display='none';document.getElementById('test-ui').style.display='block';loadWord();}
 document.addEventListener('keydown',function(e){if(document.getElementById('test-ui').style.display==='none')return;if(e.key==='Enter')handleSubmit();});

@@ -524,7 +524,7 @@ function nextQuestion() {
     }
 }
 
-function showResult() {
+async function showResult() {
     document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('result-screen').classList.remove('hidden');
     document.getElementById('display-name').innerText = studentName;
