@@ -226,7 +226,7 @@ function startApp(){
     cardList=selectedFilter==='ALL'?[...ALL_CARDS]:ALL_CARDS.filter(c=>c.type===selectedFilter);
     shuffle(cardList);
     currentIndex=0;
-    hide('s-start');show('s-cards');
+    hide('s-start');show('s-card');
     renderCard();
 }
 
@@ -265,7 +265,7 @@ function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}
 function shuffleCards(){shuffle(cardList);currentIndex=0;renderCard();}
 
 function showResult(){
-    hide('s-cards');show('s-result');
+    hide('s-card');show('s-result');
     const total=cardList.length;
     const pct=Math.round(((currentIndex+1)/total)*100);
     const fl=selectedFilter==='ALL'?'Mind':selectedFilter==='IRREGULAR'?'Szabálytalan':'Szabályos';
@@ -277,12 +277,12 @@ function showResult(){
     fetch(MAKE_WEBHOOK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({Student:studentName,Quiz:"Essential Verbs ("+fl+")",Score:currentIndex+1,TotalQuestions:total,Level:"A2-B2",Skill:"Vocabulary",Percentage:pct,CompletedAt:new Date().toISOString()})}).catch(()=>{});
 }
 
-function restartFromStart(){currentIndex=0;hide('s-result');show('s-cards');renderCard();}
-function shuffleAndRestart(){shuffle(cardList);currentIndex=0;hide('s-result');show('s-cards');renderCard();}
+function restartFromStart(){currentIndex=0;hide('s-result');show('s-card');renderCard();}
+function shuffleAndRestart(){shuffle(cardList);currentIndex=0;hide('s-result');show('s-card');renderCard();}
 function adminAccess(){if(prompt("Jelszó:")==="bettina2026")alert("Az eredmények a Make → Airtable rendszerben mentődnek.");}
 
 document.addEventListener('keydown',e=>{
-    if(!document.getElementById('s-cards').classList.contains('hidden')){
+    if(!document.getElementById('s-card').classList.contains('hidden')){
         if(e.key==='ArrowRight')nextCard();
         else if(e.key==='ArrowLeft')prevCard();
         else if(e.key===' '){e.preventDefault();flipCard();}
