@@ -577,23 +577,50 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     }
 </script>
 
+
 <script>
-// EB Auto-start: read name from URL and skip login screen
-window.addEventListener('load', function() {
-    if (window.__eb_student_name) {
-        var inputs = ['student-name','name-input','nameInput','studentName'];
-        for (var i=0; i<inputs.length; i++) {
-            var el = document.getElementById(inputs[i]);
-            if (el) { el.value = window.__eb_student_name; break; }
-        }
-        setTimeout(function(){
-            if (typeof startApp === 'function') startApp();
-            else if (typeof startQuiz === 'function') startQuiz();
-            else if (typeof start === 'function') start();
-            else if (typeof startTest === 'function') startTest();
-        }, 80);
+// ═══ ENTROPY BREAKERS — DEFINITIVE AUTO-START ═══
+(function() {
+  var p = new URLSearchParams(window.location.search);
+  var n = p.get('name');
+  if (!n || n.length < 1) return;
+  var name = decodeURIComponent(n);
+  window.__eb_student_name = name;
+
+  function doStart() {
+    // 1. Fill all possible name inputs
+    var inputIds = ['student-name','name-input','nameInput','studentName','player-name'];
+    for (var i = 0; i < inputIds.length; i++) {
+      var el = document.getElementById(inputIds[i]);
+      if (el) el.value = name;
     }
-});
+
+    // 2. Set global studentName variable if it exists
+    try { if (typeof studentName !== 'undefined') studentName = name; } catch(e) {}
+    try { if (typeof window.studentName !== 'undefined') window.studentName = name; } catch(e) {}
+
+    // 3. Hide start screen
+    var startEl = document.getElementById('start-screen');
+    if (startEl) startEl.classList.add('hidden');
+
+    // 4. Call whichever start function exists
+    var fns = ['startApp','checkName','startQuiz','startTest','start','startTraining','startPlatform'];
+    for (var j = 0; j < fns.length; j++) {
+      if (typeof window[fns[j]] === 'function') {
+        try { window[fns[j]](); } catch(e) {}
+        break;
+      }
+    }
+  }
+
+  // Run after full page load
+  if (document.readyState === 'complete') {
+    setTimeout(doStart, 100);
+  } else {
+    window.addEventListener('load', function() { setTimeout(doStart, 100); });
+  }
+})();
 </script>
+
 </body>
 </html>
