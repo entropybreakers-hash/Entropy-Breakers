@@ -301,7 +301,11 @@ let studentName="",cardList=[...CARDS],currentIndex=0,isFlipped=false;
 function startApp(){const i=document.getElementById('student-name');const n=i.value.trim();if(n.length<3){alert("Kérlek írj be legalább 3 karaktert!");i.focus();return;}studentName=n;currentIndex=0;document.getElementById('start-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
 document.getElementById('student-name').addEventListener('keypress',e=>{if(e.key==='Enter')startApp();});
 function renderCard(){const c=cardList[currentIndex];const t=cardList.length;document.getElementById('card-counter').innerText=`${currentIndex+1} / ${t}`;document.getElementById('progress-fill').style.width=`${((currentIndex+1)/t)*100}%`;document.getElementById('cat-label').innerText=c.cat;document.getElementById('front-cat').innerText=c.cat;document.getElementById('back-cat').innerText=c.cat;document.getElementById('card-hu').innerText=c.hu;document.getElementById('card-en').innerText=c.en;document.getElementById('card-example').innerText=`"${c.example}"`;isFlipped=false;document.getElementById('flip-inner').classList.remove('is-flipped');}
-function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('is-flipped',isFlipped);}
+function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('is-flipped',isFlipped);
+    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); 
+    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); }
+}
+}
 function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
 function prevCard(){if(currentIndex>0){currentIndex--;renderCard();}}
 function shuffleCards(){for(let i=cardList.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cardList[i],cardList[j]]=[cardList[j],cardList[i]];}currentIndex=0;renderCard();}
@@ -357,5 +361,17 @@ document.addEventListener('keydown',e=>{if(document.getElementById('card-screen'
 })();
 </script>
 
+<script>
+function speakEnglish(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-GB'; u.rate = 0.82; u.pitch = 1;
+    const voices = speechSynthesis.getVoices();
+    const v = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en'));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+}
+</script>
 </body>
 </html>

@@ -239,6 +239,18 @@ document.addEventListener('keydown',function(e){if(document.getElementById('test
     if(document.readyState==='complete')setTimeout(doStart,100);
     else window.addEventListener('load',function(){setTimeout(doStart,100);});
 })();
+
+function speakEnglish(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-GB'; u.rate = 0.82; u.pitch = 1;
+    const voices = speechSynthesis.getVoices();
+    const v = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en'));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+}
+
 </script>
 </body>
 </html>

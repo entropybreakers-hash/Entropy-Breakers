@@ -302,7 +302,11 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     function startApp() { const input = document.getElementById('student-name'); const name = input.value.trim(); if (name.length < 3) { alert("Kérlek írj be legalább 3 karaktert!"); input.focus(); return; } studentName = name; currentIndex = 0; document.getElementById('start-screen').classList.add('hidden'); document.getElementById('card-screen').classList.remove('hidden'); renderCard(); }
     document.getElementById('student-name').addEventListener('keypress', e => { if (e.key === 'Enter') startApp(); });
     function renderCard() { const card = cardList[currentIndex]; const total = cardList.length; document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${total}`; document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`; document.getElementById('cat-label').innerText = card.cat; document.getElementById('front-cat').innerText = card.cat; document.getElementById('back-cat').innerText = card.cat; document.getElementById('card-hu').innerText = card.hu; document.getElementById('card-en').innerText = card.en; document.getElementById('card-example').innerText = `"${card.example}"`; isFlipped = false; document.getElementById('flip-inner').classList.remove('is-flipped'); }
-    function flipCard() { isFlipped = !isFlipped; document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped); }
+    function flipCard() { isFlipped = !isFlipped; document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped); 
+    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); 
+    if (isFlipped) { var w = document.getElementById("card-en"); if(w) speakEnglish(w.innerText); }
+}
+}
     function nextCard() { if (currentIndex < cardList.length - 1) { currentIndex++; renderCard(); } else showResult(); }
     function prevCard() { if (currentIndex > 0) { currentIndex--; renderCard(); } }
     function shuffleCards() { for (let i = cardList.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [cardList[i], cardList[j]] = [cardList[j], cardList[i]]; } currentIndex = 0; renderCard(); }
@@ -358,5 +362,17 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 })();
 </script>
 
+<script>
+function speakEnglish(text) {
+    if (!text || !('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-GB'; u.rate = 0.82; u.pitch = 1;
+    const voices = speechSynthesis.getVoices();
+    const v = voices.find(v => v.lang.startsWith('en-GB')) || voices.find(v => v.lang.startsWith('en'));
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+}
+</script>
 </body>
 </html>
