@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Vocabulary Flashcards</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%}
@@ -16,7 +16,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:12px;
+  padding:8px;
   overflow:hidden;
   -webkit-font-smoothing:antialiased;
 }
@@ -58,7 +58,7 @@ body{
 /* ── SHELL ── */
 .shell{
   position:relative;z-index:1;
-  width:100%;max-width:500px;min-height:92vh;display:flex;flex-direction:column;justify-content:center;
+  width:100%;max-width:500px;
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(255,255,255,0.09);
   border-radius:30px;
@@ -132,8 +132,8 @@ body{
   letter-spacing:.14em;text-transform:uppercase;color:#C4B5FD;margin-bottom:16px;
 }
 .hu-word{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(1.9rem,7.5vw,2.8rem);
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(1.5rem,6vw,2.4rem);
   font-weight:800;letter-spacing:-.02em;
   color:#fff;line-height:1.1;
 }
@@ -141,8 +141,8 @@ body{
 
 .en-label{font-size:.56rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:rgba(196,181,253,0.75);margin-bottom:12px;position:relative;z-index:1}
 .en-word{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(1.9rem,7.5vw,2.8rem);
+  font-family:'Outfit',sans-serif;
+  font-size:clamp(1.5rem,6vw,2.4rem);
   font-weight:800;letter-spacing:-.02em;
   background:linear-gradient(135deg,#fff 20%,#DDD6FE 60%,#C4B5FD 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
@@ -170,7 +170,7 @@ body{
   padding:14px;
   background:linear-gradient(135deg,#6D28D9,#8B5CF6 50%,#7C3AED);
   border:none;border-radius:16px;
-  font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;
+  font-family:'Outfit',sans-serif;font-size:.78rem;font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;
   box-shadow:0 0 30px rgba(109,40,217,0.45),0 6px 16px rgba(0,0,0,0.35);
   transition:all .2s;position:relative;overflow:hidden;
@@ -180,7 +180,7 @@ body{
 .btn-main:active{transform:scale(.98)}
 
 .btn-shuffle{
-  width:100%;padding:12px;
+  width:100%;padding:8px;
   background:rgba(255,255,255,0.03);
   border:1px solid rgba(255,255,255,0.07);
   border-radius:16px;
@@ -195,7 +195,7 @@ body{
   background:linear-gradient(135deg,rgba(109,40,217,0.8),rgba(139,92,246,0.6));
   border:1px solid rgba(167,139,250,0.4);display:flex;align-items:center;justify-content:center;
   font-size:2rem;box-shadow:0 0 50px rgba(109,40,217,0.45)}
-.result-title{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;letter-spacing:-.03em;
+.result-title{font-family:'Outfit',sans-serif;font-size:2.4rem;font-weight:800;letter-spacing:-.03em;
   background:linear-gradient(135deg,#fff 30%,#C4B5FD 70%,#DDD6FE);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
 .result-sub{font-size:.82rem;font-weight:300;color:rgba(255,255,255,0.28);margin-bottom:26px}
@@ -203,7 +203,7 @@ body{
   border-radius:20px;padding:28px;margin-bottom:14px;position:relative;overflow:hidden}
 .result-panel::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;
   background:linear-gradient(90deg,transparent,rgba(167,139,250,0.45),transparent)}
-.result-count{font-family:'Syne',sans-serif;font-size:4.5rem;font-weight:800;letter-spacing:-.05em;
+.result-count{font-family:'Outfit',sans-serif;font-size:4.5rem;font-weight:800;letter-spacing:-.05em;
   background:linear-gradient(135deg,#fff,#C4B5FD);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   line-height:1;margin-bottom:4px}
@@ -232,8 +232,9 @@ body{
     <div class="flip-wrap" onclick="flipCard()">
       <div class="flip-inner" id="flip-inner">
         <div class="flip-front">
-          <div class="cat-pill" id="front-cat">—</div>
+          <div class="en-label" style="opacity:0">English</div>
           <div class="hu-word" id="hu-word">—</div>
+          <div class="example" style="opacity:0">placeholder text here</div>
           <span class="tap-hint">Tap to reveal →</span>
         </div>
         <div class="flip-back">
