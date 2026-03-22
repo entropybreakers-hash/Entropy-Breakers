@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Essential Verbs | Entropy Breakers</title>
-    <script src="https://cdn.tailwindcss.com">
-    window.addEventListener("load", startApp);
-</script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { width: 100%; min-height: 100vh; }
@@ -64,6 +62,17 @@
     </style>
 </head>
 <body>
+<script>
+// Auto-read student name from URL — injected by Entropy Breakers platform
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var urlName = params.get('name');
+    if (urlName) {
+        window.__eb_student_name = decodeURIComponent(urlName);
+    }
+})();
+</script>
+
 <div class="shell">
 
     <!-- START -->
@@ -238,18 +247,18 @@ function setFilter(f){
     ['ALL','IRREGULAR','REGULAR'].forEach(k=>document.getElementById('f-'+k).classList.toggle('on',k===f));
 }
 
-function startApp() {
+function startApp(){
     const name=document.getElementById('student-name').value.trim();
-    
-    
+    if(name.length<3){alert("Kérlek írj be legalább 3 karaktert!");return;}
+    studentName=name;
     cardList=selectedFilter==='ALL'?[...ALL_CARDS]:ALL_CARDS.filter(c=>c.type===selectedFilter);
     shuffle(cardList);
-    currentIndex = 0;
+    currentIndex=0;
     hide('s-start');show('s-cards');
     renderCard();
 }
 
-});
+document.getElementById('student-name').addEventListener('keypress',e=>{if(e.key==='Enter')startApp();});
 
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
 
@@ -305,5 +314,30 @@ document.addEventListener('keydown',e=>{
     }
 });
 </script>
+
+<script>
+// Auto-start if name provided via URL
+window.addEventListener('load', function() {
+    if (window.__eb_student_name) {
+        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
+        if (nameInput) {
+            nameInput.value = window.__eb_student_name;
+            // Auto trigger start
+            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
+            if (startBtn) {
+                setTimeout(function(){ startBtn.click(); }, 100);
+            } else {
+                // Try calling start functions directly
+                setTimeout(function(){
+                    if (typeof startApp === 'function') startApp();
+                    else if (typeof startQuiz === 'function') startQuiz();
+                    else if (typeof start === 'function') start();
+                }, 100);
+            }
+        }
+    }
+});
+</script>
+
 </body>
 </html>

@@ -3,9 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>B2 Society & Politics | Entropy Breakers 🚀</title>
-    <script src="https://cdn.tailwindcss.com">
-    window.addEventListener("load", startApp);
-</script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { box-sizing: border-box; }
         body { background: radial-gradient(circle at 15% 15%, rgba(168,85,247,0.1), transparent 40%), radial-gradient(circle at 85% 85%, rgba(99,102,241,0.12), transparent 40%), #020617; font-family: -apple-system, system-ui, sans-serif; color: #f1f5f9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; margin: 0; }
@@ -40,8 +38,31 @@
     </style>
 </head>
 <body>
+<script>
+// Auto-read student name from URL — injected by Entropy Breakers platform
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var urlName = params.get('name');
+    if (urlName) {
+        window.__eb_student_name = decodeURIComponent(urlName);
+    }
+})();
+</script>
+
 <div id="app" class="cyber-shell p-6 md:p-10">
-    <div id="card-screen" class="animate-slide">
+    <div id="start-screen" class="text-center py-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-purple-500/10 mb-6 border border-purple-500/20"><span class="text-2xl">🏛️</span></div>
+        <h1 onclick="adminAccess()" class="text-4xl md:text-5xl font-black mb-4 tracking-tighter cursor-pointer"><span class="aurora-title uppercase">Entropy Breakers 🚀</span></h1>
+        <p class="text-xl font-black text-white mb-1 uppercase tracking-tight">Society & Politics</p>
+        <p class="text-purple-300 font-bold text-[10px] tracking-[0.3em] mb-3 uppercase">🟣 B2 · Vocabulary Flashcards</p>
+        <p class="text-slate-400 text-sm font-medium mb-8 max-w-xs mx-auto">Magyar szó elöl · Angol szó + példa hátul · 50 szó</p>
+        <div class="space-y-4 max-w-sm mx-auto">
+            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
+            <button onclick="startApp()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Tanulás indítása</button>
+        </div>
+        <p class="mt-10 text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">Designed by Entropy Breakers</p>
+    </div>
+    <div id="card-screen" class="hidden animate-slide">
         <header class="flex justify-between items-center mb-5">
             <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-purple-300 tracking-widest"><span id="cat-label">-</span></div>
             <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest"><span id="card-counter">1 / 50</span></div>
@@ -145,8 +166,8 @@ const CARDS = [
     { cat:"💬 Igék", hu:"Megvalósít (politikát)", en:"Implement (a policy)", example:"The government plans to implement the new policy next year." },
 ];
 let studentName="",cardList=[...CARDS],currentIndex=0,isFlipped=false;
-function startApp() {currentIndex = 0;document.getElementById('start-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
-});
+function startApp(){const i=document.getElementById('student-name');const n=i.value.trim();if(n.length<3){alert("Kérlek írj be legalább 3 karaktert!");i.focus();return;}studentName=n;currentIndex=0;document.getElementById('start-screen').classList.add('hidden');document.getElementById('card-screen').classList.remove('hidden');renderCard();}
+document.getElementById('student-name').addEventListener('keypress',e=>{if(e.key==='Enter')startApp();});
 function renderCard(){const c=cardList[currentIndex];const t=cardList.length;document.getElementById('card-counter').innerText=`${currentIndex+1} / ${t}`;document.getElementById('progress-fill').style.width=`${((currentIndex+1)/t)*100}%`;document.getElementById('cat-label').innerText=c.cat;document.getElementById('front-cat').innerText=c.cat;document.getElementById('back-cat').innerText=c.cat;document.getElementById('card-hu').innerText=c.hu;document.getElementById('card-en').innerText=c.en;document.getElementById('card-example').innerText=`"${c.example}"`;isFlipped=false;document.getElementById('flip-inner').classList.remove('is-flipped');}
 function flipCard(){isFlipped=!isFlipped;document.getElementById('flip-inner').classList.toggle('is-flipped',isFlipped);}
 function nextCard(){if(currentIndex<cardList.length-1){currentIndex++;renderCard();}else showResult();}
@@ -158,5 +179,30 @@ function shuffleAndRestart(){shuffleCards();document.getElementById('result-scre
 function adminAccess(){if(prompt("Jelszó:")==="bettina2026")alert("Az eredmények a Make → Airtable rendszerben mentődnek.");}
 document.addEventListener('keydown',e=>{if(document.getElementById('card-screen').classList.contains('hidden'))return;if(e.key==='ArrowRight')nextCard();if(e.key==='ArrowLeft')prevCard();if(e.key===' '){e.preventDefault();flipCard();}});
 </script>
+
+<script>
+// Auto-start if name provided via URL
+window.addEventListener('load', function() {
+    if (window.__eb_student_name) {
+        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
+        if (nameInput) {
+            nameInput.value = window.__eb_student_name;
+            // Auto trigger start
+            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
+            if (startBtn) {
+                setTimeout(function(){ startBtn.click(); }, 100);
+            } else {
+                // Try calling start functions directly
+                setTimeout(function(){
+                    if (typeof startApp === 'function') startApp();
+                    else if (typeof startQuiz === 'function') startQuiz();
+                    else if (typeof start === 'function') start();
+                }, 100);
+            }
+        }
+    }
+});
+</script>
+
 </body>
 </html>

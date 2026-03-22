@@ -42,10 +42,38 @@
     </style>
 </head>
 <body>
+<script>
+// Auto-read student name from URL — injected by Entropy Breakers platform
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var urlName = params.get('name');
+    if (urlName) {
+        window.__eb_student_name = decodeURIComponent(urlName);
+    }
+})();
+</script>
+
 <div class="cyber-shell p-8 md:p-12">
 
+    <!-- START SCREEN -->
+    <div id="start-screen" class="text-center py-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-teal-500/10 mb-6 border border-teal-500/20">
+            <span class="text-2xl mint-glow-text">⚡</span>
+        </div>
+        <h1 onclick="adminAccess()" class="text-4xl md:text-5xl font-black mb-4 tracking-tighter cursor-pointer">
+            <span class="aurora-title uppercase">Entropy Breakers 🚀</span>
+        </h1>
+        <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">B1 Grammar Master</p>
+        <p class="text-slate-400 mb-10 font-medium">40 kérdéses nyelvtani gyakorlás.</p>
+        <div class="max-w-sm mx-auto space-y-4">
+            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
+            <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-[0.98]">Teszt indítása</button>
+        </div>
+        <div class="mt-12 text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">Designed by Entropy Breakers</div>
+    </div>
+
     <!-- QUIZ UI -->
-    <div id="quiz-ui" class=" animate-slide">
+    <div id="quiz-ui" class="hidden animate-slide">
         <div class="flex justify-between items-center mb-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">
             <span>Kérdés: <span id="q-counter" class="text-teal-400">1 / 40</span></span>
             <span>Pont: <span id="live-score" class="text-indigo-300">0</span></span>
@@ -134,9 +162,6 @@
     let currentQuestion = 0;
     let score = 0;
     let studentName = "";
-    // Read student name from URL ?name=...
-    const urlParams = new URLSearchParams(window.location.search);
-    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
     let answered = false;
 
     function shuffleArray(array) {
@@ -147,14 +172,18 @@
         return array;
     }
 
-    
+    function checkName() {
+        const input = document.getElementById('student-name');
+        const name = input.value.trim();
+        if (name.length < 3) { alert("Kérlek írj be legalább 3 karaktert a névhez."); input.focus(); return; }
         studentName = name;
         document.getElementById('start-screen').classList.add('hidden');
         document.getElementById('quiz-ui').classList.remove('hidden');
         loadQuestion();
     }
 
-    
+    document.getElementById('student-name').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') checkName();
     });
 
     function loadQuestion() {
@@ -276,8 +305,33 @@
         document.getElementById('explanation-box').classList.add('hidden');
         document.getElementById('result-screen').classList.add('hidden');
         document.getElementById('quiz-ui').classList.add('hidden');
-        
+        document.getElementById('start-screen').classList.remove('hidden');
     }
 </script>
+
+<script>
+// Auto-start if name provided via URL
+window.addEventListener('load', function() {
+    if (window.__eb_student_name) {
+        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
+        if (nameInput) {
+            nameInput.value = window.__eb_student_name;
+            // Auto trigger start
+            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
+            if (startBtn) {
+                setTimeout(function(){ startBtn.click(); }, 100);
+            } else {
+                // Try calling start functions directly
+                setTimeout(function(){
+                    if (typeof startApp === 'function') startApp();
+                    else if (typeof startQuiz === 'function') startQuiz();
+                    else if (typeof start === 'function') start();
+                }, 100);
+            }
+        }
+    }
+});
+</script>
+
 </body>
 </html>

@@ -177,9 +177,44 @@
     </style>
 </head>
 <body>
+<script>
+// Auto-read student name from URL — injected by Entropy Breakers platform
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var urlName = params.get('name');
+    if (urlName) {
+        window.__eb_student_name = decodeURIComponent(urlName);
+    }
+})();
+</script>
+
 
 <div id="app" class="cyber-shell p-6 md:p-10">
     <!-- START SCREEN -->
+    <div id="start-screen" class="text-center py-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-teal-500/10 mb-6 border border-teal-500/20">
+            <span class="text-2xl mint-glow-text">⚡</span>
+        </div>
+
+        <h1 onclick="adminAccess()" class="text-4xl md:text-5xl font-black mb-4 tracking-tighter cursor-pointer">
+            <span class="aurora-title uppercase">Entropy Breakers 🚀</span>
+        </h1>
+
+        <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">B1 Verb Learner</p>
+        <p class="text-slate-400 font-bold text-xs tracking-widest mb-8 uppercase">Level up your vocabulary!</p>
+
+        <div class="space-y-4 max-w-sm mx-auto">
+            <input type="text" id="student-name" placeholder="Írd be a teljes neved" class="input-field">
+            <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest shadow-lg active:scale-95">
+                Tanulás indítása
+            </button>
+        </div>
+
+        <p class="mt-10 text-[10px] text-slate-500 font-black uppercase tracking-[0.3em]">
+            Designed by Entropy Breakers
+        </p>
+    </div>
+
     <!-- GAME SCREEN -->
     <div id="game-screen" class="hidden animate-slide">
         <header class="flex justify-between items-center mb-6">
@@ -248,9 +283,6 @@
     const CHUNK_SIZE = 10;
 
     let studentName = "";
-    // Read student name from URL ?name=...
-    const urlParams = new URLSearchParams(window.location.search);
-    studentName = decodeURIComponent(urlParams.get('name') || 'Student');
     let moves = 0;
     let matchedInTotal = 0;
     let currentChunk = [];
@@ -258,7 +290,15 @@
     let isProcessing = false;
     let fullList = [...VERB_DATA].sort(() => Math.random() - 0.5);
 
-    
+    function checkName() {
+        const input = document.getElementById('student-name');
+        const name = input.value.trim();
+
+        if (name.length < 3) {
+            alert("Kérlek írj be legalább 3 karaktert a névhez.");
+            input.focus();
+            return;
+        }
 
         studentName = name;
         document.getElementById('start-screen').classList.add('hidden');
@@ -266,7 +306,8 @@
         loadNextChunk();
     }
 
-    
+    document.getElementById('student-name').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') checkName();
     });
 
     function loadNextChunk() {
@@ -402,8 +443,33 @@
         document.getElementById('next-round-modal').classList.add('hidden');
         document.getElementById('result-screen').classList.add('hidden');
         document.getElementById('game-screen').classList.add('hidden');
-        
+        document.getElementById('start-screen').classList.remove('hidden');
     }
 </script>
+
+<script>
+// Auto-start if name provided via URL
+window.addEventListener('load', function() {
+    if (window.__eb_student_name) {
+        var nameInput = document.getElementById('student-name') || document.getElementById('name-input') || document.getElementById('nameInput');
+        if (nameInput) {
+            nameInput.value = window.__eb_student_name;
+            // Auto trigger start
+            var startBtn = document.querySelector('button[onclick*="startApp"], button[onclick*="startQuiz"], button[onclick*="startPlatform"], button[onclick*="start()"]');
+            if (startBtn) {
+                setTimeout(function(){ startBtn.click(); }, 100);
+            } else {
+                // Try calling start functions directly
+                setTimeout(function(){
+                    if (typeof startApp === 'function') startApp();
+                    else if (typeof startQuiz === 'function') startQuiz();
+                    else if (typeof start === 'function') start();
+                }, 100);
+            }
+        }
+    }
+});
+</script>
+
 </body>
 </html>
