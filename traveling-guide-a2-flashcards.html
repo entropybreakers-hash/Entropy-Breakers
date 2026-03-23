@@ -262,7 +262,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                 <div class="flip-front">
                     <div class="cat-pill" id="front-cat">-</div>
                     <h2 id="card-hu" class="text-xl font-black text-white leading-snug">-</h2>
-                    <span class="flip-hint">Koppints a fordításhoz →</span>
+                    <span class="flip-hint">Tap to flip →</span>
                 </div>
                 <!-- BACK: English -->
                 <div class="flip-back">
@@ -270,7 +270,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                     <p class="text-teal-300 text-[10px] font-black uppercase tracking-widest mb-3">English kifejezés</p>
                     <h2 id="card-en" class="text-xl font-black text-white leading-snug mb-3">-</h2>
                     <p id="card-tip" class="text-slate-400 text-xs font-medium leading-relaxed">-</p>
-                    <span class="flip-hint" style="color:#5eead4;">← Koppints vissza</span>
+                    <span class="flip-hint" style="color:#5eead4;">← Tap back</span>
                 </div>
             </div>
         </div>
@@ -281,7 +281,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
                 <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="flex-1 text-center">
-                <p class="text-slate-500 text-[10px] font-black uppercase tracking-widest">Koppints a kártyára a fordításért</p>
+                
             </div>
             <button class="nav-btn" onclick="nextCard()">
                 <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -303,16 +303,16 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     <div id="result-screen" class="hidden text-center animate-slide">
         <div class="text-6xl mb-6">🌍</div>
         <h2 class="text-3xl font-black text-white mb-2 uppercase">Well done!</h2>
-        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, átmenté az összes kártyát!</p>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, reviewed all the cards!</p>
         <div class="result-card p-8 mb-8">
-            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-widest">Megtanult kártyák</div>
+            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-widest">Cards Reviewed</div>
             <div class="text-7xl font-black text-white" id="seen-count">0</div>
-            <div class="text-slate-400 text-sm mt-2">/ 60 szituáció</div>
+            <div class="text-slate-400 text-sm mt-2">/ 60 situations</div>
             <div id="feedback-msg" class="mt-4 text-teal-200 font-bold italic">-</div>
         </div>
         <div class="grid grid-cols-2 gap-3">
             <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">
-                🔄 Restartés
+                🔄 Restart
             </button>
             <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">
                 🔀 Új sorrend
@@ -483,10 +483,10 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 
         const pct = Math.round(((currentIndex + 1) / cardList.length) * 100);
         const msg = pct === 100
-            ? "Zseniális! Mind a 60 kártyát átmenté! Készen állsz az utazásra! ✈️"
+            ? "Amazing! You reviewed all 60 cards! Ready for your trip! ✈️"
             : pct >= 60
-            ? "Szép haladás! Folytasd, hamarosan készen leszel!"
-            : "Jó kezdés! Gyakorolj még és magabiztos leszel!";
+            ? "Great progress! Keep going, you're almost there!"
+            : "Good start! Keep practising and you'll get there!";
         document.getElementById('feedback-msg').innerText = msg;
 
         // Send to Make.com

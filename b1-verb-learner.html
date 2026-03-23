@@ -373,7 +373,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         </div>
 
         <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">
-            Restartés
+            Restart
         </button>
     </div>
 </div>
@@ -522,14 +522,14 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 
             clearTimeout(timeout);
             const text = await response.text();
-            document.getElementById('feedback-rating').innerText = text || "Well done! Folytasd a gyakorlást!";
+            document.getElementById('feedback-rating').innerText = text || "Well done! Keep practising!";
 
         } catch (e) {
             console.error("Error:", e);
             document.getElementById('feedback-rating').innerText =
-                moves <= 70 ? "Zseniális! Készen állsz a haladóbb szintre!" :
+                moves <= 70 ? "Outstanding! You're ready for the next level!" :
                 moves <= 95 ? "Szép munka, de gyakorolj még!" :
-                "Ne add fel, próbáld újra!";
+                "Don't give up, try again!";
         }
     }
 

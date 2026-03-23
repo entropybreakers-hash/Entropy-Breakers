@@ -276,15 +276,15 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     <div id="result-screen" class="hidden text-center animate-slide">
         <div class="text-6xl mb-6">🌍</div>
         <h2 class="text-3xl font-black text-white mb-2 uppercase">Well done!</h2>
-        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, átmenté a kártyákat!</p>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, reviewed the cards!</p>
         <div class="result-card p-8 mb-8">
-            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-widest">Megtanult kártyák</div>
+            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-widest">Cards Reviewed</div>
             <div class="text-7xl font-black text-white" id="seen-count">0</div>
-            <div id="result-total" class="text-slate-400 text-sm mt-1">/ 120 szituáció</div>
+            <div id="result-total" class="text-slate-400 text-sm mt-1">/ 120 situations</div>
             <div id="feedback-msg" class="mt-4 text-teal-200 font-bold italic text-sm">-</div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Restartés</button>
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Restart</button>
             <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
         </div>
     </div>
@@ -570,14 +570,14 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         document.getElementById('result-screen').classList.remove('hidden');
         document.getElementById('display-name').innerText = studentName;
         document.getElementById('seen-count').innerText = currentIndex + 1;
-        document.getElementById('result-total').innerText = `/ ${cardList.length} szituáció`;
+        document.getElementById('result-total').innerText = `/ ${cardList.length} situations`;
 
         const pct = Math.round(((currentIndex + 1) / cardList.length) * 100);
         const msg = pct === 100
-            ? "Zseniális! Az összes kártyát átmenté! Magabiztosan kommunikálsz külföldön! ✈️"
+            ? "Amazing! You reviewed all the cards! You can communicate abroad with confidence! ✈️"
             : pct >= 60
-            ? "Szép haladás! Folytasd, hamarosan készen leszel az utazásra!"
-            : "Jó kezdés! Ismételj még és magabiztos leszel!";
+            ? "Great progress! Keep going, you'll be ready for your trip soon!"
+            : "Good start! Review more and you'll feel confident!";
         document.getElementById('feedback-msg').innerText = msg;
 
         fetch(MAKE_WEBHOOK_URL, {

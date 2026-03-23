@@ -166,8 +166,8 @@ footer{text-align:center;padding:52px 0 28px;font-size:.5rem;font-weight:600;let
 .ov-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;background:rgba(13,5,32,0.97);border-bottom:1px solid rgba(139,92,246,0.14);flex-shrink:0}
 .ov-logo{font-family:'Exo 2',sans-serif;font-size:.86rem;font-weight:800;text-transform:uppercase;background:linear-gradient(135deg,#fff,#C084FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .ov-title{font-size:.58rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.25);flex:1;text-align:center;padding:0 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ov-close{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:rgba(255,255,255,0.45);font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:600;padding:7px 16px;cursor:pointer;transition:all .2s;white-space:nowrap}
-.ov-close:hover{border-color:rgba(139,92,246,0.4);color:rgba(196,181,253,0.8)}
+.ov-close{background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);border-radius:12px;color:rgba(196,181,253,0.9);font-family:'Manrope',sans-serif;font-size:.82rem;font-weight:700;padding:10px 22px;cursor:pointer;transition:all .2s;white-space:nowrap;min-width:80px;min-height:42px}
+.ov-close:hover{background:rgba(139,92,246,0.28);border-color:rgba(139,92,246,0.6);color:#fff}
 .ov-loader{position:absolute;inset:0;top:46px;background:#0D0520;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
 .ov-ltitle{font-family:'Exo 2',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:linear-gradient(135deg,#fff,#C084FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .ov-lbar{width:180px;height:2px;background:rgba(139,92,246,0.12);border-radius:999px;overflow:hidden}
@@ -428,6 +428,17 @@ function closeQuiz() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeQuiz(); });
+
+// Swipe right to close quiz
+(function(){
+  let tx = 0;
+  const overlay = document.getElementById('quiz-overlay');
+  overlay.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  overlay.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (dx > 80) closeQuiz();
+  }, {passive:true});
+})();
 
 </script>
 </body>

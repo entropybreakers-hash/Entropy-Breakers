@@ -268,9 +268,9 @@ async function showResult(){
     try {
         const _r = await fetch(MAKE_WEBHOOK_URL, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({Student:studentName,Quiz:QUIZ_NAME,Score:currentIndex+1,TotalQuestions:cardList.length,Level:QUIZ_LEVEL,Skill:QUIZ_SKILL,Percentage:pct,CompletedAt:new Date().toISOString()})});
         const _t = await _r.text();
-        document.getElementById('ai-feedback').innerText = _t || (pct===100?"Zseniális! Az összes igét átmenté! ⚡":pct>=60?"Szép haladás! Folytasd!":"Ne add fel — minden hibából tanulsz!");
+        document.getElementById('ai-feedback').innerText = _t || (pct===100?"Amazing! You reviewed all the verbs! ⚡":pct>=60?"Great progress! Keep going!":"Don't give up — you learn from every mistake!");
     } catch(e) {
-        document.getElementById('ai-feedback').innerText = pct===100?"Zseniális! Az összes igét átmenté! ⚡":pct>=60?"Szép haladás! Folytasd!":"Ne add fel — minden hibából tanulsz!";
+        document.getElementById('ai-feedback').innerText = pct===100?"Amazing! You reviewed all the verbs! ⚡":pct>=60?"Great progress! Keep going!":"Don't give up — you learn from every mistake!";
     }
 }
 

@@ -247,7 +247,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
     <div id="result-screen" class="hidden text-center animate-slide">
         <div class="text-6xl mb-6">🧠</div>
         <h2 class="text-3xl font-black text-white mb-2 uppercase">Well done!</h2>
-        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, átmenté a kártyákat!</p>
+        <p class="text-slate-400 font-medium mb-8"><span id="display-name" class="mint-glow-text"></span>, reviewed the cards!</p>
         <div class="result-card p-8 mb-8">
             <div class="text-purple-300 font-black uppercase text-xs mb-2 tracking-widest">🟣 B2 · Psychology & Emotions</div>
             <div class="text-7xl font-black text-white" id="seen-count">0</div>
@@ -255,7 +255,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
             <div id="feedback-msg" class="mt-4 text-purple-200 font-bold italic text-sm">-</div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Restartés</button>
+            <button onclick="restartFromStart()" class="py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition text-xs">🔄 Restart</button>
             <button onclick="shuffleAndRestart()" class="py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest text-xs">🔀 Új sorrend</button>
         </div>
     </div>
@@ -392,9 +392,9 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
         document.getElementById('seen-count').innerText = currentIndex + 1;
         const pct = Math.round(((currentIndex + 1) / cardList.length) * 100);
         document.getElementById('feedback-msg').innerText = pct === 100
-            ? "Zseniális! Az összes pszichológiai szót megtanultad! 🧠"
-            : pct >= 60 ? "Szép haladás! Folytasd a tanulást!"
-            : "Jó kezdés! Ismételj és magabiztos leszel!";
+            ? "Amazing! You learned all the psychology words! 🧠"
+            : pct >= 60 ? "Great progress! Keep studying!"
+            : "Good start! Keep reviewing and you'll feel confident!";
         fetch(MAKE_WEBHOOK_URL, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ Student: studentName, Quiz:"B2 Vocabulary - Psychology & Emotions", Score: currentIndex+1, TotalQuestions: cardList.length, Level:"B2", Skill:"Vocabulary", Percentage: pct, CompletedAt: new Date().toISOString() }) }).catch(()=>{});
     }
 

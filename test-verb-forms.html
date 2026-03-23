@@ -211,7 +211,7 @@ h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
 
         <div class="space-y-4 max-w-sm mx-auto">
             <input type="text" id="student-name" placeholder="Enter your name" class="input-field">
-            <button onclick="startApp()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Teszt indítása ✍️</button>
+            <button onclick="startApp()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">Start Test ✍️</button>
         </div>
         </div>
 
@@ -544,7 +544,7 @@ async function showResult() {
         ? "Tökéletes! Minden igealak helyes! ⚡"
         : pct >= 80 ? "Excellent! Nagyon jól teljesítettél!"
         : pct >= 60 ? "Well done! Még egy kis gyakorlás és tökéletes leszel!"
-        : "Jó kezdés! Ismételd át a flashcards-t és próbáld újra!";
+        : "Good start! Review the flashcards and try again!";
 
     // send to Make.com
     fetch(MAKE_WEBHOOK_URL, {
@@ -576,10 +576,10 @@ async function showResult() {
             CompletedAt: new Date().toISOString()
         })
     }).then(r => r.text()).then(t => {
-        document.getElementById('ai-text').innerText = t || "Well done! Folytasd a gyakorlást! ⚡";
+        document.getElementById('ai-text').innerText = t || "Well done! Keep practising! ⚡";
     }).catch(() => {
         document.getElementById('ai-text').innerText = pct >= 80
-            ? "Kiváló teljesítmény! Az igealakokat magabiztosan használod. ⚡"
+            ? "Excellent! You use verb forms with confidence. ⚡"
             : "Érdemes átismételni a szabálytalan igéket a flashcard-ok segítségével!";
     });
 }

@@ -236,9 +236,9 @@ async function showResult(){
     try {
         var response = await fetch(MAKE_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({Student:studentName,Quiz:'A2 Verb Test',Score:score,TotalQuestions:tot,Level:'A2',Skill:'Verbs',Percentage:pct,CompletedAt:new Date().toISOString()})});
         var text = await response.text();
-        document.getElementById('ai-feedback').innerText = text || (pct>=80?'Szuper! Magabiztos A2 tud\u00e1s! \u2728':pct>=60?'Well done! M\u00e9g egy kis gyakorl\u00e1ssal t\u00f6k\u00e9letes leszel!':'Ne add fel \u2014 minden hib\u00e1b\u00f3l tanulsz!');
+        document.getElementById('ai-feedback').innerText = text || (pct>=80?'Superb! Confident A2 knowledge! ✨':pct>=60?'Well done! A little more practice and you\'ll be perfect!':'Don\'t give up — you learn from every mistake!');
     } catch(e) {
-        document.getElementById('ai-feedback').innerText = pct>=80?'Szuper! Magabiztos A2 tud\u00e1s! \u2728':pct>=60?'Well done! M\u00e9g egy kis gyakorl\u00e1ssal t\u00f6k\u00e9letes leszel!':'Ne add fel \u2014 minden hib\u00e1b\u00f3l tanulsz!';
+        document.getElementById('ai-feedback').innerText = pct>=80?'Superb! Confident A2 knowledge! ✨':pct>=60?'Well done! A little more practice and you\'ll be perfect!':'Don\'t give up — you learn from every mistake!';
     }
 }
 function restartQuiz(){qIdx=0;score=0;wrongAnswers=[];document.getElementById('result-screen').style.display='none';document.getElementById('test-ui').style.display='block';loadWord();}
