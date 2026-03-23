@@ -157,7 +157,7 @@ const VERBS = [
     {en:"Think",hu:"Gondol"},{en:"Try",hu:"Megpr\u00f3b\u00e1l"},{en:"Use",hu:"Haszn\u00e1l"},
     {en:"Want",hu:"Akar"},{en:"Work",hu:"Dolgozik"}
 ];
-let studentName="", qIdx=0, score=0, wrongAnswers=[], revealed=false;
+let studentName="", qIdx=0, score=0, wrongAnswers=[], revealed=false, answered=false;
 
 function startApp(){
     var input=document.getElementById('student-name');
@@ -185,12 +185,12 @@ function loadWord(){
     document.getElementById('reveal-btn').style.display='';
     document.getElementById('next-btn').innerText='Check \u2192';
     revealed=false;
+    answered=false;
     setTimeout(function(){document.getElementById('en-input').focus();},50);
 }
 function norm(s){return s.trim().toLowerCase().replace(/[^a-z\s\/]/g,'').replace(/\s+/,' ').trim();}
 function handleSubmit(){
-    var btn=document.getElementById('next-btn');
-    if(btn.innerText.indexOf('Next')>=0){qIdx++;loadWord();return;}
+    if(answered){qIdx++;loadWord();return;}
     var input=document.getElementById('en-input');
     var ans=norm(input.value);
     var correct=norm(VERBS[qIdx].en);
@@ -208,7 +208,8 @@ function handleSubmit(){
         feedback.className='feedback-bad';
     }
     feedback.style.display='';
-    btn.innerText='Next \u2192';
+    answered=true;
+    document.getElementById('next-btn').innerText='Next \u2192';
     document.getElementById('reveal-btn').style.display='none';
 }
 function revealAnswer(){
