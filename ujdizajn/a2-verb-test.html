@@ -308,6 +308,10 @@ main{
   display:grid;grid-template-columns:1fr 1fr;gap:10px;
   max-width:380px;margin:0 auto;width:100%;
 }
+.action-row.action-row-3{
+  grid-template-columns:1fr 1fr 1fr;
+  max-width:480px;
+}
 .action-btn{
   padding:12px 18px;
   font-size:10px;font-weight:500;letter-spacing:.2em;
@@ -469,19 +473,17 @@ footer{
       <div class="verb-hu" id="verb-hu">—</div>
       <div class="phrase-test-row">
         <input type="text" class="phrase-input" id="input-en" autocomplete="off" spellcheck="false" placeholder="Írd be angolul...">
-        <div class="phrase-answer" id="answer-en"></div>
       </div>
-    </div>
     </div>
 
     <div class="nav-row">
       <button class="arrow-btn" id="prev-btn" onclick="prevCard()" aria-label="Előző">←</button>
       <span class="nav-hint" id="nav-hint">Fordítsd le angolra</span>
-      <button class="arrow-btn" id="next-btn" onclick="nextCard()" aria-label="Következő">→</button>
+      <button class="arrow-btn" id="next-btn" onclick="submitAndNext()" aria-label="Következő">→</button>
     </div>
 
     <div class="action-row">
-      <button class="action-btn secondary" id="check-btn" onclick="checkAnswer()">Ellenőrzés</button>
+      <button class="action-btn secondary" id="next-action-btn" onclick="submitAndNext()">Következő</button>
       <button class="action-btn primary" onclick="showResult()">Befejezés</button>
     </div>
   </div>
@@ -490,12 +492,12 @@ footer{
   <div class="result-screen" id="result-screen">
     <div class="result-badge">A2 · Igék</div>
     <h2 class="result-title">Szép <span class="accent">munka</span>, <span class="result-name" id="result-name">—</span></h2>
-    <p class="result-subtitle">Teszt eredménye</p>
+    <p class="result-subtitle">Teszt befejezve</p>
 
     <div class="result-stats">
       <div class="result-number" id="result-count">0</div>
-      <div class="result-meta">helyes / 50</div>
-      <div class="result-feedback" id="result-feedback">—</div>
+      <div class="result-meta">megválaszolt szó</div>
+      <div class="result-feedback" id="result-feedback">Az <span class="accent">AI visszajelzést</span> hamarosan megkapod e-mailben — részletes hibajavítással, magyarázattal és gyakorlási tippekkel.</div>
     </div>
 
     <div class="action-row">
@@ -614,14 +616,8 @@ function renderCard() {
 
   const input = document.getElementById('input-en');
   input.value = '';
-  input.classList.remove('correct', 'wrong');
-  document.getElementById('answer-en').textContent = '';
-  document.getElementById('answer-en').classList.remove('show');
 
-  document.getElementById('nav-hint').textContent = 'Fordítsd le angolra · vagy ugorj tovább';
-  document.getElementById('check-btn').textContent = 'Ellenőrzés';
-  answered = false;
-
+  document.getElementById('nav-hint').textContent = 'Fordítsd le angolra';
   document.getElementById('prev-btn').disabled = currentIndex === 0;
   setTimeout(() => input.focus(), 100);
 }
@@ -630,34 +626,24 @@ function normalize(s) {
   return (s || '').trim().toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' ');
 }
 
-function checkAnswer() {
-  if (answered) { nextCard(); return; }
+function submitAndNext() {
   const card = cardList[currentIndex];
   const input = document.getElementById('input-en');
-  const answer = document.getElementById('answer-en');
   const userAnswer = normalize(input.value);
   const correctAnswer = normalize(card.en);
+  const isCorrect = (userAnswer === correctAnswer && userAnswer !== '');
 
-  let isCorrect = (userAnswer === correctAnswer && userAnswer !== '');
-  if (isCorrect) {
-    input.classList.add('correct');
-    score++;
-  } else {
-    input.classList.add('wrong');
-    answer.textContent = card.en;
-    answer.classList.add('show');
-  }
+  if (isCorrect) score++;
 
   answersLog.push({
     hu: card.hu,
     correct: card.en,
-    student: input.value.trim(),
+    student: input.value.trim() || '(üresen hagyta)',
     isCorrect: isCorrect
   });
 
-  document.getElementById('nav-hint').textContent = isCorrect ? 'Helyes!' : 'A helyes válasz narancsban';
-  document.getElementById('check-btn').textContent = 'Tovább →';
-  answered = true;
+  // Azonnal tovább — nincs visszajelzés
+  nextCard();
 }
 
 function flipCard() {}
@@ -691,35 +677,28 @@ function showResult() {
   document.getElementById('card-screen').style.display = 'none';
   document.getElementById('result-screen').classList.add('active');
 
-  const total_seen = currentIndex + 1;
   const total = cardList.length;
-  const pct = Math.round((score / total) * 100);
+  const answered = answersLog.length;
+  const pct = total > 0 ? Math.round((score / total) * 100) : 0;
 
   document.getElementById('result-name').textContent = studentName;
-  document.getElementById('result-count').textContent = score;
+  document.getElementById('result-count').textContent = answered;
+  // A feedback szöveg már a HTML-ben van: AI visszajelzés ígérete — nem írjuk felül
 
-  let feedback = '';
-  if (pct === 100) {
-    feedback = 'Végigmentél az összes szón. Szuper munka!';
-  } else if (pct >= 60) {
-    feedback = 'Szép haladás. Még pár kör, és rögzül!';
-  } else {
-    feedback = 'Jó kezdés. Térj vissza hamarosan — az ismétlés a kulcs.';
-  }
-  document.getElementById('result-feedback').textContent = feedback;
-
-  // Send to Make webhook (silently — ignore failures)
+  // Küldjük az összes választ az AI-hoz a Make-en keresztül
   fetch(MAKE_WEBHOOK_URL, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
       Student: studentName,
       Quiz: MODULE_META.title,
-      Score: seen,
+      Score: score,
       TotalQuestions: total,
+      Answered: answered,
       Level: MODULE_META.level,
       Skill: MODULE_META.skill,
       Percentage: pct,
+      Answers: answersLog,
       CompletedAt: new Date().toISOString()
     })
   }).catch(() => {});
@@ -747,10 +726,9 @@ document.addEventListener('keydown', e => {
   if (document.getElementById('result-screen').classList.contains('active')) return;
   if (e.key === 'Enter') {
     e.preventDefault();
-    if (answered) nextCard();
-    else checkAnswer();
+    submitAndNext();
   }
-  if (e.key === 'ArrowRight' && answered) nextCard();
+  if (e.key === 'ArrowRight') submitAndNext();
   if (e.key === 'ArrowLeft' && currentIndex > 0) prevCard();
 });
 </script>

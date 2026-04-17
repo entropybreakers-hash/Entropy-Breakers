@@ -84,7 +84,7 @@ main{
 
 /* ───── MODULE HEADER (compact) ───── */
 .module-frame{
-  width:100%;max-width:480px;
+  width:100%;max-width:540px;
   display:flex;flex-direction:column;gap:20px;
 }
 
@@ -297,6 +297,10 @@ main{
   display:grid;grid-template-columns:1fr 1fr;gap:10px;
   max-width:380px;margin:0 auto;width:100%;
 }
+.action-row.action-row-3{
+  grid-template-columns:1fr 1fr 1fr;
+  max-width:480px;
+}
 .action-btn{
   padding:12px 18px;
   font-size:10px;font-weight:500;letter-spacing:.2em;
@@ -457,8 +461,6 @@ footer{
     <div class="quiz-card">
       <div class="quiz-question" id="quiz-question">—</div>
       <div class="quiz-options" id="quiz-options"></div>
-      <div class="quiz-feedback" id="quiz-feedback"></div>
-    </div>
     </div>
 
     <div class="action-row">
@@ -471,12 +473,12 @@ footer{
   <div class="result-screen" id="result-screen">
     <div class="result-badge">C1 · Nyelvtan</div>
     <h2 class="result-title">Szép <span class="accent">munka</span>, <span class="result-name" id="result-name">—</span></h2>
-    <p class="result-subtitle">Quiz eredménye</p>
+    <p class="result-subtitle">Kvíz befejezve</p>
 
     <div class="result-stats">
       <div class="result-number" id="result-count">0</div>
-      <div class="result-meta">helyes</div>
-      <div class="result-feedback" id="result-feedback">—</div>
+      <div class="result-meta">megválaszolt kérdés</div>
+      <div class="result-feedback" id="result-feedback">Az <span class="accent">AI visszajelzést</span> hamarosan megkapod e-mailben — részletes hibajavítással, magyarázattal és gyakorlási tippekkel.</div>
     </div>
 
     <div class="action-row">
@@ -636,25 +638,15 @@ function renderCard() {
     optionsDiv.appendChild(btn);
   });
 
-  document.getElementById('quiz-feedback').textContent = '';
-  document.getElementById('quiz-feedback').classList.remove('show');
+  document.getElementById('quiz-feedback')?.classList.remove('show');
   answered = false;
 }
 
 function selectOption(chosen) {
   if (answered) return;
   const card = cardList[currentIndex];
-  const buttons = document.querySelectorAll('.quiz-option');
-  buttons.forEach(b => b.disabled = true);
-
   const isCorrect = (chosen === card.correct);
-  if (isCorrect) {
-    buttons[chosen].classList.add('correct');
-    score++;
-  } else {
-    buttons[chosen].classList.add('wrong');
-    buttons[card.correct].classList.add('correct');
-  }
+  if (isCorrect) score++;
 
   answersLog.push({
     question: card.question,
@@ -663,18 +655,11 @@ function selectOption(chosen) {
     isCorrect: isCorrect
   });
 
-  if (card.explanation) {
-    const fb = document.getElementById('quiz-feedback');
-    fb.textContent = card.explanation;
-    fb.classList.add('show');
-  }
   answered = true;
 
-  // Automatikusan tovább 1.5 mp múlva
-  setTimeout(() => {
-    if (currentIndex < cardList.length - 1) nextCard();
-    else showResult();
-  }, 1800);
+  // Azonnal tovább — nincs visszajelzés
+  if (currentIndex < cardList.length - 1) nextCard();
+  else showResult();
 }
 
 function flipCard() {}
