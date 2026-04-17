@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entropy Breakers — Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+:root{
+  --bg:#ffffff;
+  --bg2:#faf8f3;
+  --bg3:#f0ebe3;
+  --cream:#1a1612;
+  --cream2:#5a5248;
+  --dim:#8a8075;
+  --dimmer:#b5aa9a;
+  --orange:#c9671f;
+  --orange2:#a85418;
+  --border:rgba(26,22,18,0.06);
+  --border2:rgba(26,22,18,0.12);
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--cream);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  min-height:100vh;
+}
+
+.accent{color:var(--orange);font-weight:500}
+.orange{color:var(--orange)}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
+
+/* ───── NAV ───── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  height:56px;padding:0 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#0a0806;
+  border-bottom:1px solid rgba(240,235,227,0.08);
+}
+.logo{
+  font-size:11px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:#f0ebe3;
+  display:flex;align-items:baseline;gap:5px;
+  text-decoration:none;
+}
+.logo .accent{
+  color:var(--orange);
+  font-weight:600;letter-spacing:.24em;
+}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-greeting{
+  font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:#c8c1b8;
+}
+.nav-greeting b{color:var(--orange);font-weight:500}
+.nav-btn{
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:#f0ebe3;
+  background:transparent;
+  border:1px solid rgba(240,235,227,0.14);
+  padding:9px 20px;border-radius:60px;
+  cursor:pointer;transition:all .3s;
+  font-family:inherit;
+}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ───── LOGIN SCREEN ───── */
+.login-screen{
+  min-height:calc(100vh - 56px - 88px);
+  display:flex;align-items:center;justify-content:center;
+  padding:64px 24px 48px;
+  position:relative;
+}
+.login-screen::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 30%, rgba(201,103,31,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(201,103,31,0.03) 0%, transparent 60%);
+  pointer-events:none;
+}
+.login-inner{
+  position:relative;z-index:1;
+  max-width:540px;width:100%;text-align:center;
+}
+.login-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:24px;
+}
+.login-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(40px,6vw,64px);
+  font-weight:500;line-height:1.05;
+  letter-spacing:-.03em;color:var(--cream);
+  margin-bottom:18px;
+}
+.login-subtitle{
+  font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:400;
+  color:var(--cream2);
+  margin-bottom:48px;max-width:460px;
+  margin-left:auto;margin-right:auto;line-height:1.5;
+  letter-spacing:.01em;
+}
+.quote-author{
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-style:normal;font-weight:400;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim);
+  display:inline-block;margin-top:14px;
+}
+.login-form{
+  display:flex;flex-direction:column;gap:14px;
+  max-width:380px;margin:0 auto;
+}
+.login-input{
+  width:100%;padding:18px 22px;
+  background:rgba(26,22,18,0.03);
+  border:1px solid var(--border2);
+  border-radius:4px;
+  color:var(--cream);
+  font-family:inherit;font-size:15px;font-weight:400;
+  text-align:center;letter-spacing:.02em;
+  outline:none;transition:all .3s;
+}
+.login-input::placeholder{color:var(--dim);letter-spacing:.02em}
+.login-input:focus{
+  border-color:var(--orange);
+  background:rgba(26,22,18,0.05);
+}
+.login-btn{
+  padding:18px 32px;
+  background:var(--orange);
+  border:none;border-radius:60px;
+  color:#ffffff;
+  font-family:inherit;font-size:10px;font-weight:500;
+  letter-spacing:.24em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;
+  margin-top:6px;
+}
+.login-btn:hover{background:var(--orange2);transform:translateY(-1px)}
+.login-error{
+  font-size:12px;color:#a8322a;
+  text-align:center;letter-spacing:.04em;
+  min-height:18px;margin-top:-2px;
+  
+  opacity:0;transition:opacity .2s;
+}
+.login-error.show{opacity:1}
+.login-meta{
+  margin-top:28px;font-size:11px;color:var(--dim);
+  letter-spacing:.08em;
+}
+.login-meta .orange{color:var(--orange)}
+.login-badges{
+  display:flex;justify-content:center;gap:24px;
+  margin-top:64px;flex-wrap:wrap;
+}
+.login-badge{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:0 16px;
+}
+.login-badge-num{
+  font-family:'Inter',sans-serif;
+  font-size:32px;font-weight:500;color:var(--orange);
+  line-height:1;
+}
+.login-badge-label{
+  font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--cream2);
+}
+
+/* ───── DASHBOARD ───── */
+.dashboard{
+  display:none;
+  padding:80px 40px 64px;
+  max-width:980px;margin:0 auto;
+}
+.dashboard.active{display:block}
+
+/* ───── LEVEL SELECT SCREEN ───── */
+.level-select{
+  display:none;
+  padding:80px 40px 64px;
+  max-width:980px;margin:0 auto;
+  min-height:calc(100vh - 56px - 88px);
+}
+.level-select.active{display:flex;flex-direction:column;justify-content:center}
+
+.select-hero{
+  text-align:center;margin-bottom:64px;
+}
+.select-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:16px;
+}
+.select-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(32px,5vw,48px);
+  font-weight:500;line-height:1.05;
+  letter-spacing:-.03em;color:var(--cream);
+  margin-bottom:16px;
+}
+.select-subtitle{
+  font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:400;
+  color:var(--cream2);letter-spacing:.01em;
+  max-width:460px;margin:0 auto;line-height:1.5;
+}
+
+.level-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  max-width:720px;margin:0 auto;width:100%;
+}
+.level-card{
+  background:transparent;
+  border:1px solid var(--border2);
+  border-radius:4px;
+  padding:40px 32px;
+  cursor:pointer;
+  transition:all .4s;
+  text-align:left;
+  font-family:inherit;
+  position:relative;overflow:hidden;
+}
+.level-card::after{
+  content:'';position:absolute;inset:0;
+  background:var(--orange);
+  transform:translateY(100%);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  z-index:0;
+}
+.level-card:hover{border-color:var(--orange)}
+.level-card:hover::after{transform:translateY(0)}
+.level-card > *{position:relative;z-index:1;transition:color .4s}
+.level-card:hover .level-card-tag,
+.level-card:hover .level-card-name,
+.level-card:hover .level-card-desc,
+.level-card:hover .level-card-count,
+.level-card:hover .level-card-arrow{color:#fff}
+
+.level-card-top{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:28px;
+}
+.level-card-tag{
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:600;
+  color:var(--orange);letter-spacing:.2em;
+  text-transform:uppercase;
+}
+.level-card-count{
+  font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);
+}
+.level-card-name{
+  font-family:'Inter',sans-serif;
+  font-size:28px;font-weight:500;color:var(--cream);
+  letter-spacing:-.02em;line-height:1.15;
+  margin-bottom:10px;
+}
+.level-card-desc{
+  font-size:13px;color:var(--cream2);
+  line-height:1.5;margin-bottom:28px;
+}
+.level-card-arrow{
+  font-family:'Inter',sans-serif;
+  font-size:18px;font-weight:400;color:var(--cream2);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.level-card:hover .level-card-arrow{transform:translateX(6px)}
+
+/* Back button on modules view */
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);
+  background:transparent;border:none;cursor:pointer;
+  font-family:inherit;padding:0;
+  margin-bottom:24px;
+  transition:color .3s;
+}
+.back-btn:hover{color:var(--orange)}
+.back-btn-arrow{
+  font-family:'Inter',sans-serif;
+  font-size:18px;font-weight:300;
+}
+
+/* Level sections — only show active one */
+.level-section{margin-bottom:72px;display:none}
+.level-section.visible{display:block}
+
+.dash-hero{
+  padding:20px 0 56px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:56px;
+}
+.dash-eyebrow{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:16px;
+}
+.dash-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(30px,4vw,44px);
+  font-weight:500;line-height:1.05;
+  letter-spacing:-.03em;color:var(--cream);
+  margin-bottom:14px;
+}
+.dash-subtitle{
+  font-size:15px;color:var(--cream2);
+  max-width:520px;line-height:1.55;
+}
+
+/* ───── LEVEL SECTIONS ───── */
+.level-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:32px;padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.level-header-left{display:flex;align-items:baseline;gap:20px}
+.level-tag{
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:600;
+  color:var(--orange);letter-spacing:.2em;
+  text-transform:uppercase;
+}
+.level-name{
+  font-family:'Inter',sans-serif;
+  font-size:26px;font-weight:500;color:var(--cream);
+  letter-spacing:-.02em;
+}
+.level-count{
+  font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);
+}
+
+.skill-group{margin-bottom:32px}
+.skill-group:last-child{margin-bottom:0}
+.skill-label{
+  display:flex;align-items:center;gap:10px;
+  font-size:10px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--cream2);
+  margin-bottom:16px;font-weight:500;
+}
+.skill-label::before{
+  content:'';display:block;width:5px;height:5px;
+  border-radius:50%;background:var(--orange);
+}
+
+/* ───── MODULE CARDS ───── */
+.modules{
+  display:grid;grid-template-columns:1fr;gap:2px;
+  background:var(--border);border-radius:4px;overflow:hidden;
+}
+.module{
+  display:block;padding:0;
+  background:var(--bg2);
+  cursor:pointer;transition:all .35s;
+  border:1px solid transparent;
+  text-decoration:none;color:inherit;
+}
+.module:hover{
+  background:var(--bg3);
+}
+.module-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 28px;gap:20px;
+}
+.module-info{flex:1;min-width:0}
+.module-title-line{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:4px;flex-wrap:wrap;
+}
+.module-title{
+  font-family:'Inter',sans-serif;
+  font-size:18px;font-weight:500;color:var(--cream);
+  letter-spacing:-.015em;line-height:1.25;
+}
+.module:hover .module-title{color:var(--orange)}
+.badge{
+  display:inline-block;
+  font-size:9px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;
+  padding:3px 9px;border-radius:3px;
+  border:1px solid;
+}
+.badge.flash{color:var(--orange);border-color:rgba(212,118,59,0.3);background:rgba(212,118,59,0.05)}
+.badge.test{color:var(--cream);border-color:var(--border2);background:rgba(240,235,227,0.03)}
+.badge.grammar{color:#b8a488;border-color:rgba(184,164,136,0.25);background:rgba(184,164,136,0.05)}
+.module-meta{
+  font-size:12px;color:var(--dim);letter-spacing:.04em;
+}
+.module-arrow{
+  font-family:'Inter',sans-serif;
+  font-size:18px;font-weight:400;color:var(--dim);
+  transition:all .35s;flex-shrink:0;
+}
+.module:hover .module-arrow{
+  color:var(--orange);transform:translateX(4px);
+}
+
+/* ───── MOBILE ───── */
+@media (max-width:640px){
+  nav{padding:0 20px}
+  .nav-greeting{display:none}
+  .dashboard,.level-select{padding:76px 20px 48px}
+  .level-grid{grid-template-columns:1fr;gap:12px}
+  .level-card{padding:28px 24px}
+  .level-card-name{font-size:28px}
+  .module-row{padding:20px 22px;gap:12px}
+  .module-title{font-size:19px}
+  .level-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .level-name{font-size:26px}
+  footer{padding:24px 20px}
+  .footer-inner{flex-direction:column;gap:10px;text-align:center}
+  .footer-tagline{font-size:13px}
+}
+
+/* ───── TABLET / LAPTOP ───── */
+@media (min-width:641px) and (max-width:1024px){
+  nav{padding:0 32px}
+  .dashboard,.level-select{padding:76px 32px 56px}
+  footer{padding:28px 32px}
+}
+
+/* ───── FOOTER ───── */
+footer{
+  background:#0a0806;
+  padding:30px 40px;
+  border-top:1px solid rgba(240,235,227,0.08);
+  position:relative;z-index:10;
+}
+.footer-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.footer-brand{
+  font-size:11px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:#f0ebe3;
+  display:flex;align-items:baseline;gap:5px;
+}
+.footer-brand .accent{
+  color:var(--orange);
+  font-weight:600;letter-spacing:.24em;
+}
+.footer-tagline{
+  font-family:'Inter',sans-serif;
+  font-size:11px;color:#c8c1b8;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+}
+.footer-meta{
+  font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:#8a8075;
+}
+.footer-meta a{color:#c8c1b8;text-decoration:none;transition:color .2s}
+.footer-meta a:hover{color:var(--orange)}
+
+/* ───── ANIMATION ───── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.login-inner > *,.dashboard.active > *,.level-select.active > *{
+  animation:fadeUp .7s ease both;
+}
+.login-inner > *:nth-child(1){animation-delay:.05s}
+.login-inner > *:nth-child(2){animation-delay:.15s}
+.login-inner > *:nth-child(3){animation-delay:.25s}
+.login-inner > *:nth-child(4){animation-delay:.35s}
+
+.level-select.active .select-hero{animation-delay:.05s}
+.level-select.active .level-grid{animation-delay:.2s}
+.level-select.active .level-card{
+  animation:fadeUp .6s ease both;
+}
+.level-select.active .level-card:nth-child(1){animation-delay:.25s}
+.level-select.active .level-card:nth-child(2){animation-delay:.33s}
+.level-select.active .level-card:nth-child(3){animation-delay:.41s}
+.level-select.active .level-card:nth-child(4){animation-delay:.49s}
+
+.dashboard.active .back-btn{animation-delay:.02s}
+.dashboard.active .dash-hero{animation-delay:.1s}
+.dashboard.active .level-section.visible{animation-delay:.2s;display:block}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="nav">
+  <a href="#" class="logo" onclick="return false">Entropy <span class="accent">Breakers</span></a>
+  <div class="nav-right" id="nav-right-login">
+    <span class="nav-greeting">Akadémia</span>
+  </div>
+  <div class="nav-right" id="nav-right-dash" style="display:none">
+    <span class="nav-greeting">Szia, <b id="nav-name">—</b></span>
+    <button class="nav-btn" onclick="logout()">Kilépés</button>
+  </div>
+</nav>
+
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<section class="login-screen" id="login">
+  <div class="login-inner">
+    <h1 class="login-title">Üdv az <span class="accent">Akadémián</span></h1>
+    <p class="login-subtitle">„A nyelvhatáraim világom határai."<br><span class="quote-author">— Ludwig Wittgenstein</span></p>
+    <div class="login-form">
+      <input type="text" id="name-input" class="login-input" placeholder="Írd be a neved" autocomplete="off">
+      <input type="password" id="passcode-input" class="login-input" placeholder="Belépési kód" autocomplete="off">
+      <div id="login-error" class="login-error"></div>
+      <button type="button" class="login-btn" onclick="login()">Kezdés →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ LEVEL SELECT SCREEN ══════════ -->
+<section class="level-select" id="level-select">
+  <div class="select-hero">
+    <div class="select-eyebrow">Szia, <span id="select-name">—</span></div>
+    <h2 class="select-title">Válaszd ki a <span class="accent">szintedet</span></h2>
+    <p class="select-subtitle">„A nyelvhatáraim világom határai."</p>
+  </div>
+
+  <div class="level-grid">
+    <button class="level-card" onclick="showLevel('a2')">
+      <div class="level-card-top">
+        <span class="level-card-tag">A2</span>
+        <span class="level-card-count">14 modul</span>
+      </div>
+      <div class="level-card-name">Kezdő</div>
+      <div class="level-card-desc">Gyakorolj alap szókincset, igéket és nyelvtant — rögzítsd amit már tanultál.</div>
+      <div class="level-card-arrow">→</div>
+    </button>
+
+    <button class="level-card" onclick="showLevel('b1')">
+      <div class="level-card-top">
+        <span class="level-card-tag">B1</span>
+        <span class="level-card-count">4 modul</span>
+      </div>
+      <div class="level-card-name">Középhaladó</div>
+      <div class="level-card-desc">Gyakorold amit órán tanultál — igék, nyelvtan, utazási kifejezések.</div>
+      <div class="level-card-arrow">→</div>
+    </button>
+
+    <button class="level-card" onclick="showLevel('b2')">
+      <div class="level-card-top">
+        <span class="level-card-tag">B2</span>
+        <span class="level-card-count">12 modul</span>
+      </div>
+      <div class="level-card-name">Felső-középhaladó</div>
+      <div class="level-card-desc">Mélyítsd el a tanult anyagot — szakmai szókincs, tesztek, igeidők.</div>
+      <div class="level-card-arrow">→</div>
+    </button>
+
+    <button class="level-card" onclick="showLevel('c1')">
+      <div class="level-card-top">
+        <span class="level-card-tag">C1</span>
+        <span class="level-card-count">3 modul</span>
+      </div>
+      <div class="level-card-name">Haladó</div>
+      <div class="level-card-desc">Ismételd át az összetett kifejezéseket — idiómák, haladó nyelvtan.</div>
+      <div class="level-card-arrow">→</div>
+    </button>
+  </div>
+</section>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<section class="dashboard" id="dashboard">
+
+  <button class="back-btn" onclick="backToLevels()">
+    <span class="back-btn-arrow">←</span> Vissza a szintekhez
+  </button>
+
+  <div class="dash-hero">
+    <div class="dash-eyebrow" id="dash-level-tag">A2 · Kezdő</div>
+    <h2 class="dash-title">Válassz egy <span class="accent">gyakorlatot</span></h2>
+    <p class="dash-subtitle">Gyakorolj amikor kedved tartja — kártyák, kvízek, tesztek a tanult anyaghoz.</p>
+  </div>
+
+  <!-- A2 -->
+  <div class="level-section" data-level="a2">
+    <div class="level-header">
+      <div class="level-header-left">
+        <span class="level-tag">A2</span>
+        <span class="level-name">Kezdő</span>
+      </div>
+      <span class="level-count">14 modul</span>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Utazás</div>
+      <div class="modules">
+        <a class="module" href="traveling-guide-a2-flashcards.html">
+          <div class="module-row">
+            <div class="module-info">
+              <div class="module-title-line">
+                <span class="module-title">Utazási kalauz</span>
+                <span class="badge flash">Kártya</span>
+              </div>
+              <div class="module-meta">60 szituáció · A2</div>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Szókincs</div>
+      <div class="modules">
+        <a class="module" href="vocab-a2-home-daily-routine.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Napi rutin</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-family-relationships.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Család</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-food-shopping.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Étel & Vásárlás</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-free-time-hobbies.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Szabadidő & Hobbi</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-school-learning.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Iskola & Tanulás</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-health-body.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Egészség & Test</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-weather-seasons.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Időjárás & Évszakok</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-a2-work-jobs.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Munka & Foglalkozások</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · A2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Igék</div>
+      <div class="modules">
+        <a class="module" href="a2-verb-learner.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Ige tanuló</span><span class="badge flash">Kártya</span></div><div class="module-meta">Igék · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="a2-verb-test.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Ige teszt</span><span class="badge test">Teszt</span></div><div class="module-meta">Igék · A2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="test-verb-forms.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">V1 → V2 · V3 Teszt</span><span class="badge test">Teszt</span></div><div class="module-meta">Igealakok · A2–B2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Nyelvtan</div>
+      <div class="modules">
+        <a class="module" href="a2-grammar-master.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Nyelvtan mester</span><span class="badge grammar">Nyelvtan</span></div><div class="module-meta">60 kérdés · A2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- B1 -->
+  <div class="level-section" data-level="b1">
+    <div class="level-header">
+      <div class="level-header-left">
+        <span class="level-tag">B1</span>
+        <span class="level-name">Középhaladó</span>
+      </div>
+      <span class="level-count">4 modul</span>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Utazás</div>
+      <div class="modules">
+        <a class="module" href="traveling-guide-b1-flashcards.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Utazási kalauz</span><span class="badge flash">Kártya</span></div><div class="module-meta">60 szituáció · B1</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Igék</div>
+      <div class="modules">
+        <a class="module" href="b1-verb-learner.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Ige tanuló</span><span class="badge flash">Kártya</span></div><div class="module-meta">Igék · B1</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="b1-verb-test.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Ige teszt</span><span class="badge test">Teszt</span></div><div class="module-meta">Igék · B1</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Nyelvtan</div>
+      <div class="modules">
+        <a class="module" href="b1-grammar-master.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Nyelvtan mester</span><span class="badge grammar">Nyelvtan</span></div><div class="module-meta">40 kérdés · B1</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2 -->
+  <div class="level-section" data-level="b2">
+    <div class="level-header">
+      <div class="level-header-left">
+        <span class="level-tag">B2</span>
+        <span class="level-name">Felső-középhaladó</span>
+      </div>
+      <span class="level-count">12 modul</span>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Utazás</div>
+      <div class="modules">
+        <a class="module" href="traveling-guide-b2-flashcards.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Utazási kalauz</span><span class="badge flash">Kártya</span></div><div class="module-meta">60 szituáció · B2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Szókincs</div>
+      <div class="modules">
+        <a class="module" href="vocab-b2-psychology-emotions.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Pszichológia & Érzelmek</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-money-finance.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Pénz & Pénzügyek</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-technology-media.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Technológia & Média</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-business-career.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Üzlet & Karrier</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-environment-climate.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Környezet & Klíma</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-society-politics.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Társadalom & Politika</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-arts-culture.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Művészet & Kultúra</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="vocab-b2-global-issues-travel.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Globális témák & Utazás</span><span class="badge flash">Kártya</span></div><div class="module-meta">Szókincs · B2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Igék</div>
+      <div class="modules">
+        <a class="module" href="b2-verb-learner.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Ige tanuló</span><span class="badge flash">Kártya</span></div><div class="module-meta">Igék · B2</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="b2-verb-test.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Ige teszt</span><span class="badge test">Teszt</span></div><div class="module-meta">Igék · B2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Nyelvtan</div>
+      <div class="modules">
+        <a class="module" href="b2-grammar-master.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Nyelvtan mester</span><span class="badge grammar">Nyelvtan</span></div><div class="module-meta">60 kérdés · B2</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- C1 -->
+  <div class="level-section" data-level="c1">
+    <div class="level-header">
+      <div class="level-header-left">
+        <span class="level-tag">C1</span>
+        <span class="level-name">Haladó</span>
+      </div>
+      <span class="level-count">3 modul</span>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Kifejezések</div>
+      <div class="modules">
+        <a class="module" href="c1-phrase-learner.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Kifejezés tanuló</span><span class="badge flash">Kártya</span></div><div class="module-meta">50 kifejezés · C1</div></div><span class="module-arrow">→</span></div></a>
+        <a class="module" href="c1-phrase-test.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Kifejezés teszt</span><span class="badge test">Teszt</span></div><div class="module-meta">50 kifejezés · C1</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Nyelvtan</div>
+      <div class="modules">
+        <a class="module" href="c1-grammar-master.html"><div class="module-row"><div class="module-info"><div class="module-title-line"><span class="module-title">Nyelvtan mester</span><span class="badge grammar">Nyelvtan</span></div><div class="module-meta">60 kérdés · C1</div></div><span class="module-arrow">→</span></div></a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
+    <div class="footer-tagline">Gyakorlás · Ismétlés · <span class="accent">Fejlődés</span></div>
+    <div class="footer-meta">
+      © 2026 · <a href="mailto:baranyibettina@entropybreakers.com">baranyibettina@entropybreakers.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const ACCESS_CODE = 'akademia2026';  // ← change this to the passcode you want to share with students
+
+let studentName = '';
+let currentLevel = '';
+
+const LEVEL_LABELS = {
+  a2: 'A2 · Kezdő',
+  b1: 'B1 · Középhaladó',
+  b2: 'B2 · Felső-középhaladó',
+  c1: 'C1 · Haladó'
+};
+
+// Auto-read student name from URL if passed (e.g., from module pages linking back)
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const urlName = params.get('name');
+  if (urlName) {
+    studentName = decodeURIComponent(urlName);
+    showLevelSelect();
+  }
+})();
+
+function login() {
+  const nameInput = document.getElementById('name-input');
+  const codeInput = document.getElementById('passcode-input');
+  const errorEl = document.getElementById('login-error');
+  const name = nameInput.value.trim();
+  const code = codeInput.value.trim().toLowerCase();
+
+  if (name.length < 2) {
+    errorEl.textContent = 'Kérlek írd be a neved.';
+    errorEl.classList.add('show');
+    nameInput.focus();
+    return;
+  }
+  if (code !== ACCESS_CODE.toLowerCase()) {
+    errorEl.textContent = 'Hibás belépési kód. Próbáld újra.';
+    errorEl.classList.add('show');
+    codeInput.value = '';
+    codeInput.focus();
+    return;
+  }
+
+  errorEl.classList.remove('show');
+  studentName = name;
+  showLevelSelect();
+}
+
+// Enter key works on both inputs
+document.addEventListener('DOMContentLoaded', function() {
+  ['name-input', 'passcode-input'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          login();
+        }
+      });
+    }
+  });
+});
+
+function showLevelSelect() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('level-select').classList.add('active');
+
+  document.getElementById('nav-right-login').style.display = 'none';
+  document.getElementById('nav-right-dash').style.display = 'flex';
+  document.getElementById('nav-name').textContent = studentName;
+  document.getElementById('select-name').textContent = studentName;
+
+  // Add ?name= to all module links
+  const encodedName = encodeURIComponent(studentName);
+  document.querySelectorAll('.module').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && !href.includes('?name=')) {
+      link.setAttribute('href', href + '?name=' + encodedName);
+    }
+  });
+
+  window.scrollTo(0, 0);
+}
+
+function showLevel(level) {
+  currentLevel = level;
+  document.getElementById('level-select').classList.remove('active');
+  document.getElementById('dashboard').classList.add('active');
+
+  // Show only the selected level-section
+  document.querySelectorAll('.level-section').forEach(sec => {
+    if (sec.dataset.level === level) {
+      sec.classList.add('visible');
+    } else {
+      sec.classList.remove('visible');
+    }
+  });
+
+  // Update the dashboard hero label
+  document.getElementById('dash-level-tag').textContent = LEVEL_LABELS[level] || '';
+
+  window.scrollTo(0, 0);
+}
+
+function backToLevels() {
+  showLevelSelect();
+}
+
+function logout() {
+  studentName = '';
+  currentLevel = '';
+  document.getElementById('name-input').value = '';
+  document.getElementById('passcode-input').value = '';
+  document.getElementById('login-error').classList.remove('show');
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('level-select').classList.remove('active');
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('nav-right-login').style.display = 'flex';
+  document.getElementById('nav-right-dash').style.display = 'none';
+
+  // Strip ?name= from links
+  document.querySelectorAll('.module').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href && href.includes('?name=')) {
+      link.setAttribute('href', href.split('?')[0]);
+    }
+  });
+
+  // Remove ?name= from URL
+  if (window.history.replaceState) {
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+}
+</script>
+
+</body>
+</html>
