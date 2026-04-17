@@ -785,13 +785,18 @@ const LEVEL_LABELS = {
   c1: 'C1 · Haladó'
 };
 
-// Auto-read student name from URL if passed (e.g., from module pages linking back)
+// Auto-read student name and optionally level from URL
 (function() {
   const params = new URLSearchParams(window.location.search);
   const urlName = params.get('name');
+  const urlLevel = params.get('level');
   if (urlName) {
     studentName = decodeURIComponent(urlName);
     showLevelSelect();
+    // If a specific level is requested, jump straight to it
+    if (urlLevel && ['a2', 'b1', 'b2', 'c1'].includes(urlLevel.toLowerCase())) {
+      showLevel(urlLevel.toLowerCase());
+    }
   }
 })();
 
