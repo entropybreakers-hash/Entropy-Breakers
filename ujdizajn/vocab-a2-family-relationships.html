@@ -185,15 +185,17 @@ main{
 
 .face-example{
   font-family:'Inter',sans-serif;
-  font-size:12px;
-  margin-top:10px;max-width:100%;
+  font-size:11px;
+  max-width:100%;
   line-height:1.45;
   color:var(--cream2);
-  position:relative;padding:0 10px;
+  position:absolute;
+  bottom:14px;left:16px;right:16px;
+  padding:0 8px;
 }
 .face-example::before,.face-example::after{
   content:'"';color:var(--orange);
-  font-size:15px;
+  font-size:14px;
 }
 
 .flip-hint{
@@ -380,9 +382,7 @@ footer{
   <div class="module-frame active" id="card-screen">
 
     <div class="module-head">
-      <div class="module-badge">A2 · Szókincs</div>
       <h1 class="module-title">Család</h1>
-      <p class="module-subtitle">50 szó</p>
     </div>
 
     <div class="progress-wrap">
@@ -398,11 +398,9 @@ footer{
     <div class="flip-container" onclick="flipCard()">
       <div class="flip-inner" id="flip-inner">
         <div class="flip-face flip-front">
-          <div class="face-label">Magyar</div>
           <div class="face-word" id="card-hu">—</div>
         </div>
         <div class="flip-face flip-back">
-          <div class="face-label">Angol</div>
           <div class="face-word" id="card-en">—</div>
           <div class="face-example" id="card-example">—</div>
         </div>
