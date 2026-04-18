@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gerund vs Infinitive — jelentéskülönbség · B2 | Gyakorlás | Entropy Breakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#ffffff;--bg2:#faf8f3;--bg3:#f0ebe3;
+  --cream:#1a1612;--cream2:#5a5248;--dim:#8a8075;--dimmer:#b5aa9a;
+  --orange:#c9671f;--orange2:#a85418;
+  --border:rgba(26,22,18,0.06);--border2:rgba(26,22,18,0.12);
+}
+body{
+  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);
+  min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;line-height:1.5;
+}
+.accent{color:var(--orange);font-weight:500}
+
+nav{
+height:56px;padding:0 40px;flex-shrink:0;
+display:flex;align-items:center;justify-content:space-between;
+background:#0a0806;border-bottom:1px solid rgba(240,235,227,0.08);
+}
+.logo{
+font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+color:#f0ebe3;display:flex;align-items:baseline;gap:5px;text-decoration:none;
+}
+.logo .accent{color:var(--orange);font-weight:600;letter-spacing:.24em}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-greeting{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c8c1b8}
+.nav-greeting .name{color:#f0ebe3;font-weight:500}
+.nav-btn{
+display:inline-flex;align-items:center;gap:6px;
+font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+color:#f0ebe3;text-decoration:none;padding:8px 18px;
+border:1px solid rgba(240,235,227,0.24);border-radius:60px;
+transition:all .2s;
+}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.module-frame{width:100%;max-width:520px;display:flex;flex-direction:column;gap:20px}
+.module-head{text-align:center}
+.module-title{
+font-family:'DM Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);
+font-weight:600;letter-spacing:-.025em;line-height:1.2;
+}
+
+.progress-wrap{max-width:440px;margin:0 auto;width:100%}
+.progress-row{
+display:flex;align-items:center;justify-content:space-between;
+font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+color:var(--dim);margin-bottom:8px;
+}
+.progress-track{width:100%;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+
+.quiz-card{
+width:100%;max-width:520px;margin:0 auto;
+background:var(--bg2);
+border:1px solid var(--border2);
+border-radius:10px;
+padding:28px 24px;
+display:flex;flex-direction:column;gap:18px;
+}
+
+.quiz-question{
+font-size:17px;
+font-weight:500;
+line-height:1.4;
+color:var(--cream);
+letter-spacing:-.01em;
+}
+
+.quiz-fill-wrap{margin-top:6px}
+.quiz-fill-input{
+width:100%;
+padding:14px 16px;
+font-family:inherit;
+font-size:15px;
+color:var(--cream);
+background:var(--bg);
+border:1.5px solid var(--border2);
+border-radius:8px;
+outline:none;
+transition:all .15s;
+}
+.quiz-fill-input:focus{
+border-color:var(--orange);
+box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
+
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{
+padding:13px 16px;
+background:var(--bg);
+border:1px solid var(--border2);
+border-radius:8px;
+cursor:pointer;
+transition:all .15s;
+font-size:14px;
+font-weight:500;
+color:var(--cream);
+text-align:left;
+font-family:inherit;
+line-height:1.4;
+}
+.quiz-option:hover{
+border-color:var(--orange);
+background:rgba(201,103,31,0.04);
+}
+.quiz-option.selected{
+border-color:var(--orange);
+background:rgba(201,103,31,0.08);
+color:var(--orange);
+}
+.quiz-option.locked{pointer-events:none;opacity:.6}
+.quiz-option.selected.locked{opacity:1}
+
+.action-row{
+display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%;
+}
+.action-btn{
+flex:1;
+font-family:'DM Sans',sans-serif;
+font-size:10px;font-weight:500;letter-spacing:.24em;
+text-transform:uppercase;
+padding:14px 20px;border-radius:60px;
+cursor:pointer;transition:all .2s;
+border:1px solid var(--border2);
+text-align:center;
+text-decoration:none;
+display:inline-flex;align-items:center;justify-content:center;
+}
+.action-btn.secondary{background:var(--bg);color:var(--cream)}
+.action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
+.action-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
+.action-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.result-screen{display:none;text-align:center;max-width:440px;margin:0 auto}
+.result-screen.active{display:block;animation:fadeUp .5s ease both}
+.result-badge{
+display:inline-block;
+font-size:10px;font-weight:500;letter-spacing:.24em;
+text-transform:uppercase;color:var(--orange);
+padding:5px 14px;border-radius:60px;
+border:1px solid rgba(201,103,31,0.3);
+background:rgba(201,103,31,0.05);
+margin-bottom:20px;
+}
+.result-title{
+font-family:'DM Sans',sans-serif;font-size:clamp(28px,4vw,42px);
+font-weight:600;letter-spacing:-.03em;line-height:1.1;
+margin-bottom:8px;
+}
+.result-subtitle{color:var(--cream2);font-size:13px;margin-bottom:32px;line-height:1.5}
+.result-stats{
+background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+padding:28px 24px;margin-bottom:24px;
+}
+.result-number{
+font-size:clamp(44px,6vw,64px);font-weight:500;
+color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
+}
+.result-meta{
+font-size:10px;font-weight:500;letter-spacing:.3em;
+text-transform:uppercase;color:var(--dim);margin-bottom:16px;
+}
+.result-feedback{
+font-size:14px;color:var(--cream2);line-height:1.6;
+padding-top:16px;border-top:1px solid var(--border);
+}
+
+footer{
+background:#0a0806;padding:24px 40px;margin-top:auto;
+border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
+}
+.footer-inner{
+max-width:1000px;margin:0 auto;
+display:flex;align-items:center;justify-content:space-between;
+flex-wrap:wrap;gap:12px;
+}
+.footer-brand{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:#f0ebe3}
+.footer-brand .accent{color:var(--orange);font-weight:600}
+.footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
+.footer-tagline .accent{color:var(--orange)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.module-frame{animation:fadeUp .5s ease both}
+
+@media(max-width:560px){
+nav{padding:0 20px}
+main{padding:24px 16px}
+.module-frame{gap:16px}
+.quiz-card{padding:22px 18px;gap:14px}
+.quiz-question{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
+  <div class="nav-right">
+    <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
+    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
+  </div>
+</nav>
+
+<main>
+  <div class="module-frame" id="card-screen">
+    <div class="module-head">
+      <h1 class="module-title">Gerund vs Infinitive — <span class="accent">jelentéskülönbség</span></h1>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span id="quiz-type-label">—</span>
+        <span id="counter">1 / 25</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:4%"></div>
+      </div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="quiz-question" id="quiz-question">—</div>
+      <div id="quiz-answer-area"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn primary" id="next-btn" onclick="submitAnswer()">Tovább</button>
+      <button class="action-btn secondary" onclick="showResult()">Befejezés</button>
+    </div>
+  </div>
+
+  <div class="result-screen" id="result-screen">
+    <div class="result-badge">B2 · Gyakorlás</div>
+    <h2 class="result-title">Ügyes <span class="accent">voltál</span>, <span id="result-name">—</span>!</h2>
+    <p class="result-subtitle">Gyakorlás befejezve</p>
+
+    <div class="result-stats">
+      <div class="result-number" id="result-count">0</div>
+      <div class="result-meta">megválaszolt kérdés</div>
+      <div class="result-feedback">Az <span class="accent">AI visszajelzést</span> hamarosan megkapod e-mailben — személyre szabott hibajavítással és tippekkel.</div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
+      <a class="action-btn primary" href="index.html" id="home-link">Főoldal</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
+    <div class="footer-tagline">„A nyelvem határai a világom határai"</div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('error', function(e) {
+  console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+const MODULE_META = {
+  title: "B2 Practice - Gerund vs Infinitive Meaning",
+  level: "B2",
+  skill: "Grammar Practice"
+};
+
+const QUESTIONS = [
+  {
+    "type": "fill",
+    "question": "I remember _____ (lock) the door this morning. (emlékszik rá)",
+    "answer": "locking",
+    "tip": "remember + ing = múltbeli emlék"
+  },
+  {
+    "type": "fill",
+    "question": "Remember _____ (lock) the door when you leave! (ne felejtsd el)",
+    "answer": "to lock",
+    "tip": "remember + to = jövőbeli teendő"
+  },
+  {
+    "type": "choice",
+    "question": "I stopped ___ years ago. (leszoktam)",
+    "options": [
+      "smoking",
+      "to smoke",
+      "smoke",
+      "smoked"
+    ],
+    "answer": "smoking",
+    "tip": "stop + ing = abbahagy"
+  },
+  {
+    "type": "choice",
+    "question": "I stopped ___ a coffee. (megálltam, hogy)",
+    "options": [
+      "drinking",
+      "to drink",
+      "drink",
+      "drunk"
+    ],
+    "answer": "to drink",
+    "tip": "stop + to = megáll, hogy megcsináljon valamit"
+  },
+  {
+    "type": "correct",
+    "question": "I forgot to tell you — the meeting is cancelled.",
+    "options": [
+      "Helyes",
+      "Helytelen"
+    ],
+    "answer": "Helyes",
+    "tip": "forget + to = elfelejtett megcsinálni"
+  },
+  {
+    "type": "fill",
+    "question": "I'll never forget _____ (meet) you. (sosem felejtem el a találkozást)",
+    "answer": "meeting",
+    "tip": "forget + ing = emlék egy múltbeli élményről"
+  },
+  {
+    "type": "choice",
+    "question": "Try ___ more salt — it might taste better. (próbáld ki)",
+    "options": [
+      "adding",
+      "to add",
+      "add",
+      "added"
+    ],
+    "answer": "adding",
+    "tip": "try + ing = kísérletezés"
+  },
+  {
+    "type": "choice",
+    "question": "I tried ___ the door, but it was locked. (megpróbáltam)",
+    "options": [
+      "opening",
+      "to open",
+      "open",
+      "opened"
+    ],
+    "answer": "to open",
+    "tip": "try + to = erőfeszítés, próbálkozás"
+  },
+  {
+    "type": "fill",
+    "question": "I regret _____ (tell) him my secret. (bánom, hogy elmondtam)",
+    "answer": "telling",
+    "tip": "regret + ing = múltbeli sajnálat"
+  },
+  {
+    "type": "correct",
+    "question": "I regret to inform you that your application was rejected.",
+    "options": [
+      "Helyes",
+      "Helytelen"
+    ],
+    "answer": "Helyes",
+    "tip": "regret + to inform = formális rossz hír"
+  },
+  {
+    "type": "fill",
+    "question": "Remember _____ (call) your mother tomorrow! (ne felejtsd)",
+    "answer": "to call",
+    "tip": "remember + to = jövőbeli teendő"
+  },
+  {
+    "type": "choice",
+    "question": "She forgot ___ the lights off before leaving.",
+    "options": [
+      "turning",
+      "to turn",
+      "turn",
+      "turned"
+    ],
+    "answer": "to turn",
+    "tip": "forget + to = elfelejtett megcsinálni"
+  },
+  {
+    "type": "fill",
+    "question": "I stopped _____ (eat) meat a year ago. (leszoktam)",
+    "answer": "eating",
+    "tip": "stop + ing = abbahagy"
+  },
+  {
+    "type": "correct",
+    "question": "I tried taking a cold shower and it woke me up.",
+    "options": [
+      "Helyes",
+      "Helytelen"
+    ],
+    "answer": "Helyes",
+    "tip": "try + ing = kísérleti megoldás kipróbálása"
+  },
+  {
+    "type": "fill",
+    "question": "He means _____ (study) medicine one day. (szándékozik)",
+    "answer": "to study",
+    "tip": "mean + to = szándékozik"
+  },
+  {
+    "type": "choice",
+    "question": "This job means ___ early every day.",
+    "options": [
+      "getting up",
+      "to get up",
+      "get up",
+      "got up"
+    ],
+    "answer": "getting up",
+    "tip": "mean + ing = jelent, velejárója"
+  },
+  {
+    "type": "fill",
+    "question": "I'll never forget _____ (swim) in that lake. (emlék)",
+    "answer": "swimming",
+    "tip": "forget + ing = emlék"
+  },
+  {
+    "type": "correct",
+    "question": "Please remember turning off the oven!",
+    "options": [
+      "Helyes",
+      "Helytelen"
+    ],
+    "answer": "Helytelen",
+    "tip": "Jövőbeli teendő → 'remember TO TURN off'"
+  },
+  {
+    "type": "choice",
+    "question": "I regret ___ you this, but you're fired.",
+    "options": [
+      "telling",
+      "to tell",
+      "tell",
+      "told"
+    ],
+    "answer": "to tell",
+    "tip": "regret + to + V = formális rossz hír közlése"
+  },
+  {
+    "type": "fill",
+    "question": "On the way home, I stopped _____ (buy) some milk. (megálltam, hogy)",
+    "answer": "to buy",
+    "tip": "stop + to = célból megáll"
+  },
+  {
+    "type": "fill",
+    "question": "I tried _____ (call) him many times yesterday. (megpróbáltam)",
+    "answer": "to call",
+    "tip": "try + to = erőfeszítés"
+  },
+  {
+    "type": "correct",
+    "question": "She stopped smoking to have a baby.",
+    "options": [
+      "Helyes",
+      "Helytelen"
+    ],
+    "answer": "Helyes",
+    "tip": "stop + ing = abbahagy, to = céllal"
+  },
+  {
+    "type": "fill",
+    "question": "Don't forget _____ (feed) the cat! (ne felejtsd)",
+    "answer": "to feed",
+    "tip": "forget + to = jövőbeli emlékeztető"
+  },
+  {
+    "type": "choice",
+    "question": "I remember ___ with you years ago.",
+    "options": [
+      "talking",
+      "to talk",
+      "talk",
+      "talked"
+    ],
+    "answer": "talking",
+    "tip": "remember + ing = múltbeli emlék"
+  },
+  {
+    "type": "fill",
+    "question": "I regret _____ (not/study) harder at school. (sajnálom)",
+    "answer": "not studying",
+    "tip": "regret + not + ing = múltbeli sajnálat"
+  }
+];
+
+let studentName = '';
+let currentIndex = 0;
+let currentAnswer = null;
+const answersLog = [];
+
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  studentName = params.get('name') || '';
+  if (!studentName) {
+    window.location.href = 'index.html';
+    return;
+  }
+  document.getElementById('nav-name').textContent = studentName;
+
+  const nameParam = '?name=' + encodeURIComponent(studentName);
+  const backParam = nameParam + '&level=b2';
+  document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
+  document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
+  document.getElementById('home-link').setAttribute('href', 'index.html' + backParam);
+
+  renderQuestion();
+})();
+
+function renderQuestion() {
+  const q = QUESTIONS[currentIndex];
+  const total = QUESTIONS.length;
+
+  document.getElementById('counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
+
+  const typeLabels = { fill: 'Kitöltős', choice: 'Válassz', correct: 'Helyes-e?' };
+  document.getElementById('quiz-type-label').textContent = typeLabels[q.type] || '';
+
+  document.getElementById('quiz-question').textContent = q.question;
+
+  const area = document.getElementById('quiz-answer-area');
+  area.innerHTML = '';
+  currentAnswer = null;
+
+  if (q.type === 'fill') {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-fill-wrap';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'quiz-fill-input';
+    input.placeholder = 'Írd be a választ…';
+    input.id = 'fill-input';
+    input.autocomplete = 'off';
+    input.autocapitalize = 'none';
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitAnswer();
+      }
+    });
+    wrap.appendChild(input);
+    area.appendChild(wrap);
+    setTimeout(() => input.focus(), 50);
+  } else {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-options';
+    (q.options || []).forEach((opt) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = opt;
+      btn.dataset.value = opt;
+      btn.onclick = () => selectOption(btn, opt);
+      wrap.appendChild(btn);
+    });
+    area.appendChild(wrap);
+  }
+
+  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább →';
+}
+
+function selectOption(btn, value) {
+  document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  currentAnswer = value;
+}
+
+function submitAnswer() {
+  const q = QUESTIONS[currentIndex];
+  let userAnswer = '';
+
+  if (q.type === 'fill') {
+    const input = document.getElementById('fill-input');
+    userAnswer = (input.value || '').trim();
+  } else {
+    userAnswer = currentAnswer || '';
+  }
+
+  const correct = q.answer.toString().trim().toLowerCase();
+  const given = userAnswer.toString().trim().toLowerCase();
+  const isCorrect = (correct === given);
+
+  answersLog.push({
+    question: q.question,
+    type: q.type,
+    correctAnswer: q.answer,
+    studentAnswer: userAnswer || '(üresen hagyta)',
+    isCorrect,
+    tip: q.tip || ''
+  });
+
+  if (currentIndex < QUESTIONS.length - 1) {
+    currentIndex++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('card-screen').style.display = 'none';
+  document.getElementById('result-screen').classList.add('active');
+
+  const total = QUESTIONS.length;
+  const answered = answersLog.length;
+  const score = answersLog.filter(a => a.isCorrect).length;
+
+  document.getElementById('result-name').textContent = studentName;
+  document.getElementById('result-count').textContent = answered;
+
+  fetch(MAKE_WEBHOOK_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      Student: studentName,
+      Quiz: MODULE_META.title,
+      Level: MODULE_META.level,
+      Skill: MODULE_META.skill,
+      Score: score,
+      TotalQuestions: total,
+      Answered: answered,
+      Percentage: total > 0 ? Math.round((score / total) * 100) : 0,
+      Answers: answersLog,
+      CompletedAt: new Date().toISOString()
+    })
+  }).catch(() => {});
+}
+
+function restartDeck() {
+  currentIndex = 0;
+  answersLog.length = 0;
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('card-screen').style.display = 'flex';
+  renderQuestion();
+}
+</script>
+
+</body>
+</html>
