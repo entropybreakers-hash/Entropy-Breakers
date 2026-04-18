@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vonatkozó mondat — személy · B1 | Elmélet | Entropy Breakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#ffffff;--bg2:#faf8f3;--bg3:#f0ebe3;
+  --cream:#1a1612;--cream2:#5a5248;--dim:#8a8075;--dimmer:#b5aa9a;
+  --orange:#c9671f;--orange2:#a85418;
+  --border:rgba(26,22,18,0.06);--border2:rgba(26,22,18,0.12);
+}
+body{
+  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);
+  min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;line-height:1.5;
+}
+.accent{color:var(--orange);font-weight:500}
+
+nav{
+  height:56px;padding:0 40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#0a0806;border-bottom:1px solid rgba(240,235,227,0.08);
+}
+.logo{
+  font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+  color:#f0ebe3;display:flex;align-items:baseline;gap:5px;text-decoration:none;
+}
+.logo .accent{color:var(--orange);font-weight:600;letter-spacing:.24em}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-greeting{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c8c1b8}
+.nav-greeting .name{color:#f0ebe3;font-weight:500}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:#f0ebe3;text-decoration:none;padding:8px 18px;
+  border:1px solid rgba(240,235,227,0.24);border-radius:60px;
+  transition:all .2s;
+}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+.nav-btn-arrow{font-size:13px}
+
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.module-frame{
+  width:100%;max-width:480px;
+  display:flex;flex-direction:column;gap:20px;
+}
+.module-head{text-align:center}
+.module-title{
+  font-family:'DM Sans',sans-serif;font-size:clamp(24px,4vw,34px);
+  font-weight:500;letter-spacing:-.03em;line-height:1.1;
+}
+
+.progress-wrap{max-width:440px;margin:0 auto;width:100%}
+.progress-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px;
+}
+.category{color:var(--orange);max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.progress-track{width:100%;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+
+/* FLASHCARD */
+.flip-wrap{
+  perspective:1000px;width:100%;max-width:440px;margin:0 auto;
+  cursor:pointer;user-select:none;
+}
+.flip-inner{
+  position:relative;width:100%;min-height:340px;
+  transform-style:preserve-3d;transition:transform .55s cubic-bezier(.25,.46,.45,.94);
+}
+.flip-wrap.flipped .flip-inner{transform:rotateY(180deg)}
+
+.flip-face{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 28px 36px;
+  border-radius:8px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}
+.flip-front{background:var(--bg2);border:1px solid var(--border2)}
+.flip-back{background:var(--bg2);border:1px solid var(--border2);transform:rotateY(180deg)}
+
+.face-label{
+  font-size:9px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;
+  margin-bottom:16px;
+  color:var(--dim);
+}
+
+/* Front: Hungarian explanation (bigger, readable) */
+.face-explain-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(16px,2.5vw,20px);
+  font-weight:500;
+  line-height:1.45;
+  color:var(--cream);
+  max-width:100%;
+  letter-spacing:-.01em;
+}
+
+/* Back: English rule (orange, bold) + example */
+.face-rule-en{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(16px,2.5vw,20px);
+  font-weight:600;
+  line-height:1.4;
+  color:var(--orange);
+  max-width:100%;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
+}
+
+.face-example{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(16px,2.6vw,20px);
+  font-weight:500;
+  line-height:1.5;
+  color:var(--cream);
+  max-width:100%;
+  letter-spacing:-.005em;
+  text-align:center;
+  margin-bottom:12px;
+}
+.face-example::before{
+  content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
+}
+
+.flip-hint{
+  position:absolute;bottom:12px;left:0;right:0;
+  font-size:9px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;opacity:.45;
+  color:var(--dim);
+}
+
+/* Navigation buttons */
+.nav-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;max-width:440px;margin:0 auto;width:100%;
+}
+.arrow-btn{
+  flex-shrink:0;
+  background:transparent;border:1px solid var(--border2);border-radius:60px;
+  padding:9px 18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+  color:var(--cream);
+  font-family:inherit;
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.arrow-btn:hover{border-color:var(--orange);color:var(--orange)}
+.arrow-btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
+
+.nav-hint{
+  flex:1;text-align:center;
+  font-size:11px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);
+}
+
+/* Action buttons */
+.action-row{
+  display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%;
+}
+.action-btn{
+  flex:1;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:14px 20px;border-radius:60px;
+  cursor:pointer;transition:all .2s;
+  border:1px solid var(--border2);
+}
+.action-btn.secondary{background:var(--bg);color:var(--cream)}
+.action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
+.action-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
+
+/* Result screen */
+.result-screen{display:none;text-align:center;max-width:440px;margin:0 auto}
+.result-screen.active{display:block;animation:fadeUp .5s ease both}
+.result-badge{
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+  padding:5px 14px;border-radius:60px;
+  border:1px solid rgba(201,103,31,0.3);
+  background:rgba(201,103,31,0.05);
+  margin-bottom:20px;
+}
+.result-title{
+  font-family:'DM Sans',sans-serif;font-size:clamp(28px,4vw,42px);
+  font-weight:500;letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:8px;
+}
+.result-subtitle{color:var(--cream2);font-size:13px;margin-bottom:32px;line-height:1.5}
+.result-stats{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:6px;
+  padding:28px 24px;margin-bottom:24px;
+}
+.result-number{
+  font-size:clamp(44px,6vw,64px);font-weight:500;
+  color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
+}
+.result-meta{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:16px;
+}
+.result-feedback{
+  font-size:14px;color:var(--cream2);line-height:1.6;
+  padding-top:16px;border-top:1px solid var(--border);
+}
+
+footer{
+  background:#0a0806;padding:24px 40px;margin-top:auto;
+  border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
+}
+.footer-inner{
+  max-width:1000px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-brand{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:#f0ebe3}
+.footer-brand .accent{color:var(--orange);font-weight:600}
+.footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
+.footer-tagline .accent{color:var(--orange)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.module-frame{animation:fadeUp .5s ease both}
+
+@media(max-width:560px){
+  nav{padding:0 20px}
+  main{padding:24px 16px}
+  .module-frame{gap:16px}
+  .flip-face{padding:32px 22px 30px}
+  .flip-inner{min-height:320px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
+  <div class="nav-right">
+    <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
+    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
+  </div>
+</nav>
+
+<main>
+  <div class="module-frame" id="card-screen">
+
+    <div class="module-head">
+      <h1 class="module-title">Vonatkozó mondat — <span class="accent">személy</span></h1>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span class="category" id="cat-label">—</span>
+        <span id="counter">1 / 10</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:10%"></div>
+      </div>
+    </div>
+
+    <div class="flip-wrap" id="flip-wrap" onclick="flipCard()">
+      <div class="flip-inner" id="flip-inner">
+        <div class="flip-face flip-front">
+          <div class="face-label">Magyarul</div>
+          <div class="face-explain-hu" id="face-hu">—</div>
+          <div class="flip-hint">Koppints a fordításért</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="face-label">Angolul</div>
+          <div class="face-rule-en" id="face-en">—</div>
+          <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
+          <div class="flip-hint">Koppints a visszafordításhoz</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="arrow-btn" id="prev-btn" onclick="event.stopPropagation();prevCard()">Előző</button>
+      <button class="arrow-btn" id="next-btn" onclick="event.stopPropagation();nextCard()">Következő</button>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn secondary" onclick="shuffleCards()">Keverés</button>
+      <button class="action-btn primary" onclick="showResult()">Befejezés</button>
+    </div>
+  </div>
+
+  <div class="result-screen" id="result-screen">
+    <div class="result-badge">B1 · Elmélet</div>
+    <h2 class="result-title">Szép <span class="accent">munka</span>, <span class="result-name" id="result-name">—</span></h2>
+    <p class="result-subtitle">Elmélet áttekintve</p>
+
+    <div class="result-stats">
+      <div class="result-number" id="result-count">0</div>
+      <div class="result-meta">Áttekintett kártya</div>
+      <div class="result-feedback">Most már jöhet a <span class="accent">gyakorlat</span> — ugyanabban a témában!</div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
+      <a class="action-btn primary" href="b1-practice-relative-who.html" id="practice-link">Gyakorlat →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
+    <div class="footer-tagline">Gyakorlás · Ismétlés · <span class="accent">Fejlődés</span></div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('error', function(e) {
+  console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+const MODULE_META = {
+  title: "B1 Theory - Relative Who",
+  level: "B1",
+  skill: "Grammar Theory"
+};
+
+const CARDS = [
+  { cat:"Mikor használjuk", hu:"Ha SZEMÉLYRŐL mondunk több információt.", en:"Relative clause with 'who' — about a person", example:"The man who lives next door is a doctor.", example_hu:"" },
+  { cat:"who — alany", hu:"Az ember az ALANY a mellékmondatban: 'who'.", en:"who — subject of clause", example:"The woman who called is my sister. ('who' = aki hívott)", example_hu:"" },
+  { cat:"who — tárgy", hu:"Tárgyhoz is 'who' használható (köznapi).", en:"who — also used as object (informal)", example:"The man who I met was kind. (köznapi)", example_hu:"" },
+  { cat:"whom — formális", hu:"Tárgyhoz formálisan 'whom'. Nem gyakori ma.", en:"whom — formal object form", example:"The woman whom I met yesterday was kind. (formális)", example_hu:"" },
+  { cat:"that — személy", hu:"'that' is használható személyre (köznapi).", en:"that — also works for person (informal)", example:"The boy that lives here is my son.", example_hu:"" },
+  { cat:"Elhagyható", hu:"Ha 'who' tárgya a mellékmondatnak → ELHAGYHATÓ!", en:"'who' can be omitted when it's an object", example:"The man (who) I met was nice. = The man I met was nice.", example_hu:"" },
+  { cat:"Nem elhagyható", hu:"Ha 'who' az alany → NEM elhagyható!", en:"'who' cannot be omitted when subject", example:"The man who called me... (NEM: 'The man called me...')", example_hu:"" },
+  { cat:"whose — birtok", hu:"'whose' = akinek a... (birtoklás).", en:"whose — possession", example:"The woman whose car is red is my neighbor.", example_hu:"" },
+  { cat:"Szórend", hu:"Vonatkozó mellékmondat közvetlenül a főnév UTÁN.", en:"Right after the noun", example:"The man who lives next door (NEM 'who lives next door the man')", example_hu:"" },
+  { cat:"Magyar tipp", hu:"Magyar 'aki' = angol 'who'. Egyszerű megfeleltetés!", en:"HU 'aki' = who", example:"A férfi AKI itt lakik... = The man WHO lives here...", example_hu:"" },
+];
+
+let studentName = '';
+let currentIndex = 0;
+let cardList = [];
+
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  studentName = params.get('name') || '';
+  if (!studentName) {
+    window.location.href = 'index.html';
+    return;
+  }
+  document.getElementById('nav-name').textContent = studentName;
+
+  const nameParam = '?name=' + encodeURIComponent(studentName);
+  const backParam = nameParam + '&level=b1';
+  document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
+  document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
+
+  // Practice link with student name
+  const practiceLink = document.getElementById('practice-link');
+  if (practiceLink) {
+    const origHref = practiceLink.getAttribute('href');
+    if (origHref && !origHref.includes('?name=')) {
+      practiceLink.setAttribute('href', origHref + nameParam);
+    }
+  }
+
+  cardList = [...CARDS];
+  renderCard();
+})();
+
+function renderCard() {
+  const card = cardList[currentIndex];
+  const total = cardList.length;
+
+  document.getElementById('counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
+  document.getElementById('cat-label').textContent = card.cat || '';
+  document.getElementById('face-hu').textContent = card.hu;
+  document.getElementById('face-en').textContent = card.en;
+
+  const exEl = document.getElementById('face-example');
+  if (card.example && card.example.trim() !== '') {
+    exEl.textContent = card.example;
+    exEl.style.display = '';
+  } else {
+    exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
+  }
+
+  // Reset flip state
+  document.getElementById('flip-wrap').classList.remove('flipped');
+
+  document.getElementById('prev-btn').disabled = currentIndex === 0;
+  document.getElementById('next-btn').disabled = false;
+}
+
+function flipCard() {
+  document.getElementById('flip-wrap').classList.toggle('flipped');
+}
+
+function nextCard() {
+  if (currentIndex < cardList.length - 1) {
+    currentIndex++;
+    renderCard();
+  } else {
+    showResult();
+  }
+}
+
+function prevCard() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderCard();
+  }
+}
+
+function shuffleCards() {
+  for (let i = cardList.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cardList[i], cardList[j]] = [cardList[j], cardList[i]];
+  }
+  currentIndex = 0;
+  renderCard();
+}
+
+function restartDeck() {
+  currentIndex = 0;
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('card-screen').style.display = 'flex';
+  renderCard();
+}
+
+function showResult() {
+  document.getElementById('card-screen').style.display = 'none';
+  document.getElementById('result-screen').classList.add('active');
+
+  document.getElementById('result-name').textContent = studentName;
+  document.getElementById('result-count').textContent = cardList.length;
+
+  fetch(MAKE_WEBHOOK_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      Student: studentName,
+      Quiz: MODULE_META.title,
+      Level: MODULE_META.level,
+      Skill: MODULE_META.skill,
+      CardsReviewed: cardList.length,
+      CompletedAt: new Date().toISOString()
+    })
+  }).catch(() => {});
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (document.getElementById('result-screen').classList.contains('active')) return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextCard(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevCard(); }
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+});
+</script>
+</body>
+</html>
