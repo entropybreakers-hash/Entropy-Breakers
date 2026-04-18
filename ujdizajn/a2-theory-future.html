@@ -105,31 +105,42 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: large rule + large example, symmetric & airy */
+/* Back: English rule (orange, bold) + example */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(26px,4vw,36px);
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:600;
-  line-height:1.2;
+  line-height:1.4;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.02em;
-  margin-bottom:24px;
-  text-align:center;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:400;
+  font-weight:500;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
+  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
 }
 
 .flip-hint{
@@ -281,6 +292,7 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -330,22 +342,22 @@ window.addEventListener('error', function(e) {
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
 
 const MODULE_META = {
-  title: "A2 Theory - Future (will/going to)",
+  title: "A2 Theory - Future",
   level: "A2",
   skill: "Grammar Theory"
 };
 
 const CARDS = [
-  { cat:"Két jövő forma", hu:"Két fő jövő forma van: 'will' és 'going to' — MÁS a jelentésük!", en:"will vs. going to", example:"I will help. (azonnali döntés) / I'm going to help. (terv)" },
-  { cat:"Will — mikor", hu:"'Will' → pillanatnyi döntés, ígéret, jóslás.", en:"will", example:"on-the-spot decisions, promises / OK, I will call him. / I promise I will come." },
-  { cat:"Will — szerkezet", hu:"Alany + will + ige alapalakja.", en:"I will work / She will come", example:"I will help you. / They will arrive soon." },
-  { cat:"Will — rövidítés", hu:"'I will' → 'I'll', 'he will' → 'he'll' stb.", en:"I'll / you'll / he'll / we'll / they'll", example:"I'll call you. / She'll be there." },
-  { cat:"Will — tagadás", hu:"Tagadás: won't (will not).", en:"won't = will not", example:"I won't forget. / She won't come." },
-  { cat:"Going to — mikor", hu:"'Going to' → előre eltervezett jövőbeli cselekvés.", en:"going to", example:"planned future / I'm going to visit my mom tomorrow." },
-  { cat:"Going to — szerkezet", hu:"Létige (am/is/are) + going to + ige alapalakja.", en:"be + going to + verb", example:"I am going to study. / She is going to travel." },
-  { cat:"Going to — tagadás", hu:"Tagadás: be + NOT + going to.", en:"I'm not going to / She isn't going to", example:"I'm not going to come. / They aren't going to wait." },
-  { cat:"Jelek/bizonyítékok", hu:"'Going to' jövőbeli történésekre is, ha van bizonyíték.", en:"Future based on present evidence", example:"Look at the clouds! It's going to rain." },
-  { cat:"Magyar tipp", hu:"FIGYELEM: magyarban 'fogok' mindkét formát jelentheti! Angolban a szövegkörnyezet dönt.", en:"Will = spontán, Going to = tervezett", example:"'Holnap elmegyek' → I'm going to go (tervezett)." },
+  { cat:"Két jövő forma", hu:"Két fő jövő forma: 'will' és 'going to' — MÁS a jelentésük!", en:"will vs. going to", example:"I will help. / I'm going to help.", example_hu:"Segíteni fogok. (azonnali döntés) / Segíteni fogok. (tervezve)" },
+  { cat:"Will — mikor", hu:"'Will' → pillanatnyi döntés, ígéret, jóslás.", en:"will — decisions, promises", example:"OK, I will call him. / I promise I will come.", example_hu:"Oké, felhívom. / Ígérem, eljövök." },
+  { cat:"Will — szerkezet", hu:"Alany + will + ige alapalakja.", en:"I will work / She will come", example:"I will help you. / They will arrive soon.", example_hu:"Segítek neked. / Hamarosan megérkeznek." },
+  { cat:"Will — rövidítés", hu:"'I will' → 'I'll', 'he will' → 'he'll' stb.", en:"I'll / you'll / he'll", example:"I'll call you. / She'll be there.", example_hu:"Felhívlak. / Ott lesz." },
+  { cat:"Will — tagadás", hu:"Tagadás: won't (= will not).", en:"won't = will not", example:"I won't forget. / She won't come.", example_hu:"Nem felejtem el. / Nem fog eljönni." },
+  { cat:"Going to — mikor", hu:"'Going to' → előre eltervezett jövőbeli cselekvés.", en:"going to — planned future", example:"I'm going to visit my mom tomorrow.", example_hu:"Holnap meglátogatom anyut. (már tervezve van)" },
+  { cat:"Going to — szerkezet", hu:"Létige (am/is/are) + going to + ige alapalakja.", en:"be + going to + verb", example:"I am going to study. / She is going to travel.", example_hu:"Tanulni fogok. / Utazni fog." },
+  { cat:"Going to — tagadás", hu:"Tagadás: be + NOT + going to.", en:"I'm not going to / She isn't going to", example:"I'm not going to come. / They aren't going to wait.", example_hu:"Nem jövök el. / Nem fognak várni." },
+  { cat:"Jelek/bizonyítékok", hu:"'Going to' jövőbeli történésekre, ha van bizonyíték.", en:"Future based on evidence", example:"Look at the clouds! It's going to rain.", example_hu:"Nézd a felhőket! Esni fog." },
+  { cat:"Magyar tipp", hu:"Magyar 'fogok' mindkét formát jelentheti! Szövegkörnyezet dönt.", en:"Will vs going to: context matters", example:"I'm going to travel next year.", example_hu:"Utazni fogok jövőre. (= tervezett)" },
 ];
 
 let studentName = '';
@@ -395,6 +407,15 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
   }
 
   // Reset flip state

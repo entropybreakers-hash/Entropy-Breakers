@@ -105,31 +105,42 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: large rule + large example, symmetric & airy */
+/* Back: English rule (orange, bold) + example */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(26px,4vw,36px);
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:600;
-  line-height:1.2;
+  line-height:1.4;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.02em;
-  margin-bottom:24px;
-  text-align:center;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:400;
+  font-weight:500;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
+  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
 }
 
 .flip-hint{
@@ -281,6 +292,7 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -336,16 +348,16 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Három forma", hu:"Három fajta névelő: 'a', 'an', 'the' + nulla (semmi).", en:"a / an / the / (no article)", example:"a book / an apple / the sun / (no article for general)" },
-  { cat:"A vs. An", hu:"'A' mássalhangzó HANG előtt, 'an' magánhangzó HANG előtt.", en:"a book / an apple", example:"a car / an hour (a 'h' néma!) / a university (a 'u' 'you' hang!)" },
-  { cat:"Nem határozott", hu:"'A/an' először említett, ismeretlen dolognál.", en:"a/an", example:"something not specific / I saw a dog in the garden." },
-  { cat:"Határozott 'the'", hu:"'The' már ismert, konkrét dolognál.", en:"the", example:"already known / specific / The dog was brown. (which one? → 'the' az ismert.)" },
-  { cat:"The — egyedi dolgok", hu:"Egyedi dolgok előtt: the sun, the moon, the world.", en:"The sun / the moon / the Earth", example:"The sun is shining. / The moon is bright tonight." },
-  { cat:"The — helyek", hu:"Országnevek ELŐTT általában NINCS névelő.", en:"Hungary, France, Japan (NO 'the')", example:"I live in Hungary. NEM: 'I live in the Hungary'." },
-  { cat:"The — kivételek", hu:"Kivételek: the USA, the UK, the Netherlands.", en:"the USA / the UK / the Philippines", example:"She lives in the USA." },
-  { cat:"Nulla névelő", hu:"Általános, megszámlálhatatlan főnevekhez: NINCS névelő.", en:"NO article", example:"general, uncountable / I like music. / Water is important. (NEM: 'I like the music.')" },
-  { cat:"Nulla névelő", hu:"Étkezésekhez, sportokhoz, betegségekhez sincs névelő.", en:"breakfast / soccer / flu", example:"no article / I have breakfast at 8. / We play soccer. / She has flu." },
-  { cat:"Magyar tipp", hu:"Magyarban könnyebb — csak 'egy' vagy 'a/az'. Angolban többet kell figyelni!", en:"HU: 'egy', 'a/az'. EN: 'a/an/the'.", example:"I'm a teacher. NEM: 'I'm teacher'. (foglalkozáshoz KELL 'a'!)" },
+  { cat:"Három forma", hu:"Három fajta névelő: 'a', 'an', 'the' + nulla (semmi).", en:"a / an / the / (no article)", example:"a book / an apple / the sun", example_hu:"egy könyv / egy alma / a nap" },
+  { cat:"A vs. An", hu:"'A' mássalhangzó HANG előtt, 'an' magánhangzó HANG előtt.", en:"a book / an apple", example:"a car / an hour / a university", example_hu:"egy autó / egy óra / egy egyetem" },
+  { cat:"Nem határozott", hu:"'A/an' először említett, ismeretlen dolognál.", en:"a/an — not specific", example:"I saw a dog in the garden.", example_hu:"Láttam egy kutyát a kertben." },
+  { cat:"Határozott 'the'", hu:"'The' már ismert, konkrét dolognál.", en:"the — already known", example:"The dog was brown.", example_hu:"A kutya barna volt. (= az előbb említett kutya)" },
+  { cat:"The — egyedi dolgok", hu:"Egyedi dolgok előtt: the sun, the moon, the world.", en:"The sun / the moon / the Earth", example:"The sun is shining. / The moon is bright tonight.", example_hu:"Süt a nap. / Ma este fényes a hold." },
+  { cat:"The — helyek", hu:"Országnevek ELŐTT általában NINCS névelő.", en:"Hungary, France, Japan (no 'the')", example:"I live in Hungary.", example_hu:"Magyarországon élek. (nem 'a Magyarország')" },
+  { cat:"The — kivételek", hu:"Kivételek: the USA, the UK, the Netherlands.", en:"the USA / the UK / the Philippines", example:"She lives in the USA.", example_hu:"Az USA-ban él." },
+  { cat:"Nulla névelő", hu:"Általános, megszámlálhatatlan főnevekhez: NINCS névelő.", en:"No article — general uncountable", example:"I like music. / Water is important.", example_hu:"Szeretem a zenét. / A víz fontos." },
+  { cat:"Nulla névelő", hu:"Étkezések, sportok, betegségek: nincs névelő.", en:"breakfast / soccer / flu — no article", example:"I have breakfast at 8. / We play soccer.", example_hu:"Reggel 8-kor reggelizem. / Focizunk." },
+  { cat:"Magyar tipp", hu:"Magyarban csak 'egy' vagy 'a/az'. Angolban foglalkozáshoz KELL 'a'!", en:"I'm a teacher (nem 'I'm teacher')", example:"I'm a teacher.", example_hu:"Tanár vagyok. (foglalkozás → kell 'a' angolban!)" },
 ];
 
 let studentName = '';
@@ -395,6 +407,15 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
   }
 
   // Reset flip state

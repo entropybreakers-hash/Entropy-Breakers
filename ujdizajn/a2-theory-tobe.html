@@ -105,31 +105,42 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: large rule + large example, symmetric & airy */
+/* Back: English rule (orange, bold) + example */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(26px,4vw,36px);
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:600;
-  line-height:1.2;
+  line-height:1.4;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.02em;
-  margin-bottom:24px;
-  text-align:center;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:400;
+  font-weight:500;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
+  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
 }
 
 .flip-hint{
@@ -281,6 +292,7 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -336,18 +348,18 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Alapok", hu:"Az 'I' után MINDIG am.", en:"I am", example:"I am tired. / I am happy. / I am a student." },
-  { cat:"Alapok", hu:"A 'he/she/it' után IS jön.", en:"He/She/It is", example:"He is tall. / She is my sister. / It is cold today." },
-  { cat:"Alapok", hu:"A 'we/you/they' után ARE.", en:"We/You/They are", example:"They are late. / We are friends. / You are kind." },
-  { cat:"Rövidítések", hu:"'I am' rövidítve 'I'm'.", en:"I'm = I am", example:"I'm tired. / I'm from Hungary." },
-  { cat:"Rövidítések", hu:"'He is' → 'He's', 'She is' → 'She's', 'It is' → 'It's'.", en:"He's / She's / It's", example:"He's my brother. / It's my book." },
-  { cat:"Rövidítések", hu:"Többes számban: 'We're, You're, They're'.", en:"We're / You're / They're", example:"We're happy. / They're here." },
-  { cat:"Tagadás", hu:"Tagadáshoz: létige + NOT.", en:"I am NOT / He is NOT / They are NOT", example:"I'm not hungry. / She isn't tired." },
-  { cat:"Tagadás", hu:"Rövidítve: 'isn't', 'aren't'. 'Am not' nem rövidül!", en:"isn't / aren't (de NINCS 'amn't')", example:"He isn't home. / We aren't late." },
-  { cat:"Kérdés", hu:"Kérdésben a létige ELÖL áll.", en:"Are you...? / Is he...? / Am I...?", example:"Are you tired? / Is she a teacher?" },
-  { cat:"Múlt idő", hu:"Múltban: I/he/she/it WAS, you/we/they WERE.", en:"was / were", example:"I was at home. / They were happy." },
-  { cat:"Múlt idő", hu:"Múlt tagadás: wasn't / weren't.", en:"wasn't / weren't", example:"He wasn't there. / We weren't late." },
-  { cat:"Magyar tipp", hu:"Figyelem! Magyarban 'éhes vagyok', de NEM 'I am hunger'!", en:"I AM hungry (melléknév!)", example:"I am hungry. NEM: 'I have hunger' (magyar gondolkodás!)" },
+  { cat:"Alapok", hu:"Az 'I' után MINDIG am.", en:"I am", example:"I am tired. / I am happy. / I am a student.", example_hu:"Fáradt vagyok. / Boldog vagyok. / Diák vagyok." },
+  { cat:"Alapok", hu:"A 'he/she/it' után IS jön.", en:"He/She/It is", example:"He is tall. / She is my sister. / It is cold today.", example_hu:"Magas. / A nővérem. / Hideg van ma." },
+  { cat:"Alapok", hu:"A 'we/you/they' után ARE.", en:"We/You/They are", example:"They are late. / We are friends. / You are kind.", example_hu:"Elkéstek. / Barátok vagyunk. / Kedves vagy." },
+  { cat:"Rövidítések", hu:"'I am' rövidítve 'I'm'.", en:"I'm = I am", example:"I'm tired. / I'm from Hungary.", example_hu:"Fáradt vagyok. / Magyarországról jövök." },
+  { cat:"Rövidítések", hu:"'He is' → 'He's', 'She is' → 'She's', 'It is' → 'It's'.", en:"He's / She's / It's", example:"He's my brother. / It's my book.", example_hu:"Ő a bátyám. / Ez az én könyvem." },
+  { cat:"Rövidítések", hu:"Többes számban: 'We're, You're, They're'.", en:"We're / You're / They're", example:"We're happy. / They're here.", example_hu:"Boldogok vagyunk. / Itt vannak." },
+  { cat:"Tagadás", hu:"Tagadáshoz: létige + NOT.", en:"I am not / He is not / They are not", example:"I'm not hungry. / She isn't tired.", example_hu:"Nem vagyok éhes. / Ő nem fáradt." },
+  { cat:"Tagadás", hu:"Rövidítve: 'isn't', 'aren't'. 'Am not' nem rövidül!", en:"isn't / aren't", example:"He isn't home. / We aren't late.", example_hu:"Nincs otthon. / Nem késtünk el." },
+  { cat:"Kérdés", hu:"Kérdésben a létige ELÖL áll.", en:"Are you...? / Is he...? / Am I...?", example:"Are you tired? / Is she a teacher?", example_hu:"Fáradt vagy? / Ő tanár?" },
+  { cat:"Múlt idő", hu:"Múltban: I/he/she/it WAS, you/we/they WERE.", en:"was / were", example:"I was at home. / They were happy.", example_hu:"Otthon voltam. / Boldogok voltak." },
+  { cat:"Múlt idő", hu:"Múlt tagadás: wasn't / weren't.", en:"wasn't / weren't", example:"He wasn't there. / We weren't late.", example_hu:"Nem volt ott. / Nem késtünk el." },
+  { cat:"Magyar tipp", hu:"Figyelem! Magyarban 'éhes vagyok', de NEM 'I am hunger'!", en:"I am hungry (melléknév!)", example:"I am hungry. NEM: 'I have hunger.'", example_hu:"Éhes vagyok. (nem 'éhségem van'!)" },
 ];
 
 let studentName = '';
@@ -397,6 +409,15 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
   }
 
   // Reset flip state
