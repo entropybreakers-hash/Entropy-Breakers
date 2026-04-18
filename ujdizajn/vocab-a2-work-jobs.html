@@ -527,10 +527,9 @@ let isFlipped = false;
   }
   document.getElementById('nav-name').textContent = studentName;
 
-  // Preserve name on back link, and include level so dashboard returns to same section
+  // Preserve name on back link
   const nameParam = '?name=' + encodeURIComponent(studentName);
-  const backParam = nameParam + '&level=a2';
-  document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
+  document.getElementById('back-link').setAttribute('href', 'index.html' + nameParam);
   document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
 
   renderCard();
