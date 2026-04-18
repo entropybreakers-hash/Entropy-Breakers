@@ -105,42 +105,31 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: English rule (orange, bold) + example */
+/* Back: large rule + large example, symmetric & airy */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(16px,2.5vw,20px);
+  font-size:clamp(26px,4vw,36px);
   font-weight:600;
-  line-height:1.4;
+  line-height:1.2;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.01em;
-  margin-bottom:20px;
+  letter-spacing:-.02em;
+  margin-bottom:24px;
+  text-align:center;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:500;
+  font-weight:400;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
-  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
-}
-.face-example-hu{
-  font-family:'DM Sans',sans-serif;
-  font-size:clamp(13px,2vw,16px);
-  font-weight:400;
-  font-style:italic;
-  line-height:1.5;
-  color:var(--dim);
-  max-width:100%;
-  letter-spacing:0;
-  text-align:center;
 }
 
 .flip-hint{
@@ -292,7 +281,6 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
-          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -348,16 +336,16 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Két forma", hu:"Két forma: 'have got' (brit) és 'have' (amerikai). Jelentés ugyanaz.", en:"have got = have", example:"I have a car. / I've got a car.", example_hu:"Van egy autóm. / Van egy autóm. (ugyanaz!)" },
-  { cat:"Have got — szerkezet", hu:"Alany + have got / has got.", en:"I've got / He's got", example:"I've got a brother. / She's got two cats.", example_hu:"Van egy bátyám. / Két macskája van." },
-  { cat:"Have got — tagadás", hu:"Tagadás: haven't got / hasn't got.", en:"haven't got / hasn't got", example:"I haven't got time. / He hasn't got a car.", example_hu:"Nincs időm. / Nincs autója." },
-  { cat:"Have got — kérdés", hu:"Kérdés: Have/Has + alany + got...?", en:"Have you got...? / Has she got...?", example:"Have you got a pen? / Has he got a brother?", example_hu:"Van tollad? / Van testvére?" },
-  { cat:"Have — amerikai", hu:"Amerikai angolban 'have' önmagában, do/does segédigével.", en:"Do you have? / I don't have", example:"Do you have a car? / I don't have time.", example_hu:"Van autód? / Nincs időm." },
-  { cat:"Birtokos névmások", hu:"'my, your, his, her, its, our, your, their' — a főnév ELŐTT.", en:"my / your / his / her / our / their", example:"my book / her house / their car", example_hu:"a könyvem / az ő háza / az ő autójuk" },
-  { cat:"Birtokjel 's", hu:"Embereknél/állatoknál: név + 's.", en:"Tom's book / my mother's car", example:"Peter's dog. / The teacher's bag.", example_hu:"Péter kutyája. / A tanár táskája." },
-  { cat:"Birtokjel 's", hu:"Többes szám (-s végű) után csak aposztróf.", en:"my parents' house / the boys' school", example:"My parents' car. / The students' bags.", example_hu:"A szüleim autója. / A diákok táskái." },
-  { cat:"'of' használat", hu:"Tárgyaknál, fogalmaknál 'of' szerkezet.", en:"the name of the book", example:"The color of the sky. / The end of the movie.", example_hu:"Az ég színe. / A film vége." },
-  { cat:"Magyar tipp", hu:"Magyar 'nekem van' → angol 'I have'. NINCS 'to me is'!", en:"I have (nem 'To me is')", example:"I have a dog.", example_hu:"Van egy kutyám. (nem 'nekem van')" },
+  { cat:"Two birtoklás forma", hu:"Két forma: 'have got' (brit) és 'have' (amerikai). Jelentés ugyanaz.", en:"have got = have (to possess)", example:"I have a car. / I've got a car. (ugyanaz!)" },
+  { cat:"Have got — szerkezet", hu:"Alany + have got / has got.", en:"I've got / He's got", example:"I've got a brother. / She's got two cats." },
+  { cat:"Have got — tagadás", hu:"Tagadás: haven't got / hasn't got.", en:"haven't got / hasn't got", example:"I haven't got time. / He hasn't got a car." },
+  { cat:"Have got — kérdés", hu:"Kérdés: Have/Has + alany + got...?", en:"Have you got...? / Has she got...?", example:"Have you got a pen? / Has he got a brother?" },
+  { cat:"Have — amerikai", hu:"Amerikai angolban 'have' önmagában, do/does segédigével.", en:"Do you have? / I don't have", example:"Do you have a car? / I don't have time." },
+  { cat:"Birtokos névmások", hu:"'my, your, his, her, its, our, your, their' — a főnév ELŐTT.", en:"my / your / his / her / its / our / their", example:"my book / her house / their car" },
+  { cat:"Birtokjel 's", hu:"Embereknél/állatoknál: név + 's.", en:"Tom's book / my mother's car", example:"Peter's dog. / The teacher's bag." },
+  { cat:"Birtokjel 's", hu:"Többes szám (-s végű) után csak aposztróf.", en:"my parents' house / the boys' school", example:"My parents' car. / The students' bags." },
+  { cat:"'of' használat", hu:"Tárgyaknál, fogalmaknál 'of' szerkezet.", en:"the name OF the book", example:"The color of the sky. / The end of the movie." },
+  { cat:"Magyar tipp", hu:"Magyarban 'nekem van' — angolban 'I have'. NINCS 'me have' vagy 'to me is'!", en:"I HAVE (NEM: 'To me is')", example:"I have a dog. NEM: 'To me is a dog'." },
 ];
 
 let studentName = '';
@@ -407,15 +395,6 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
-  }
-  const exHuEl = document.getElementById('face-example-hu');
-  if (exHuEl) {
-    if (card.example_hu && card.example_hu.trim() !== '') {
-      exHuEl.textContent = card.example_hu;
-      exHuEl.style.display = '';
-    } else {
-      exHuEl.style.display = 'none';
-    }
   }
 
   // Reset flip state

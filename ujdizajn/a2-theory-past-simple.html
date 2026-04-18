@@ -105,42 +105,31 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: English rule (orange, bold) + example */
+/* Back: large rule + large example, symmetric & airy */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(16px,2.5vw,20px);
+  font-size:clamp(26px,4vw,36px);
   font-weight:600;
-  line-height:1.4;
+  line-height:1.2;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.01em;
-  margin-bottom:20px;
+  letter-spacing:-.02em;
+  margin-bottom:24px;
+  text-align:center;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:500;
+  font-weight:400;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
-  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
-}
-.face-example-hu{
-  font-family:'DM Sans',sans-serif;
-  font-size:clamp(13px,2vw,16px);
-  font-weight:400;
-  font-style:italic;
-  line-height:1.5;
-  color:var(--dim);
-  max-width:100%;
-  letter-spacing:0;
-  text-align:center;
 }
 
 .flip-hint{
@@ -292,7 +281,6 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
-          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -348,16 +336,16 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Mikor használjuk", hu:"Befejezett, múltbeli eseményekre használjuk.", en:"Past Simple — completed actions", example:"I visited Paris last year. / She called me yesterday.", example_hu:"Tavaly látogattam meg Párizst. / Tegnap felhívott." },
-  { cat:"Szabályos igék", hu:"Szabályos igékhez '-ed' kerül a végére.", en:"work → worked / play → played", example:"I worked yesterday. / They played soccer.", example_hu:"Tegnap dolgoztam. / Futballoztak." },
-  { cat:"Szabályos igék", hu:"'-e' végű igék: csak '-d' kell.", en:"like → liked / live → lived", example:"She lived in London. / He liked the movie.", example_hu:"Londonban élt. / Tetszett neki a film." },
-  { cat:"Szabályos igék", hu:"'-y' végű igék (mássalhangzó után): 'y' → '-ied'.", en:"study → studied / try → tried", example:"I studied English. / She tried hard.", example_hu:"Angolt tanultam. / Keményen próbálkozott." },
-  { cat:"Szabálytalan igék", hu:"Sok ige szabálytalan — meg kell tanulni!", en:"go → went / eat → ate / see → saw", example:"I went to the shop. / She ate an apple. / We saw a movie.", example_hu:"Boltba mentem. / Megevett egy almát. / Filmet néztünk." },
-  { cat:"Szabálytalan igék", hu:"Gyakori szabálytalanok: be → was/were, have → had, do → did.", en:"was/were, had, did, said", example:"I was tired. / He had a car. / We did our homework.", example_hu:"Fáradt voltam. / Volt egy autója. / Megcsináltuk a házit." },
-  { cat:"Tagadás", hu:"Tagadás: didn't + ige ALAPALAKJA (NEM -ed!).", en:"I didn't work (nem 'didn't worked')", example:"I didn't go. / She didn't see it.", example_hu:"Nem mentem. / Nem látta." },
-  { cat:"Kérdés", hu:"Kérdés: Did + alany + ige alapalakja.", en:"Did you work? / Did she go?", example:"Did you see her? / Did he call?", example_hu:"Láttad őt? / Felhívott?" },
-  { cat:"Kulcsszavak", hu:"Jellemző időhatározók: yesterday, last week, ago, in 2020.", en:"yesterday / last / ago / in [year]", example:"I met her yesterday. / We moved here two years ago.", example_hu:"Tegnap találkoztam vele. / Két éve költöztünk ide." },
-  { cat:"Magyar tipp", hu:"Az angol szabálytalanokat külön kell tanulni!", en:"Memorize irregular verbs!", example:"I went (nem 'I goed').", example_hu:"Mentem. (az angol 'go' → 'went', nem 'goed'!)" },
+  { cat:"Mikor használjuk", hu:"Befejezett, múltbeli eseményekre használjuk.", en:"Past Simple", example:"completed actions in the past / I visited Paris last year. / She called me yesterday." },
+  { cat:"Szabályos igék", hu:"Szabályos igékhez '-ed' kerül a végére.", en:"work → worked / play → played", example:"I worked yesterday. / They played soccer." },
+  { cat:"Szabályos igék", hu:"'-e' végű igék: csak '-d' kell.", en:"like → liked / live → lived", example:"She lived in London. / He liked the movie." },
+  { cat:"Szabályos igék", hu:"'-y' végű igék (mássalhangzó után): 'y' → '-ied'.", en:"study → studied / try → tried", example:"I studied English. / She tried hard." },
+  { cat:"Szabálytalan igék", hu:"Sok ige szabálytalan — meg kell tanulni!", en:"go → went / eat → ate / see → saw", example:"I went to the shop. / She ate an apple. / We saw a movie." },
+  { cat:"Szabálytalan igék", hu:"Gyakori szabálytalanok: be → was/were, have → had, do → did, say → said.", en:"was/were, had, did, said", example:"I was tired. / He had a car. / We did our homework." },
+  { cat:"Tagadás", hu:"Tagadás: didn't + ige ALAPALAKJA (NEM -ed!).", en:"I didn't work (nem: 'didn't worked')", example:"I didn't go. NEM: 'I didn't went'. / She didn't see it." },
+  { cat:"Kérdés", hu:"Kérdés: Did + alany + ige alapalakja.", en:"Did you work? / Did she go?", example:"Did you see her? / Did he call?" },
+  { cat:"Kulcsszavak", hu:"Jellemző időhatározók: yesterday, last week, ago, in 2020.", en:"yesterday / last / ago / in [year]", example:"I met her yesterday. / We moved here two years ago." },
+  { cat:"Magyar tipp", hu:"A magyar múlt idő mindig ugyanaz az ige — angolban a szabálytalanokat külön kell megjegyezni.", en:"Rendszeres memorizálás szükséges!", example:"Magyar: 'mentem' = 'I went' (nem 'I goed'!)" },
 ];
 
 let studentName = '';
@@ -407,15 +395,6 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
-  }
-  const exHuEl = document.getElementById('face-example-hu');
-  if (exHuEl) {
-    if (card.example_hu && card.example_hu.trim() !== '') {
-      exHuEl.textContent = card.example_hu;
-      exHuEl.style.display = '';
-    } else {
-      exHuEl.style.display = 'none';
-    }
   }
 
   // Reset flip state
