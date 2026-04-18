@@ -105,31 +105,42 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: large rule + large example, symmetric & airy */
+/* Back: English rule (orange, bold) + example */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(26px,4vw,36px);
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:600;
-  line-height:1.2;
+  line-height:1.4;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.02em;
-  margin-bottom:24px;
-  text-align:center;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:400;
+  font-weight:500;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
+  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
 }
 
 .flip-hint{
@@ -281,6 +292,7 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -336,18 +348,18 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Mikor használjuk", hu:"Jelen idő egyszerűt használunk szokásos cselekvésekre.", en:"Present Simple", example:"for habits and routines / I drink coffee every morning. / She works in a bank." },
-  { cat:"Mikor használjuk", hu:"Továbbá általános igazságokra.", en:"For general truths", example:"The sun rises in the east. / Water boils at 100°C." },
-  { cat:"Alapalak", hu:"Az ige alapalakját használjuk I/you/we/they után.", en:"I work / you work / we work / they work", example:"I work in Budapest. / They live in London." },
-  { cat:"Egyes szám 3. személy", hu:"He/she/it után az ige VÉGÉRE '-s' kerül!", en:"He/she/it + verb+s", example:"He works hard. / She reads every day. / It costs $10." },
-  { cat:"Egyes szám 3. személy", hu:"'-o, -s, -x, -ch, -sh' végű igékhez '-es' jön.", en:"goes / does / watches / washes", example:"She goes to school. / He watches TV." },
-  { cat:"Egyes szám 3. személy", hu:"'-y' végű igék (mássalhangzó után): 'y' → '-ies'.", en:"study → studies / try → tries", example:"She studies English. / He tries hard." },
-  { cat:"Tagadás", hu:"Tagadás: don't / doesn't + ige alapalak.", en:"I don't work / He doesn't work", example:"I don't speak German. / She doesn't like coffee." },
-  { cat:"Tagadás", hu:"Egyes szám 3. személyben: doesn't + ige ALAPALAKJA (NEM -s!).", en:"He doesn't work (nem: 'doesn't works')", example:"He doesn't understand. NEM: 'He doesn't understands'." },
-  { cat:"Kérdés", hu:"Kérdés: Do / Does + alany + ige alapalakja.", en:"Do you work? / Does he work?", example:"Do you speak English? / Does she live here?" },
-  { cat:"Kérdés", hu:"Kérdőszavas kérdés: Where/When/What + do/does + alany + ige.", en:"Where do you live? / What does he want?", example:"Where do you work? / When does the movie start?" },
-  { cat:"Gyakoriság", hu:"Gyakorisági határozók (always, usually, often, sometimes, never) az ige ELŐTT állnak.", en:"I ALWAYS drink coffee.", example:"She usually works from home. / I never eat fast food." },
-  { cat:"Magyar tipp", hu:"FIGYELEM: a 'never' már tagadó — nem kell mellé 'don't'!", en:"I NEVER drink. (NEM: 'I don't never drink')", example:"I never smoke. NEM: 'I don't never smoke'." },
+  { cat:"Mikor használjuk", hu:"Jelen idő egyszerűt használunk szokásos cselekvésekre.", en:"Present Simple — habits", example:"I drink coffee every morning. / She works in a bank.", example_hu:"Minden reggel kávét iszom. / Egy bankban dolgozik." },
+  { cat:"Mikor használjuk", hu:"Továbbá általános igazságokra.", en:"General truths", example:"The sun rises in the east. / Water boils at 100°C.", example_hu:"A nap keleten kel. / A víz 100°C-on forr." },
+  { cat:"Alapalak", hu:"Az ige alapalakját használjuk I/you/we/they után.", en:"I work / you work / we work / they work", example:"I work in Budapest. / They live in London.", example_hu:"Budapesten dolgozom. / Londonban élnek." },
+  { cat:"Egyes szám 3. személy", hu:"He/she/it után az ige VÉGÉRE '-s' kerül!", en:"He/she/it + verb+s", example:"He works hard. / She reads every day. / It costs $10.", example_hu:"Keményen dolgozik. / Minden nap olvas. / 10 dollárba kerül." },
+  { cat:"Egyes szám 3. személy", hu:"'-o, -s, -x, -ch, -sh' végű igékhez '-es' jön.", en:"goes / watches / washes", example:"She goes to school. / He watches TV.", example_hu:"Iskolába jár. / Tévét néz." },
+  { cat:"Egyes szám 3. személy", hu:"'-y' végű igék (mássalhangzó után): 'y' → '-ies'.", en:"study → studies / try → tries", example:"She studies English. / He tries hard.", example_hu:"Angolt tanul. / Keményen próbálkozik." },
+  { cat:"Tagadás", hu:"Tagadás: don't / doesn't + ige alapalak.", en:"I don't work / He doesn't work", example:"I don't speak German. / She doesn't like coffee.", example_hu:"Nem beszélek németül. / Nem szereti a kávét." },
+  { cat:"Tagadás", hu:"E/3 személyben: doesn't + ige ALAPALAKJA (NEM -s!).", en:"He doesn't work (nem 'doesn't works')", example:"He doesn't understand. / She doesn't drive.", example_hu:"Nem érti. / Nem vezet." },
+  { cat:"Kérdés", hu:"Kérdés: Do / Does + alany + ige alapalakja.", en:"Do you work? / Does he work?", example:"Do you speak English? / Does she live here?", example_hu:"Beszélsz angolul? / Itt él?" },
+  { cat:"Kérdés", hu:"Kérdőszavas kérdés: Where/When/What + do/does + alany + ige.", en:"Where do you live? / What does he want?", example:"Where do you work? / When does the movie start?", example_hu:"Hol dolgozol? / Mikor kezdődik a film?" },
+  { cat:"Gyakoriság", hu:"Gyakorisági határozók (always, usually, often, never) az ige ELŐTT.", en:"I always drink coffee.", example:"She usually works from home. / I never eat fast food.", example_hu:"Általában otthonról dolgozik. / Soha nem eszem gyorsételt." },
+  { cat:"Magyar tipp", hu:"FIGYELEM: a 'never' már tagadó — nem kell mellé 'don't'!", en:"I never drink.", example:"I never smoke.", example_hu:"Soha nem dohányzom." },
 ];
 
 let studentName = '';
@@ -397,6 +409,15 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
   }
 
   // Reset flip state

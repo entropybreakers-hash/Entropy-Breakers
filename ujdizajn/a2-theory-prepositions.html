@@ -105,31 +105,42 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: large rule + large example, symmetric & airy */
+/* Back: English rule (orange, bold) + example */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(26px,4vw,36px);
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:600;
-  line-height:1.2;
+  line-height:1.4;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.02em;
-  margin-bottom:24px;
-  text-align:center;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:400;
+  font-weight:500;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
+  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
 }
 
 .flip-hint{
@@ -281,6 +292,7 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -330,22 +342,22 @@ window.addEventListener('error', function(e) {
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
 
 const MODULE_META = {
-  title: "A2 Theory - Basic Prepositions",
+  title: "A2 Theory - Prepositions",
   level: "A2",
   skill: "Grammar Theory"
 };
 
 const CARDS = [
-  { cat:"Hely: IN", hu:"'IN' — zárt térben, országokban, városokban.", en:"IN", example:"inside, countries, cities / in the room / in Hungary / in Budapest / in the car" },
-  { cat:"Hely: ON", hu:"'ON' — felületen, utcákban, emeleten.", en:"ON", example:"on a surface / on the table / on the wall / on the floor / on Main Street" },
-  { cat:"Hely: AT", hu:"'AT' — pontos helyen, címen, konkrét helynél.", en:"AT", example:"specific point / at home / at school / at the door / at 10 Main Street" },
-  { cat:"Hely különleges", hu:"Közlekedési eszközökben: busz/vonat/repülő → ON, autó/taxi → IN.", en:"ON a bus/train, IN a car", example:"I'm on the bus. / She's in a taxi." },
-  { cat:"Idő: IN", hu:"'IN' — hónapok, évek, évszakok, 'in the morning/afternoon/evening'.", en:"IN January, IN 2024, IN the morning", example:"in July / in 2024 / in winter / in the morning" },
-  { cat:"Idő: ON", hu:"'ON' — napok, dátumok, konkrét napok.", en:"ON Monday, ON July 4th, ON my birthday", example:"on Monday / on Christmas Day / on weekends" },
-  { cat:"Idő: AT", hu:"'AT' — pontos időpontok, ünnepek, 'at night'.", en:"AT 5 o'clock, AT Christmas, AT night", example:"at 3 PM / at midnight / at Easter / at lunchtime" },
-  { cat:"Mozgás", hu:"'to' mozgás célja felé, 'from' indulásnál.", en:"to / from", example:"I go to school. / I come from Hungary." },
-  { cat:"Magyar tipp", hu:"Figyelem: 'home' elé NEM kell 'to'! 'I go home' (NEM 'to home').", en:"'home'", example:"NO 'to' needed! / I go home. NEM: 'I go to home'." },
-  { cat:"Magyar tipp", hu:"Magyarban '-ban, -on, -nál' → angolban in/on/at. Az utcán = 'in the street' VAGY 'on the street'!", en:"HU: egy rag. EN: in/on/at.", example:"on Monday (magyar: hétfőn, nem 'hétfőben')" },
+  { cat:"Hely: IN", hu:"'IN' — zárt térben, országokban, városokban.", en:"IN — inside, countries, cities", example:"in the room / in Hungary / in Budapest", example_hu:"a szobában / Magyarországon / Budapesten" },
+  { cat:"Hely: ON", hu:"'ON' — felületen, utcákban, emeleten.", en:"ON — on a surface", example:"on the table / on the wall / on Main Street", example_hu:"az asztalon / a falon / a Main Streeten" },
+  { cat:"Hely: AT", hu:"'AT' — pontos helyen, címen, konkrét helynél.", en:"AT — specific point", example:"at home / at school / at the door", example_hu:"otthon / az iskolában / az ajtónál" },
+  { cat:"Hely különleges", hu:"Busz/vonat/repülő → ON, autó/taxi → IN.", en:"ON a bus/train, IN a car", example:"I'm on the bus. / She's in a taxi.", example_hu:"A buszon vagyok. / Taxiban van." },
+  { cat:"Idő: IN", hu:"'IN' — hónapok, évek, évszakok, 'in the morning/afternoon/evening'.", en:"IN January, IN 2024", example:"in July / in 2024 / in winter / in the morning", example_hu:"júliusban / 2024-ben / télen / reggel" },
+  { cat:"Idő: ON", hu:"'ON' — napok, dátumok, konkrét napok.", en:"ON Monday, ON July 4th", example:"on Monday / on Christmas Day / on weekends", example_hu:"hétfőn / karácsonykor / hétvégén" },
+  { cat:"Idő: AT", hu:"'AT' — pontos időpontok, ünnepek, 'at night'.", en:"AT 5 o'clock, AT Christmas, AT night", example:"at 3 PM / at midnight / at Easter", example_hu:"délután 3-kor / éjfélkor / húsvétkor" },
+  { cat:"Mozgás", hu:"'to' mozgás célja felé, 'from' indulásnál.", en:"to / from", example:"I go to school. / I come from Hungary.", example_hu:"Iskolába megyek. / Magyarországról jövök." },
+  { cat:"Magyar tipp", hu:"Figyelem: 'home' elé NEM kell 'to'! 'I go home' (NEM 'to home').", en:"'home' — no 'to'", example:"I go home.", example_hu:"Hazamegyek." },
+  { cat:"Magyar tipp", hu:"Magyarban '-ban, -on, -nál' → angolban in/on/at.", en:"HU: egy rag. EN: in/on/at.", example:"on Monday", example_hu:"hétfőn" },
 ];
 
 let studentName = '';
@@ -395,6 +407,15 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
   }
 
   // Reset flip state

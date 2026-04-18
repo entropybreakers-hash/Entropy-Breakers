@@ -105,31 +105,42 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: large rule + large example, symmetric & airy */
+/* Back: English rule (orange, bold) + example */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(26px,4vw,36px);
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:600;
-  line-height:1.2;
+  line-height:1.4;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.02em;
-  margin-bottom:24px;
-  text-align:center;
+  letter-spacing:-.01em;
+  margin-bottom:20px;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
   font-size:clamp(16px,2.6vw,20px);
-  font-weight:400;
+  font-weight:500;
   line-height:1.5;
   color:var(--cream);
   max-width:100%;
   letter-spacing:-.005em;
   text-align:center;
+  margin-bottom:12px;
 }
 .face-example::before{
   content:none;
+}
+.face-example-hu{
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(13px,2vw,16px);
+  font-weight:400;
+  font-style:italic;
+  line-height:1.5;
+  color:var(--dim);
+  max-width:100%;
+  letter-spacing:0;
+  text-align:center;
 }
 
 .flip-hint{
@@ -281,6 +292,7 @@ footer{
           <div class="face-label">Angolul</div>
           <div class="face-rule-en" id="face-en">—</div>
           <div class="face-example" id="face-example"></div>
+          <div class="face-example-hu" id="face-example-hu"></div>
           <div class="flip-hint">Koppints a visszafordításhoz</div>
         </div>
       </div>
@@ -336,16 +348,16 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Mikor használjuk", hu:"Most éppen folyó cselekvésre használjuk.", en:"Present Continuous", example:"happening NOW / I am reading a book. / She is cooking dinner." },
-  { cat:"Mikor használjuk", hu:"Időszakos cselekvésekre is (nem örökre).", en:"Temporary situations", example:"He is working in Vienna this month." },
-  { cat:"Szerkezet", hu:"Létige (am/is/are) + ige + '-ing'.", en:"be + verb-ING", example:"I am working. / She is studying. / They are running." },
-  { cat:"ING forma", hu:"Egyszerű igék: csak '-ing' hozzá.", en:"work → working / read → reading", example:"I am reading. / He is working." },
-  { cat:"ING forma", hu:"'-e' végű igék: az 'e' elmarad.", en:"make → making / write → writing", example:"She is making dinner. / I am writing a letter." },
-  { cat:"ING forma", hu:"Rövid, CVC (pl. run): utolsó betű duplázódik.", en:"run → running / sit → sitting", example:"The kids are running. / The cat is sitting." },
-  { cat:"Tagadás", hu:"Tagadás: létige + NOT + -ing alak.", en:"I am NOT working / She isn't working", example:"I'm not sleeping. / They aren't listening." },
-  { cat:"Kérdés", hu:"Kérdés: létige + alany + -ing alak.", en:"Are you working? / Is he sleeping?", example:"Are you coming? / Is she reading?" },
-  { cat:"Kulcsszavak", hu:"Jellemző időhatározók: now, right now, at the moment, today.", en:"now / right now / at the moment", example:"I'm working at the moment. / She's not here now." },
-  { cat:"Magyar tipp", hu:"Ha éppen most történik → ENNEK kell használni! 'I work' ≠ 'I am working'.", en:"I AM working = épp most. I work = általában.", example:"I'm working (most). / I work at a bank (általában)." },
+  { cat:"Mikor használjuk", hu:"Most éppen folyó cselekvésre használjuk.", en:"Present Continuous — happening NOW", example:"I am reading a book. / She is cooking dinner.", example_hu:"Könyvet olvasok. / Vacsorát főz." },
+  { cat:"Mikor használjuk", hu:"Időszakos cselekvésekre is (nem örökre).", en:"Temporary situations", example:"He is working in Vienna this month.", example_hu:"Ebben a hónapban Bécsben dolgozik." },
+  { cat:"Szerkezet", hu:"Létige (am/is/are) + ige + '-ing'.", en:"be + verb-ing", example:"I am working. / She is studying. / They are running.", example_hu:"Dolgozom. / Tanul. / Futnak." },
+  { cat:"ING forma", hu:"Egyszerű igék: csak '-ing' hozzá.", en:"work → working / read → reading", example:"I am reading. / He is working.", example_hu:"Olvasok. / Dolgozik." },
+  { cat:"ING forma", hu:"'-e' végű igék: az 'e' elmarad.", en:"make → making / write → writing", example:"She is making dinner. / I am writing a letter.", example_hu:"Vacsorát készít. / Levelet írok." },
+  { cat:"ING forma", hu:"Rövid, CVC ige (pl. run): utolsó betű duplázódik.", en:"run → running / sit → sitting", example:"The kids are running. / The cat is sitting.", example_hu:"A gyerekek futnak. / A macska ül." },
+  { cat:"Tagadás", hu:"Tagadás: létige + NOT + -ing alak.", en:"I am not working / She isn't working", example:"I'm not sleeping. / They aren't listening.", example_hu:"Nem alszom. / Nem figyelnek." },
+  { cat:"Kérdés", hu:"Kérdés: létige + alany + -ing alak.", en:"Are you working? / Is he sleeping?", example:"Are you coming? / Is she reading?", example_hu:"Jössz? / Olvas?" },
+  { cat:"Kulcsszavak", hu:"Jellemző időhatározók: now, right now, at the moment, today.", en:"now / right now / at the moment", example:"I'm working at the moment. / She's not here now.", example_hu:"Pillanatnyilag dolgozom. / Most nincs itt." },
+  { cat:"Magyar tipp", hu:"Ha éppen most történik → Present Continuous! 'I work' ≠ 'I am working'.", en:"I am working = épp most", example:"I'm working. / I work at a bank.", example_hu:"Éppen dolgozom (most). / Egy bankban dolgozom (általában)." },
 ];
 
 let studentName = '';
@@ -395,6 +407,15 @@ function renderCard() {
     exEl.style.display = '';
   } else {
     exEl.style.display = 'none';
+  }
+  const exHuEl = document.getElementById('face-example-hu');
+  if (exHuEl) {
+    if (card.example_hu && card.example_hu.trim() !== '') {
+      exHuEl.textContent = card.example_hu;
+      exHuEl.style.display = '';
+    } else {
+      exHuEl.style.display = 'none';
+    }
   }
 
   // Reset flip state
