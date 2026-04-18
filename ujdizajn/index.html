@@ -1118,6 +1118,20 @@ main{
 </div>
 
 <script>
+// DEBUG: Global error handler to catch silent failures
+window.addEventListener('error', function(e) {
+  console.error('GLOBAL ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+  // Show on screen temporarily
+  if (!document.getElementById('debug-err')) {
+    const errDiv = document.createElement('div');
+    errDiv.id = 'debug-err';
+    errDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c00;color:#fff;padding:10px;font-family:monospace;font-size:12px;z-index:9999;';
+    errDiv.textContent = 'JS ERROR: ' + e.message;
+    document.body.appendChild(errDiv);
+    setTimeout(() => errDiv.remove(), 10000);
+  }
+});
+
 const ACCESS_CODE = 'akademia2026';
 
 let studentName = '';
@@ -1131,18 +1145,28 @@ const LEVEL_LABELS = {
 };
 
 // Auto-read name + level from URL
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  const urlName = params.get('name');
-  const urlLevel = params.get('level');
-  if (urlName) {
-    studentName = decodeURIComponent(urlName);
-    showLevelSelect();
-    if (urlLevel && ['a2','b1','b2','c1'].includes(urlLevel.toLowerCase())) {
-      showLevel(urlLevel.toLowerCase());
+// Init after DOM is ready to be safe
+function initApp() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlName = params.get('name');
+    const urlLevel = params.get('level');
+    if (urlName) {
+      studentName = decodeURIComponent(urlName);
+      showLevelSelect();
+      if (urlLevel && ['a2','b1','b2','c1'].includes(urlLevel.toLowerCase())) {
+        showLevel(urlLevel.toLowerCase());
+      }
     }
+  } catch(err) {
+    console.error('Init error:', err);
   }
-})();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
 
 function login() {
   const nameInput = document.getElementById('name-input');
@@ -1191,28 +1215,32 @@ function switchScreen(screenId) {
 }
 
 function showLevelSelect() {
-  currentLevel = '';
-  switchScreen('screen-levels');
+  try {
+    currentLevel = '';
+    switchScreen('screen-levels');
 
-  // Top bar state
-  document.getElementById('back-icon').style.display = 'none';
-  document.getElementById('topbar-name').style.display = '';
-  document.getElementById('logout-btn').style.display = '';
-  document.getElementById('nav-name').textContent = studentName;
-  document.getElementById('select-name').textContent = studentName;
+    const backIcon = document.getElementById('back-icon');
+    if (backIcon) backIcon.style.display = 'none';
+    const topbarName = document.getElementById('topbar-name');
+    if (topbarName) topbarName.style.display = '';
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) logoutBtn.style.display = '';
+    const navName = document.getElementById('nav-name');
+    if (navName) navName.textContent = studentName;
+    const selectName = document.getElementById('select-name');
+    if (selectName) selectName.textContent = studentName;
 
-  // Bottom nav
-  // bottom-nav removed
-  document.querySelectorAll('.bn-btn').forEach(b => b.classList.remove('active'));
-
-  // Add ?name= to all module links
-  const encodedName = encodeURIComponent(studentName);
-  document.querySelectorAll('a.module').forEach(link => {
-    const href = link.getAttribute('href');
-    if (href && !href.includes('?name=')) {
-      link.setAttribute('href', href + '?name=' + encodedName);
-    }
-  });
+    // Add ?name= to all module links
+    const encodedName = encodeURIComponent(studentName);
+    document.querySelectorAll('a.module').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && !href.includes('?name=')) {
+        link.setAttribute('href', href + '?name=' + encodedName);
+      }
+    });
+  } catch(err) {
+    console.error('showLevelSelect error:', err);
+  }
 }
 
 const CATEGORY_LABELS = {
@@ -1224,41 +1252,45 @@ const CATEGORY_LABELS = {
 let currentCategory = '';
 
 function showLevel(level) {
-  currentLevel = level;
-  currentCategory = '';
-  switchScreen('screen-dashboard');
+  try {
+    currentLevel = level;
+    currentCategory = '';
+    switchScreen('screen-dashboard');
 
-  // Show only the selected section
-  document.querySelectorAll('.level-section').forEach(sec => {
-    sec.style.display = (sec.dataset.level === level) ? 'block' : 'none';
-  });
+    document.querySelectorAll('.level-section').forEach(sec => {
+      sec.style.display = (sec.dataset.level === level) ? 'block' : 'none';
+    });
 
-  // Back icon + label
-  document.getElementById('back-icon').style.display = '';
-  document.getElementById('dash-level-label').textContent = LEVEL_LABELS[level] || '';
-
-  // Bottom nav: active tab
+    const backIcon = document.getElementById('back-icon');
+    if (backIcon) backIcon.style.display = '';
+    const dashLabel = document.getElementById('dash-level-label');
+    if (dashLabel) dashLabel.textContent = LEVEL_LABELS[level] || '';
+  } catch(err) {
+    console.error('showLevel error:', err);
+  }
 }
 
 function showCategory(level, category) {
-  currentLevel = level;
-  currentCategory = category;
-  switchScreen('screen-category');
+  try {
+    currentLevel = level;
+    currentCategory = category;
+    switchScreen('screen-category');
 
-  // Show only the selected category section
-  document.querySelectorAll('.category-section').forEach(sec => {
-    const match = sec.dataset.level === level && sec.dataset.category === category;
-    sec.style.display = match ? 'block' : 'none';
-  });
+    document.querySelectorAll('.category-section').forEach(sec => {
+      const match = sec.dataset.level === level && sec.dataset.category === category;
+      sec.style.display = match ? 'block' : 'none';
+    });
 
-  // Labels
-  document.getElementById('cat-eyebrow').textContent = `${level.toUpperCase()} · ${CATEGORY_LABELS[category]}`;
-  document.getElementById('cat-title').textContent = CATEGORY_LABELS[category];
+    const eyebrow = document.getElementById('cat-eyebrow');
+    if (eyebrow) eyebrow.textContent = `${level.toUpperCase()} · ${CATEGORY_LABELS[category]}`;
+    const catTitle = document.getElementById('cat-title');
+    if (catTitle) catTitle.textContent = CATEGORY_LABELS[category];
 
-  // Back icon stays visible
-  document.getElementById('back-icon').style.display = '';
-
-  // Bottom nav: stay on the level
+    const backIcon = document.getElementById('back-icon');
+    if (backIcon) backIcon.style.display = '';
+  } catch(err) {
+    console.error('showCategory error:', err);
+  }
 }
 
 function backToLevels() {

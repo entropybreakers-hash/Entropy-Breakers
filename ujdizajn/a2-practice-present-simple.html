@@ -240,7 +240,7 @@ footer{
     </div>
 
     <div class="action-row">
-      <button class="action-btn primary" id="next-btn" onclick="submitAnswer()">Tovább →</button>
+      <button class="action-btn primary" id="next-btn" onclick="submitAnswer()">Tovább</button>
       <button class="action-btn secondary" onclick="showResult()">Befejezés</button>
     </div>
   </div>
@@ -271,6 +271,11 @@ footer{
 </footer>
 
 <script>
+// Global error handler
+window.addEventListener('error', function(e) {
+  console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
 
 const MODULE_META = {
@@ -378,7 +383,7 @@ function renderQuestion() {
     area.appendChild(wrap);
   }
 
-  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább →';
+  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább';
 }
 
 function selectOption(btn, value) {
