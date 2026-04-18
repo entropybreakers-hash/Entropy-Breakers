@@ -105,37 +105,31 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: English rule (orange, bold) + example */
+/* Back: large rule + large example, symmetric & airy */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(16px,2.5vw,20px);
+  font-size:clamp(26px,4vw,36px);
   font-weight:600;
-  line-height:1.4;
+  line-height:1.2;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.01em;
-  margin-bottom:20px;
+  letter-spacing:-.02em;
+  margin-bottom:24px;
+  text-align:center;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
-  font-size:13px;
+  font-size:clamp(16px,2.6vw,20px);
+  font-weight:400;
+  line-height:1.5;
+  color:var(--cream);
   max-width:100%;
-  line-height:1.55;
-  color:var(--cream2);
-  padding:12px 14px;
-  background:var(--bg);
-  border-radius:4px;
-  border-left:3px solid var(--orange);
-  margin-top:8px;
-  text-align:left;
+  letter-spacing:-.005em;
+  text-align:center;
 }
 .face-example::before{
-  content:'Példa:';
-  display:block;
-  font-size:9px;font-weight:600;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--orange);
-  margin-bottom:4px;
+  content:none;
 }
 
 .flip-hint{
@@ -255,7 +249,7 @@ footer{
   <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
   <div class="nav-right">
     <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
-    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
+    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
   </div>
 </nav>
 
@@ -316,7 +310,7 @@ footer{
 
     <div class="action-row">
       <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
-      <a class="action-btn primary" href="a2-practice-future.html" id="practice-link">Gyakorlat</a>
+      <a class="action-btn primary" href="a2-practice-future.html" id="practice-link">Gyakorlat →</a>
     </div>
   </div>
 </main>
@@ -343,11 +337,11 @@ const MODULE_META = {
 
 const CARDS = [
   { cat:"Két jövő forma", hu:"Két fő jövő forma van: 'will' és 'going to' — MÁS a jelentésük!", en:"will vs. going to", example:"I will help. (azonnali döntés) / I'm going to help. (terv)" },
-  { cat:"Will — mikor", hu:"'Will' → pillanatnyi döntés, ígéret, jóslás.", en:"will — on-the-spot decisions, promises", example:"OK, I will call him. / I promise I will come." },
+  { cat:"Will — mikor", hu:"'Will' → pillanatnyi döntés, ígéret, jóslás.", en:"will", example:"on-the-spot decisions, promises / OK, I will call him. / I promise I will come." },
   { cat:"Will — szerkezet", hu:"Alany + will + ige alapalakja.", en:"I will work / She will come", example:"I will help you. / They will arrive soon." },
   { cat:"Will — rövidítés", hu:"'I will' → 'I'll', 'he will' → 'he'll' stb.", en:"I'll / you'll / he'll / we'll / they'll", example:"I'll call you. / She'll be there." },
   { cat:"Will — tagadás", hu:"Tagadás: won't (will not).", en:"won't = will not", example:"I won't forget. / She won't come." },
-  { cat:"Going to — mikor", hu:"'Going to' → előre eltervezett jövőbeli cselekvés.", en:"going to — planned future", example:"I'm going to visit my mom tomorrow." },
+  { cat:"Going to — mikor", hu:"'Going to' → előre eltervezett jövőbeli cselekvés.", en:"going to", example:"planned future / I'm going to visit my mom tomorrow." },
   { cat:"Going to — szerkezet", hu:"Létige (am/is/are) + going to + ige alapalakja.", en:"be + going to + verb", example:"I am going to study. / She is going to travel." },
   { cat:"Going to — tagadás", hu:"Tagadás: be + NOT + going to.", en:"I'm not going to / She isn't going to", example:"I'm not going to come. / They aren't going to wait." },
   { cat:"Jelek/bizonyítékok", hu:"'Going to' jövőbeli történésekre is, ha van bizonyíték.", en:"Future based on present evidence", example:"Look at the clouds! It's going to rain." },

@@ -105,37 +105,31 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   letter-spacing:-.01em;
 }
 
-/* Back: English rule (orange, bold) + example */
+/* Back: large rule + large example, symmetric & airy */
 .face-rule-en{
   font-family:'DM Sans',sans-serif;
-  font-size:clamp(16px,2.5vw,20px);
+  font-size:clamp(26px,4vw,36px);
   font-weight:600;
-  line-height:1.4;
+  line-height:1.2;
   color:var(--orange);
   max-width:100%;
-  letter-spacing:-.01em;
-  margin-bottom:20px;
+  letter-spacing:-.02em;
+  margin-bottom:24px;
+  text-align:center;
 }
 
 .face-example{
   font-family:'DM Sans',sans-serif;
-  font-size:13px;
+  font-size:clamp(16px,2.6vw,20px);
+  font-weight:400;
+  line-height:1.5;
+  color:var(--cream);
   max-width:100%;
-  line-height:1.55;
-  color:var(--cream2);
-  padding:12px 14px;
-  background:var(--bg);
-  border-radius:4px;
-  border-left:3px solid var(--orange);
-  margin-top:8px;
-  text-align:left;
+  letter-spacing:-.005em;
+  text-align:center;
 }
 .face-example::before{
-  content:'Példa:';
-  display:block;
-  font-size:9px;font-weight:600;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--orange);
-  margin-bottom:4px;
+  content:none;
 }
 
 .flip-hint{
@@ -255,7 +249,7 @@ footer{
   <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
   <div class="nav-right">
     <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
-    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
+    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
   </div>
 </nav>
 
@@ -316,7 +310,7 @@ footer{
 
     <div class="action-row">
       <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
-      <a class="action-btn primary" href="a2-practice-prepositions.html" id="practice-link">Gyakorlat</a>
+      <a class="action-btn primary" href="a2-practice-prepositions.html" id="practice-link">Gyakorlat →</a>
     </div>
   </div>
 </main>
@@ -342,15 +336,15 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Hely: IN", hu:"'IN' — zárt térben, országokban, városokban.", en:"IN — inside, countries, cities", example:"in the room / in Hungary / in Budapest / in the car" },
-  { cat:"Hely: ON", hu:"'ON' — felületen, utcákban, emeleten.", en:"ON — on a surface", example:"on the table / on the wall / on the floor / on Main Street" },
-  { cat:"Hely: AT", hu:"'AT' — pontos helyen, címen, konkrét helynél.", en:"AT — specific point", example:"at home / at school / at the door / at 10 Main Street" },
+  { cat:"Hely: IN", hu:"'IN' — zárt térben, országokban, városokban.", en:"IN", example:"inside, countries, cities / in the room / in Hungary / in Budapest / in the car" },
+  { cat:"Hely: ON", hu:"'ON' — felületen, utcákban, emeleten.", en:"ON", example:"on a surface / on the table / on the wall / on the floor / on Main Street" },
+  { cat:"Hely: AT", hu:"'AT' — pontos helyen, címen, konkrét helynél.", en:"AT", example:"specific point / at home / at school / at the door / at 10 Main Street" },
   { cat:"Hely különleges", hu:"Közlekedési eszközökben: busz/vonat/repülő → ON, autó/taxi → IN.", en:"ON a bus/train, IN a car", example:"I'm on the bus. / She's in a taxi." },
   { cat:"Idő: IN", hu:"'IN' — hónapok, évek, évszakok, 'in the morning/afternoon/evening'.", en:"IN January, IN 2024, IN the morning", example:"in July / in 2024 / in winter / in the morning" },
   { cat:"Idő: ON", hu:"'ON' — napok, dátumok, konkrét napok.", en:"ON Monday, ON July 4th, ON my birthday", example:"on Monday / on Christmas Day / on weekends" },
   { cat:"Idő: AT", hu:"'AT' — pontos időpontok, ünnepek, 'at night'.", en:"AT 5 o'clock, AT Christmas, AT night", example:"at 3 PM / at midnight / at Easter / at lunchtime" },
   { cat:"Mozgás", hu:"'to' mozgás célja felé, 'from' indulásnál.", en:"to / from", example:"I go to school. / I come from Hungary." },
-  { cat:"Magyar tipp", hu:"Figyelem: 'home' elé NEM kell 'to'! 'I go home' (NEM 'to home').", en:"'home' — NO 'to' needed!", example:"I go home. NEM: 'I go to home'." },
+  { cat:"Magyar tipp", hu:"Figyelem: 'home' elé NEM kell 'to'! 'I go home' (NEM 'to home').", en:"'home'", example:"NO 'to' needed! / I go home. NEM: 'I go to home'." },
   { cat:"Magyar tipp", hu:"Magyarban '-ban, -on, -nál' → angolban in/on/at. Az utcán = 'in the street' VAGY 'on the street'!", en:"HU: egy rag. EN: in/on/at.", example:"on Monday (magyar: hétfőn, nem 'hétfőben')" },
 ];
 
