@@ -6,7 +6,7 @@
 <title>Család · A2 | Entropy Breakers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -26,7 +26,7 @@ html{scroll-behavior:smooth}
 }
 
 body{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   background:var(--bg);
   color:var(--cream);
   min-height:100vh;
@@ -72,7 +72,7 @@ nav{
 }
 .nav-btn:hover{border-color:var(--orange);color:var(--orange)}
 .nav-btn-arrow{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:16px;font-weight:300;
 }
 
@@ -101,7 +101,7 @@ main{
   margin-bottom:12px;
 }
 .module-title{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(26px,4vw,34px);
   font-weight:500;line-height:1.1;
   letter-spacing:-.03em;color:var(--cream);
@@ -173,7 +173,7 @@ main{
 }
 
 .face-word{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(22px,3.5vw,30px);
   font-weight:500;line-height:1.1;
   letter-spacing:-.03em;
@@ -184,7 +184,7 @@ main{
 .flip-back .face-word{color:var(--orange)}
 
 .face-example{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:11px;
   max-width:100%;
   line-height:1.45;
@@ -218,7 +218,7 @@ main{
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;transition:all .3s;
   color:var(--cream);
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:16px;font-weight:400;
 }
 .arrow-btn:hover{
@@ -279,7 +279,7 @@ main{
   margin-bottom:24px;
 }
 .result-title{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(28px,4vw,38px);
   font-weight:500;line-height:1.1;
   letter-spacing:-.03em;color:var(--cream);
@@ -287,7 +287,7 @@ main{
 }
 .result-name{color:var(--orange);font-weight:500}
 .result-subtitle{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:15px;color:var(--cream2);
   margin-bottom:32px;line-height:1.5;
 }
@@ -298,7 +298,7 @@ main{
   padding:32px 24px;margin-bottom:28px;
 }
 .result-number{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:clamp(60px,10vw,96px);
   font-weight:600;color:var(--orange);
   line-height:1;letter-spacing:-.04em;
@@ -309,7 +309,7 @@ main{
   margin-top:10px;
 }
 .result-feedback{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:16px;
   color:var(--cream2);margin-top:18px;
   max-width:360px;margin-left:auto;margin-right:auto;
@@ -337,7 +337,7 @@ footer{
   font-weight:600;letter-spacing:.24em;
 }
 .footer-tagline{
-  font-family:'Inter',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:11px;color:#c8c1b8;font-weight:500;
   letter-spacing:.2em;text-transform:uppercase;
 }
@@ -371,7 +371,7 @@ footer{
   <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
   <div class="nav-right">
     <span class="nav-greeting">Szia, <b id="nav-name">—</b></span>
-    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
+    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
   </div>
 </nav>
 
@@ -408,9 +408,9 @@ footer{
     </div>
 
     <div class="nav-row">
-      <button class="arrow-btn" id="prev-btn" onclick="prevCard()" aria-label="Előző">←</button>
+      <button class="arrow-btn" id="prev-btn" onclick="prevCard()" aria-label="Előző">Előző</button>
       <span class="nav-hint">Kattints a kártyára</span>
-      <button class="arrow-btn" id="next-btn" onclick="nextCard()" aria-label="Következő">→</button>
+      <button class="arrow-btn" id="next-btn" onclick="nextCard()" aria-label="Következő">Következő</button>
     </div>
 
     <div class="action-row">
@@ -472,10 +472,11 @@ const CARDS = [
   { cat:"Kapcsolatok", hu:"Pár / Társ", en:"Partner", example:"My partner and I met at university." },
   { cat:"Kapcsolatok", hu:"Férj", en:"Husband", example:"Her husband cooks dinner every evening." },
   { cat:"Kapcsolatok", hu:"Feleség", en:"Wife", example:"His wife is a doctor." },
-  { cat:"Kapcsolatok", hu:"Szomszéd", en:"Neighbour", example:"Our neighbours are very friendly." },
+  { cat:"Kapcsolatok", hu:"Szomszéd", en:"Neighbor", example:"Our neighbors are very friendly." },
   { cat:"Kapcsolatok", hu:"Ismerős", en:"Acquaintance", example:"He is just an acquaintance, not a close friend." },
   { cat:"Kapcsolatok", hu:"Kolléga", en:"Colleague", example:"I have lunch with my colleagues every day." },
   { cat:"Kapcsolatok", hu:"Osztálytárs", en:"Classmate", example:"My classmates are very supportive." },
+  { cat:"Kapcsolatok", hu:"Lakótárs", en:"Roommate", example:"My roommate and I get along really well." },
   { cat:"Kapcsolati igék", hu:"Szeret", en:"Love", example:"I love spending time with my family." },
   { cat:"Kapcsolati igék", hu:"Gondoskodik", en:"Take care of", example:"She takes care of her elderly parents." },
   { cat:"Kapcsolati igék", hu:"Segít", en:"Help", example:"My brother always helps me when I need it." },
@@ -526,9 +527,10 @@ let isFlipped = false;
   }
   document.getElementById('nav-name').textContent = studentName;
 
-  // Preserve name on back link
+  // Preserve name on back link, and include level so dashboard returns to same section
   const nameParam = '?name=' + encodeURIComponent(studentName);
-  document.getElementById('back-link').setAttribute('href', 'index.html' + nameParam);
+  const backParam = nameParam + '&level=a2';
+  document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
   document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
 
   renderCard();
