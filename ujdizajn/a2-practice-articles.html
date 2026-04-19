@@ -632,10 +632,45 @@ async function fetchAIFeedback(payload) {
       throw new Error('HTTP ' + response.status);
     }
 
-    const data = await response.json();
-    const aiText = data.ai_feedback || '';
+    // Read as raw text first (don't assume JSON)
+    const rawText = await response.text();
+    let aiText = '';
 
-    if (!aiText.trim()) {
+    // Try parsing as JSON first (ideal case)
+    try {
+      const data = JSON.parse(rawText);
+      if (data && typeof data.ai_feedback === 'string') {
+        aiText = data.ai_feedback;
+      }
+    } catch (jsonErr) {
+      // JSON broken (likely due to unescaped quotes/newlines in AI text)
+      // Fallback 1: try to extract ai_feedback value using a loose regex
+      const match = rawText.match(/"ai_feedback"\s*:\s*"([\s\S]*?)"\s*\}?\s*$/);
+      if (match && match[1]) {
+        aiText = match[1];
+      } else {
+        // Fallback 2: if the response is just plain text (no JSON wrapping), use it directly
+        // Strip potential wrapping like {"status":"ok","ai_feedback":" and trailing "}
+        let cleaned = rawText
+          .replace(/^\s*\{[^"]*"ai_feedback"\s*:\s*"?/, '')
+          .replace(/"?\s*\}\s*$/, '')
+          .trim();
+        if (cleaned.length > 20 && !cleaned.startsWith('{')) {
+          aiText = cleaned;
+        }
+      }
+    }
+
+    // Unescape common sequences
+    if (aiText) {
+      aiText = aiText
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    if (!aiText) {
       throw new Error('empty response');
     }
 
