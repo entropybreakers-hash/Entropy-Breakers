@@ -6,736 +6,746 @@
 <title>A2 - Verb Test | Entropy Breakers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-
 :root{
-  --bg:#ffffff;
-  --bg2:#faf8f3;
-  --bg3:#f0ebe3;
-  --cream:#1a1612;
-  --cream2:#5a5248;
-  --dim:#8a8075;
-  --dimmer:#b5aa9a;
-  --orange:#c9671f;
-  --orange2:#a85418;
-  --border:rgba(26,22,18,0.06);
-  --border2:rgba(26,22,18,0.12);
+  --bg:#ffffff;--bg2:#faf8f3;--bg3:#f0ebe3;
+  --cream:#1a1612;--cream2:#5a5248;--dim:#8a8075;--dimmer:#b5aa9a;
+  --orange:#c9671f;--orange2:#a85418;
+  --border:rgba(26,22,18,0.06);--border2:rgba(26,22,18,0.12);
+  --red:#b23a2e;--red-bg:rgba(178,58,46,0.06);
+  --green:#2e7d57;--green-bg:rgba(46,125,87,0.06);
 }
-
 body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--cream);
-  min-height:100vh;
-  display:flex;flex-direction:column;
-  -webkit-font-smoothing:antialiased;
-  line-height:1.5;
+  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);
+  min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;line-height:1.5;
 }
-
 .accent{color:var(--orange);font-weight:500}
-
-/* ───── NAV ───── */
 nav{
   height:56px;padding:0 40px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
-  background:#0a0806;
-  border-bottom:1px solid rgba(240,235,227,0.08);
+  background:#0a0806;border-bottom:1px solid rgba(240,235,227,0.08);
 }
 .logo{
-  font-size:11px;font-weight:500;letter-spacing:.24em;
-  text-transform:uppercase;color:#f0ebe3;
-  display:flex;align-items:baseline;gap:5px;
-  text-decoration:none;
+  font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+  color:#f0ebe3;display:flex;align-items:baseline;gap:5px;text-decoration:none;
 }
-.logo .accent{
-  color:var(--orange);
-  font-weight:600;letter-spacing:.24em;
-}
+.logo .accent{color:var(--orange);font-weight:600;letter-spacing:.24em}
 .nav-right{display:flex;align-items:center;gap:20px}
-.nav-greeting{
-  font-size:11px;letter-spacing:.14em;
-  text-transform:uppercase;color:#c8c1b8;
-}
-.nav-greeting b{color:var(--orange);font-weight:500}
+.nav-greeting{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c8c1b8}
+.nav-greeting .name{color:#f0ebe3;font-weight:500}
 .nav-btn{
-  font-size:10px;font-weight:500;letter-spacing:.18em;
-  text-transform:uppercase;color:#f0ebe3;
-  background:transparent;
-  border:1px solid rgba(240,235,227,0.14);
-  padding:8px 18px;border-radius:60px;
-  cursor:pointer;transition:all .3s;
-  font-family:inherit;text-decoration:none;
   display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:#f0ebe3;text-decoration:none;padding:8px 18px;
+  border:1px solid rgba(240,235,227,0.24);border-radius:60px;
+  transition:all .2s;
 }
 .nav-btn:hover{border-color:var(--orange);color:var(--orange)}
-.nav-btn-arrow{
-  font-family:'Inter',sans-serif;
-  font-size:16px;font-weight:300;
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.module-frame{width:100%;max-width:520px;display:flex;flex-direction:column;gap:20px}
+.module-head{text-align:center}
+.module-title{
+  font-family:'DM Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);
+  font-weight:600;letter-spacing:-.025em;line-height:1.2;
 }
+.progress-wrap{max-width:440px;margin:0 auto;width:100%}
+.progress-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px;
+}
+.progress-track{width:100%;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
 
-/* ───── MAIN ───── */
-main{
-  flex:1;display:flex;align-items:center;justify-content:center;
-  padding:32px 24px;
+/* ───── QUIZ CARD ───── */
+.quiz-card{
+  width:100%;max-width:520px;margin:0 auto;
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:28px 24px;
+  display:flex;flex-direction:column;gap:18px;
 }
+.quiz-question{
+  font-size:17px;
+  font-weight:500;
+  line-height:1.4;
+  color:var(--cream);
+  letter-spacing:-.01em;
+}
+/* Fill-in input */
+.quiz-fill-wrap{margin-top:6px}
+.quiz-fill-input{
+  width:100%;
+  padding:14px 16px;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--cream);
+  background:var(--bg);
+  border:1.5px solid var(--border2);
+  border-radius:8px;
+  outline:none;
+  transition:all .15s;
+}
+.quiz-fill-input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
+/* Choice options */
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{
+  padding:13px 16px;
+  background:var(--bg);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .15s;
+  font-size:14px;
+  font-weight:500;
+  color:var(--cream);
+  text-align:left;
+  font-family:inherit;
+  line-height:1.4;
+}
+.quiz-option:hover{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.04);
+}
+.quiz-option.selected{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.08);
+  color:var(--orange);
+}
+.quiz-option.locked{pointer-events:none;opacity:.6}
+.quiz-option.selected.locked{opacity:1}
 
-/* ───── MODULE HEADER (compact) ───── */
-.module-frame{
-  width:100%;max-width:480px;
-  display:flex;flex-direction:column;gap:20px;
+/* ───── ACTION BUTTONS ───── */
+.action-row{
+  display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%;
 }
+.action-btn{
+  flex:1;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:14px 20px;border-radius:60px;
+  cursor:pointer;transition:all .2s;
+  border:1px solid var(--border2);
+}
+.action-btn.secondary{background:var(--bg);color:var(--cream)}
+.action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
+.action-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
+.action-btn:disabled{opacity:.4;cursor:not-allowed}
 
-.module-head{
-  text-align:center;
-}
-.module-badge{
+/* ───── RESULT SCREEN ───── */
+.result-screen{display:none;max-width:620px;margin:0 auto;width:100%}
+.result-screen.active{display:block;animation:fadeUp .5s ease both}
+.result-head{text-align:center;margin-bottom:24px}
+.result-badge{
   display:inline-block;
   font-size:10px;font-weight:500;letter-spacing:.24em;
   text-transform:uppercase;color:var(--orange);
   padding:5px 14px;border-radius:60px;
   border:1px solid rgba(201,103,31,0.3);
   background:rgba(201,103,31,0.05);
-  margin-bottom:12px;
-}
-.module-title{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(26px,4vw,34px);
-  font-weight:500;line-height:1.1;
-  letter-spacing:-.03em;color:var(--cream);
-}
-.module-subtitle{
-  font-size:12px;color:var(--cream2);
-  margin-top:6px;letter-spacing:.02em;
-}
-
-/* ───── PROGRESS ───── */
-.progress-wrap{max-width:380px;margin:0 auto;width:100%}
-.progress-row{
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:8px;
-}
-.progress-row .category{
-  color:var(--cream2);font-weight:500;
-  max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.progress-track{
-  width:100%;height:2px;
-  background:var(--border);border-radius:999px;overflow:hidden;
-}
-.progress-fill{
-  height:100%;background:var(--orange);
-  transition:width .5s cubic-bezier(.2,.8,.2,1);
-}
-
-/* ───── FLIP CARD ───── */
-.flip-container{
-  perspective:1200px;
-  width:100%;max-width:460px;
-  margin:0 auto;
-  height:220px;
-  cursor:pointer;
-}
-.flip-inner{
-  position:relative;width:100%;height:100%;
-  transition:transform .6s cubic-bezier(.2,.8,.2,1);
-  transform-style:preserve-3d;
-}
-.flip-inner.is-flipped{transform:rotateY(180deg)}
-
-.flip-face{
-  position:absolute;inset:0;
-  backface-visibility:hidden;
-  border-radius:6px;
-  padding:24px 22px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;
-}
-.flip-front{
-  background:var(--bg2);
-  border:1px solid var(--border2);
-}
-.flip-back{
-  background:var(--bg2);
-  border:1px solid var(--border2);
-  transform:rotateY(180deg);
-}
-
-.face-label{
-  font-size:8px;font-weight:500;letter-spacing:.3em;
-  text-transform:uppercase;
-  margin-bottom:10px;
-  color:var(--dim);
-}
-
-.face-word{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(16px,2.5vw,20px);
-  font-weight:500;line-height:1.3;
-  letter-spacing:-.02em;
-  max-width:100%;
-  word-wrap:break-word;
-}
-.flip-front .face-word{color:var(--cream)}
-.flip-back .face-word{color:var(--orange)}
-
-.face-example{
-  font-family:'Inter',sans-serif;
-  font-size:11px;
-  max-width:100%;
-  line-height:1.45;
-  color:var(--cream2);
-  position:absolute;
-  bottom:14px;left:16px;right:16px;
-  padding:0 8px;
-}
-.face-example::before,.face-example::after{
-  content:'"';color:var(--orange);
-  font-size:14px;
-}
-
-.flip-hint{
-  position:absolute;bottom:10px;left:0;right:0;
-  font-size:8px;font-weight:500;letter-spacing:.24em;
-  text-transform:uppercase;opacity:.4;
-  color:var(--dim);
-}
-
-/* ───── TEST CARD (verb-card) ───── */
-.verb-card{
-  width:100%;max-width:460px;margin:0 auto;
-  background:var(--bg2);
-  border:1px solid var(--border2);
-  border-radius:6px;
-  padding:40px 32px 36px;
-  text-align:center;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  min-height:200px;
-  gap:24px;
-}
-.verb-hu{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(22px,3.5vw,30px);
-  font-weight:500;line-height:1.2;
-  letter-spacing:-.03em;
-  color:var(--cream);
-  word-wrap:break-word;
-  max-width:100%;
-}
-.phrase-test-row{
-  width:100%;max-width:340px;margin:0 auto;
-}
-.phrase-input{
-  width:100%;
-  font-family:'Inter',sans-serif;
-  font-size:15px;font-weight:500;
-  color:var(--cream);
-  background:transparent;
-  border:none;
-  border-bottom:1px solid var(--border2);
-  border-radius:0;
-  text-align:center;
-  padding:10px 8px;
-  outline:none;
-  transition:all .2s;
-  letter-spacing:.01em;
-}
-.phrase-input::placeholder{
-  color:var(--dim);font-weight:400;
-  font-style:normal;letter-spacing:.05em;
-  text-transform:uppercase;font-size:11px;
-}
-.phrase-input:focus{
-  border-bottom-color:var(--orange);
-  border-bottom-width:2px;
-  padding-bottom:9px;
-}
-.phrase-input:disabled{cursor:default}
-.phrase-input.correct{
-  color:#2d8659;
-  border-bottom-color:#2d8659;
-}
-.phrase-input.wrong{
-  color:#b73434;
-  border-bottom-color:#b73434;
-}
-.phrase-answer{
-  font-family:'Inter',sans-serif;
-  font-size:13px;font-weight:500;
-  text-align:center;
-  color:var(--dim);
-  min-height:18px;
-  margin-top:10px;
-  letter-spacing:-.01em;
-}
-.phrase-answer.show{color:var(--orange)}
-
-/* ───── NAV BUTTONS ───── */
-.nav-row{
-  display:flex;align-items:center;justify-content:center;
-  gap:16px;max-width:380px;margin:0 auto;width:100%;
-}
-.arrow-btn{
-  width:38px;height:38px;flex-shrink:0;
-  background:transparent;
-  border:1px solid var(--border2);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .3s;
-  color:var(--cream);
-  font-family:'Inter',sans-serif;
-  font-size:16px;font-weight:400;
-}
-.arrow-btn:hover{
-  border-color:var(--orange);
-  color:var(--orange);
-}
-.arrow-btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
-
-.nav-hint{
-  flex:1;text-align:center;
-  font-size:10px;font-weight:500;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--dim);
-}
-
-/* ───── ACTION BUTTONS ───── */
-.action-row{
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;
-  max-width:380px;margin:0 auto;width:100%;
-}
-.action-row.action-row-3{
-  grid-template-columns:1fr 1fr 1fr;
-  max-width:480px;
-}
-.action-btn{
-  padding:12px 18px;
-  font-size:10px;font-weight:500;letter-spacing:.2em;
-  text-transform:uppercase;
-  font-family:inherit;
-  border-radius:4px;
-  cursor:pointer;transition:all .3s;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.action-btn.secondary{
-  background:transparent;
-  border:1px solid var(--border2);
-  color:var(--cream);
-}
-.action-btn.secondary:hover{
-  border-color:var(--orange);color:var(--orange);
-}
-.action-btn.primary{
-  background:var(--orange);
-  border:1px solid var(--orange);
-  color:#fff;
-}
-.action-btn.primary:hover{
-  background:var(--orange2);border-color:var(--orange2);
-}
-
-/* ───── RESULT SCREEN ───── */
-.result-screen{
-  display:none;text-align:center;width:100%;max-width:560px;
-}
-.result-screen.active{display:block;animation:fadeUp .6s ease both}
-.result-badge{
-  display:inline-block;
-  font-size:10px;font-weight:500;letter-spacing:.3em;
-  text-transform:uppercase;color:var(--orange);
-  padding:6px 16px;border-radius:60px;
-  border:1px solid rgba(201,103,31,0.3);
-  background:rgba(201,103,31,0.05);
-  margin-bottom:24px;
+  margin-bottom:20px;
 }
 .result-title{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(28px,4vw,38px);
-  font-weight:500;line-height:1.1;
-  letter-spacing:-.03em;color:var(--cream);
-  margin-bottom:14px;
+  font-family:'DM Sans',sans-serif;font-size:clamp(26px,4vw,38px);
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:8px;
 }
-.result-name{color:var(--orange);font-weight:500}
-.result-subtitle{
-  font-family:'Inter',sans-serif;
-  font-size:15px;color:var(--cream2);
-  margin-bottom:32px;line-height:1.5;
+.result-subtitle{color:var(--cream2);font-size:13px;line-height:1.5}
+
+/* Score card */
+.result-score{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+  padding:28px 24px;margin-bottom:24px;text-align:center;
 }
-.result-stats{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:32px 24px;margin-bottom:28px;
+.result-score-number{
+  font-size:clamp(44px,6vw,64px);font-weight:500;
+  color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
 }
-.result-number{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(60px,10vw,96px);
-  font-weight:600;color:var(--orange);
-  line-height:1;letter-spacing:-.04em;
-}
-.result-meta{
-  font-size:10px;letter-spacing:.24em;
+.result-score-number .dim{color:var(--dimmer);font-size:.65em}
+.result-score-meta{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
   text-transform:uppercase;color:var(--dim);
-  margin-top:10px;
-}
-.result-feedback{
-  font-family:'Inter',sans-serif;
-  font-size:16px;
-  color:var(--cream2);margin-top:18px;
-  max-width:360px;margin-left:auto;margin-right:auto;
-  line-height:1.45;
 }
 
-/* ───── FOOTER ───── */
+/* Section headers */
+.result-section{margin-bottom:24px}
+.result-section-head{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
+  padding:16px 0 12px;
+  display:flex;align-items:center;gap:10px;
+}
+.result-section-head::before,
+.result-section-head::after{
+  content:'';flex:1;height:1px;background:var(--border2);
+}
+.result-section-head::before{max-width:40px}
+
+/* Mistake list */
+.mistake-list{display:flex;flex-direction:column;gap:10px}
+.mistake-item{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--red);
+  border-radius:8px;
+  padding:16px 18px;
+}
+.mistake-num{
+  font-size:10px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+}
+.mistake-q{
+  font-size:14px;font-weight:500;color:var(--cream);
+  margin-bottom:12px;line-height:1.5;
+}
+.mistake-row{
+  display:flex;gap:10px;margin-bottom:6px;
+  font-size:13px;line-height:1.5;
+}
+.mistake-label{
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim);
+  min-width:90px;flex-shrink:0;padding-top:2px;
+}
+.mistake-val-wrong{color:var(--red);font-weight:500}
+.mistake-val-right{color:var(--green);font-weight:500}
+.mistake-tip{
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border);
+  font-size:13px;color:var(--cream2);
+  line-height:1.55;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.mistake-tip::before{
+  content:'💡';flex-shrink:0;font-size:14px;
+}
+
+/* Perfect result */
+.perfect-card{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--green);
+  border-radius:8px;
+  padding:22px 20px;
+  text-align:center;
+}
+.perfect-icon{font-size:32px;margin-bottom:10px;line-height:1}
+.perfect-text{font-size:14px;color:var(--cream);line-height:1.5;font-weight:500}
+
+/* AI Feedback card */
+.ai-card{
+  background:linear-gradient(165deg, rgba(201,103,31,0.04) 0%, var(--bg2) 60%);
+  border:1px solid rgba(201,103,31,0.22);
+  border-radius:10px;
+  padding:26px 24px;
+  min-height:80px;
+}
+.ai-label{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.ai-label::before{
+  content:'✦';font-size:13px;
+}
+.ai-loading{
+  display:flex;align-items:center;gap:12px;
+  color:var(--cream2);font-size:14px;
+}
+.ai-spinner{
+  width:18px;height:18px;
+  border:2px solid var(--border2);
+  border-top-color:var(--orange);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  flex-shrink:0;
+}
+.ai-text{
+  font-size:15px;color:var(--cream);line-height:1.7;
+  white-space:pre-wrap;
+}
+.ai-error{
+  color:var(--cream2);font-size:13.5px;line-height:1.6;
+}
+
+/* Result actions */
+.result-actions{
+  display:flex;gap:10px;max-width:440px;margin:32px auto 0;width:100%;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.module-frame{animation:fadeUp .5s ease both}
+
 footer{
-  background:#0a0806;
-  padding:24px 40px;flex-shrink:0;
-  border-top:1px solid rgba(240,235,227,0.08);
+  background:#0a0806;padding:24px 40px;margin-top:auto;
+  border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
 }
 .footer-inner{
-  max-width:980px;margin:0 auto;
+  max-width:1000px;margin:0 auto;
   display:flex;align-items:center;justify-content:space-between;
-  gap:24px;flex-wrap:wrap;
+  flex-wrap:wrap;gap:12px;
 }
-.footer-brand{
-  font-size:11px;font-weight:500;letter-spacing:.24em;
-  text-transform:uppercase;color:#f0ebe3;
-  display:flex;align-items:baseline;gap:5px;
-}
-.footer-brand .accent{
-  color:var(--orange);
-  font-weight:600;letter-spacing:.24em;
-}
-.footer-tagline{
-  font-family:'Inter',sans-serif;
-  font-size:11px;color:#c8c1b8;font-weight:500;
-  letter-spacing:.2em;text-transform:uppercase;
-}
+.footer-brand{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:#f0ebe3}
+.footer-brand .accent{color:var(--orange);font-weight:600}
+.footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
+.footer-tagline .accent{color:var(--orange)}
 
-/* ───── ANIMATIONS ───── */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.module-frame.active{animation:fadeUp .5s ease both}
-
-/* ───── MOBILE ───── */
-@media (max-width:640px){
-  nav{padding:0 20px;height:52px}
-  .nav-greeting{display:none}
-  main{padding:20px 16px}
+@media(max-width:560px){
+  nav{padding:0 20px}
+  main{padding:24px 16px}
   .module-frame{gap:16px}
-  .flip-container{height:180px;max-width:320px}
-  .flip-face{padding:20px 18px}
-  .face-word{font-size:clamp(20px,5vw,26px)}
-  .face-example{font-size:11px;margin-top:8px}
-  footer{padding:18px 20px}
-  .footer-tagline{display:none}
+  .quiz-card{padding:22px 18px;gap:14px}
+  .quiz-question{font-size:16px}
+  .mistake-item{padding:14px 16px}
+  .mistake-label{min-width:80px;font-size:9.5px}
+  .mistake-row{font-size:12.5px}
+  .ai-card{padding:22px 20px}
+  .ai-text{font-size:14.5px}
 }
+
+/* Verb-forms type: 3 inputs (V1, V2, V3) in a row */
+.quiz-verbforms-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  max-width:100%;margin-top:6px;
+}
+.quiz-verbform{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.quiz-verbform-label{
+  font-size:9px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+}
+.quiz-verbform-input{
+  width:100%;
+  padding:12px 10px;
+  font-family:inherit;
+  font-size:14px;
+  color:var(--cream);
+  background:var(--bg);
+  border:1.5px solid var(--border2);
+  border-radius:8px;
+  outline:none;
+  text-align:center;
+  transition:all .15s;
+}
+.quiz-verbform-input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
+
 </style>
 </head>
 <body>
-
-<!-- ══════════ NAV ══════════ -->
 <nav>
   <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
   <div class="nav-right">
-    <span class="nav-greeting">Szia, <b id="nav-name">—</b></span>
-    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
+    <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
+    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
   </div>
 </nav>
 
-<!-- ══════════ MAIN ══════════ -->
 <main>
-
-  <!-- KÁRTYA KÉPERNYŐ -->
-  <div class="module-frame active" id="card-screen">
-
+  <div class="module-frame" id="card-screen">
     <div class="module-head">
       <h1 class="module-title">Igék <span class="accent">teszt</span></h1>
     </div>
-
     <div class="progress-wrap">
       <div class="progress-row">
-        <span class="category" id="cat-label">—</span>
+        <span id="quiz-type-label">—</span>
         <span id="counter">1 / 50</span>
       </div>
       <div class="progress-track">
-        <div class="progress-fill" id="progress-fill" style="width:2%"></div>
+        <div class="progress-fill" id="progress-fill" style="width:2.0%"></div>
       </div>
     </div>
-
-    <div class="verb-card">
-      <div class="verb-hu" id="verb-hu">—</div>
-      <div class="phrase-test-row">
-        <input type="text" class="phrase-input" id="input-en" autocomplete="off" spellcheck="false" placeholder="Írd be angolul...">
-      </div>
+    <div class="quiz-card">
+      <div class="quiz-question" id="quiz-question">—</div>
+      <div id="quiz-answer-area"></div>
     </div>
-
-    <div class="nav-row">
-      <button class="arrow-btn" id="prev-btn" onclick="prevCard()" aria-label="Előző">←</button>
-      <span class="nav-hint" id="nav-hint">Fordítsd le angolra</span>
-      <button class="arrow-btn" id="next-btn" onclick="submitAndNext()" aria-label="Következő">→</button>
-    </div>
-
     <div class="action-row">
-      <button class="action-btn secondary" id="next-action-btn" onclick="submitAndNext()">Következő</button>
-      <button class="action-btn primary" onclick="showResult()">Befejezés</button>
+      <button class="action-btn primary" id="next-btn" onclick="submitAnswer()">Tovább</button>
+      <button class="action-btn secondary" onclick="showResult()">Befejezés</button>
     </div>
   </div>
 
-  <!-- EREDMÉNY KÉPERNYŐ -->
   <div class="result-screen" id="result-screen">
-    <div class="result-badge">A2 · Igék</div>
-    <h2 class="result-title">Szép <span class="accent">munka</span>, <span class="result-name" id="result-name">—</span></h2>
-    <p class="result-subtitle">Teszt befejezve</p>
-
-    <div class="result-stats">
-      <div class="result-number" id="result-count">0</div>
-      <div class="result-meta">megválaszolt szó</div>
-      <div class="result-feedback" id="result-feedback">Az <span class="accent">AI visszajelzést</span> hamarosan megkapod e-mailben — részletes hibajavítással, magyarázattal és gyakorlási tippekkel.</div>
+    <div class="result-head">
+      <div class="result-badge">A2 · Igék</div>
+      <h2 class="result-title">Ügyes <span class="accent">voltál</span>, <span id="result-name">—</span>!</h2>
+      <p class="result-subtitle">Gyakorlás befejezve</p>
     </div>
 
-    <div class="action-row">
-      <button class="action-btn secondary" onclick="restartFromStart()">Újra</button>
-      <button class="action-btn primary" onclick="shuffleAndRestart()">Új sorrend</button>
+    <div class="result-score">
+      <div class="result-score-number"><span id="result-correct">0</span><span class="dim"> / <span id="result-total">0</span></span></div>
+      <div class="result-score-meta">Helyes válasz (<span id="result-percentage">0</span>%)</div>
+    </div>
+
+    <div class="result-section" id="mistakes-section">
+      <div class="result-section-head">Hibák átnézése</div>
+      <div id="mistakes-container"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-head">AI visszajelzés</div>
+      <div class="ai-card">
+        <div class="ai-label">Személyes üzenet tőlem (Bettinától)</div>
+        <div id="ai-content">
+          <div class="ai-loading" id="ai-loading">
+            <div class="ai-spinner"></div>
+            <span>Készítem a visszajelzést — pár másodperc…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
+      <a class="action-btn primary" href="index.html" id="home-link">Főoldal</a>
     </div>
   </div>
-
 </main>
 
-<!-- ══════════ FOOTER ══════════ -->
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
-    <div class="footer-tagline">Gyakorlás · Ismétlés · <span class="accent">Fejlődés</span></div>
+    <div class="footer-tagline">„A nyelvem határai a világom határai"</div>
   </div>
 </footer>
 
 <script>
+// Global error handler
+window.addEventListener('error', function(e) {
+  console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
 
-const MODULE_META = {
-  title: "A2 - Verb Test",
-  level: "A2",
-  skill: "Igék"
-};
+const MODULE_META = {"title": "A2 - Verb Test", "level": "A2", "skill": "Igék"};
 
-const CARDS = [
-  { cat:"Alapigék", hu:"Kérdez", en:"Ask" },
-  { cat:"Alapigék", hu:"Válaszol", en:"Answer" },
-  { cat:"Alapigék", hu:"Takarít", en:"Clean" },
-  { cat:"Alapigék", hu:"Főz", en:"Cook" },
-  { cat:"Alapigék", hu:"Táncol", en:"Dance" },
-  { cat:"Alapigék", hu:"Iszik", en:"Drink" },
-  { cat:"Alapigék", hu:"Eszik", en:"Eat" },
-  { cat:"Alapigék", hu:"Segít", en:"Help" },
-  { cat:"Alapigék", hu:"Ugrik", en:"Jump" },
-  { cat:"Alapigék", hu:"Hallgat", en:"Listen" },
-  { cat:"Alapigék", hu:"Néz", en:"Look" },
-  { cat:"Alapigék", hu:"Játszik", en:"Play" },
-  { cat:"Alapigék", hu:"Olvas", en:"Read" },
-  { cat:"Alapigék", hu:"Fut", en:"Run" },
-  { cat:"Alapigék", hu:"Énekel", en:"Sing" },
-  { cat:"Alapigék", hu:"Alszik", en:"Sleep" },
-  { cat:"Alapigék", hu:"Mosolyog", en:"Smile" },
-  { cat:"Alapigék", hu:"Beszél", en:"Speak" },
-  { cat:"Alapigék", hu:"Úszik", en:"Swim" },
-  { cat:"Alapigék", hu:"Beszélget", en:"Talk" },
-  { cat:"Alapigék", hu:"Sétál", en:"Walk" },
-  { cat:"Alapigék", hu:"Mos", en:"Wash" },
-  { cat:"Alapigék", hu:"Néz (TV)", en:"Watch" },
-  { cat:"Alapigék", hu:"Ír", en:"Write" },
-  { cat:"Alapigék", hu:"Kinyit", en:"Open" },
-  { cat:"Alapigék", hu:"Bezár", en:"Close" },
-  { cat:"Alapigék", hu:"Hív", en:"Call" },
-  { cat:"Alapigék", hu:"Ellenőriz", en:"Check" },
-  { cat:"Alapigék", hu:"Számol", en:"Count" },
-  { cat:"Alapigék", hu:"Álmodik", en:"Dream" },
-  { cat:"Alapigék", hu:"Talál", en:"Find" },
-  { cat:"Alapigék", hu:"Ad", en:"Give" },
-  { cat:"Alapigék", hu:"Megy", en:"Go" },
-  { cat:"Alapigék", hu:"Tud / Ismer", en:"Know" },
-  { cat:"Alapigék", hu:"Szeret", en:"Like" },
-  { cat:"Alapigék", hu:"Él / Lakik", en:"Live" },
-  { cat:"Alapigék", hu:"Szeret nagyon", en:"Love" },
-  { cat:"Alapigék", hu:"Csinál", en:"Make" },
-  { cat:"Alapigék", hu:"Szüksége van", en:"Need" },
-  { cat:"Alapigék", hu:"Mond", en:"Say" },
-  { cat:"Alapigék", hu:"Lát", en:"See" },
-  { cat:"Alapigék", hu:"Megmutat", en:"Show" },
-  { cat:"Alapigék", hu:"Gondol", en:"Think" },
-  { cat:"Alapigék", hu:"Megpróbál", en:"Try" },
-  { cat:"Alapigék", hu:"Használ", en:"Use" },
-  { cat:"Alapigék", hu:"Akar", en:"Want" },
-  { cat:"Alapigék", hu:"Dolgozik", en:"Work" },
-  { cat:"Alapigék", hu:"Vezet", en:"Drive" },
-  { cat:"Alapigék", hu:"Érez", en:"Feel" },
-  { cat:"Alapigék", hu:"Tanul", en:"Learn" },
-];
+const QUESTIONS = [{"type": "fill", "question": "Fordítsd angolra: Kérdez", "answer": "Ask", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Válaszol", "answer": "Answer", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Takarít", "answer": "Clean", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Főz", "answer": "Cook", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Táncol", "answer": "Dance", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Iszik", "answer": "Drink", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Eszik", "answer": "Eat", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Segít", "answer": "Help", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ugrik", "answer": "Jump", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Hallgat", "answer": "Listen", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Néz", "answer": "Look", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Játszik", "answer": "Play", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Olvas", "answer": "Read", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Fut", "answer": "Run", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Énekel", "answer": "Sing", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Alszik", "answer": "Sleep", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Mosolyog", "answer": "Smile", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Beszél", "answer": "Speak", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Úszik", "answer": "Swim", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Beszélget", "answer": "Talk", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Sétál", "answer": "Walk", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Mos", "answer": "Wash", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Néz (TV)", "answer": "Watch", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ír", "answer": "Write", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Kinyit", "answer": "Open", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Bezár", "answer": "Close", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Hív", "answer": "Call", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ellenőriz", "answer": "Check", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Számol", "answer": "Count", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Álmodik", "answer": "Dream", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Talál", "answer": "Find", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ad", "answer": "Give", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Megy", "answer": "Go", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Tud / Ismer", "answer": "Know", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Szeret", "answer": "Like", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Él / Lakik", "answer": "Live", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Szeret nagyon", "answer": "Love", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Csinál", "answer": "Make", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Szüksége van", "answer": "Need", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Mond", "answer": "Say", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Lát", "answer": "See", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Megmutat", "answer": "Show", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Gondol", "answer": "Think", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Megpróbál", "answer": "Try", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Használ", "answer": "Use", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Akar", "answer": "Want", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Dolgozik", "answer": "Work", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Vezet", "answer": "Drive", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Érez", "answer": "Feel", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Tanul", "answer": "Learn", "tip": "", "cat": "Alapigék"}];
 
 let studentName = '';
-let cardList = [...CARDS];
 let currentIndex = 0;
-let isFlipped = false;
+let currentAnswer = null;
+const answersLog = [];
 
-// Read student name from URL
 (function() {
   const params = new URLSearchParams(window.location.search);
-  const urlName = params.get('name');
-  if (urlName) {
-    studentName = decodeURIComponent(urlName);
-  } else {
-    // No name = send them back to login
+  studentName = params.get('name') || '';
+  if (!studentName) {
     window.location.href = 'index.html';
     return;
   }
   document.getElementById('nav-name').textContent = studentName;
-
-  // Preserve name on back link, and include level so dashboard returns to same section
   const nameParam = '?name=' + encodeURIComponent(studentName);
   const backParam = nameParam + '&level=a2';
   document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
   document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
-
-  renderCard();
+  document.getElementById('home-link').setAttribute('href', 'index.html' + backParam);
+  renderQuestion();
 })();
 
-let score = 0;
-let answered = false;
-const answersLog = [];
-
-function renderCard() {
-  const card = cardList[currentIndex];
-  const total = cardList.length;
-
+function renderQuestion() {
+  const q = QUESTIONS[currentIndex];
+  const total = QUESTIONS.length;
   document.getElementById('counter').textContent = `${currentIndex + 1} / ${total}`;
   document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
-  document.getElementById('cat-label').textContent = card.cat;
-  document.getElementById('verb-hu').textContent = card.hu;
+  const typeLabels = { fill: 'Fordítsd', choice: 'Válassz', correct: 'Helyes-e?', verbforms: 'V1 · V2 · V3' };
+  document.getElementById('quiz-type-label').textContent = q.cat || typeLabels[q.type] || '';
+  document.getElementById('quiz-question').textContent = q.question;
 
-  const input = document.getElementById('input-en');
-  input.value = '';
+  const area = document.getElementById('quiz-answer-area');
+  area.innerHTML = '';
+  currentAnswer = null;
 
-  document.getElementById('nav-hint').textContent = 'Fordítsd le angolra';
-  document.getElementById('prev-btn').disabled = currentIndex === 0;
-  setTimeout(() => input.focus(), 100);
+  if (q.type === 'fill') {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-fill-wrap';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'quiz-fill-input';
+    input.placeholder = 'Írd be a választ…';
+    input.id = 'fill-input';
+    input.autocomplete = 'off';
+    input.autocapitalize = 'none';
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitAnswer();
+      }
+    });
+    wrap.appendChild(input);
+    area.appendChild(wrap);
+    setTimeout(() => input.focus(), 50);
+  } else if (q.type === 'verbforms') {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-verbforms-row';
+    ['v1','v2','v3'].forEach(key => {
+      const cell = document.createElement('div');
+      cell.className = 'quiz-verbform';
+      const label = document.createElement('div');
+      label.className = 'quiz-verbform-label';
+      label.textContent = key.toUpperCase();
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'quiz-verbform-input';
+      input.id = 'verbform-input-' + key;
+      input.autocomplete = 'off';
+      input.autocapitalize = 'none';
+      input.spellcheck = false;
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitAnswer();
+        }
+      });
+      cell.appendChild(label);
+      cell.appendChild(input);
+      wrap.appendChild(cell);
+    });
+    area.appendChild(wrap);
+    setTimeout(() => document.getElementById('verbform-input-v1').focus(), 50);
+  } else {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-options';
+    (q.options || []).forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = opt;
+      btn.dataset.value = opt;
+      btn.onclick = () => selectOption(btn, opt);
+      wrap.appendChild(btn);
+    });
+    area.appendChild(wrap);
+  }
+  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább';
 }
 
-function normalize(s) {
-  return (s || '').trim().toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' ');
+function selectOption(btn, value) {
+  document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  currentAnswer = value;
 }
 
-function submitAndNext() {
-  const card = cardList[currentIndex];
-  const input = document.getElementById('input-en');
-  const userAnswer = normalize(input.value);
-  const correctAnswer = normalize(card.en);
-  const isCorrect = (userAnswer === correctAnswer && userAnswer !== '');
+function normalizeFillAnswer(s) {
+  // Lowercase, trim, remove trailing punctuation, collapse multiple spaces.
+  // Keeps commas (some answers use them, e.g. "a, The").
+  return (s || '').toString().trim().toLowerCase()
+    .replace(/[.!?;:]+$/g, '')
+    .replace(/\s+/g, ' ');
+}
 
-  if (isCorrect) score++;
+function submitAnswer() {
+  const q = QUESTIONS[currentIndex];
+  let userAnswer = '';
+  let correctAnswer;
+  let isCorrect;
+
+  if (q.type === 'fill') {
+    const input = document.getElementById('fill-input');
+    userAnswer = (input.value || '').trim();
+    correctAnswer = q.answer;
+    isCorrect = (normalizeFillAnswer(correctAnswer) === normalizeFillAnswer(userAnswer));
+  } else if (q.type === 'verbforms') {
+    const parts = ['v1','v2','v3'].map(k => (document.getElementById('verbform-input-' + k).value || '').trim());
+    userAnswer = parts.join(' · ');
+    const expected = [q.answer.v1, q.answer.v2, q.answer.v3];
+    correctAnswer = expected.join(' · ');
+    isCorrect = parts.every((p, i) => p.toLowerCase() === expected[i].toLowerCase() && p !== '');
+  } else {
+    userAnswer = currentAnswer || '';
+    correctAnswer = q.answer;
+    isCorrect = (correctAnswer.toString().trim().toLowerCase() === userAnswer.toString().trim().toLowerCase());
+  }
 
   answersLog.push({
-    hu: card.hu,
-    correct: card.en,
-    student: input.value.trim() || '(üresen hagyta)',
-    isCorrect: isCorrect
+    questionNumber: currentIndex + 1,
+    question: q.question,
+    type: q.type,
+    correctAnswer: correctAnswer,
+    studentAnswer: userAnswer || '(üresen hagyta)',
+    isCorrect,
+    tip: q.tip || ''
   });
 
-  // Azonnal tovább — nincs visszajelzés
-  nextCard();
-}
-
-function flipCard() {}
-
-function nextCard() {
-  if (currentIndex < cardList.length - 1) {
+  if (currentIndex < QUESTIONS.length - 1) {
     currentIndex++;
-    renderCard();
+    renderQuestion();
   } else {
     showResult();
   }
-}
-
-function prevCard() {
-  if (currentIndex > 0) {
-    currentIndex--;
-    renderCard();
-  }
-}
-
-function shuffleCards() {
-  for (let i = cardList.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [cardList[i], cardList[j]] = [cardList[j], cardList[i]];
-  }
-  currentIndex = 0;
-  renderCard();
 }
 
 function showResult() {
   document.getElementById('card-screen').style.display = 'none';
   document.getElementById('result-screen').classList.add('active');
 
-  const total = cardList.length;
+  const total = QUESTIONS.length;
   const answered = answersLog.length;
-  const pct = total > 0 ? Math.round((score / total) * 100) : 0;
+  const score = answersLog.filter(a => a.isCorrect).length;
+  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
 
+  // Score display
   document.getElementById('result-name').textContent = studentName;
-  document.getElementById('result-count').textContent = answered;
-  // A feedback szöveg már a HTML-ben van: AI visszajelzés ígérete — nem írjuk felül
+  document.getElementById('result-correct').textContent = score;
+  document.getElementById('result-total').textContent = total;
+  document.getElementById('result-percentage').textContent = percentage;
 
-  // Küldjük az összes választ az AI-hoz a Make-en keresztül
-  fetch(MAKE_WEBHOOK_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      Student: studentName,
-      Quiz: MODULE_META.title,
-      Score: score,
-      TotalQuestions: total,
-      Answered: answered,
-      Level: MODULE_META.level,
-      Skill: MODULE_META.skill,
-      Percentage: pct,
-      Answers: answersLog,
-      CompletedAt: new Date().toISOString()
-    })
-  }).catch(() => {});
+  // Render mistakes
+  renderMistakes();
+
+  // Fetch AI feedback
+  fetchAIFeedback({
+    Student: studentName,
+    Quiz: MODULE_META.title,
+    Level: MODULE_META.level,
+    Skill: MODULE_META.skill,
+    Score: score,
+    TotalQuestions: total,
+    Answered: answered,
+    Percentage: percentage,
+    Answers: answersLog,
+    CompletedAt: new Date().toISOString()
+  });
 }
 
-function restartFromStart() {
-  currentIndex = 0;
-  score = 0;
-  answersLog.length = 0;
-  document.getElementById('result-screen').classList.remove('active');
-  document.getElementById('card-screen').style.display = 'flex';
-  renderCard();
-}
+function renderMistakes() {
+  const mistakes = answersLog.filter(a => !a.isCorrect);
+  const container = document.getElementById('mistakes-container');
+  const section = document.getElementById('mistakes-section');
 
-function shuffleAndRestart() {
-  shuffleCards();
-  score = 0;
-  answersLog.length = 0;
-  document.getElementById('result-screen').classList.remove('active');
-  document.getElementById('card-screen').style.display = 'flex';
-}
-
-// Keyboard shortcuts
-document.addEventListener('keydown', e => {
-  if (document.getElementById('result-screen').classList.contains('active')) return;
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    submitAndNext();
+  if (mistakes.length === 0) {
+    // Perfect score — show a celebration card instead
+    container.innerHTML = `
+      <div class="perfect-card">
+        <div class="perfect-icon">🎉</div>
+        <div class="perfect-text">Hibátlan gyakorlás! Minden válasz helyes volt.</div>
+      </div>
+    `;
+    return;
   }
-  if (e.key === 'ArrowRight') submitAndNext();
-  if (e.key === 'ArrowLeft' && currentIndex > 0) prevCard();
-});
-</script>
 
+  const html = mistakes.map(m => `
+    <div class="mistake-item">
+      <div class="mistake-num">${m.questionNumber}. kérdés</div>
+      <div class="mistake-q">${escapeHtml(m.question)}</div>
+      <div class="mistake-row">
+        <div class="mistake-label">Válaszod</div>
+        <div class="mistake-val-wrong">${escapeHtml(m.studentAnswer)}</div>
+      </div>
+      <div class="mistake-row">
+        <div class="mistake-label">Helyes</div>
+        <div class="mistake-val-right">${escapeHtml(m.correctAnswer)}</div>
+      </div>
+      ${m.tip ? `<div class="mistake-tip">${escapeHtml(m.tip)}</div>` : ''}
+    </div>
+  `).join('');
+  container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+async function fetchAIFeedback(payload) {
+  const aiContent = document.getElementById('ai-content');
+
+  try {
+    const response = await fetch(MAKE_WEBHOOK_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+
+    // Read as raw text first (don't assume JSON)
+    const rawText = await response.text();
+    let aiText = '';
+
+    // Try parsing as JSON first (ideal case)
+    try {
+      const data = JSON.parse(rawText);
+      if (data && typeof data.ai_feedback === 'string') {
+        aiText = data.ai_feedback;
+      }
+    } catch (jsonErr) {
+      // JSON broken (likely due to unescaped quotes/newlines in AI text)
+      // Fallback 1: try to extract ai_feedback value using a loose regex
+      const match = rawText.match(/"ai_feedback"\s*:\s*"([\s\S]*?)"\s*\}?\s*$/);
+      if (match && match[1]) {
+        aiText = match[1];
+      } else {
+        // Fallback 2: if the response is just plain text (no JSON wrapping), use it directly
+        // Strip potential wrapping like {"status":"ok","ai_feedback":" and trailing "}
+        let cleaned = rawText
+          .replace(/^\s*\{[^"]*"ai_feedback"\s*:\s*"?/, '')
+          .replace(/"?\s*\}\s*$/, '')
+          .trim();
+        if (cleaned.length > 20 && !cleaned.startsWith('{')) {
+          aiText = cleaned;
+        }
+      }
+    }
+
+    // Unescape common sequences
+    if (aiText) {
+      aiText = aiText
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    if (!aiText) {
+      throw new Error('empty response');
+    }
+
+    aiContent.innerHTML = `<div class="ai-text">${escapeHtml(aiText)}</div>`;
+
+  } catch (err) {
+    console.error('AI feedback error:', err);
+    aiContent.innerHTML = `
+      <div class="ai-error">
+        A személyre szabott visszajelzés most nem érhető el. A hibalistád fent teljes — fókuszálj arra, és legközelebb újra próbálhatod. 🧡
+      </div>
+    `;
+  }
+}
+
+function restartDeck() {
+  currentIndex = 0;
+  answersLog.length = 0;
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('card-screen').style.display = 'flex';
+  document.getElementById('ai-content').innerHTML = `
+    <div class="ai-loading" id="ai-loading">
+      <div class="ai-spinner"></div>
+      <span>Készítem a visszajelzést — pár másodperc…</span>
+    </div>
+  `;
+  renderQuestion();
+}
+</script>
 </body>
 </html>
