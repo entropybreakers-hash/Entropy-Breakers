@@ -15,6 +15,8 @@ html{scroll-behavior:smooth}
   --cream:#1a1612;--cream2:#5a5248;--dim:#8a8075;--dimmer:#b5aa9a;
   --orange:#c9671f;--orange2:#a85418;
   --border:rgba(26,22,18,0.06);--border2:rgba(26,22,18,0.12);
+  --red:#b23a2e;--red-bg:rgba(178,58,46,0.06);
+  --green:#2e7d57;--green-bg:rgba(46,125,87,0.06);
 }
 body{
   font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);
@@ -23,135 +25,294 @@ body{
 }
 .accent{color:var(--orange);font-weight:500}
 nav{
-height:56px;padding:0 40px;flex-shrink:0;
-display:flex;align-items:center;justify-content:space-between;
-background:#0a0806;border-bottom:1px solid rgba(240,235,227,0.08);
+  height:56px;padding:0 40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#0a0806;border-bottom:1px solid rgba(240,235,227,0.08);
 }
 .logo{
-font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
-color:#f0ebe3;display:flex;align-items:baseline;gap:5px;text-decoration:none;
+  font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+  color:#f0ebe3;display:flex;align-items:baseline;gap:5px;text-decoration:none;
 }
 .logo .accent{color:var(--orange);font-weight:600;letter-spacing:.24em}
 .nav-right{display:flex;align-items:center;gap:20px}
 .nav-greeting{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c8c1b8}
 .nav-greeting .name{color:#f0ebe3;font-weight:500}
 .nav-btn{
-display:inline-flex;align-items:center;gap:6px;
-font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
-color:#f0ebe3;text-decoration:none;padding:8px 18px;
-border:1px solid rgba(240,235,227,0.24);border-radius:60px;
-transition:all .2s;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:#f0ebe3;text-decoration:none;padding:8px 18px;
+  border:1px solid rgba(240,235,227,0.24);border-radius:60px;
+  transition:all .2s;
 }
 .nav-btn:hover{border-color:var(--orange);color:var(--orange)}
 main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px}
 .module-frame{width:100%;max-width:520px;display:flex;flex-direction:column;gap:20px}
 .module-head{text-align:center}
 .module-title{
-font-family:'DM Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);
-font-weight:600;letter-spacing:-.025em;line-height:1.2;
+  font-family:'DM Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);
+  font-weight:600;letter-spacing:-.025em;line-height:1.2;
 }
 .progress-wrap{max-width:440px;margin:0 auto;width:100%}
 .progress-row{
-display:flex;align-items:center;justify-content:space-between;
-font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
-color:var(--dim);margin-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px;
 }
 .progress-track{width:100%;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
 .progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+
+/* ───── QUIZ CARD ───── */
 .quiz-card{
-width:100%;max-width:520px;margin:0 auto;
-background:var(--bg2);
-border:1px solid var(--border2);
-border-radius:10px;
-padding:28px 24px;
-display:flex;flex-direction:column;gap:18px;
+  width:100%;max-width:520px;margin:0 auto;
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:28px 24px;
+  display:flex;flex-direction:column;gap:18px;
 }
 .quiz-question{
-font-size:17px;font-weight:500;line-height:1.4;
-color:var(--cream);letter-spacing:-.01em;
+  font-size:17px;
+  font-weight:500;
+  line-height:1.4;
+  color:var(--cream);
+  letter-spacing:-.01em;
 }
+/* Fill-in input */
 .quiz-fill-wrap{margin-top:6px}
 .quiz-fill-input{
-width:100%;padding:14px 16px;font-family:inherit;font-size:15px;
-color:var(--cream);background:var(--bg);
-border:1.5px solid var(--border2);border-radius:8px;outline:none;transition:all .15s;
+  width:100%;
+  padding:14px 16px;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--cream);
+  background:var(--bg);
+  border:1.5px solid var(--border2);
+  border-radius:8px;
+  outline:none;
+  transition:all .15s;
 }
-.quiz-fill-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(201,103,31,0.08)}
+.quiz-fill-input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
+/* Choice options */
 .quiz-options{display:flex;flex-direction:column;gap:8px}
 .quiz-option{
-padding:13px 16px;background:var(--bg);
-border:1px solid var(--border2);border-radius:8px;
-cursor:pointer;transition:all .15s;
-font-size:14px;font-weight:500;color:var(--cream);
-text-align:left;font-family:inherit;line-height:1.4;
+  padding:13px 16px;
+  background:var(--bg);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .15s;
+  font-size:14px;
+  font-weight:500;
+  color:var(--cream);
+  text-align:left;
+  font-family:inherit;
+  line-height:1.4;
 }
-.quiz-option:hover{border-color:var(--orange);background:rgba(201,103,31,0.04)}
-.quiz-option.selected{border-color:var(--orange);background:rgba(201,103,31,0.08);color:var(--orange)}
-.action-row{display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%}
+.quiz-option:hover{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.04);
+}
+.quiz-option.selected{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.08);
+  color:var(--orange);
+}
+.quiz-option.locked{pointer-events:none;opacity:.6}
+.quiz-option.selected.locked{opacity:1}
+
+/* ───── ACTION BUTTONS ───── */
+.action-row{
+  display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%;
+}
 .action-btn{
-flex:1;font-family:'DM Sans',sans-serif;
-font-size:10px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
-padding:14px 20px;border-radius:60px;cursor:pointer;transition:all .2s;
-border:1px solid var(--border2);
-text-align:center;text-decoration:none;
-display:inline-flex;align-items:center;justify-content:center;
+  flex:1;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:14px 20px;border-radius:60px;
+  cursor:pointer;transition:all .2s;
+  border:1px solid var(--border2);
 }
 .action-btn.secondary{background:var(--bg);color:var(--cream)}
 .action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
 .action-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
 .action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
 .action-btn:disabled{opacity:.4;cursor:not-allowed}
-.result-screen{display:none;text-align:center;max-width:440px;margin:0 auto}
+
+/* ───── RESULT SCREEN ───── */
+.result-screen{display:none;max-width:620px;margin:0 auto;width:100%}
 .result-screen.active{display:block;animation:fadeUp .5s ease both}
+.result-head{text-align:center;margin-bottom:24px}
 .result-badge{
-display:inline-block;font-size:10px;font-weight:500;letter-spacing:.24em;
-text-transform:uppercase;color:var(--orange);
-padding:5px 14px;border-radius:60px;
-border:1px solid rgba(201,103,31,0.3);
-background:rgba(201,103,31,0.05);margin-bottom:20px;
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+  padding:5px 14px;border-radius:60px;
+  border:1px solid rgba(201,103,31,0.3);
+  background:rgba(201,103,31,0.05);
+  margin-bottom:20px;
 }
 .result-title{
-font-family:'DM Sans',sans-serif;font-size:clamp(28px,4vw,42px);
-font-weight:600;letter-spacing:-.03em;line-height:1.1;margin-bottom:8px;
+  font-family:'DM Sans',sans-serif;font-size:clamp(26px,4vw,38px);
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:8px;
 }
-.result-subtitle{color:var(--cream2);font-size:13px;margin-bottom:32px;line-height:1.5}
-.result-stats{
-background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
-padding:28px 24px;margin-bottom:24px;
+.result-subtitle{color:var(--cream2);font-size:13px;line-height:1.5}
+
+/* Score card */
+.result-score{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+  padding:28px 24px;margin-bottom:24px;text-align:center;
 }
-.result-number{
-font-size:clamp(44px,6vw,64px);font-weight:500;
-color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
+.result-score-number{
+  font-size:clamp(44px,6vw,64px);font-weight:500;
+  color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
 }
-.result-meta{
-font-size:10px;font-weight:500;letter-spacing:.3em;
-text-transform:uppercase;color:var(--dim);margin-bottom:16px;
+.result-score-number .dim{color:var(--dimmer);font-size:.65em}
+.result-score-meta{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
 }
-.result-feedback{
-font-size:14px;color:var(--cream2);line-height:1.6;
-padding-top:16px;border-top:1px solid var(--border);
+
+/* Section headers */
+.result-section{margin-bottom:24px}
+.result-section-head{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
+  padding:16px 0 12px;
+  display:flex;align-items:center;gap:10px;
 }
+.result-section-head::before,
+.result-section-head::after{
+  content:'';flex:1;height:1px;background:var(--border2);
+}
+.result-section-head::before{max-width:40px}
+
+/* Mistake list */
+.mistake-list{display:flex;flex-direction:column;gap:10px}
+.mistake-item{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--red);
+  border-radius:8px;
+  padding:16px 18px;
+}
+.mistake-num{
+  font-size:10px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+}
+.mistake-q{
+  font-size:14px;font-weight:500;color:var(--cream);
+  margin-bottom:12px;line-height:1.5;
+}
+.mistake-row{
+  display:flex;gap:10px;margin-bottom:6px;
+  font-size:13px;line-height:1.5;
+}
+.mistake-label{
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim);
+  min-width:90px;flex-shrink:0;padding-top:2px;
+}
+.mistake-val-wrong{color:var(--red);font-weight:500}
+.mistake-val-right{color:var(--green);font-weight:500}
+.mistake-tip{
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border);
+  font-size:13px;color:var(--cream2);
+  line-height:1.55;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.mistake-tip::before{
+  content:'💡';flex-shrink:0;font-size:14px;
+}
+
+/* Perfect result */
+.perfect-card{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--green);
+  border-radius:8px;
+  padding:22px 20px;
+  text-align:center;
+}
+.perfect-icon{font-size:32px;margin-bottom:10px;line-height:1}
+.perfect-text{font-size:14px;color:var(--cream);line-height:1.5;font-weight:500}
+
+/* AI Feedback card */
+.ai-card{
+  background:linear-gradient(165deg, rgba(201,103,31,0.04) 0%, var(--bg2) 60%);
+  border:1px solid rgba(201,103,31,0.22);
+  border-radius:10px;
+  padding:26px 24px;
+  min-height:80px;
+}
+.ai-label{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.ai-label::before{
+  content:'✦';font-size:13px;
+}
+.ai-loading{
+  display:flex;align-items:center;gap:12px;
+  color:var(--cream2);font-size:14px;
+}
+.ai-spinner{
+  width:18px;height:18px;
+  border:2px solid var(--border2);
+  border-top-color:var(--orange);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  flex-shrink:0;
+}
+.ai-text{
+  font-size:15px;color:var(--cream);line-height:1.7;
+  white-space:pre-wrap;
+}
+.ai-error{
+  color:var(--cream2);font-size:13.5px;line-height:1.6;
+}
+
+/* Result actions */
+.result-actions{
+  display:flex;gap:10px;max-width:440px;margin:32px auto 0;width:100%;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.module-frame{animation:fadeUp .5s ease both}
+
 footer{
-background:#0a0806;padding:24px 40px;margin-top:auto;
-border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
+  background:#0a0806;padding:24px 40px;margin-top:auto;
+  border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
 }
 .footer-inner{
-max-width:1000px;margin:0 auto;
-display:flex;align-items:center;justify-content:space-between;
-flex-wrap:wrap;gap:12px;
+  max-width:1000px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
 }
 .footer-brand{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:#f0ebe3}
 .footer-brand .accent{color:var(--orange);font-weight:600}
 .footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
 .footer-tagline .accent{color:var(--orange)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.module-frame{animation:fadeUp .5s ease both}
+
 @media(max-width:560px){
-nav{padding:0 20px}
-main{padding:24px 16px}
-.module-frame{gap:16px}
-.quiz-card{padding:22px 18px;gap:14px}
-.quiz-question{font-size:16px}
+  nav{padding:0 20px}
+  main{padding:24px 16px}
+  .module-frame{gap:16px}
+  .quiz-card{padding:22px 18px;gap:14px}
+  .quiz-question{font-size:16px}
+  .mistake-item{padding:14px 16px}
+  .mistake-label{min-width:80px;font-size:9.5px}
+  .mistake-row{font-size:12.5px}
+  .ai-card{padding:22px 20px}
+  .ai-text{font-size:14.5px}
 }
 </style>
 </head>
@@ -163,6 +324,7 @@ main{padding:24px 16px}
     <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
   </div>
 </nav>
+
 <main>
   <div class="module-frame" id="card-screen">
     <div class="module-head">
@@ -186,42 +348,75 @@ main{padding:24px 16px}
       <button class="action-btn secondary" onclick="showResult()">Befejezés</button>
     </div>
   </div>
+
   <div class="result-screen" id="result-screen">
-    <div class="result-badge">C1 · Gyakorlás</div>
-    <h2 class="result-title">Ügyes <span class="accent">voltál</span>, <span id="result-name">—</span>!</h2>
-    <p class="result-subtitle">Gyakorlás befejezve</p>
-    <div class="result-stats">
-      <div class="result-number" id="result-count">0</div>
-      <div class="result-meta">megválaszolt kérdés</div>
-      <div class="result-feedback">Az <span class="accent">AI visszajelzést</span> hamarosan megkapod e-mailben — személyre szabott hibajavítással és tippekkel.</div>
+    <div class="result-head">
+      <div class="result-badge">C1 · Gyakorlás</div>
+      <h2 class="result-title">Ügyes <span class="accent">voltál</span>, <span id="result-name">—</span>!</h2>
+      <p class="result-subtitle">Gyakorlás befejezve</p>
     </div>
-    <div class="action-row">
+
+    <div class="result-score">
+      <div class="result-score-number"><span id="result-correct">0</span><span class="dim"> / <span id="result-total">0</span></span></div>
+      <div class="result-score-meta">Helyes válasz (<span id="result-percentage">0</span>%)</div>
+    </div>
+
+    <div class="result-section" id="mistakes-section">
+      <div class="result-section-head">Hibák átnézése</div>
+      <div id="mistakes-container"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-head">AI visszajelzés</div>
+      <div class="ai-card">
+        <div class="ai-label">Személyes üzenet tőlem (Bettinától)</div>
+        <div id="ai-content">
+          <div class="ai-loading" id="ai-loading">
+            <div class="ai-spinner"></div>
+            <span>Készítem a visszajelzést — pár másodperc…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
       <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
       <a class="action-btn primary" href="index.html" id="home-link">Főoldal</a>
     </div>
   </div>
 </main>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
     <div class="footer-tagline">„A nyelvem határai a világom határai"</div>
   </div>
 </footer>
+
 <script>
+// Global error handler
 window.addEventListener('error', function(e) {
   console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
 });
+
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
 const MODULE_META = {"title": "C1 Gyakorlás – Nyomatékos do/does/did szerkezet", "level": "C1", "skill": "Nyelvtani gyakorlás"};
+
 const QUESTIONS = [{"type": "fill", "question": "I _____ love you! (do — hangsúlyos)", "answer": "do", "tip": "do + base = emphasis"}, {"type": "fill", "question": "She _____ care about you. (does)", "answer": "does", "tip": "does + base E/3-ban"}, {"type": "choice", "question": "He ___ speak French, I heard him.", "options": ["do", "does", "did", "is"], "answer": "does", "tip": "Present E/3: does + base"}, {"type": "choice", "question": "Múlt hangsúly: 'I _____ see him yesterday.'", "options": ["do", "did", "does", "saw"], "answer": "did", "tip": "did + base (NEM V2)"}, {"type": "correct", "question": "I did saw him yesterday.", "options": ["Helyes", "Helytelen"], "answer": "Helytelen", "tip": "did + BASE form: 'did SEE him'"}, {"type": "fill", "question": "Please _____ come in! (udvarias hangsúly)", "answer": "do", "tip": "Please do + base = udvarias kiemelés"}, {"type": "choice", "question": "'You don't try.' – 'I ___ try!'", "options": ["do", "try", "does", "am"], "answer": "do", "tip": "Ellentmondás: I DO try"}, {"type": "correct", "question": "She does loves chocolate.", "options": ["Helyes", "Helytelen"], "answer": "Helytelen", "tip": "does + BASE: 'does LOVE'"}, {"type": "fill", "question": "We _____ enjoy your company. (do)", "answer": "do", "tip": "T/1-nél 'do'"}, {"type": "choice", "question": "Imperative: '___ be careful!'", "options": ["Do", "Does", "Did", "To do"], "answer": "Do", "tip": "Do + be = nyomatékos felszólítás"}, {"type": "correct", "question": "Do be careful on the road!", "options": ["Helyes", "Helytelen"], "answer": "Helyes", "tip": "Nyomatékos felszólítás"}, {"type": "fill", "question": "She says she _____ understand. (does — hangsúly)", "answer": "does", "tip": "She does understand"}, {"type": "choice", "question": "'He never visits.' — 'He ___ visit, you just don't know!'", "options": ["do", "does", "did", "is"], "answer": "does", "tip": "Ellentmondás E/3-ban"}, {"type": "correct", "question": "I did went to the party.", "options": ["Helyes", "Helytelen"], "answer": "Helytelen", "tip": "did + BASE: 'did GO'"}, {"type": "fill", "question": "They _____ work hard — don't underestimate them. (do)", "answer": "do", "tip": "Ellentmondásra"}, {"type": "choice", "question": "Polite request: '___ come in!'", "options": ["Do", "Does", "Did", "To"], "answer": "Do", "tip": "Do come in = udvarias kiemelés"}, {"type": "correct", "question": "He does believes in honesty.", "options": ["Helyes", "Helytelen"], "answer": "Helytelen", "tip": "does + BASE: 'does BELIEVE'"}, {"type": "fill", "question": "I _____ think you're right after all. (do)", "answer": "do", "tip": "Megerősítés"}, {"type": "choice", "question": "You say she's lazy, but she ___ do her best.", "options": ["do", "does", "did", "is"], "answer": "does", "tip": "Ellentmondásra"}, {"type": "correct", "question": "Do tell me more about your trip!", "options": ["Helyes", "Helytelen"], "answer": "Helyes", "tip": "'Do tell' = érdeklődő kiemelés"}, {"type": "fill", "question": "He _____ finish the project, I saw it with my own eyes. (did)", "answer": "did", "tip": "did + base múltban"}, {"type": "choice", "question": "___ have a seat, please.", "options": ["Do", "Does", "Did", "Please"], "answer": "Do", "tip": "Do + have = udvarias"}, {"type": "correct", "question": "I do really like her.", "options": ["Helyes", "Helytelen"], "answer": "Helyes", "tip": "do + really + like = dupla hangsúly"}, {"type": "fill", "question": "She _____ apologise, but too late. (did)", "answer": "did", "tip": "Múltbeli hangsúly"}, {"type": "fill", "question": "I _____ want to help, but I can't. (do)", "answer": "do", "tip": "Ellentmondás kifejezése"}];
+
 let studentName = '';
 let currentIndex = 0;
 let currentAnswer = null;
 const answersLog = [];
+
 (function() {
   const params = new URLSearchParams(window.location.search);
   studentName = params.get('name') || '';
-  if (!studentName) { window.location.href = 'index.html'; return; }
+  if (!studentName) {
+    window.location.href = 'index.html';
+    return;
+  }
   document.getElementById('nav-name').textContent = studentName;
   const nameParam = '?name=' + encodeURIComponent(studentName);
   const backParam = nameParam + '&level=c1';
@@ -230,6 +425,7 @@ const answersLog = [];
   document.getElementById('home-link').setAttribute('href', 'index.html' + backParam);
   renderQuestion();
 })();
+
 function renderQuestion() {
   const q = QUESTIONS[currentIndex];
   const total = QUESTIONS.length;
@@ -238,9 +434,11 @@ function renderQuestion() {
   const typeLabels = { fill: 'Kitöltős', choice: 'Válassz', correct: 'Helyes-e?' };
   document.getElementById('quiz-type-label').textContent = typeLabels[q.type] || '';
   document.getElementById('quiz-question').textContent = q.question;
+
   const area = document.getElementById('quiz-answer-area');
   area.innerHTML = '';
   currentAnswer = null;
+
   if (q.type === 'fill') {
     const wrap = document.createElement('div');
     wrap.className = 'quiz-fill-wrap';
@@ -252,7 +450,10 @@ function renderQuestion() {
     input.autocomplete = 'off';
     input.autocapitalize = 'none';
     input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); submitAnswer(); }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitAnswer();
+      }
     });
     wrap.appendChild(input);
     area.appendChild(wrap);
@@ -260,7 +461,7 @@ function renderQuestion() {
   } else {
     const wrap = document.createElement('div');
     wrap.className = 'quiz-options';
-    (q.options || []).forEach((opt) => {
+    (q.options || []).forEach((opt, i) => {
       const btn = document.createElement('button');
       btn.className = 'quiz-option';
       btn.textContent = opt;
@@ -270,13 +471,15 @@ function renderQuestion() {
     });
     area.appendChild(wrap);
   }
-  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább →';
+  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább';
 }
+
 function selectOption(btn, value) {
   document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
   currentAnswer = value;
 }
+
 function submitAnswer() {
   const q = QUESTIONS[currentIndex];
   let userAnswer = '';
@@ -289,7 +492,9 @@ function submitAnswer() {
   const correct = q.answer.toString().trim().toLowerCase();
   const given = userAnswer.toString().trim().toLowerCase();
   const isCorrect = (correct === given);
+
   answersLog.push({
+    questionNumber: currentIndex + 1,
     question: q.question,
     type: q.type,
     correctAnswer: q.answer,
@@ -297,6 +502,7 @@ function submitAnswer() {
     isCorrect,
     tip: q.tip || ''
   });
+
   if (currentIndex < QUESTIONS.length - 1) {
     currentIndex++;
     renderQuestion();
@@ -304,36 +510,163 @@ function submitAnswer() {
     showResult();
   }
 }
+
 function showResult() {
   document.getElementById('card-screen').style.display = 'none';
   document.getElementById('result-screen').classList.add('active');
+
   const total = QUESTIONS.length;
   const answered = answersLog.length;
   const score = answersLog.filter(a => a.isCorrect).length;
+  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+
+  // Score display
   document.getElementById('result-name').textContent = studentName;
-  document.getElementById('result-count').textContent = answered;
-  fetch(MAKE_WEBHOOK_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      Student: studentName,
-      Quiz: MODULE_META.title,
-      Level: MODULE_META.level,
-      Skill: MODULE_META.skill,
-      Score: score,
-      TotalQuestions: total,
-      Answered: answered,
-      Percentage: total > 0 ? Math.round((score / total) * 100) : 0,
-      Answers: answersLog,
-      CompletedAt: new Date().toISOString()
-    })
-  }).catch(() => {});
+  document.getElementById('result-correct').textContent = score;
+  document.getElementById('result-total').textContent = total;
+  document.getElementById('result-percentage').textContent = percentage;
+
+  // Render mistakes
+  renderMistakes();
+
+  // Fetch AI feedback
+  fetchAIFeedback({
+    Student: studentName,
+    Quiz: MODULE_META.title,
+    Level: MODULE_META.level,
+    Skill: MODULE_META.skill,
+    Score: score,
+    TotalQuestions: total,
+    Answered: answered,
+    Percentage: percentage,
+    Answers: answersLog,
+    CompletedAt: new Date().toISOString()
+  });
 }
+
+function renderMistakes() {
+  const mistakes = answersLog.filter(a => !a.isCorrect);
+  const container = document.getElementById('mistakes-container');
+  const section = document.getElementById('mistakes-section');
+
+  if (mistakes.length === 0) {
+    // Perfect score — show a celebration card instead
+    container.innerHTML = `
+      <div class="perfect-card">
+        <div class="perfect-icon">🎉</div>
+        <div class="perfect-text">Hibátlan gyakorlás! Minden válasz helyes volt.</div>
+      </div>
+    `;
+    return;
+  }
+
+  const html = mistakes.map(m => `
+    <div class="mistake-item">
+      <div class="mistake-num">${m.questionNumber}. kérdés</div>
+      <div class="mistake-q">${escapeHtml(m.question)}</div>
+      <div class="mistake-row">
+        <div class="mistake-label">Válaszod</div>
+        <div class="mistake-val-wrong">${escapeHtml(m.studentAnswer)}</div>
+      </div>
+      <div class="mistake-row">
+        <div class="mistake-label">Helyes</div>
+        <div class="mistake-val-right">${escapeHtml(m.correctAnswer)}</div>
+      </div>
+      ${m.tip ? `<div class="mistake-tip">${escapeHtml(m.tip)}</div>` : ''}
+    </div>
+  `).join('');
+  container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+async function fetchAIFeedback(payload) {
+  const aiContent = document.getElementById('ai-content');
+
+  try {
+    const response = await fetch(MAKE_WEBHOOK_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+
+    // Read as raw text first (don't assume JSON)
+    const rawText = await response.text();
+    let aiText = '';
+
+    // Try parsing as JSON first (ideal case)
+    try {
+      const data = JSON.parse(rawText);
+      if (data && typeof data.ai_feedback === 'string') {
+        aiText = data.ai_feedback;
+      }
+    } catch (jsonErr) {
+      // JSON broken (likely due to unescaped quotes/newlines in AI text)
+      // Fallback 1: try to extract ai_feedback value using a loose regex
+      const match = rawText.match(/"ai_feedback"\s*:\s*"([\s\S]*?)"\s*\}?\s*$/);
+      if (match && match[1]) {
+        aiText = match[1];
+      } else {
+        // Fallback 2: if the response is just plain text (no JSON wrapping), use it directly
+        // Strip potential wrapping like {"status":"ok","ai_feedback":" and trailing "}
+        let cleaned = rawText
+          .replace(/^\s*\{[^"]*"ai_feedback"\s*:\s*"?/, '')
+          .replace(/"?\s*\}\s*$/, '')
+          .trim();
+        if (cleaned.length > 20 && !cleaned.startsWith('{')) {
+          aiText = cleaned;
+        }
+      }
+    }
+
+    // Unescape common sequences
+    if (aiText) {
+      aiText = aiText
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    if (!aiText) {
+      throw new Error('empty response');
+    }
+
+    aiContent.innerHTML = `<div class="ai-text">${escapeHtml(aiText)}</div>`;
+
+  } catch (err) {
+    console.error('AI feedback error:', err);
+    aiContent.innerHTML = `
+      <div class="ai-error">
+        A személyre szabott visszajelzés most nem érhető el. A hibalistád fent teljes — fókuszálj arra, és legközelebb újra próbálhatod. 🧡
+      </div>
+    `;
+  }
+}
+
 function restartDeck() {
   currentIndex = 0;
   answersLog.length = 0;
   document.getElementById('result-screen').classList.remove('active');
   document.getElementById('card-screen').style.display = 'flex';
+  document.getElementById('ai-content').innerHTML = `
+    <div class="ai-loading" id="ai-loading">
+      <div class="ai-spinner"></div>
+      <span>Készítem a visszajelzést — pár másodperc…</span>
+    </div>
+  `;
   renderQuestion();
 }
 </script>
