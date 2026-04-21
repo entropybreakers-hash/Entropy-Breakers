@@ -6,8 +6,7 @@
 <title>Szórend gyakorló · B1 | Entropy Breakers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -16,15 +15,15 @@ html{scroll-behavior:smooth}
   --cream:#1a1612;--cream2:#5a5248;--dim:#8a8075;--dimmer:#b5aa9a;
   --orange:#c9671f;--orange2:#a85418;
   --border:rgba(26,22,18,0.06);--border2:rgba(26,22,18,0.12);
+  --red:#b23a2e;--red-bg:rgba(178,58,46,0.06);
+  --green:#2e7d57;--green-bg:rgba(46,125,87,0.06);
 }
 body{
-  font-family:'Inter',sans-serif;background:var(--bg);color:var(--cream);
+  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);
   min-height:100vh;display:flex;flex-direction:column;
   -webkit-font-smoothing:antialiased;line-height:1.5;
 }
 .accent{color:var(--orange);font-weight:500}
-
-/* ───── NAV ───── */
 nav{
   height:56px;padding:0 40px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
@@ -46,108 +45,335 @@ nav{
   transition:all .2s;
 }
 .nav-btn:hover{border-color:var(--orange);color:var(--orange)}
-.nav-btn-arrow{font-size:13px}
-
-/* ───── MAIN ───── */
 main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px}
-.module-frame{
-  width:100%;max-width:600px;
-  display:flex;flex-direction:column;gap:20px;
-}
+.module-frame{width:100%;max-width:520px;display:flex;flex-direction:column;gap:20px}
 .module-head{text-align:center}
 .module-title{
-  font-family:'Inter',sans-serif;font-size:clamp(26px,4vw,36px);
-  font-weight:500;letter-spacing:-.03em;line-height:1.1;
+  font-family:'DM Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);
+  font-weight:600;letter-spacing:-.025em;line-height:1.2;
 }
-
-/* ───── PROGRESS ───── */
-.progress-wrap{max-width:460px;margin:0 auto;width:100%}
+.progress-wrap{max-width:440px;margin:0 auto;width:100%}
 .progress-row{
   display:flex;align-items:center;justify-content:space-between;
   font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
   color:var(--dim);margin-bottom:8px;
 }
-.category{
-  color:var(--orange);max-width:70%;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.progress-track{
-  width:100%;height:2px;background:var(--border2);
-  border-radius:2px;overflow:hidden;
-}
-.progress-fill{
-  height:100%;background:var(--orange);border-radius:2px;
-  transition:width .4s cubic-bezier(.2,.8,.2,1);
-}
+.progress-track{width:100%;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
 
-/* ───── WORDORDER CARD ───── */
-.wo-card{
-  width:100%;max-width:600px;margin:0 auto;
+/* ───── QUIZ CARD ───── */
+.quiz-card{
+  width:100%;max-width:520px;margin:0 auto;
   background:var(--bg2);
   border:1px solid var(--border2);
-  border-radius:6px;
-  padding:32px 28px;
-  display:flex;flex-direction:column;gap:20px;
+  border-radius:10px;
+  padding:28px 24px;
+  display:flex;flex-direction:column;gap:18px;
 }
+.quiz-question{
+  font-size:17px;
+  font-weight:500;
+  line-height:1.4;
+  color:var(--cream);
+  letter-spacing:-.01em;
+}
+/* Fill-in input */
+.quiz-fill-wrap{margin-top:6px}
+.quiz-fill-input{
+  width:100%;
+  padding:14px 16px;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--cream);
+  background:var(--bg);
+  border:1.5px solid var(--border2);
+  border-radius:8px;
+  outline:none;
+  transition:all .15s;
+}
+.quiz-fill-input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
+/* Choice options */
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{
+  padding:13px 16px;
+  background:var(--bg);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .15s;
+  font-size:14px;
+  font-weight:500;
+  color:var(--cream);
+  text-align:left;
+  font-family:inherit;
+  line-height:1.4;
+}
+.quiz-option:hover{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.04);
+}
+.quiz-option.selected{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.08);
+  color:var(--orange);
+}
+.quiz-option.locked{pointer-events:none;opacity:.6}
+.quiz-option.selected.locked{opacity:1}
+
+/* ───── ACTION BUTTONS ───── */
+.action-row{
+  display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%;
+}
+.action-btn{
+  flex:1;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:14px 20px;border-radius:60px;
+  cursor:pointer;transition:all .2s;
+  border:1px solid var(--border2);
+}
+.action-btn.secondary{background:var(--bg);color:var(--cream)}
+.action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
+.action-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
+.action-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ───── RESULT SCREEN ───── */
+.result-screen{display:none;max-width:620px;margin:0 auto;width:100%}
+.result-screen.active{display:block;animation:fadeUp .5s ease both}
+.result-head{text-align:center;margin-bottom:24px}
+.result-badge{
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+  padding:5px 14px;border-radius:60px;
+  border:1px solid rgba(201,103,31,0.3);
+  background:rgba(201,103,31,0.05);
+  margin-bottom:20px;
+}
+.result-title{
+  font-family:'DM Sans',sans-serif;font-size:clamp(26px,4vw,38px);
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:8px;
+}
+.result-subtitle{color:var(--cream2);font-size:13px;line-height:1.5}
+
+/* Score card */
+.result-score{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+  padding:28px 24px;margin-bottom:24px;text-align:center;
+}
+.result-score-number{
+  font-size:clamp(44px,6vw,64px);font-weight:500;
+  color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
+}
+.result-score-number .dim{color:var(--dimmer);font-size:.65em}
+.result-score-meta{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
+}
+
+/* Section headers */
+.result-section{margin-bottom:24px}
+.result-section-head{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
+  padding:16px 0 12px;
+  display:flex;align-items:center;gap:10px;
+}
+.result-section-head::before,
+.result-section-head::after{
+  content:'';flex:1;height:1px;background:var(--border2);
+}
+.result-section-head::before{max-width:40px}
+
+/* Mistake list */
+.mistake-list{display:flex;flex-direction:column;gap:10px}
+.mistake-item{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--red);
+  border-radius:8px;
+  padding:16px 18px;
+}
+.mistake-num{
+  font-size:10px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+}
+.mistake-q{
+  font-size:14px;font-weight:500;color:var(--cream);
+  margin-bottom:12px;line-height:1.5;
+}
+.mistake-row{
+  display:flex;gap:10px;margin-bottom:6px;
+  font-size:13px;line-height:1.5;
+}
+.mistake-label{
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim);
+  min-width:90px;flex-shrink:0;padding-top:2px;
+}
+.mistake-val-wrong{color:var(--red);font-weight:500}
+.mistake-val-right{color:var(--green);font-weight:500}
+.mistake-tip{
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border);
+  font-size:13px;color:var(--cream2);
+  line-height:1.55;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.mistake-tip::before{
+  content:'💡';flex-shrink:0;font-size:14px;
+}
+
+/* Perfect result */
+.perfect-card{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--green);
+  border-radius:8px;
+  padding:22px 20px;
+  text-align:center;
+}
+.perfect-icon{font-size:32px;margin-bottom:10px;line-height:1}
+.perfect-text{font-size:14px;color:var(--cream);line-height:1.5;font-weight:500}
+
+/* AI Feedback card */
+.ai-card{
+  background:linear-gradient(165deg, rgba(201,103,31,0.04) 0%, var(--bg2) 60%);
+  border:1px solid rgba(201,103,31,0.22);
+  border-radius:10px;
+  padding:26px 24px;
+  min-height:80px;
+}
+.ai-label{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.ai-label::before{
+  content:'✦';font-size:13px;
+}
+.ai-loading{
+  display:flex;align-items:center;gap:12px;
+  color:var(--cream2);font-size:14px;
+}
+.ai-spinner{
+  width:18px;height:18px;
+  border:2px solid var(--border2);
+  border-top-color:var(--orange);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  flex-shrink:0;
+}
+.ai-text{
+  font-size:15px;color:var(--cream);line-height:1.7;
+  white-space:pre-wrap;
+}
+.ai-error{
+  color:var(--cream2);font-size:13.5px;line-height:1.6;
+}
+
+/* Result actions */
+.result-actions{
+  display:flex;gap:10px;max-width:440px;margin:32px auto 0;width:100%;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.module-frame{animation:fadeUp .5s ease both}
+
+footer{
+  background:#0a0806;padding:24px 40px;margin-top:auto;
+  border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
+}
+.footer-inner{
+  max-width:1000px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-brand{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:#f0ebe3}
+.footer-brand .accent{color:var(--orange);font-weight:600}
+.footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
+.footer-tagline .accent{color:var(--orange)}
+
+@media(max-width:560px){
+  nav{padding:0 20px}
+  main{padding:24px 16px}
+  .module-frame{gap:16px}
+  .quiz-card{padding:22px 18px;gap:14px}
+  .quiz-question{font-size:16px}
+  .mistake-item{padding:14px 16px}
+  .mistake-label{min-width:80px;font-size:9.5px}
+  .mistake-row{font-size:12.5px}
+  .ai-card{padding:22px 20px}
+  .ai-text{font-size:14.5px}
+}
+
+/* ───── WORDORDER SPECIFIC ───── */
 .wo-hu{
-  font-family:'Inter',sans-serif;
-  font-size:clamp(18px,2.8vw,24px);
+  font-family:'DM Sans',sans-serif;
+  font-size:clamp(18px,2.8vw,22px);
   font-weight:500;line-height:1.3;
-  letter-spacing:-.02em;
+  letter-spacing:-.015em;
   color:var(--cream);
   text-align:center;
+  padding:4px 0 2px;
 }
 .wo-hu::before{content:'"';color:var(--orange);margin-right:2px}
 .wo-hu::after{content:'"';color:var(--orange);margin-left:2px}
 
 .wo-hint{
   text-align:center;
-  font-size:11px;letter-spacing:.14em;
+  font-size:10px;letter-spacing:.18em;
   text-transform:uppercase;color:var(--dim);
+  margin-top:-6px;
 }
 
-/* Top (answer) area */
 .wo-answer{
-  min-height:72px;
+  min-height:68px;
   background:var(--bg);
   border:1px solid var(--border2);
-  border-radius:6px;
-  padding:14px 14px;
-  display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;
+  border-radius:8px;
+  padding:12px;
+  display:flex;flex-wrap:wrap;gap:7px;align-content:flex-start;
   align-items:center;
   position:relative;
 }
 .wo-answer.empty::after{
-  content:'Húzd ide a szavakat...';
+  content:'Húzd ide a szavakat…';
   color:var(--dimmer);font-size:12px;
-  letter-spacing:.05em;
+  letter-spacing:.04em;
   position:absolute;
   left:50%;top:50%;transform:translate(-50%,-50%);
   pointer-events:none;
   white-space:nowrap;
 }
 
-/* Bottom (pool) area */
 .wo-pool{
-  min-height:56px;
+  min-height:54px;
   background:var(--bg2);
   border:1px dashed var(--border2);
-  border-radius:6px;
-  padding:12px 12px;
-  display:flex;flex-wrap:wrap;gap:8px;align-content:center;
+  border-radius:8px;
+  padding:12px;
+  display:flex;flex-wrap:wrap;gap:7px;align-content:center;
   align-items:center;justify-content:center;
 }
 
-/* Word chip */
 .wo-word{
   display:inline-flex;align-items:center;
-  font-family:'Inter',sans-serif;
+  font-family:inherit;
   font-size:14px;font-weight:500;
   color:var(--cream);
   background:#ffffff;
   border:1px solid var(--border2);
-  border-radius:4px;
-  padding:9px 15px;
+  border-radius:6px;
+  padding:9px 14px;
   cursor:grab;
   user-select:none;
   white-space:nowrap;
@@ -162,10 +388,7 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
 }
 
 /* SortableJS classes */
-.sortable-ghost{
-  opacity:0.3;
-  background:var(--bg3);
-}
+.sortable-ghost{opacity:0.3;background:var(--bg3)}
 .sortable-drag{
   box-shadow:0 8px 24px rgba(26,22,18,0.2);
   border-color:var(--orange) !important;
@@ -174,166 +397,79 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 
   transform:rotate(-2deg);
   z-index:999;
 }
-.sortable-chosen{
-  border-color:var(--orange);
-  color:var(--orange);
-}
+.sortable-chosen{border-color:var(--orange);color:var(--orange)}
 
-/* Locked state after check */
-.wo-word.locked{
-  cursor:default;
-  pointer-events:none;
-}
+/* Locked after check */
+.wo-word.locked{cursor:default;pointer-events:none}
 .wo-word.correct-pos{
-  background:rgba(45,134,89,0.08);
-  border-color:#2d8659;
-  color:#2d8659;
+  background:var(--green-bg);
+  border-color:var(--green);
+  color:var(--green);
 }
 .wo-word.wrong-pos{
-  background:rgba(183,52,52,0.06);
-  border-color:#b73434;
-  color:#b73434;
+  background:var(--red-bg);
+  border-color:var(--red);
+  color:var(--red);
 }
 
-/* Feedback */
 .wo-feedback{
-  min-height:24px;text-align:center;
+  min-height:22px;text-align:center;
   font-size:13px;font-weight:500;
-  letter-spacing:.02em;
+  letter-spacing:.01em;
   color:var(--dim);
+  line-height:1.4;
 }
-.wo-feedback.correct{color:#2d8659}
-.wo-feedback.wrong{color:#b73434}
+.wo-feedback.correct{color:var(--green)}
+.wo-feedback.wrong{color:var(--red)}
 
-/* Tip */
 .wo-tip{
   background:rgba(201,103,31,0.06);
   border-left:3px solid var(--orange);
-  padding:12px 16px;
-  border-radius:0 4px 4px 0;
+  padding:11px 14px;
+  border-radius:0 6px 6px 0;
   font-size:13px;color:var(--cream2);line-height:1.5;
   display:none;
 }
 .wo-tip.show{display:block}
 .wo-tip strong{color:var(--orange);font-weight:600}
 
-/* ───── ACTION BUTTONS ───── */
-.action-row{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
-  max-width:480px;margin:0 auto;width:100%;
-}
-.action-btn{
-  font-family:'Inter',sans-serif;
-  font-size:10px;font-weight:500;letter-spacing:.24em;
-  text-transform:uppercase;
-  padding:14px 20px;border-radius:60px;
-  cursor:pointer;transition:all .2s;
-  border:1px solid var(--border2);
-}
-.action-btn.secondary{background:var(--bg);color:var(--cream)}
-.action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
-.action-btn.primary{background:var(--orange);color:#ffffff;border-color:var(--orange)}
-.action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
-.action-btn:disabled{opacity:0.4;cursor:not-allowed}
-
-/* ───── RESULT SCREEN ───── */
-.result-screen{
-  display:none;text-align:center;max-width:440px;margin:0 auto;
-}
-.result-screen.active{display:block;animation:fadeUp .5s ease both}
-.result-badge{
-  display:inline-block;
-  font-size:10px;font-weight:500;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--orange);
-  padding:5px 14px;border-radius:60px;
-  border:1px solid rgba(201,103,31,0.3);
-  background:rgba(201,103,31,0.05);
-  margin-bottom:20px;
-}
-.result-title{
-  font-family:'Inter',sans-serif;font-size:clamp(28px,4vw,42px);
-  font-weight:500;letter-spacing:-.03em;line-height:1.1;
-  margin-bottom:8px;
-}
-.result-subtitle{color:var(--cream2);font-size:13px;margin-bottom:32px;line-height:1.5}
-.result-stats{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:6px;
-  padding:28px 24px;margin-bottom:24px;
-}
-.result-number{
-  font-size:clamp(44px,6vw,64px);font-weight:500;
-  color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
-}
-.result-meta{
-  font-size:10px;font-weight:500;letter-spacing:.3em;
-  text-transform:uppercase;color:var(--dim);margin-bottom:16px;
-}
-.result-feedback{
-  font-size:14px;color:var(--cream2);line-height:1.6;
-  padding-top:16px;border-top:1px solid var(--border);
-}
-
-/* ───── FOOTER ───── */
-footer{
-  background:#0a0806;padding:24px 40px;margin-top:auto;
-  border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
-}
-.footer-inner{
-  max-width:1000px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:12px;
-}
-.footer-brand{
-  font-size:11px;font-weight:500;letter-spacing:.24em;
-  text-transform:uppercase;color:#f0ebe3;
-}
-.footer-brand .accent{color:var(--orange);font-weight:600}
-.footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
-.footer-tagline .accent{color:var(--orange)}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.module-frame{animation:fadeUp .5s ease both}
+/* 3-column action row for wordorder (clear, check, finish) */
+.action-row.wo-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 
 @media(max-width:560px){
-  nav{padding:0 20px}
-  main{padding:24px 16px}
-  .module-frame{gap:16px}
-  .wo-card{padding:24px 18px;gap:18px}
+  .action-row.wo-actions{grid-template-columns:1fr 1fr;gap:8px}
+  .action-row.wo-actions .action-btn:last-child{grid-column:1 / -1}
   .wo-word{font-size:13px;padding:8px 12px}
-  .action-row{grid-template-columns:1fr 1fr;gap:8px}
-  .action-row .action-btn:last-child{grid-column:1 / -1}
-  .wo-hint{font-size:10px}
+  .wo-hint{font-size:9.5px}
 }
+
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
   <div class="nav-right">
     <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
-    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
+    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
   </div>
 </nav>
 
 <main>
-  <div class="module-frame active" id="card-screen">
-
+  <div class="module-frame" id="card-screen">
     <div class="module-head">
       <h1 class="module-title">Szórend <span class="accent">gyakorló</span></h1>
     </div>
-
     <div class="progress-wrap">
       <div class="progress-row">
-        <span class="category" id="cat-label">—</span>
-        <span id="counter">1 / 40</span>
+        <span id="quiz-type-label">—</span>
+        <span id="counter">1 / 50</span>
       </div>
       <div class="progress-track">
-        <div class="progress-fill" id="progress-fill" style="width:2%"></div>
+        <div class="progress-fill" id="progress-fill" style="width:4%"></div>
       </div>
     </div>
-
-    <div class="wo-card">
+    <div class="quiz-card">
       <div class="wo-hu" id="wo-hu">—</div>
       <div class="wo-hint">↓ Húzd a szavakat fel a helyes sorrendbe ↓</div>
       <div class="wo-answer empty" id="wo-answer"></div>
@@ -341,28 +477,46 @@ footer{
       <div class="wo-feedback" id="wo-feedback"></div>
       <div class="wo-tip" id="wo-tip"></div>
     </div>
-
-    <div class="action-row">
+    <div class="action-row wo-actions">
       <button class="action-btn secondary" onclick="clearAssembly()">Törlés</button>
-      <button class="action-btn secondary" id="check-btn" onclick="checkSentence()">Ellenőrzés</button>
-      <button class="action-btn primary" onclick="showResult()">Befejezés</button>
+      <button class="action-btn primary" id="next-btn" onclick="submitAnswer()">Ellenőrzés</button>
+      <button class="action-btn secondary" onclick="showResult()">Befejezés</button>
     </div>
   </div>
 
   <div class="result-screen" id="result-screen">
-    <div class="result-badge">B1 · Szórend</div>
-    <h2 class="result-title">Szép <span class="accent">munka</span>, <span class="result-name" id="result-name">—</span></h2>
-    <p class="result-subtitle">Gyakorlás befejezve</p>
-
-    <div class="result-stats">
-      <div class="result-number" id="result-count">0</div>
-      <div class="result-meta">megválaszolt mondat</div>
-      <div class="result-feedback" id="result-feedback">Az <span class="accent">AI visszajelzést</span> hamarosan megkapod e-mailben — részletes hibajavítással és magyar-angol gondolkodásbeli tippekkel.</div>
+    <div class="result-head">
+      <div class="result-badge">B1 · Szórend</div>
+      <h2 class="result-title">Ügyes <span class="accent">voltál</span>, <span id="result-name">—</span>!</h2>
+      <p class="result-subtitle">Gyakorlás befejezve</p>
     </div>
 
-    <div class="action-row">
-      <button class="action-btn secondary" onclick="restartFromStart()">Újra</button>
-      <button class="action-btn primary" onclick="shuffleAndRestart()">Új sorrend</button>
+    <div class="result-score">
+      <div class="result-score-number"><span id="result-correct">0</span><span class="dim"> / <span id="result-total">0</span></span></div>
+      <div class="result-score-meta">Helyes válasz (<span id="result-percentage">0</span>%)</div>
+    </div>
+
+    <div class="result-section" id="mistakes-section">
+      <div class="result-section-head">Hibák átnézése</div>
+      <div id="mistakes-container"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-head">AI visszajelzés</div>
+      <div class="ai-card">
+        <div class="ai-label">Személyes üzenet tőlem (Bettinától)</div>
+        <div id="ai-content">
+          <div class="ai-loading" id="ai-loading">
+            <div class="ai-spinner"></div>
+            <span>Készítem a visszajelzést — pár másodperc…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
+      <a class="action-btn primary" href="index.html" id="home-link">Főoldal</a>
     </div>
   </div>
 </main>
@@ -370,11 +524,16 @@ footer{
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
-    <div class="footer-tagline">Gyakorlás · Ismétlés · <span class="accent">Fejlődés</span></div>
+    <div class="footer-tagline">„A nyelvem határai a világom határai"</div>
   </div>
 </footer>
 
 <script>
+// Global error handler
+window.addEventListener('error', function(e) {
+  console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
 
 const MODULE_META = {
@@ -383,72 +542,64 @@ const MODULE_META = {
   skill: "Word Order"
 };
 
-// CARDS: { cat, hu, en (correct sentence), tip }
-const CARDS = [
-  { cat:"Present Perfect", hu:"Három éve tanulok angolul.", en:"I have been learning English for three years.", tip:"Folyamatos jelen: HAVE BEEN + -ING. Időtartam: FOR + időszak" },
-  { cat:"Present Perfect", hu:"Sosem voltam Párizsban.", en:"I have never been to Paris.", tip:"NEVER a have/has UTÁN áll! Nem: 'I never have been'" },
-  { cat:"Present Perfect", hu:"Már megírtam a levelet.", en:"I have already written the letter.", tip:"ALREADY a have/has és past participle KÖZÖTT" },
-  { cat:"Present Perfect", hu:"Még nem reggeliztem.", en:"I haven't had breakfast yet.", tip:"YET a mondat VÉGÉN tagadásban és kérdésben" },
-  { cat:"Present Perfect", hu:"Nemrég költöztem ide.", en:"I have just moved here.", tip:"JUST a have/has után! Magyar: 'nemrég' → just" },
-  { cat:"Past Perfect", hu:"Mire hazaért, már ettem.", en:"When he got home, I had already eaten.", tip:"HAD + past participle. A 'had already' előbbi múlt jelzi." },
-  { cat:"Past Perfect", hu:"Nem tudtam, hogy elmentél.", en:"I didn't know you had left.", tip:"A magasabb múlt: HAD LEFT. Magyarban ugyanaz mint a múlt!" },
-  { cat:"Feltételes", hu:"Ha ráérnék, elmennék.", en:"If I had time, I would go.", tip:"Second conditional: IF + past, WOULD + base form. Magyarul: 'ha + feltételes'" },
-  { cat:"Feltételes", hu:"Ha esik, otthon maradok.", en:"If it rains, I'll stay home.", tip:"First conditional: IF + present, WILL + base" },
-  { cat:"Feltételes", hu:"Ha gazdag lennék, utaznék.", en:"If I were rich, I would travel.", tip:"IF I WERE (nem 'was' — formálisabb!)" },
-  { cat:"Függő beszéd", hu:"Azt mondta, fáradt.", en:"He said he was tired.", tip:"Függő beszédben a 'is' → 'was'. Időeltolódás!" },
-  { cat:"Függő beszéd", hu:"Megkérdezte, hol lakom.", en:"She asked where I lived.", tip:"Függő kérdés: NEM kérdő szórend! 'where I lived', nem 'where did I live'" },
-  { cat:"Függő beszéd", hu:"Azt mondta, holnap jön.", en:"He said he would come the next day.", tip:"'Tomorrow' → 'the next day' függő beszédben" },
-  { cat:"Prepositions", hu:"Várok rád.", en:"I'm waiting for you.", tip:"'Vár valakire' → WAIT FOR (nem 'wait to', nem 'wait on')" },
-  { cat:"Prepositions", hu:"Függ tőled.", en:"It depends on you.", tip:"'Függ' → DEPEND ON (nem 'depend from')" },
-  { cat:"Prepositions", hu:"Félek a kígyóktól.", en:"I'm afraid of snakes.", tip:"'Fél valamitől' → AFRAID OF (nem 'afraid from')" },
-  { cat:"Prepositions", hu:"Gondolok rád.", en:"I'm thinking of you.", tip:"'Gondol valakire' → THINK OF/ABOUT (nem 'think on')" },
-  { cat:"Prepositions", hu:"Hallgatok zenét.", en:"I'm listening to music.", tip:"'Hallgat' → LISTEN TO (mindig 'to'! 'listen music' HIBÁS)" },
-  { cat:"Prepositions", hu:"A buszon találkoztunk.", en:"We met on the bus.", tip:"Busz/vonat/repülő → ON (nem 'in'). Autóban → IN" },
-  { cat:"Prepositions", hu:"Kocsival megyünk.", en:"We go by car.", tip:"Közlekedési eszközzel: BY + eszköz. Nem 'with car'!" },
-  { cat:"Szenvedő", hu:"A házat 1950-ben építették.", en:"The house was built in 1950.", tip:"Szenvedő múlt: WAS/WERE + past participle. Magyar: 'építették'" },
-  { cat:"Szenvedő", hu:"A csomagot holnap szállítják.", en:"The package will be delivered tomorrow.", tip:"Szenvedő jövő: WILL BE + past participle" },
-  { cat:"Szenvedő", hu:"Ezt a dalt mindenki ismeri.", en:"This song is known by everyone.", tip:"Passive jelen: IS + past participle. 'Által' → BY" },
-  { cat:"Modálisak", hu:"Nem szabad itt dohányozni.", en:"You mustn't smoke here.", tip:"Tiltás: MUSTN'T. Magyar: 'nem szabad'" },
-  { cat:"Modálisak", hu:"Tudnál segíteni?", en:"Could you help me?", tip:"Udvarias kérés: COULD YOU. Magyar 'tudnál' → Could" },
-  { cat:"Modálisak", hu:"Valószínűleg esni fog.", en:"It might rain.", tip:"Valószínűség: MIGHT / MAY. Magyar: 'valószínűleg'" },
-  { cat:"Modálisak", hu:"Tanulnom kellene.", en:"I should study.", tip:"'Kellene' → SHOULD. Nem erős kötelezettség" },
-  { cat:"Modálisak", hu:"Ötéves koromban tudtam úszni.", en:"I could swim when I was five.", tip:"Múltbeli képesség: COULD. 'When I was' = magyar: '-éves koromban'" },
-  { cat:"Melléknevek", hu:"Egy nagy, piros, régi autó.", en:"A big, old, red car.", tip:"Angol melléknévsorrend: méret → kor → szín. Magyar tetszőleges!" },
-  { cat:"Melléknevek", hu:"Egy gyönyörű, fiatal, magyar nő.", en:"A beautiful, young, Hungarian woman.", tip:"Vélemény → kor → nemzetiség. NEM 'Hungarian young beautiful'!" },
-  { cat:"Since/For", hu:"Két órája várok.", en:"I have been waiting for two hours.", tip:"FOR = időtartam. Magyar: '-a, -e óta' → for" },
-  { cat:"Since/For", hu:"2020 óta itt élek.", en:"I have lived here since 2020.", tip:"SINCE = időpont/kezdet. '2020 óta' → since 2020" },
-  { cat:"Used to", hu:"Régen cigiztem.", en:"I used to smoke.", tip:"'Régen csináltam, de már nem' → USED TO + alapalak" },
-  { cat:"Used to", hu:"Már hozzászoktam.", en:"I'm used to it.", tip:"'Hozzászokott' → BE USED TO + -ing/főnév (MÁS mint 'used to'!)" },
-  { cat:"Szerkezetek", hu:"Imádok olvasni.", en:"I love reading.", tip:"LOVE után -ING alak. 'Love to read' is OK, de gyakoribb: 'love reading'" },
-  { cat:"Szerkezetek", hu:"Nem bánom ha későn jössz.", en:"I don't mind if you're late.", tip:"MIND után -ING vagy 'if you...'. Nem 'I don't mind that you're late'" },
-  { cat:"Szerkezetek", hu:"Alig várom a nyaralást.", en:"I can't wait for the holiday.", tip:"'Alig várom' → CAN'T WAIT FOR. Nem 'I hardly wait'!" },
-  { cat:"Szerkezetek", hu:"Eldöntöttem, hogy itt maradok.", en:"I decided to stay here.", tip:"DECIDE után: TO + alapalak. Nem '-ing'!" },
-  { cat:"Szerkezetek", hu:"Kerülöm az édességet.", en:"I avoid sweets.", tip:"AVOID után -ING. De itt főnév is jó. Nem 'I avoid to eat sweets'!" },
-  { cat:"Present Perfect", hu:"Még sosem jártam ott.", en:"I have never been there.", tip:"HAVE NEVER BEEN TO + hely. Magyar 'ott' → there (nem 'to there'!)" },
-  { cat:"Jövő idő", hu:"Jövő héten Londonba megyek.", en:"I'm going to London next week.", tip:"Tervezett jövő → Present Continuous. 'Will' csak döntés pillanatban!" },
-  { cat:"Jövő idő", hu:"Rögtön segítek.", en:"I'll help you right away.", tip:"Pillanatnyi döntés: WILL. Magyar 'rögtön' → right away" },
-  { cat:"Függő kérdés", hu:"Nem tudom, mit mondjak.", en:"I don't know what to say.", tip:"Függő kérdés infinitivusszal: WHAT TO + alapalak" },
-  { cat:"Prepositions", hu:"Sikerült elintéznem.", en:"I managed to do it.", tip:"'Sikerült' → MANAGED TO + alapalak. Nem 'I could do it'!" },
-  { cat:"Prepositions", hu:"Érdekel a zene.", en:"I'm interested in music.", tip:"INTERESTED IN (nem 'interested for', nem 'interested about')" },
-  { cat:"Prepositions", hu:"Jó vagyok matekból.", en:"I'm good at math.", tip:"GOOD AT + főnév/ing. Magyar '-ból, -ből' → AT" },
-  { cat:"Szerkezetek", hu:"Érdemes elolvasni.", en:"It's worth reading.", tip:"IT'S WORTH + -ING. Nem 'worth to read' (mint magyarul: 'érdemes OLVASNI')" },
-  { cat:"Szerkezetek", hu:"Elég idős, hogy vezessen.", en:"He's old enough to drive.", tip:"ENOUGH a melléknév UTÁN, de főnév ELŐTT! Magyar 'elég' → enough" },
-  { cat:"Modálisak", hu:"Nem kellett volna elmondanom.", en:"I shouldn't have told you.", tip:"Múltbeli szemrehányás: SHOULDN'T HAVE + past participle" },
-  { cat:"Helyhatározók", hu:"A sarkon fordulj jobbra.", en:"Turn right at the corner.", tip:"Konkrét hely: AT. Magyar 'a sarkon' → at the corner" }
+const QUESTIONS = [
+  { type:"wordorder", cat:"Present Perfect", hu:"Három éve tanulok angolul.", en:"I have been learning English for three years.", tip:"Folyamatos jelen: HAVE BEEN + -ING. Időtartam: FOR + időszak" },
+  { type:"wordorder", cat:"Present Perfect", hu:"Sosem voltam Párizsban.", en:"I have never been to Paris.", tip:"NEVER a have/has UTÁN áll! Nem: 'I never have been'" },
+  { type:"wordorder", cat:"Present Perfect", hu:"Már megírtam a levelet.", en:"I have already written the letter.", tip:"ALREADY a have/has és past participle KÖZÖTT" },
+  { type:"wordorder", cat:"Present Perfect", hu:"Még nem reggeliztem.", en:"I haven't had breakfast yet.", tip:"YET a mondat VÉGÉN tagadásban és kérdésben" },
+  { type:"wordorder", cat:"Present Perfect", hu:"Nemrég költöztem ide.", en:"I have just moved here.", tip:"JUST a have/has után! Magyar: 'nemrég' → just" },
+  { type:"wordorder", cat:"Past Perfect", hu:"Mire hazaért, már ettem.", en:"When he got home, I had already eaten.", tip:"HAD + past participle. A 'had already' előbbi múlt jelzi." },
+  { type:"wordorder", cat:"Past Perfect", hu:"Nem tudtam, hogy elmentél.", en:"I didn't know you had left.", tip:"A magasabb múlt: HAD LEFT. Magyarban ugyanaz mint a múlt!" },
+  { type:"wordorder", cat:"Feltételes", hu:"Ha ráérnék, elmennék.", en:"If I had time, I would go.", tip:"Second conditional: IF + past, WOULD + base form. Magyarul: 'ha + feltételes'" },
+  { type:"wordorder", cat:"Feltételes", hu:"Ha esik, otthon maradok.", en:"If it rains, I'll stay home.", tip:"First conditional: IF + present, WILL + base" },
+  { type:"wordorder", cat:"Feltételes", hu:"Ha gazdag lennék, utaznék.", en:"If I were rich, I would travel.", tip:"IF I WERE (nem 'was' — formálisabb!)" },
+  { type:"wordorder", cat:"Függő beszéd", hu:"Azt mondta, fáradt.", en:"He said he was tired.", tip:"Függő beszédben a 'is' → 'was'. Időeltolódás!" },
+  { type:"wordorder", cat:"Függő beszéd", hu:"Megkérdezte, hol lakom.", en:"She asked where I lived.", tip:"Függő kérdés: NEM kérdő szórend! 'where I lived', nem 'where did I live'" },
+  { type:"wordorder", cat:"Függő beszéd", hu:"Azt mondta, holnap jön.", en:"He said he would come the next day.", tip:"'Tomorrow' → 'the next day' függő beszédben" },
+  { type:"wordorder", cat:"Prepositions", hu:"Várok rád.", en:"I'm waiting for you.", tip:"'Vár valakire' → WAIT FOR (nem 'wait to', nem 'wait on')" },
+  { type:"wordorder", cat:"Prepositions", hu:"Függ tőled.", en:"It depends on you.", tip:"'Függ' → DEPEND ON (nem 'depend from')" },
+  { type:"wordorder", cat:"Prepositions", hu:"Félek a kígyóktól.", en:"I'm afraid of snakes.", tip:"'Fél valamitől' → AFRAID OF (nem 'afraid from')" },
+  { type:"wordorder", cat:"Prepositions", hu:"Gondolok rád.", en:"I'm thinking of you.", tip:"'Gondol valakire' → THINK OF/ABOUT (nem 'think on')" },
+  { type:"wordorder", cat:"Prepositions", hu:"Hallgatok zenét.", en:"I'm listening to music.", tip:"'Hallgat' → LISTEN TO (mindig 'to'! 'listen music' HIBÁS)" },
+  { type:"wordorder", cat:"Prepositions", hu:"A buszon találkoztunk.", en:"We met on the bus.", tip:"Busz/vonat/repülő → ON (nem 'in'). Autóban → IN" },
+  { type:"wordorder", cat:"Prepositions", hu:"Kocsival megyünk.", en:"We go by car.", tip:"Közlekedési eszközzel: BY + eszköz. Nem 'with car'!" },
+  { type:"wordorder", cat:"Szenvedő", hu:"A házat 1950-ben építették.", en:"The house was built in 1950.", tip:"Szenvedő múlt: WAS/WERE + past participle. Magyar: 'építették'" },
+  { type:"wordorder", cat:"Szenvedő", hu:"A csomagot holnap szállítják.", en:"The package will be delivered tomorrow.", tip:"Szenvedő jövő: WILL BE + past participle" },
+  { type:"wordorder", cat:"Szenvedő", hu:"Ezt a dalt mindenki ismeri.", en:"This song is known by everyone.", tip:"Passive jelen: IS + past participle. 'Által' → BY" },
+  { type:"wordorder", cat:"Modálisak", hu:"Nem szabad itt dohányozni.", en:"You mustn't smoke here.", tip:"Tiltás: MUSTN'T. Magyar: 'nem szabad'" },
+  { type:"wordorder", cat:"Modálisak", hu:"Tudnál segíteni?", en:"Could you help me?", tip:"Udvarias kérés: COULD YOU. Magyar 'tudnál' → Could" },
+  { type:"wordorder", cat:"Modálisak", hu:"Valószínűleg esni fog.", en:"It might rain.", tip:"Valószínűség: MIGHT / MAY. Magyar: 'valószínűleg'" },
+  { type:"wordorder", cat:"Modálisak", hu:"Tanulnom kellene.", en:"I should study.", tip:"'Kellene' → SHOULD. Nem erős kötelezettség" },
+  { type:"wordorder", cat:"Modálisak", hu:"Ötéves koromban tudtam úszni.", en:"I could swim when I was five.", tip:"Múltbeli képesség: COULD. 'When I was' = magyar: '-éves koromban'" },
+  { type:"wordorder", cat:"Melléknevek", hu:"Egy nagy, piros, régi autó.", en:"A big, old, red car.", tip:"Angol melléknévsorrend: méret → kor → szín. Magyar tetszőleges!" },
+  { type:"wordorder", cat:"Melléknevek", hu:"Egy gyönyörű, fiatal, magyar nő.", en:"A beautiful, young, Hungarian woman.", tip:"Vélemény → kor → nemzetiség. NEM 'Hungarian young beautiful'!" },
+  { type:"wordorder", cat:"Since/For", hu:"Két órája várok.", en:"I have been waiting for two hours.", tip:"FOR = időtartam. Magyar: '-a, -e óta' → for" },
+  { type:"wordorder", cat:"Since/For", hu:"2020 óta itt élek.", en:"I have lived here since 2020.", tip:"SINCE = időpont/kezdet. '2020 óta' → since 2020" },
+  { type:"wordorder", cat:"Used to", hu:"Régen cigiztem.", en:"I used to smoke.", tip:"'Régen csináltam, de már nem' → USED TO + alapalak" },
+  { type:"wordorder", cat:"Used to", hu:"Már hozzászoktam.", en:"I'm used to it.", tip:"'Hozzászokott' → BE USED TO + -ing/főnév (MÁS mint 'used to'!)" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Imádok olvasni.", en:"I love reading.", tip:"LOVE után -ING alak. 'Love to read' is OK, de gyakoribb: 'love reading'" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Nem bánom ha későn jössz.", en:"I don't mind if you're late.", tip:"MIND után -ING vagy 'if you...'. Nem 'I don't mind that you're late'" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Alig várom a nyaralást.", en:"I can't wait for the holiday.", tip:"'Alig várom' → CAN'T WAIT FOR. Nem 'I hardly wait'!" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Eldöntöttem, hogy itt maradok.", en:"I decided to stay here.", tip:"DECIDE után: TO + alapalak. Nem '-ing'!" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Kerülöm az édességet.", en:"I avoid sweets.", tip:"AVOID után -ING. De itt főnév is jó. Nem 'I avoid to eat sweets'!" },
+  { type:"wordorder", cat:"Present Perfect", hu:"Még sosem jártam ott.", en:"I have never been there.", tip:"HAVE NEVER BEEN TO + hely. Magyar 'ott' → there (nem 'to there'!)" },
+  { type:"wordorder", cat:"Jövő idő", hu:"Jövő héten Londonba megyek.", en:"I'm going to London next week.", tip:"Tervezett jövő → Present Continuous. 'Will' csak döntés pillanatban!" },
+  { type:"wordorder", cat:"Jövő idő", hu:"Rögtön segítek.", en:"I'll help you right away.", tip:"Pillanatnyi döntés: WILL. Magyar 'rögtön' → right away" },
+  { type:"wordorder", cat:"Függő kérdés", hu:"Nem tudom, mit mondjak.", en:"I don't know what to say.", tip:"Függő kérdés infinitivusszal: WHAT TO + alapalak" },
+  { type:"wordorder", cat:"Prepositions", hu:"Sikerült elintéznem.", en:"I managed to do it.", tip:"'Sikerült' → MANAGED TO + alapalak. Nem 'I could do it'!" },
+  { type:"wordorder", cat:"Prepositions", hu:"Érdekel a zene.", en:"I'm interested in music.", tip:"INTERESTED IN (nem 'interested for', nem 'interested about')" },
+  { type:"wordorder", cat:"Prepositions", hu:"Jó vagyok matekból.", en:"I'm good at math.", tip:"GOOD AT + főnév/ing. Magyar '-ból, -ből' → AT" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Érdemes elolvasni.", en:"It's worth reading.", tip:"IT'S WORTH + -ING. Nem 'worth to read' (mint magyarul: 'érdemes OLVASNI')" },
+  { type:"wordorder", cat:"Szerkezetek", hu:"Elég idős, hogy vezessen.", en:"He's old enough to drive.", tip:"ENOUGH a melléknév UTÁN, de főnév ELŐTT! Magyar 'elég' → enough" },
+  { type:"wordorder", cat:"Modálisak", hu:"Nem kellett volna elmondanom.", en:"I shouldn't have told you.", tip:"Múltbeli szemrehányás: SHOULDN'T HAVE + past participle" },
+  { type:"wordorder", cat:"Helyhatározók", hu:"A sarkon fordulj jobbra.", en:"Turn right at the corner.", tip:"Konkrét hely: AT. Magyar 'a sarkon' → at the corner" }
 ];
 
-// ─── State ───
 let studentName = '';
-let cardList = [];
 let currentIndex = 0;
-let answered = false;
-let score = 0;
+let currentAnswer = null;
 const answersLog = [];
 
-let sortableAnswer = null;
-let sortablePool = null;
-
-// ─── Init from URL ───
 (function() {
   const params = new URLSearchParams(window.location.search);
   studentName = params.get('name') || '';
@@ -457,73 +608,44 @@ let sortablePool = null;
     return;
   }
   document.getElementById('nav-name').textContent = studentName;
-
   const nameParam = '?name=' + encodeURIComponent(studentName);
   const backParam = nameParam + '&level=b1';
   document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
   document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
-
-  cardList = [...CARDS];
-  shuffleArray(cardList);
-  initSortable();
-  renderCard();
+  document.getElementById('home-link').setAttribute('href', 'index.html' + backParam);
+  renderQuestion();
 })();
 
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-function tokenize(sentence) {
-  return sentence.trim().split(/\s+/);
-}
-
-function initSortable() {
-  const answerEl = document.getElementById('wo-answer');
-  const poolEl = document.getElementById('wo-pool');
-
-  // Shared config: allow moving between the two lists
-  const sharedOpts = {
-    group: 'words',
-    animation: 180,
-    ghostClass: 'sortable-ghost',
-    chosenClass: 'sortable-chosen',
-    dragClass: 'sortable-drag',
-    forceFallback: true,  // helps with touch devices
-    fallbackTolerance: 4,
-    delay: 0,
-    onEnd: onDragEnd,
-  };
-
-  sortableAnswer = Sortable.create(answerEl, sharedOpts);
-  sortablePool = Sortable.create(poolEl, sharedOpts);
-}
-
-function onDragEnd() {
-  // Update empty state of answer area
-  const answerEl = document.getElementById('wo-answer');
-  if (answerEl.children.length === 0) {
-    answerEl.classList.add('empty');
-  } else {
-    answerEl.classList.remove('empty');
-  }
-}
-
-function renderCard() {
-  const card = cardList[currentIndex];
-  const total = cardList.length;
-
+function renderQuestion() {
+  const q = QUESTIONS[currentIndex];
+  const total = QUESTIONS.length;
   document.getElementById('counter').textContent = `${currentIndex + 1} / ${total}`;
   document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
-  document.getElementById('cat-label').textContent = card.cat;
-  document.getElementById('wo-hu').textContent = card.hu;
+  document.getElementById('quiz-type-label').textContent = q.cat || '';
 
-  answered = false;
-  const words = tokenize(card.en);
+  if (q.type === 'wordorder') {
+    renderWordOrder(q);
+    return;
+  }
 
-  // Scramble order
+  // (fallback — unused in wordorder modules, kept for safety)
+  document.getElementById('quiz-question').textContent = q.question;
+}
+
+function renderWordOrder(q) {
+  document.getElementById('wo-hu').textContent = q.hu;
+  document.getElementById('wo-feedback').textContent = '';
+  document.getElementById('wo-feedback').className = 'wo-feedback';
+  document.getElementById('wo-tip').classList.remove('show');
+  document.getElementById('wo-tip').innerHTML = '';
+
+  const answerEl = document.getElementById('wo-answer');
+  const poolEl = document.getElementById('wo-pool');
+  answerEl.innerHTML = '';
+  answerEl.classList.add('empty');
+  poolEl.innerHTML = '';
+
+  const words = q.en.trim().split(/\s+/);
   const order = Array.from({length: words.length}, (_, i) => i);
   let attempts = 0;
   do {
@@ -531,14 +653,6 @@ function renderCard() {
     attempts++;
   } while (isInOrder(order) && attempts < 10 && words.length > 2);
 
-  // Clear answer area
-  const answerEl = document.getElementById('wo-answer');
-  answerEl.innerHTML = '';
-  answerEl.classList.add('empty');
-
-  // Populate pool
-  const poolEl = document.getElementById('wo-pool');
-  poolEl.innerHTML = '';
   order.forEach(origIdx => {
     const chip = document.createElement('div');
     chip.className = 'wo-word';
@@ -547,17 +661,19 @@ function renderCard() {
     poolEl.appendChild(chip);
   });
 
-  // Reset UI
-  document.getElementById('wo-feedback').textContent = '';
-  document.getElementById('wo-feedback').className = 'wo-feedback';
-  document.getElementById('wo-tip').classList.remove('show');
-  document.getElementById('wo-tip').innerHTML = '';
-  document.getElementById('check-btn').textContent = 'Ellenőrzés';
-  document.getElementById('check-btn').disabled = false;
+  checkPhase = 'assemble'; // 'assemble' -> 'next'
+  answered = false;
+  document.getElementById('next-btn').textContent = 'Ellenőrzés';
+  document.getElementById('next-btn').disabled = false;
 
-  // Re-enable sortable (in case locked from previous)
-  if (sortableAnswer) sortableAnswer.option('disabled', false);
-  if (sortablePool) sortablePool.option('disabled', false);
+  initSortableForRound();
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
 }
 
 function isInOrder(arr) {
@@ -565,6 +681,40 @@ function isInOrder(arr) {
     if (arr[i] !== i) return false;
   }
   return true;
+}
+
+let sortableAnswer = null;
+let sortablePool = null;
+let checkPhase = 'assemble';
+let answered = false;
+
+function initSortableForRound() {
+  const answerEl = document.getElementById('wo-answer');
+  const poolEl = document.getElementById('wo-pool');
+  const sharedOpts = {
+    group: 'words',
+    animation: 180,
+    ghostClass: 'sortable-ghost',
+    chosenClass: 'sortable-chosen',
+    dragClass: 'sortable-drag',
+    forceFallback: true,
+    fallbackTolerance: 4,
+    delay: 0,
+    onEnd: onDragEnd,
+  };
+  if (sortableAnswer) sortableAnswer.destroy();
+  if (sortablePool) sortablePool.destroy();
+  sortableAnswer = Sortable.create(answerEl, sharedOpts);
+  sortablePool = Sortable.create(poolEl, sharedOpts);
+}
+
+function onDragEnd() {
+  const answerEl = document.getElementById('wo-answer');
+  if (answerEl.children.length === 0) {
+    answerEl.classList.add('empty');
+  } else {
+    answerEl.classList.remove('empty');
+  }
 }
 
 function getAssembledSentence() {
@@ -578,22 +728,40 @@ function clearAssembly() {
   if (answered) return;
   const answerEl = document.getElementById('wo-answer');
   const poolEl = document.getElementById('wo-pool');
-  // Move all chips back to pool
   while (answerEl.firstChild) {
     poolEl.appendChild(answerEl.firstChild);
   }
   answerEl.classList.add('empty');
 }
 
-function checkSentence() {
-  if (answered) {
-    nextCard();
+function selectOption(btn, value) {
+  document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  currentAnswer = value;
+}
+
+function submitAnswer() {
+  const q = QUESTIONS[currentIndex];
+
+  if (q.type !== 'wordorder') {
+    // (fallback — unused)
     return;
   }
 
-  const card = cardList[currentIndex];
+  // Two-phase: 'assemble' -> check; 'next' -> advance
+  if (checkPhase === 'next') {
+    if (currentIndex < QUESTIONS.length - 1) {
+      currentIndex++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+    return;
+  }
+
+  // Phase 'assemble' — evaluate
   const userSentence = getAssembledSentence();
-  const correctSentence = card.en;
+  const correctSentence = q.en;
   const isCorrect = userSentence === correctSentence;
 
   const feedback = document.getElementById('wo-feedback');
@@ -602,103 +770,199 @@ function checkSentence() {
   if (isCorrect) {
     feedback.textContent = '✓ Helyes!';
     feedback.className = 'wo-feedback correct';
-    score++;
-    // Zöld visszajelzés a chipeken
     document.querySelectorAll('#wo-answer .wo-word').forEach(el => {
       el.classList.add('correct-pos', 'locked');
     });
   } else {
     feedback.textContent = 'A helyes szórend: ' + correctSentence;
     feedback.className = 'wo-feedback wrong';
-    // Piros visszajelzés
     document.querySelectorAll('#wo-answer .wo-word, #wo-pool .wo-word').forEach(el => {
       el.classList.add('wrong-pos', 'locked');
     });
   }
 
-  // Tipp mindig jön
-  if (card.tip) {
-    tip.innerHTML = '<strong>💡 Tipp:</strong> ' + card.tip;
+  if (q.tip) {
+    tip.innerHTML = '<strong>💡 Tipp:</strong> ' + escapeHtml(q.tip);
     tip.classList.add('show');
   }
 
   answersLog.push({
-    hu: card.hu,
-    correct: correctSentence,
-    student: userSentence || '(üresen hagyta)',
+    questionNumber: currentIndex + 1,
+    question: q.hu,
+    type: 'wordorder',
+    correctAnswer: correctSentence,
+    studentAnswer: userSentence || '(üresen hagyta)',
     isCorrect: isCorrect,
-    tip: card.tip
+    tip: q.tip || ''
   });
 
-  document.getElementById('check-btn').textContent = 'Tovább →';
   answered = true;
-
-  // Zárjuk le a drag-drop-ot
   if (sortableAnswer) sortableAnswer.option('disabled', true);
   if (sortablePool) sortablePool.option('disabled', true);
-}
 
-function nextCard() {
-  if (currentIndex < cardList.length - 1) {
-    currentIndex++;
-    renderCard();
-  } else {
-    showResult();
-  }
+  checkPhase = 'next';
+  const btn = document.getElementById('next-btn');
+  btn.textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés →' : 'Tovább →';
 }
 
 function showResult() {
   document.getElementById('card-screen').style.display = 'none';
   document.getElementById('result-screen').classList.add('active');
 
-  const total = cardList.length;
-  const answeredCount = answersLog.length;
-  const pct = total > 0 ? Math.round((score / total) * 100) : 0;
+  const total = QUESTIONS.length;
+  const answered = answersLog.length;
+  const score = answersLog.filter(a => a.isCorrect).length;
+  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
 
+  // Score display
   document.getElementById('result-name').textContent = studentName;
-  document.getElementById('result-count').textContent = answeredCount;
+  document.getElementById('result-correct').textContent = score;
+  document.getElementById('result-total').textContent = total;
+  document.getElementById('result-percentage').textContent = percentage;
 
-  fetch(MAKE_WEBHOOK_URL, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      Student: studentName,
-      Quiz: MODULE_META.title,
-      Score: score,
-      TotalQuestions: total,
-      Answered: answeredCount,
-      Level: MODULE_META.level,
-      Skill: MODULE_META.skill,
-      Percentage: pct,
-      Answers: answersLog,
-      CompletedAt: new Date().toISOString()
-    })
-  }).catch(() => {});
+  // Render mistakes
+  renderMistakes();
+
+  // Fetch AI feedback
+  fetchAIFeedback({
+    Student: studentName,
+    Quiz: MODULE_META.title,
+    Level: MODULE_META.level,
+    Skill: MODULE_META.skill,
+    Score: score,
+    TotalQuestions: total,
+    Answered: answered,
+    Percentage: percentage,
+    Answers: answersLog,
+    CompletedAt: new Date().toISOString()
+  });
 }
 
-function restartFromStart() {
+function renderMistakes() {
+  const mistakes = answersLog.filter(a => !a.isCorrect);
+  const container = document.getElementById('mistakes-container');
+  const section = document.getElementById('mistakes-section');
+
+  if (mistakes.length === 0) {
+    // Perfect score — show a celebration card instead
+    container.innerHTML = `
+      <div class="perfect-card">
+        <div class="perfect-icon">🎉</div>
+        <div class="perfect-text">Hibátlan gyakorlás! Minden válasz helyes volt.</div>
+      </div>
+    `;
+    return;
+  }
+
+  const html = mistakes.map(m => `
+    <div class="mistake-item">
+      <div class="mistake-num">${m.questionNumber}. kérdés</div>
+      <div class="mistake-q">${escapeHtml(m.question)}</div>
+      <div class="mistake-row">
+        <div class="mistake-label">Válaszod</div>
+        <div class="mistake-val-wrong">${escapeHtml(m.studentAnswer)}</div>
+      </div>
+      <div class="mistake-row">
+        <div class="mistake-label">Helyes</div>
+        <div class="mistake-val-right">${escapeHtml(m.correctAnswer)}</div>
+      </div>
+      ${m.tip ? `<div class="mistake-tip">${escapeHtml(m.tip)}</div>` : ''}
+    </div>
+  `).join('');
+  container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+async function fetchAIFeedback(payload) {
+  const aiContent = document.getElementById('ai-content');
+
+  try {
+    const response = await fetch(MAKE_WEBHOOK_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+
+    // Read as raw text first (don't assume JSON)
+    const rawText = await response.text();
+    let aiText = '';
+
+    // Try parsing as JSON first (ideal case)
+    try {
+      const data = JSON.parse(rawText);
+      if (data && typeof data.ai_feedback === 'string') {
+        aiText = data.ai_feedback;
+      }
+    } catch (jsonErr) {
+      // JSON broken (likely due to unescaped quotes/newlines in AI text)
+      // Fallback 1: try to extract ai_feedback value using a loose regex
+      const match = rawText.match(/"ai_feedback"\s*:\s*"([\s\S]*?)"\s*\}?\s*$/);
+      if (match && match[1]) {
+        aiText = match[1];
+      } else {
+        // Fallback 2: if the response is just plain text (no JSON wrapping), use it directly
+        // Strip potential wrapping like {"status":"ok","ai_feedback":" and trailing "}
+        let cleaned = rawText
+          .replace(/^\s*\{[^"]*"ai_feedback"\s*:\s*"?/, '')
+          .replace(/"?\s*\}\s*$/, '')
+          .trim();
+        if (cleaned.length > 20 && !cleaned.startsWith('{')) {
+          aiText = cleaned;
+        }
+      }
+    }
+
+    // Unescape common sequences
+    if (aiText) {
+      aiText = aiText
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    if (!aiText) {
+      throw new Error('empty response');
+    }
+
+    aiContent.innerHTML = `<div class="ai-text">${escapeHtml(aiText)}</div>`;
+
+  } catch (err) {
+    console.error('AI feedback error:', err);
+    aiContent.innerHTML = `
+      <div class="ai-error">
+        A személyre szabott visszajelzés most nem érhető el. A hibalistád fent teljes — fókuszálj arra, és legközelebb újra próbálhatod. 🧡
+      </div>
+    `;
+  }
+}
+
+function restartDeck() {
   currentIndex = 0;
-  score = 0;
   answersLog.length = 0;
   document.getElementById('result-screen').classList.remove('active');
   document.getElementById('card-screen').style.display = 'flex';
-  renderCard();
+  document.getElementById('ai-content').innerHTML = `
+    <div class="ai-loading" id="ai-loading">
+      <div class="ai-spinner"></div>
+      <span>Készítem a visszajelzést — pár másodperc…</span>
+    </div>
+  `;
+  renderQuestion();
 }
-
-function shuffleAndRestart() {
-  cardList = [...CARDS];
-  shuffleArray(cardList);
-  restartFromStart();
-}
-
-// Enter = check/next
-document.addEventListener('keydown', e => {
-  if (document.getElementById('result-screen').classList.contains('active')) return;
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    checkSentence();
-  }
-});
 </script>
 </body>
 </html>
