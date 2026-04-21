@@ -600,6 +600,12 @@ let currentIndex = 0;
 let currentAnswer = null;
 const answersLog = [];
 
+// ─── Wordorder state (must be declared before the IIFE that calls renderQuestion) ───
+let sortableAnswer = null;
+let sortablePool = null;
+let checkPhase = 'assemble';
+let answered = false;
+
 (function() {
   const params = new URLSearchParams(window.location.search);
   studentName = params.get('name') || '';
@@ -682,11 +688,6 @@ function isInOrder(arr) {
   }
   return true;
 }
-
-let sortableAnswer = null;
-let sortablePool = null;
-let checkPhase = 'assemble';
-let answered = false;
 
 function initSortableForRound() {
   const answerEl = document.getElementById('wo-answer');
