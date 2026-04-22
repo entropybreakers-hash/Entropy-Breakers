@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/eb-theme.css">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
@@ -822,7 +823,7 @@ main{
     <div class="hero hero-compact">
       <div class="hero-content">
         <div class="hero-nav">
-          <div></div>
+          <span class="eb-streak" id="eb-streak-levels" data-eb-streak></span>
           <button class="hero-logout" onclick="logout()">Kilépés</button>
         </div>
         <p class="hero-eyebrow">Szia, <span id="select-name">—</span> 👋</p>
@@ -837,6 +838,7 @@ main{
             <span class="level-card-tag">A2</span>
             <div class="level-card-body">
               <p class="level-card-name">Alapozó</p>
+              <span class="eb-chip" data-eb-chip="level:a2"></span>
             </div>
           </button>
           <button class="level-card highlight" onclick="showLevel('b1', this)">
@@ -844,6 +846,7 @@ main{
             <span class="level-card-tag">B1</span>
             <div class="level-card-body">
               <p class="level-card-name">Építő</p>
+              <span class="eb-chip" data-eb-chip="level:b1"></span>
             </div>
           </button>
           <button class="level-card highlight" onclick="showLevel('b2', this)">
@@ -851,6 +854,7 @@ main{
             <span class="level-card-tag">B2</span>
             <div class="level-card-body">
               <p class="level-card-name">Megerősítő</p>
+              <span class="eb-chip" data-eb-chip="level:b2"></span>
             </div>
           </button>
           <button class="level-card highlight" onclick="showLevel('c1', this)">
@@ -858,6 +862,7 @@ main{
             <span class="level-card-tag">C1</span>
             <div class="level-card-body">
               <p class="level-card-name">Mester</p>
+              <span class="eb-chip" data-eb-chip="level:c1"></span>
             </div>
           </button>
         </div>
@@ -895,6 +900,7 @@ main{
           <div class="category-body">
             <p class="category-name">Elmélet</p>
             <p class="category-desc">Nyelvtan szabályok + példák</p>
+            <span class="eb-chip" data-eb-chip="cat:theory"></span>
           </div>
           <span class="category-arrow">→</span>
         </button>
@@ -906,6 +912,7 @@ main{
           <div class="category-body">
             <p class="category-name">Gyakorlás</p>
             <p class="category-desc">Kvízek, tesztek, szórend</p>
+            <span class="eb-chip" data-eb-chip="cat:practice"></span>
           </div>
           <span class="category-arrow">→</span>
         </button>
@@ -917,6 +924,7 @@ main{
           <div class="category-body">
             <p class="category-name">Szószedet</p>
             <p class="category-desc">Szókincs + kifejezések</p>
+            <span class="eb-chip" data-eb-chip="cat:vocab"></span>
           </div>
           <span class="category-arrow">→</span>
         </button>
@@ -1598,6 +1606,167 @@ function logout() {
     window.history.replaceState({}, '', window.location.pathname);
   }
 }
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     Entropy Breakers — Progress wiring
+     ═══════════════════════════════════════════════════════════════ -->
+<script src="assets/eb-progress.js"></script>
+<script src="assets/eb-catalog.js"></script>
+<script>
+/* NAV STATE — remember which screen the student was on */
+(function () {
+  var NAV_KEY = 'eb.nav';
+  function readNav() { try { return JSON.parse(localStorage.getItem(NAV_KEY) || 'null'); } catch (e) { return null; } }
+  function writeNav(v) { try { localStorage.setItem(NAV_KEY, JSON.stringify(v)); } catch (e) {} }
+  function clearNav() { try { localStorage.removeItem(NAV_KEY); } catch (e) {} }
+
+  var _origSwitch = window.switchScreen;
+  if (typeof _origSwitch === 'function') {
+    window.switchScreen = function (id) {
+      var r = _origSwitch.apply(this, arguments);
+      try {
+        if (id === 'screen-login') clearNav();
+        else writeNav({ screen: id, level: (typeof currentLevel !== 'undefined' && currentLevel) ? currentLevel : null, category: (typeof currentCategory !== 'undefined' && currentCategory) ? currentCategory : null });
+      } catch (e) {}
+      return r;
+    };
+  }
+  var _origLogout = window.logout;
+  if (typeof _origLogout === 'function') {
+    window.logout = function () { clearNav(); return _origLogout.apply(this, arguments); };
+  }
+  function restoreFromNav() {
+    var nav = readNav();
+    if (!nav || !nav.screen) return;
+    if (typeof studentName === 'undefined' || !studentName) {
+      try { var p = new URLSearchParams(location.search); var n = p.get('name'); if (n) window.studentName = decodeURIComponent(n); } catch (e) {}
+    }
+    if (!window.studentName) return;
+    if (nav.level) window.currentLevel = nav.level;
+    if (nav.category) window.currentCategory = nav.category;
+    if (nav.screen === 'screen-category' && nav.level && nav.category) {
+      if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
+      if (typeof showCategoryCurrent === 'function') showCategoryCurrent(nav.category);
+    } else if (nav.screen === 'screen-dashboard' && nav.level) {
+      if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
+    } else if (nav.screen === 'screen-levels') {
+      if (typeof showLevelSelect === 'function') showLevelSelect();
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restoreFromNav);
+  else restoreFromNav();
+  window.addEventListener('pageshow', function (e) { if (e.persisted) restoreFromNav(); });
+})();
+</script>
+<script>
+(function () {
+  if (!window.EB) return;
+  function pctNumber(p) { return typeof p === 'number' && !isNaN(p) ? p : 0; }
+  function renderChipInto(el, pct) {
+    var p = pctNumber(pct);
+    var zero = p === 0 ? ' eb-chip-zero' : '';
+    var complete = p >= 95 ? ' eb-chip-complete' : '';
+    el.className = 'eb-chip' + zero + complete;
+    el.innerHTML = '<span class="eb-chip-bar"><span class="eb-chip-fill" style="width:' + p + '%"></span></span><span class="eb-chip-pct">' + p + '%</span>';
+  }
+  function renderStreakInto(el) {
+    var s = EB.getStreak();
+    var zero = s.current === 0 ? ' eb-streak-zero' : '';
+    el.className = 'eb-streak eb-streak-dark' + zero;
+    el.innerHTML = '<span class="eb-streak-icon">🔥</span><span class="eb-streak-num">' + s.current + '</span><span class="eb-streak-label">nap</span>';
+  }
+  function renderLevelSelect() {
+    document.querySelectorAll('#screen-levels [data-eb-chip]').forEach(function (el) {
+      var key = el.getAttribute('data-eb-chip'); var m = key.match(/^level:(.+)$/); if (!m) return;
+      renderChipInto(el, EB.getLevelPct(m[1]));
+    });
+    var streak = document.getElementById('eb-streak-levels');
+    if (streak) renderStreakInto(streak);
+  }
+  function renderDashboard(level) {
+    document.querySelectorAll('#screen-dashboard [data-eb-chip]').forEach(function (el) {
+      var key = el.getAttribute('data-eb-chip'); var m = key.match(/^cat:(.+)$/); if (!m) return;
+      renderChipInto(el, EB.getCategoryPct(level, m[1]));
+    });
+  }
+  function _slugFromHref(href, level, category) {
+    var file = href.split('/').pop().replace(/\.html.*$/, '');
+    var patterns = [
+      new RegExp('^' + level + '-theory-(.+)$'),
+      new RegExp('^' + level + '-practice-(.+)$'),
+      new RegExp('^vocab-' + level + '-(.+)$'),
+      new RegExp('^traveling-guide-' + level + '-flashcards$'),
+      new RegExp('^' + level + '-grammar-master$'),
+      new RegExp('^' + level + '-verb-(learner|test)$'),
+      new RegExp('^' + level + '-phrase-(learner|test)$'),
+      new RegExp('^wordorder-' + level + '$')
+    ];
+    for (var i = 0; i < patterns.length; i++) {
+      var m = file.match(patterns[i]);
+      if (m) {
+        if (file === 'traveling-guide-' + level + '-flashcards') return 'traveling-guide';
+        if (file === level + '-grammar-master') return 'grammar-master';
+        if (file === 'wordorder-' + level) return 'wordorder';
+        if (/^(a2|b1|b2|c1)-verb-/.test(file)) return 'verb-' + m[1];
+        if (/^(a2|b1|b2|c1)-phrase-/.test(file)) return 'phrase-' + m[1];
+        return m[1];
+      }
+    }
+    return null;
+  }
+  function renderCategoryList(level, category) {
+    var root = document.querySelector('#screen-category'); if (!root) return;
+    var sections = root.querySelectorAll('.category-section[data-level="' + level + '"][data-category="' + category + '"]');
+    sections.forEach(function (section) {
+      section.querySelectorAll('a.module').forEach(function (a) {
+        var href = (a.getAttribute('href') || '').toLowerCase();
+        var slug = _slugFromHref(href, level, category); if (!slug) return;
+        var pct = EB.getModule(level, category, slug);
+        var value = pct ? pct.best : 0;
+        var body = a.querySelector('.module-body'); if (!body) return;
+        var chip = body.querySelector('.eb-chip[data-eb-chip^="module:"]');
+        if (!chip) {
+          chip = document.createElement('span');
+          chip.setAttribute('data-eb-chip', 'module:' + level + ':' + category + ':' + slug);
+          body.appendChild(chip);
+        }
+        renderChipInto(chip, value);
+      });
+    });
+  }
+  function _wrap(name, after) {
+    var orig = window[name]; if (typeof orig !== 'function') return;
+    window[name] = function () {
+      var r = orig.apply(this, arguments);
+      try { after.apply(this, arguments); } catch (e) { console.error(e); }
+      return r;
+    };
+  }
+  function _currentLevelFromBadge() {
+    var b = document.getElementById('dash-badge');
+    if (b) return String(b.textContent || '').trim().toLowerCase().split(/\s/)[0];
+    return null;
+  }
+  function _currentLevelCatFromBadge() {
+    var b = document.getElementById('cat-badge'); if (!b) return null;
+    var parts = String(b.textContent || '').split('·').map(function (s) { return s.trim(); });
+    if (parts.length < 2) return null;
+    var lvl = parts[0].toLowerCase();
+    var cat = parts[1].toLowerCase();
+    var catMap = { 'elmélet':'theory', 'gyakorlás':'practice', 'szószedet':'vocab' };
+    return { level: lvl, category: catMap[cat] || cat };
+  }
+  function onScreenActivate(id) {
+    if (id === 'screen-levels') renderLevelSelect();
+    else if (id === 'screen-dashboard') { var lvl = _currentLevelFromBadge(); if (lvl) renderDashboard(lvl); }
+    else if (id === 'screen-category') { var info = _currentLevelCatFromBadge(); if (info) renderCategoryList(info.level, info.category); }
+  }
+  _wrap('switchScreen', function (id) { onScreenActivate(id); });
+  _wrap('showLevel', function () { setTimeout(function () { var lvl = _currentLevelFromBadge(); if (lvl) renderDashboard(lvl); }, 30); });
+  _wrap('showCategoryCurrent', function () { setTimeout(function () { var info = _currentLevelCatFromBadge(); if (info) renderCategoryList(info.level, info.category); }, 30); });
+  document.addEventListener('DOMContentLoaded', function () { renderLevelSelect(); });
+})();
 </script>
 
 </body>
