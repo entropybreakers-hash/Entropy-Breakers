@@ -3,266 +3,752 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>A2 Verb Test | Entropy Breakers</title>
+<title>A2 - Verb Test | Entropy Breakers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
-body{background:#020F09;color:rgba(255,255,255,0.90);font-family:'Manrope',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;}
-.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.mesh{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% -10%,rgba(6,78,59,0.95) 0%,rgba(4,120,87,0.65) 25%,transparent 60%),radial-gradient(ellipse 80% 60% at 0% 50%,rgba(16,185,129,0.45) 0%,transparent 55%),radial-gradient(ellipse 80% 60% at 100% 50%,rgba(52,211,153,0.35) 0%,transparent 55%),#020F09;}
-.light-rays{position:absolute;inset:0;background:conic-gradient(from 270deg at 50% -5%,transparent 0deg,rgba(16,185,129,0.08) 8deg,transparent 16deg,rgba(52,211,153,0.06) 24deg,transparent 40deg,transparent 180deg);mask-image:linear-gradient(to bottom,black 0%,transparent 70%)}
-.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(52,211,153,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(52,211,153,0.07) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse 90% 90% at 50% 30%,black 10%,transparent 80%)}
-.floor-glow{position:absolute;bottom:0;left:0;right:0;height:40%;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(16,185,129,0.28) 0%,transparent 70%);filter:blur(20px)}
-.noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.shell{position:relative;z-index:1;width:100%;max-width:500px}
-.eb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
-.eb-logo{font-family:'Exo 2',sans-serif;font-size:.88rem;font-weight:800;text-transform:uppercase;background:linear-gradient(135deg,#fff 40%,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.eb-badge{font-family:'Exo 2',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#10B981;background:rgba(16,185,129,0.10);border:1px solid rgba(16,185,129,0.25);border-radius:100px;padding:5px 14px}
-#start-screen{text-align:center}
-.start-icon-wrap{position:relative;display:inline-block;margin-bottom:22px}
-.start-icon-glow{position:absolute;inset:-10px;border-radius:32px;background:radial-gradient(circle,rgba(16,185,129,0.45) 0%,transparent 70%);filter:blur(14px);z-index:-1}
-.start-icon{width:76px;height:76px;border-radius:22px;background:linear-gradient(135deg,rgba(6,95,70,0.8),rgba(16,185,129,0.67));border:1px solid rgba(16,185,129,0.30);display:flex;align-items:center;justify-content:center;font-size:1.9rem;backdrop-filter:blur(12px);box-shadow:0 0 40px rgba(16,185,129,0.45),0 8px 32px rgba(0,0,0,0.4)}
-.start-eyebrow{font-size:.6rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#10B981;opacity:.75;margin-bottom:10px}
-.start-title{font-family:'Exo 2',sans-serif;font-size:clamp(1.9rem,8vw,2.8rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin-bottom:32px;background:linear-gradient(135deg,#fff 20%,#34D399 65%,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.name-input{width:100%;padding:15px 20px;background:rgba(255,255,255,0.05);border:1px solid rgba(16,185,129,0.30);border-radius:14px;font-family:'Manrope',sans-serif;font-size:.95rem;font-weight:500;color:#fff;text-align:center;outline:none;transition:all .25s;margin-bottom:12px}
-.name-input::placeholder{color:rgba(255,255,255,0.2)}
-.name-input:focus{border-color:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.10);background:rgba(255,255,255,0.07)}
-.cta-btn{width:100%;padding:15px;background:linear-gradient(135deg,#065F46,#10B981);border:none;border-radius:14px;font-family:'Exo 2',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;cursor:pointer;transition:all .25s;box-shadow:0 0 40px rgba(16,185,129,0.45),0 8px 24px rgba(0,0,0,0.4)}
-#test-ui{display:none}
-.status-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.cat-tag{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#10B981;opacity:.8}
-.counter{font-size:.7rem;font-weight:600;color:rgba(255,255,255,0.35)}
-.prog-track{height:3px;background:rgba(255,255,255,0.07);border-radius:999px;overflow:hidden;margin-bottom:26px}
-.prog-fill{height:100%;width:2%;background:linear-gradient(90deg,#065F46,#10B981,#34D399);border-radius:999px;box-shadow:0 0 10px rgba(16,185,129,0.7);transition:width .55s ease}
-.question-card{background:linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02));border:1px solid rgba(16,185,129,0.30);border-radius:22px;padding:36px 28px;text-align:center;margin-bottom:20px;backdrop-filter:blur(20px);position:relative;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.4)}
-.question-card::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,rgba(16,185,129,0.5),transparent)}
-.q-label{font-size:.56rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:14px}
-.hu-word{font-family:'Exo 2',sans-serif;font-size:clamp(2rem,9vw,2.8rem);font-weight:900;color:#fff;margin-bottom:8px}
-.q-hint{font-size:.8rem;color:#34D399;font-weight:600;min-height:22px}
-.answer-input{width:100%;padding:15px 20px;background:rgba(255,255,255,0.05);border:1px solid rgba(16,185,129,0.30);border-radius:14px;font-family:'Manrope',sans-serif;font-size:1rem;font-weight:600;color:#fff;text-align:center;outline:none;transition:all .25s;margin-bottom:10px}
-.answer-input::placeholder{color:rgba(255,255,255,0.2)}
-.answer-input:focus{border-color:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.10);background:rgba(255,255,255,0.07)}
-.answer-input.correct{border-color:#10B981;background:rgba(16,185,129,0.10)}
-.answer-input.wrong{border-color:#EF4444;background:rgba(239,68,68,0.08)}
-.feedback-msg{font-size:.82rem;font-weight:600;text-align:center;min-height:24px;margin-bottom:12px}
-.feedback-msg.correct{color:#34D399}.feedback-msg.wrong{color:#F87171}
-.feedback-bad{background:rgba(239,68,68,0.12);color:#fecaca;border:1px solid rgba(239,68,68,0.25);border-radius:16px;padding:20px;font-weight:700;font-size:.9rem;text-align:center;margin-top:8px}
-.feedback-good{background:rgba(34,197,94,0.12);color:#bbf7d0;border:1px solid rgba(34,197,94,0.25);border-radius:16px;padding:20px;font-weight:700;font-size:.9rem;text-align:center;margin-top:8px}
-.btn-row{display:flex;flex-direction:column;gap:10px}
-.btn-ghost{padding:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.30);border-radius:14px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:600;color:rgba(255,255,255,0.45);cursor:pointer;transition:all .2s}
-.btn-ghost:hover{border-color:#10B981;color:#34D399}
-.btn-main{padding:14px;background:linear-gradient(135deg,#065F46,#10B981);border:none;border-radius:14px;font-family:'Exo 2',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;box-shadow:0 0 24px rgba(16,185,129,0.45)}
-#result-screen{display:none;text-align:center}
-.result-icon{width:80px;height:80px;border-radius:22px;margin:0 auto 20px;background:linear-gradient(135deg,rgba(6,95,70,0.8),rgba(16,185,129,0.67));border:1px solid rgba(16,185,129,0.30);display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 0 40px rgba(16,185,129,0.45)}
-.result-title{font-family:'Exo 2',sans-serif;font-size:2.2rem;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,#fff 30%,#34D399 70%,#6EE7B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.result-sub{font-size:.82rem;color:rgba(255,255,255,0.38);margin-bottom:24px}
-.result-sub strong{color:#34D399;font-weight:700}
-.result-panel{background:rgba(255,255,255,0.04);border:1px solid rgba(16,185,129,0.30);border-radius:20px;padding:28px;margin-bottom:14px;backdrop-filter:blur(20px);position:relative;overflow:hidden}
-.result-panel::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,#10B981,transparent)}
-.res-eyebrow{font-size:.56rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:10px}
-.res-score{font-family:'Exo 2',sans-serif;font-size:4.5rem;font-weight:900;color:#fff;line-height:1;margin-bottom:4px}
-.res-denom{font-size:.74rem;color:rgba(255,255,255,0.3);margin-bottom:14px}
-.res-msg{font-size:.78rem;color:rgba(255,255,255,0.38);font-style:italic}
-.wrong-section{margin-top:16px;text-align:left;display:none}
-.wrong-title{font-size:.56rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:10px}
-.wrong-item{font-size:.76rem;color:rgba(255,255,255,0.5);padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.wrong-item strong{color:#F87171}
-.hidden{display:none!important}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+:root{
+  --bg:#ffffff;--bg2:#faf8f3;--bg3:#f0ebe3;
+  --cream:#1a1612;--cream2:#5a5248;--dim:#8a8075;--dimmer:#b5aa9a;
+  --orange:#c9671f;--orange2:#a85418;
+  --border:rgba(26,22,18,0.06);--border2:rgba(26,22,18,0.12);
+  --red:#b23a2e;--red-bg:rgba(178,58,46,0.06);
+  --green:#2e7d57;--green-bg:rgba(46,125,87,0.06);
+}
+body{
+  font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);
+  min-height:100vh;display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;line-height:1.5;
+}
+.accent{color:var(--orange);font-weight:500}
+nav{
+  height:56px;padding:0 40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#0a0806;border-bottom:1px solid rgba(240,235,227,0.08);
+}
+.logo{
+  font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
+  color:#f0ebe3;display:flex;align-items:baseline;gap:5px;text-decoration:none;
+}
+.logo .accent{color:var(--orange);font-weight:600;letter-spacing:.24em}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-greeting{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c8c1b8}
+.nav-greeting .name{color:#f0ebe3;font-weight:500}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:#f0ebe3;text-decoration:none;padding:8px 18px;
+  border:1px solid rgba(240,235,227,0.24);border-radius:60px;
+  transition:all .2s;
+}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 24px}
+.module-frame{width:100%;max-width:520px;display:flex;flex-direction:column;gap:20px}
+.module-head{text-align:center}
+.module-title{
+  font-family:'DM Sans',sans-serif;font-size:clamp(22px,3.5vw,30px);
+  font-weight:600;letter-spacing:-.025em;line-height:1.2;
+}
+.progress-wrap{max-width:440px;margin:0 auto;width:100%}
+.progress-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px;
+}
+.progress-track{width:100%;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--orange);border-radius:2px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+
+/* ───── QUIZ CARD ───── */
+.quiz-card{
+  width:100%;max-width:520px;margin:0 auto;
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:28px 24px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.quiz-question{
+  font-size:17px;
+  font-weight:500;
+  line-height:1.4;
+  color:var(--cream);
+  letter-spacing:-.01em;
+}
+/* Fill-in input */
+.quiz-fill-wrap{margin-top:6px}
+.quiz-fill-input{
+  width:100%;
+  padding:14px 16px;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--cream);
+  background:var(--bg);
+  border:1.5px solid var(--border2);
+  border-radius:8px;
+  outline:none;
+  transition:all .15s;
+}
+.quiz-fill-input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
+/* Choice options */
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{
+  padding:13px 16px;
+  background:var(--bg);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .15s;
+  font-size:14px;
+  font-weight:500;
+  color:var(--cream);
+  text-align:left;
+  font-family:inherit;
+  line-height:1.4;
+}
+.quiz-option:hover{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.04);
+}
+.quiz-option.selected{
+  border-color:var(--orange);
+  background:rgba(201,103,31,0.08);
+  color:var(--orange);
+}
+.quiz-option.locked{pointer-events:none;opacity:.6}
+.quiz-option.selected.locked{opacity:1}
+
+/* ───── ACTION BUTTONS ───── */
+.action-row{
+  display:flex;gap:10px;max-width:440px;margin:0 auto;width:100%;
+}
+.action-btn{
+  flex:1;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:14px 20px;border-radius:60px;
+  cursor:pointer;transition:all .2s;
+  border:1px solid var(--border2);
+}
+.action-btn.secondary{background:var(--bg);color:var(--cream)}
+.action-btn.secondary:hover{border-color:var(--orange);color:var(--orange)}
+.action-btn.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.action-btn.primary:hover{background:var(--orange2);border-color:var(--orange2)}
+.action-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ───── RESULT SCREEN ───── */
+.result-screen{display:none;max-width:620px;margin:0 auto;width:100%}
+.result-screen.active{display:block;animation:fadeUp .5s ease both}
+.result-head{text-align:center;margin-bottom:24px}
+.result-badge{
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+  padding:5px 14px;border-radius:60px;
+  border:1px solid rgba(201,103,31,0.3);
+  background:rgba(201,103,31,0.05);
+  margin-bottom:20px;
+}
+.result-title{
+  font-family:'DM Sans',sans-serif;font-size:clamp(26px,4vw,38px);
+  font-weight:600;letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:8px;
+}
+.result-subtitle{color:var(--cream2);font-size:13px;line-height:1.5}
+
+/* Score card */
+.result-score{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:10px;
+  padding:28px 24px;margin-bottom:24px;text-align:center;
+}
+.result-score-number{
+  font-size:clamp(44px,6vw,64px);font-weight:500;
+  color:var(--orange);line-height:1;margin-bottom:8px;letter-spacing:-.04em;
+}
+.result-score-number .dim{color:var(--dimmer);font-size:.65em}
+.result-score-meta{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
+}
+
+/* Section headers */
+.result-section{margin-bottom:24px}
+.result-section-head{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--dim);
+  padding:16px 0 12px;
+  display:flex;align-items:center;gap:10px;
+}
+.result-section-head::before,
+.result-section-head::after{
+  content:'';flex:1;height:1px;background:var(--border2);
+}
+.result-section-head::before{max-width:40px}
+
+/* Mistake list */
+.mistake-list{display:flex;flex-direction:column;gap:10px}
+.mistake-item{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--red);
+  border-radius:8px;
+  padding:16px 18px;
+}
+.mistake-num{
+  font-size:10px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:8px;
+}
+.mistake-q{
+  font-size:14px;font-weight:500;color:var(--cream);
+  margin-bottom:12px;line-height:1.5;
+}
+.mistake-row{
+  display:flex;gap:10px;margin-bottom:6px;
+  font-size:13px;line-height:1.5;
+}
+.mistake-label{
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim);
+  min-width:90px;flex-shrink:0;padding-top:2px;
+}
+.mistake-val-wrong{color:var(--red);font-weight:500}
+.mistake-val-right{color:var(--green);font-weight:500}
+.mistake-tip{
+  margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--border);
+  font-size:13px;color:var(--cream2);
+  line-height:1.55;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.mistake-tip::before{
+  content:'💡';flex-shrink:0;font-size:14px;
+}
+
+/* Perfect result */
+.perfect-card{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  border-left:3px solid var(--green);
+  border-radius:8px;
+  padding:22px 20px;
+  text-align:center;
+}
+.perfect-icon{font-size:32px;margin-bottom:10px;line-height:1}
+.perfect-text{font-size:14px;color:var(--cream);line-height:1.5;font-weight:500}
+
+/* AI Feedback card */
+.ai-card{
+  background:linear-gradient(165deg, rgba(201,103,31,0.04) 0%, var(--bg2) 60%);
+  border:1px solid rgba(201,103,31,0.22);
+  border-radius:10px;
+  padding:26px 24px;
+  min-height:80px;
+}
+.ai-label{
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.ai-label::before{
+  content:'✦';font-size:13px;
+}
+.ai-loading{
+  display:flex;align-items:center;gap:12px;
+  color:var(--cream2);font-size:14px;
+}
+.ai-spinner{
+  width:18px;height:18px;
+  border:2px solid var(--border2);
+  border-top-color:var(--orange);
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+  flex-shrink:0;
+}
+.ai-text{
+  font-size:15px;color:var(--cream);line-height:1.7;
+  white-space:pre-wrap;
+}
+.ai-error{
+  color:var(--cream2);font-size:13.5px;line-height:1.6;
+}
+
+/* Result actions */
+.result-actions{
+  display:flex;gap:10px;max-width:440px;margin:32px auto 0;width:100%;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.module-frame{animation:fadeUp .5s ease both}
+
+footer{
+  background:#0a0806;padding:24px 40px;margin-top:auto;
+  border-top:1px solid rgba(240,235,227,0.08);flex-shrink:0;
+}
+.footer-inner{
+  max-width:1000px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.footer-brand{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:#f0ebe3}
+.footer-brand .accent{color:var(--orange);font-weight:600}
+.footer-tagline{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8a8075}
+.footer-tagline .accent{color:var(--orange)}
+
+@media(max-width:560px){
+  nav{padding:0 20px}
+  main{padding:24px 16px}
+  .module-frame{gap:16px}
+  .quiz-card{padding:22px 18px;gap:14px}
+  .quiz-question{font-size:16px}
+  .mistake-item{padding:14px 16px}
+  .mistake-label{min-width:80px;font-size:9.5px}
+  .mistake-row{font-size:12.5px}
+  .ai-card{padding:22px 20px}
+  .ai-text{font-size:14.5px}
+}
+
+/* Verb-forms type: 3 inputs (V1, V2, V3) in a row */
+.quiz-verbforms-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  max-width:100%;margin-top:6px;
+}
+.quiz-verbform{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.quiz-verbform-label{
+  font-size:9px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+}
+.quiz-verbform-input{
+  width:100%;
+  padding:12px 10px;
+  font-family:inherit;
+  font-size:14px;
+  color:var(--cream);
+  background:var(--bg);
+  border:1.5px solid var(--border2);
+  border-radius:8px;
+  outline:none;
+  text-align:center;
+  transition:all .15s;
+}
+.quiz-verbform-input:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px rgba(201,103,31,0.08);
+}
 
 </style>
-<script>if(new URLSearchParams(location.search).get('name')){document.documentElement.classList.add('eb-autostart');}</script><style>.eb-autostart #start-screen,.eb-autostart #s-start{display:none!important}</style>
+  <link rel="stylesheet" href="assets/eb-theme.css">
 </head>
 <body>
-<div class="bg-wrap"><div class="mesh"></div><div class="light-rays"></div><div class="grid-bg"></div><div class="floor-glow"></div></div>
-<div class="noise"></div>
-<div class="shell">
-
-  <div class="eb-header">
-    <div class="eb-logo">&#9889; Entropy Breakers</div>
-    <div class="eb-badge">A2 &middot; Verbs</div>
+<nav>
+  <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
+  <div class="nav-right">
+    <span class="nav-greeting">Szia, <span class="name" id="nav-name">—</span></span>
+    <a href="index.html" class="nav-btn" id="back-link">Vissza</a>
   </div>
+</nav>
 
-  <div id="start-screen">
-    <div class="start-icon-wrap">
-      <div class="start-icon-glow"></div>
-      <div class="start-icon">&#9997;</div>
+<main>
+  <div class="module-frame" id="card-screen">
+    <div class="module-head">
+      <h1 class="module-title">Igék <span class="accent">teszt</span></h1>
     </div>
-    <div class="start-eyebrow">Verb Test</div>
-    <h1 class="start-title">A2 Verb Test</h1>
-    <input type="text" id="student-name" class="name-input" placeholder="Enter your name..." autocomplete="off">
-    <button class="cta-btn" onclick="startApp()">Start Test &#8594;</button>
-  </div>
-
-  <div id="test-ui">
-    <div class="status-row">
-      <span class="cat-tag">A2 Verbs</span>
-      <span class="counter" id="q-counter">1 / 47</span>
-    </div>
-    <div class="prog-track"><div id="prog-fill" class="prog-fill"></div></div>
-    <div class="question-card">
-      <div class="q-label">Translate to English</div>
-      <div id="hu-word" class="hu-word">&#8212;</div>
-      <div id="q-hint" class="q-hint"></div>
-    </div>
-    <input type="text" id="en-input" class="answer-input" placeholder="Type the English verb..." autocomplete="off">
-    <div id="feedback-msg" class="feedback-msg"></div>
-    <div id="instant-feedback" class="hidden feedback-bad" style="display:none"></div>
-    <div class="btn-row">
-      <button class="btn-ghost" id="reveal-btn" onclick="revealAnswer()">&#128161; Reveal</button>
-      <button class="btn-main" id="next-btn" onclick="handleSubmit()">Check &#8594;</button>
-    </div>
-  </div>
-
-  <div id="result-screen">
-    <div class="result-icon">&#9997;</div>
-    <h2 class="result-title">Test Complete!</h2>
-    <p class="result-sub">Well done, <strong id="r-name"></strong></p>
-    <div class="result-panel">
-      <div class="res-eyebrow">Your Score</div>
-      <div class="res-score" id="r-score">0</div>
-      <div class="res-denom" id="r-denom">/ 47 correct</div>
-      <div class="res-msg" id="r-msg"></div>
-      <div id="ai-feedback" style="margin-top:16px;padding:14px 16px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:14px;font-size:.82rem;color:#6EE7B7;font-style:italic;min-height:44px;text-align:center">⚡ AI elemzés folyamatban...</div>
-      <div class="wrong-section" id="wrong-section">
-        <div class="wrong-title">Review these:</div>
-        <div id="wrong-list"></div>
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span id="quiz-type-label">—</span>
+        <span id="counter">1 / 50</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:2.0%"></div>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn-ghost" onclick="restartQuiz()">&#8635; Restart</button>
-      <button class="btn-main" onclick="restartQuiz()">&#8635; Try Again</button>
+    <div class="quiz-card">
+      <div class="quiz-question" id="quiz-question">—</div>
+      <div id="quiz-answer-area"></div>
+    </div>
+    <div class="action-row">
+      <button class="action-btn primary" id="next-btn" onclick="submitAnswer()">Tovább</button>
+      <button class="action-btn secondary" onclick="showResult()">Befejezés</button>
     </div>
   </div>
 
-</div>
-<script>
-const MAKE_WEBHOOK = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
-const VERBS = [
-    {en:"Ask",hu:"K\u00e9rdez"},{en:"Answer",hu:"V\u00e1laszol"},{en:"Clean",hu:"Takar\u00edt"},
-    {en:"Cook",hu:"F\u0151z"},{en:"Dance",hu:"T\u00e1ncol"},{en:"Drink",hu:"Iszik"},
-    {en:"Eat",hu:"Eszik"},{en:"Help",hu:"Seg\u00edt"},{en:"Jump",hu:"Ugrik"},
-    {en:"Listen",hu:"Hallgat"},{en:"Look",hu:"N\u00e9z"},{en:"Play",hu:"J\u00e1tszik"},
-    {en:"Read",hu:"Olvas"},{en:"Run",hu:"Fut"},{en:"Sing",hu:"\u00c9nekel"},
-    {en:"Sleep",hu:"Alszik"},{en:"Smile",hu:"Mosolyog"},{en:"Speak",hu:"Besz\u00e9l"},
-    {en:"Swim",hu:"\u00daszik"},{en:"Talk",hu:"Besz\u00e9lget"},{en:"Walk",hu:"S\u00e9t\u00e1l"},
-    {en:"Wash",hu:"Mos"},{en:"Watch",hu:"N\u00e9z (TV)"},{en:"Write",hu:"\u00cdr"},
-    {en:"Open",hu:"Kinyit"},{en:"Close",hu:"Bez\u00e1r"},{en:"Call",hu:"H\u00edv"},
-    {en:"Check",hu:"Ellen\u0151riz"},{en:"Count",hu:"Sz\u00e1mol"},{en:"Dream",hu:"\u00c1lmodik"},
-    {en:"Find",hu:"Tal\u00e1l"},{en:"Give",hu:"Ad"},{en:"Go",hu:"Megy"},
-    {en:"Know",hu:"Tud / Ismer"},{en:"Like",hu:"Szeret"},{en:"Live",hu:"\u00c9l / Lakik"},
-    {en:"Love",hu:"Szeret nagyon"},{en:"Make",hu:"Csin\u00e1l"},{en:"Need",hu:"Sz\u00fcks\u00e9ge van"},
-    {en:"Say",hu:"Mond"},{en:"See",hu:"L\u00e1t"},{en:"Show",hu:"Megmutat"},
-    {en:"Think",hu:"Gondol"},{en:"Try",hu:"Megpr\u00f3b\u00e1l"},{en:"Use",hu:"Haszn\u00e1l"},
-    {en:"Want",hu:"Akar"},{en:"Work",hu:"Dolgozik"}
-];
-let studentName="", qIdx=0, score=0, wrongAnswers=[], revealed=false, answered=false;
+  <div class="result-screen" id="result-screen">
+    <div class="result-head">
+      <div class="result-badge">A2 · Igék</div>
+      <h2 class="result-title">Ügyes <span class="accent">voltál</span>, <span id="result-name">—</span>!</h2>
+      <p class="result-subtitle">Gyakorlás befejezve</p>
+    </div>
 
-function startApp(){
-    var input=document.getElementById('student-name');
-    var name=(window.__eb_student_name||input.value.trim());
-    if(name.length<2){input.style.borderColor='#10B981';input.focus();return;}
-    studentName=name;
-    document.getElementById('start-screen').classList.add('hidden');
-    document.getElementById('test-ui').style.display='block';
-    loadWord();
-}
-function loadWord(){
-    if(qIdx>=VERBS.length){showResult();return;}
-    var tot=VERBS.length;
-    document.getElementById('q-counter').innerText=(qIdx+1)+' / '+tot;
-    document.getElementById('prog-fill').style.width=(((qIdx+1)/tot)*100)+'%';
-    document.getElementById('hu-word').innerText=VERBS[qIdx].hu;
-    document.getElementById('q-hint').innerText='';
-    document.getElementById('en-input').value='';
-    document.getElementById('en-input').className='answer-input';
-    document.getElementById('feedback-msg').innerText='';
-    document.getElementById('feedback-msg').className='feedback-msg';
-    document.getElementById('feedback-msg').style.cssText='';
-    var inf=document.getElementById('instant-feedback');
-    inf.style.display='none';inf.innerText='';inf.className='feedback-bad';
-    document.getElementById('reveal-btn').style.display='';
-    document.getElementById('next-btn').innerText='Check \u2192';
-    revealed=false;
-    answered=false;
-    setTimeout(function(){document.getElementById('en-input').focus();},50);
-}
-function norm(s){return s.trim().toLowerCase().replace(/[^a-z\s\/]/g,'').replace(/\s+/,' ').trim();}
-function handleSubmit(){
-    if(answered){qIdx++;loadWord();return;}
-    var input=document.getElementById('en-input');
-    var ans=norm(input.value);
-    var correct=norm(VERBS[qIdx].en);
-    var feedback=document.getElementById('instant-feedback');
-    var isOk=(ans===correct||ans===correct.replace(' (tv)','').trim());
-    if(isOk){
-        score++;
-        input.className='answer-input correct';
-        feedback.innerText='Excellent! ✓';
-        feedback.className='feedback-good';
-    }else{
-        if(!revealed)wrongAnswers.push({hu:VERBS[qIdx].hu,correct:VERBS[qIdx].en});
-        input.className='answer-input wrong';
-        feedback.innerText='Sajnos nem. A helyes: '+VERBS[qIdx].en;
-        feedback.className='feedback-bad';
-    }
-    feedback.style.display='';
-    answered=true;
-    document.getElementById('next-btn').innerText='Next \u2192';
-    document.getElementById('reveal-btn').style.display='none';
-}
-function revealAnswer(){
-    revealed=true;
-    var feedback=document.getElementById('instant-feedback');
-    feedback.innerText='→ '+VERBS[qIdx].en;
-    feedback.className='feedback-bad';
-    feedback.style.display='';
-    document.getElementById('reveal-btn').style.display='none';
-}
-async function showResult(){
-    document.getElementById('test-ui').style.display='none';
-    document.getElementById('result-screen').style.display='block';
-    var tot=VERBS.length,pct=Math.round((score/tot)*100);
-    document.getElementById('r-name').innerText=studentName;
-    document.getElementById('r-score').innerText=score;
-    document.getElementById('r-denom').innerText='/ '+tot+' correct';
-    document.getElementById('r-msg').innerText=pct>=90?'Outstanding! Perfect! \ud83c\udfc6':pct>=70?'Great work! \ud83d\udcaa':pct>=50?'Good effort! Try again. \ud83d\udcc8':'Keep practicing! \ud83d\ude80';
-    if(wrongAnswers.length>0){
-        document.getElementById('wrong-section').style.display='block';
-        document.getElementById('wrong-list').innerHTML=wrongAnswers.map(function(w){return '<div class="wrong-item"><strong>'+w.hu+'</strong> \u2192 '+w.correct+'</div>';}).join('');
-    }
-    document.getElementById('ai-feedback').innerText='\u26a1 AI elem\u00e9zes folyamatban...';
-    try {
-        var response = await fetch(MAKE_WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({Student:studentName,Quiz:'A2 Verb Test',Score:score,TotalQuestions:tot,Level:'A2',Skill:'Verbs',Percentage:pct,CompletedAt:new Date().toISOString()})});
-        var text = await response.text();
-        document.getElementById('ai-feedback').innerText = text || (pct>=80?'Superb! Confident A2 knowledge! ✨':pct>=60?'Well done! A little more practice and you\'ll be perfect!':'Don\'t give up — you learn from every mistake!');
-    } catch(e) {
-        document.getElementById('ai-feedback').innerText = pct>=80?'Superb! Confident A2 knowledge! ✨':pct>=60?'Well done! A little more practice and you\'ll be perfect!':'Don\'t give up — you learn from every mistake!';
-    }
-}
-function restartQuiz(){qIdx=0;score=0;wrongAnswers=[];document.getElementById('result-screen').style.display='none';document.getElementById('test-ui').style.display='block';loadWord();}
-document.addEventListener('keydown',function(e){if(document.getElementById('test-ui').style.display==='none')return;if(e.key==='Enter')handleSubmit();});
-</script>
+    <div class="result-score">
+      <div class="result-score-number"><span id="result-correct">0</span><span class="dim"> / <span id="result-total">0</span></span></div>
+      <div class="result-score-meta">Helyes válasz (<span id="result-percentage">0</span>%)</div>
+    </div>
+
+    <div class="result-section" id="mistakes-section">
+      <div class="result-section-head">Hibák átnézése</div>
+      <div id="mistakes-container"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-head">AI visszajelzés</div>
+      <div class="ai-card">
+        <div class="ai-label">Személyes üzenet tőlem (Bettinától)</div>
+        <div id="ai-content">
+          <div class="ai-loading" id="ai-loading">
+            <div class="ai-spinner"></div>
+            <span>Készítem a visszajelzést — pár másodperc…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="action-btn secondary" onclick="restartDeck()">Újra</button>
+      <a class="action-btn primary" href="index.html" id="home-link">Főoldal</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
+    <div class="footer-tagline">„A nyelvem határai a világom határai"</div>
+  </div>
+</footer>
+
 <script>
-(function(){
-    var p=new URLSearchParams(window.location.search);
-    var n=p.get('name');
-    if(!n||n.length<1)return;
-    var name=decodeURIComponent(n);
-    window.__eb_student_name=name;
-    function doStart(){
-        var el=document.getElementById('student-name');
-        if(el)el.value=name;
-        try{studentName=name;}catch(e){}
-        var ss=document.getElementById('start-screen');
-        if(ss)ss.classList.add('hidden');
-        if(typeof startApp==='function')try{startApp();}catch(e){}
-    }
-    if(document.readyState==='complete')setTimeout(doStart,100);
-    else window.addEventListener('load',function(){setTimeout(doStart,100);});
+// Global error handler
+window.addEventListener('error', function(e) {
+  console.error('JS ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+});
+
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+const MODULE_META = {"title": "A2 - Verb Test", "level": "A2", "skill": "Igék"};
+
+const QUESTIONS = [{"type": "fill", "question": "Fordítsd angolra: Kérdez", "answer": "Ask", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Válaszol", "answer": "Answer", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Takarít", "answer": "Clean", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Főz", "answer": "Cook", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Táncol", "answer": "Dance", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Iszik", "answer": "Drink", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Eszik", "answer": "Eat", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Segít", "answer": "Help", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ugrik", "answer": "Jump", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Hallgat", "answer": "Listen", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Néz", "answer": "Look", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Játszik", "answer": "Play", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Olvas", "answer": "Read", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Fut", "answer": "Run", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Énekel", "answer": "Sing", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Alszik", "answer": "Sleep", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Mosolyog", "answer": "Smile", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Beszél", "answer": "Speak", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Úszik", "answer": "Swim", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Beszélget", "answer": "Talk", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Sétál", "answer": "Walk", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Mos", "answer": "Wash", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Néz (TV)", "answer": "Watch", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ír", "answer": "Write", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Kinyit", "answer": "Open", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Bezár", "answer": "Close", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Hív", "answer": "Call", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ellenőriz", "answer": "Check", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Számol", "answer": "Count", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Álmodik", "answer": "Dream", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Talál", "answer": "Find", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Ad", "answer": "Give", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Megy", "answer": "Go", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Tud / Ismer", "answer": "Know", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Szeret", "answer": "Like", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Él / Lakik", "answer": "Live", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Szeret nagyon", "answer": "Love", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Csinál", "answer": "Make", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Szüksége van", "answer": "Need", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Mond", "answer": "Say", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Lát", "answer": "See", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Megmutat", "answer": "Show", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Gondol", "answer": "Think", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Megpróbál", "answer": "Try", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Használ", "answer": "Use", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Akar", "answer": "Want", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Dolgozik", "answer": "Work", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Vezet", "answer": "Drive", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Érez", "answer": "Feel", "tip": "", "cat": "Alapigék"}, {"type": "fill", "question": "Fordítsd angolra: Tanul", "answer": "Learn", "tip": "", "cat": "Alapigék"}];
+
+let studentName = '';
+let currentIndex = 0;
+let currentAnswer = null;
+const answersLog = [];
+
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  studentName = params.get('name') || '';
+  if (!studentName) {
+    window.location.href = 'index.html';
+    return;
+  }
+  document.getElementById('nav-name').textContent = studentName;
+  const nameParam = '?name=' + encodeURIComponent(studentName);
+  const backParam = nameParam + '&level=a2';
+  document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
+  document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
+  document.getElementById('home-link').setAttribute('href', 'index.html' + backParam);
+  renderQuestion();
 })();
 
+function renderQuestion() {
+  const q = QUESTIONS[currentIndex];
+  const total = QUESTIONS.length;
+  document.getElementById('counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
+  const typeLabels = { fill: 'Fordítsd', choice: 'Válassz', correct: 'Helyes-e?', verbforms: 'V1 · V2 · V3' };
+  document.getElementById('quiz-type-label').textContent = q.cat || typeLabels[q.type] || '';
+  document.getElementById('quiz-question').textContent = q.question;
+
+  const area = document.getElementById('quiz-answer-area');
+  area.innerHTML = '';
+  currentAnswer = null;
+
+  if (q.type === 'fill') {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-fill-wrap';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'quiz-fill-input';
+    input.placeholder = 'Írd be a választ…';
+    input.id = 'fill-input';
+    input.autocomplete = 'off';
+    input.autocapitalize = 'none';
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitAnswer();
+      }
+    });
+    wrap.appendChild(input);
+    area.appendChild(wrap);
+    setTimeout(() => input.focus(), 50);
+  } else if (q.type === 'verbforms') {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-verbforms-row';
+    ['v1','v2','v3'].forEach(key => {
+      const cell = document.createElement('div');
+      cell.className = 'quiz-verbform';
+      const label = document.createElement('div');
+      label.className = 'quiz-verbform-label';
+      label.textContent = key.toUpperCase();
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'quiz-verbform-input';
+      input.id = 'verbform-input-' + key;
+      input.autocomplete = 'off';
+      input.autocapitalize = 'none';
+      input.spellcheck = false;
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          submitAnswer();
+        }
+      });
+      cell.appendChild(label);
+      cell.appendChild(input);
+      wrap.appendChild(cell);
+    });
+    area.appendChild(wrap);
+    setTimeout(() => document.getElementById('verbform-input-v1').focus(), 50);
+  } else {
+    const wrap = document.createElement('div');
+    wrap.className = 'quiz-options';
+    (q.options || []).forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.textContent = opt;
+      btn.dataset.value = opt;
+      btn.onclick = () => selectOption(btn, opt);
+      wrap.appendChild(btn);
+    });
+    area.appendChild(wrap);
+  }
+  document.getElementById('next-btn').textContent = (currentIndex === QUESTIONS.length - 1) ? 'Befejezés' : 'Tovább';
+}
+
+function selectOption(btn, value) {
+  document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  currentAnswer = value;
+}
+
+function normalizeFillAnswer(s) {
+  // Lowercase, trim, remove trailing punctuation, collapse multiple spaces.
+  // Keeps commas (some answers use them, e.g. "a, The").
+  return (s || '').toString().trim().toLowerCase()
+    .replace(/[.!?;:]+$/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function submitAnswer() {
+  const q = QUESTIONS[currentIndex];
+  let userAnswer = '';
+  let correctAnswer;
+  let isCorrect;
+
+  if (q.type === 'fill') {
+    const input = document.getElementById('fill-input');
+    userAnswer = (input.value || '').trim();
+    correctAnswer = q.answer;
+    isCorrect = (normalizeFillAnswer(correctAnswer) === normalizeFillAnswer(userAnswer));
+  } else if (q.type === 'verbforms') {
+    const parts = ['v1','v2','v3'].map(k => (document.getElementById('verbform-input-' + k).value || '').trim());
+    userAnswer = parts.join(' · ');
+    const expected = [q.answer.v1, q.answer.v2, q.answer.v3];
+    correctAnswer = expected.join(' · ');
+    isCorrect = parts.every((p, i) => p.toLowerCase() === expected[i].toLowerCase() && p !== '');
+  } else {
+    userAnswer = currentAnswer || '';
+    correctAnswer = q.answer;
+    isCorrect = (correctAnswer.toString().trim().toLowerCase() === userAnswer.toString().trim().toLowerCase());
+  }
+
+  answersLog.push({
+    questionNumber: currentIndex + 1,
+    question: q.question,
+    type: q.type,
+    correctAnswer: correctAnswer,
+    studentAnswer: userAnswer || '(üresen hagyta)',
+    isCorrect,
+    tip: q.tip || ''
+  });
+
+  if (currentIndex < QUESTIONS.length - 1) {
+    currentIndex++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('card-screen').style.display = 'none';
+  document.getElementById('result-screen').classList.add('active');
+
+  const total = QUESTIONS.length;
+  const answered = answersLog.length;
+  const score = answersLog.filter(a => a.isCorrect).length;
+  const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+
+  // Score display
+  document.getElementById('result-name').textContent = studentName;
+  document.getElementById('result-correct').textContent = score;
+  document.getElementById('result-total').textContent = total;
+  document.getElementById('result-percentage').textContent = percentage;
+
+  // Render mistakes
+  renderMistakes();
+
+  // Fetch AI feedback
+  fetchAIFeedback({
+    Student: studentName,
+    Quiz: MODULE_META.title,
+    Level: MODULE_META.level,
+    Skill: MODULE_META.skill,
+    Score: score,
+    TotalQuestions: total,
+    Answered: answered,
+    Percentage: percentage,
+    Answers: answersLog,
+    CompletedAt: new Date().toISOString()
+  });
+}
+
+function renderMistakes() {
+  const mistakes = answersLog.filter(a => !a.isCorrect);
+  const container = document.getElementById('mistakes-container');
+  const section = document.getElementById('mistakes-section');
+
+  if (mistakes.length === 0) {
+    // Perfect score — show a celebration card instead
+    container.innerHTML = `
+      <div class="perfect-card">
+        <div class="perfect-icon">🎉</div>
+        <div class="perfect-text">Hibátlan gyakorlás! Minden válasz helyes volt.</div>
+      </div>
+    `;
+    return;
+  }
+
+  const html = mistakes.map(m => `
+    <div class="mistake-item">
+      <div class="mistake-num">${m.questionNumber}. kérdés</div>
+      <div class="mistake-q">${escapeHtml(m.question)}</div>
+      <div class="mistake-row">
+        <div class="mistake-label">Válaszod</div>
+        <div class="mistake-val-wrong">${escapeHtml(m.studentAnswer)}</div>
+      </div>
+      <div class="mistake-row">
+        <div class="mistake-label">Helyes</div>
+        <div class="mistake-val-right">${escapeHtml(m.correctAnswer)}</div>
+      </div>
+      ${m.tip ? `<div class="mistake-tip">${escapeHtml(m.tip)}</div>` : ''}
+    </div>
+  `).join('');
+  container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+async function fetchAIFeedback(payload) {
+  const aiContent = document.getElementById('ai-content');
+
+  try {
+    const response = await fetch(MAKE_WEBHOOK_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+
+    // Read as raw text first (don't assume JSON)
+    const rawText = await response.text();
+    let aiText = '';
+
+    // Try parsing as JSON first (ideal case)
+    try {
+      const data = JSON.parse(rawText);
+      if (data && typeof data.ai_feedback === 'string') {
+        aiText = data.ai_feedback;
+      }
+    } catch (jsonErr) {
+      // JSON broken (likely due to unescaped quotes/newlines in AI text)
+      // Fallback 1: try to extract ai_feedback value using a loose regex
+      const match = rawText.match(/"ai_feedback"\s*:\s*"([\s\S]*?)"\s*\}?\s*$/);
+      if (match && match[1]) {
+        aiText = match[1];
+      } else {
+        // Fallback 2: if the response is just plain text (no JSON wrapping), use it directly
+        // Strip potential wrapping like {"status":"ok","ai_feedback":" and trailing "}
+        let cleaned = rawText
+          .replace(/^\s*\{[^"]*"ai_feedback"\s*:\s*"?/, '')
+          .replace(/"?\s*\}\s*$/, '')
+          .trim();
+        if (cleaned.length > 20 && !cleaned.startsWith('{')) {
+          aiText = cleaned;
+        }
+      }
+    }
+
+    // Unescape common sequences
+    if (aiText) {
+      aiText = aiText
+        .replace(/\\n/g, '\n')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\')
+        .trim();
+    }
+
+    if (!aiText) {
+      throw new Error('empty response');
+    }
+
+    aiContent.innerHTML = `<div class="ai-text">${escapeHtml(aiText)}</div>`;
+
+  } catch (err) {
+    console.error('AI feedback error:', err);
+    aiContent.innerHTML = `
+      <div class="ai-error">
+        A személyre szabott visszajelzés most nem érhető el. A hibalistád fent teljes — fókuszálj arra, és legközelebb újra próbálhatod. 🧡
+      </div>
+    `;
+  }
+}
+
+function restartDeck() {
+  currentIndex = 0;
+  answersLog.length = 0;
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('card-screen').style.display = 'flex';
+  document.getElementById('ai-content').innerHTML = `
+    <div class="ai-loading" id="ai-loading">
+      <div class="ai-spinner"></div>
+      <span>Készítem a visszajelzést — pár másodperc…</span>
+    </div>
+  `;
+  renderQuestion();
+}
 </script>
+<script src="assets/eb-progress.js" defer></script>
+<script src="assets/eb-catalog.js" defer></script>
 </body>
 </html>

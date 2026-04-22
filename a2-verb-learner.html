@@ -1,618 +1,652 @@
+<!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A2 Verb Learner | Entropy Breakers 🚀</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A2 - 60 Essential Verbs | Entropy Breakers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 
-        body {
-            background-color: var(--bg-dark);
-            background:#020F09;
-            font-family:'Manrope',sans-serif;
-            color: #f1f5f9;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            margin: 0;
-        }
+:root{
+  --bg:#ffffff;
+  --bg2:#faf8f3;
+  --bg3:#f0ebe3;
+  --cream:#1a1612;
+  --cream2:#5a5248;
+  --dim:#8a8075;
+  --dimmer:#b5aa9a;
+  --orange:#c9671f;
+  --orange2:#a85418;
+  --border:rgba(26,22,18,0.06);
+  --border2:rgba(26,22,18,0.12);
+}
 
-        .cyber-shell {
-            background: rgba(2, 6, 23, 0.88);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            box-shadow: 0 0 30px rgba(45, 212, 191, 0.08);
-            border-radius: 32px;
-            width: 100%;
-            max-width: 560px;
-            overflow: hidden;
-        }
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--cream);
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+}
 
-        .mint-glow-text {
-            color: var(--neon-mint);
-            text-shadow: 0 0 14px rgba(45, 212, 191, 0.6);
-        }
+.accent{color:var(--orange);font-weight:500}
 
-        .aurora-title {
-            background: linear-gradient(135deg, #fff 35%, var(--neon-mint) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* ───── NAV ───── */
+nav{
+  height:56px;padding:0 40px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  background:#0a0806;
+  border-bottom:1px solid rgba(240,235,227,0.08);
+}
+.logo{
+  font-size:11px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:#f0ebe3;
+  display:flex;align-items:baseline;gap:5px;
+  text-decoration:none;
+}
+.logo .accent{
+  color:var(--orange);
+  font-weight:600;letter-spacing:.24em;
+}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-greeting{
+  font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:#c8c1b8;
+}
+.nav-greeting b{color:var(--orange);font-weight:500}
+.nav-btn{
+  font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:#f0ebe3;
+  background:transparent;
+  border:1px solid rgba(240,235,227,0.14);
+  padding:8px 18px;border-radius:60px;
+  cursor:pointer;transition:all .3s;
+  font-family:inherit;text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+.nav-btn-arrow{
+  font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:300;
+}
 
-        .glass-panel {
-            background: var(--glass-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 24px;
-        }
+/* ───── MAIN ───── */
+main{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:32px 24px;
+}
 
-        .input-field {
-            width: 100%;
-            padding: 18px 20px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.04);
-            color: white;
-            font-weight: 700;
-            text-align: center;
-            outline: none;
-            transition: all 0.25s ease;
-        }
+/* ───── MODULE HEADER (compact) ───── */
+.module-frame{
+  width:100%;max-width:480px;
+  display:flex;flex-direction:column;gap:20px;
+}
 
-        .input-field::placeholder {
-            color: #94a3b8;
-        }
+.module-head{
+  text-align:center;
+}
+.module-badge{
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);
+  padding:5px 14px;border-radius:60px;
+  border:1px solid rgba(201,103,31,0.3);
+  background:rgba(201,103,31,0.05);
+  margin-bottom:12px;
+}
+.module-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(26px,4vw,34px);
+  font-weight:500;line-height:1.1;
+  letter-spacing:-.03em;color:var(--cream);
+}
+.module-subtitle{
+  font-size:12px;color:var(--cream2);
+  margin-top:6px;letter-spacing:.02em;
+}
 
-        .input-field:focus {
-            border-color: var(--neon-mint);
-            box-shadow: 0 0 20px rgba(45, 212, 191, 0.15);
-            background: rgba(255,255,255,0.06);
-        }
+/* ───── PROGRESS ───── */
+.progress-wrap{max-width:380px;margin:0 auto;width:100%}
+.progress-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:8px;
+}
+.progress-row .category{
+  color:var(--cream2);font-weight:500;
+  max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.progress-track{
+  width:100%;height:2px;
+  background:var(--border);border-radius:999px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:var(--orange);
+  transition:width .5s cubic-bezier(.2,.8,.2,1);
+}
 
-        .primary-btn {
-            background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%);
-            box-shadow: 0 0 20px rgba(45, 212, 191, 0.22);
-            border: 1px solid rgba(255,255,255,0.14);
-            transition: all 0.25s ease;
-        }
+/* ───── FLIP CARD ───── */
+.flip-container{
+  perspective:1200px;
+  width:100%;max-width:380px;
+  margin:0 auto;
+  height:200px;
+  cursor:pointer;
+}
+.flip-inner{
+  position:relative;width:100%;height:100%;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+  transform-style:preserve-3d;
+}
+.flip-inner.is-flipped{transform:rotateY(180deg)}
 
-        .primary-btn:hover:not(:disabled) {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-            box-shadow: 0 0 30px rgba(45, 212, 191, 0.35);
-        }
+.flip-face{
+  position:absolute;inset:0;
+  backface-visibility:hidden;
+  border-radius:6px;
+  padding:24px 22px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+}
+.flip-front{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+}
+.flip-back{
+  background:var(--bg2);
+  border:1px solid var(--border2);
+  transform:rotateY(180deg);
+}
 
-        .card-flip {
-            perspective: 1000px;
-            height: 78px;
-        }
+.face-label{
+  font-size:8px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;
+  margin-bottom:10px;
+  color:var(--dim);
+}
 
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.45s ease;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
+.face-word{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(22px,3.5vw,30px);
+  font-weight:500;line-height:1.1;
+  letter-spacing:-.03em;
+  max-width:100%;
+  word-wrap:break-word;
+}
+.flip-front .face-word{color:var(--cream)}
+.flip-back .face-word{color:var(--orange)}
 
-        .card-inner.is-flipped {
-            transform: rotateY(180deg);
-        }
+.face-example{
+  font-family:'Inter',sans-serif;
+  font-size:11px;
+  max-width:100%;
+  line-height:1.45;
+  color:var(--cream2);
+  position:absolute;
+  bottom:14px;left:16px;right:16px;
+  padding:0 8px;
+}
+.face-example::before,.face-example::after{
+  content:'"';color:var(--orange);
+  font-size:14px;
+}
 
-        .card-front,
-        .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            padding: 8px;
-            text-align: center;
-            font-weight: 700;
-        }
+.flip-hint{
+  position:absolute;bottom:10px;left:0;right:0;
+  font-size:8px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;opacity:.4;
+  color:var(--dim);
+}
 
-        .card-front {
-            background: linear-gradient(135deg, #0d9488 0%, #4f46e5 100%);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.14);
-            box-shadow: 0 0 16px rgba(45, 212, 191, 0.16);
-            font-size: 1.35rem;
-        }
+/* ───── NAV BUTTONS ───── */
+.nav-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;max-width:380px;margin:0 auto;width:100%;
+}
+.arrow-btn{
+  width:38px;height:38px;flex-shrink:0;
+  background:transparent;
+  border:1px solid var(--border2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .3s;
+  color:var(--cream);
+  font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:400;
+}
+.arrow-btn:hover{
+  border-color:var(--orange);
+  color:var(--orange);
+}
+.arrow-btn:disabled{opacity:.3;cursor:not-allowed;pointer-events:none}
 
-        .card-back {
-            background: rgba(255,255,255,0.06);
-            color: #e2e8f0;
-            border: 1px solid rgba(255,255,255,0.08);
-            transform: rotateY(180deg);
-            font-size: 0.9rem;
-            line-height: 1.35;
-        }
+.nav-hint{
+  flex:1;text-align:center;
+  font-size:10px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);
+}
 
-        .card-inner.is-matched .card-back {
-            background: rgba(34, 197, 94, 0.12);
-            border-color: var(--correct);
-            color: #bbf7d0;
-            opacity: 0.7;
-        }
+/* ───── ACTION BUTTONS ───── */
+.action-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  max-width:380px;margin:0 auto;width:100%;
+}
+.action-btn{
+  padding:12px 18px;
+  font-size:10px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;
+  font-family:inherit;
+  border-radius:4px;
+  cursor:pointer;transition:all .3s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.action-btn.secondary{
+  background:transparent;
+  border:1px solid var(--border2);
+  color:var(--cream);
+}
+.action-btn.secondary:hover{
+  border-color:var(--orange);color:var(--orange);
+}
+.action-btn.primary{
+  background:var(--orange);
+  border:1px solid var(--orange);
+  color:#fff;
+}
+.action-btn.primary:hover{
+  background:var(--orange2);border-color:var(--orange2);
+}
 
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
+/* ───── RESULT SCREEN ───── */
+.result-screen{
+  display:none;text-align:center;width:100%;max-width:560px;
+}
+.result-screen.active{display:block;animation:fadeUp .6s ease both}
+.result-badge{
+  display:inline-block;
+  font-size:10px;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--orange);
+  padding:6px 16px;border-radius:60px;
+  border:1px solid rgba(201,103,31,0.3);
+  background:rgba(201,103,31,0.05);
+  margin-bottom:24px;
+}
+.result-title{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(28px,4vw,38px);
+  font-weight:500;line-height:1.1;
+  letter-spacing:-.03em;color:var(--cream);
+  margin-bottom:14px;
+}
+.result-name{color:var(--orange);font-weight:500}
+.result-subtitle{
+  font-family:'Inter',sans-serif;
+  font-size:15px;color:var(--cream2);
+  margin-bottom:32px;line-height:1.5;
+}
+.result-stats{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:32px 24px;margin-bottom:28px;
+}
+.result-number{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(60px,10vw,96px);
+  font-weight:600;color:var(--orange);
+  line-height:1;letter-spacing:-.04em;
+}
+.result-meta{
+  font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--dim);
+  margin-top:10px;
+}
+.result-feedback{
+  font-family:'Inter',sans-serif;
+  font-size:16px;
+  color:var(--cream2);margin-top:18px;
+  max-width:360px;margin-left:auto;margin-right:auto;
+  line-height:1.45;
+}
 
-        .animate-slide {
-            animation: slideIn 0.35s ease-out;
-        }
+/* ───── FOOTER ───── */
+footer{
+  background:#0a0806;
+  padding:24px 40px;flex-shrink:0;
+  border-top:1px solid rgba(240,235,227,0.08);
+}
+.footer-inner{
+  max-width:980px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.footer-brand{
+  font-size:11px;font-weight:500;letter-spacing:.24em;
+  text-transform:uppercase;color:#f0ebe3;
+  display:flex;align-items:baseline;gap:5px;
+}
+.footer-brand .accent{
+  color:var(--orange);
+  font-weight:600;letter-spacing:.24em;
+}
+.footer-tagline{
+  font-family:'Inter',sans-serif;
+  font-size:11px;color:#c8c1b8;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+}
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* ───── ANIMATIONS ───── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.module-frame.active{animation:fadeUp .5s ease both}
 
-        .result-card {
-            background: linear-gradient(135deg, rgba(13, 148, 136, 0.18), rgba(79, 70, 229, 0.18));
-            border: 1px solid rgba(45, 212, 191, 0.16);
-            border-radius: 32px;
-            box-shadow: 0 0 30px rgba(45, 212, 191, 0.08);
-        }
-    
-    /* ── LEVEL COLOUR THEME ── */
-    :root {
-        --accent:    #10B981;
-        --accent-l:  #34D399;
-        --accent-ll: #6EE7B7;
-        --border-hi: rgba(16,185,129,0.30);
-        --border-lo: rgba(16,185,129,0.15);
-    }
-    .orb-theme-1 { background: radial-gradient(circle, rgba(16,185,129,0.55), transparent 70%) !important; }
-    .orb-theme-2 { background: radial-gradient(circle, rgba(52,211,153,0.40), transparent 70%) !important; }
-    .orb-theme-3 { background: radial-gradient(circle, rgba(6,214,160,0.18), transparent 70%) !important; }
-    
-    
-/* ═══ PREMIUM THEME OVERRIDE ═══ */
-body{background:#020F09 !important;font-family:'Manrope',sans-serif !important}
-.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.mesh{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% -10%,rgba(6,78,59,0.95) 0%,rgba(4,120,87,0.65) 25%,transparent 60%),
-    radial-gradient(ellipse 80% 60% at 0% 50%,rgba(16,185,129,0.45) 0%,transparent 55%),
-    radial-gradient(ellipse 80% 60% at 100% 50%,rgba(52,211,153,0.35) 0%,transparent 55%),
-    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(16,185,129,0.30) 0%,transparent 60%),
-    #020F09}
-.light-rays{position:absolute;inset:0;
-  background:conic-gradient(from 270deg at 50% -5%,
-    transparent 0deg,rgba(16,185,129,0.08) 8deg,transparent 16deg,
-    rgba(52,211,153,0.06) 24deg,transparent 32deg,rgba(110,231,183,0.07) 40deg,
-    transparent 48deg,rgba(16,185,129,0.08) 56deg,transparent 64deg,
-    rgba(52,211,153,0.06) 72deg,transparent 80deg,transparent 180deg);
-  mask-image:linear-gradient(to bottom,black 0%,transparent 70%)}
-.grid-bg{position:absolute;inset:0;
-  background-image:linear-gradient(rgba(52,211,153,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(52,211,153,0.07) 1px,transparent 1px);
-  background-size:48px 48px;
-  mask-image:radial-gradient(ellipse 90% 90% at 50% 30%,black 10%,transparent 80%)}
-.floor-glow{position:absolute;bottom:0;left:0;right:0;height:40%;
-  background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(16,185,129,0.28) 0%,transparent 70%);
-  filter:blur(20px)}
-.noise{position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E")}
-
-/* HEADER */
-.eb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;position:relative;z-index:1}
-.eb-logo{font-family:'Exo 2',sans-serif !important;font-size:.88rem;font-weight:800;text-transform:uppercase;
-  background:linear-gradient(135deg,#fff 40%,#6EE7B7) !important;
-  -webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important}
-.eb-badge{font-family:'Exo 2',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.18em;
-  text-transform:uppercase;color:#10B981;background:rgba(16,185,129,0.10);
-  border:1px solid rgba(16,185,129,0.25);border-radius:100px;padding:5px 14px}
-
-/* START SCREEN */
-#start-screen{position:relative;z-index:1}
-.start-icon-wrap{position:relative;display:inline-block;margin-bottom:22px}
-.start-icon-glow{position:absolute;inset:-10px;border-radius:32px;
-  background:radial-gradient(circle,rgba(16,185,129,0.45) 0%,transparent 70%);
-  filter:blur(14px);z-index:-1}
-.start-icon{width:76px !important;height:76px !important;border-radius:22px !important;
-  background:linear-gradient(135deg,#065F46CC,#10B98188) !important;
-  border:1px solid rgba(16,185,129,0.30) !important;
-  box-shadow:0 0 40px rgba(16,185,129,0.45),0 8px 32px rgba(0,0,0,0.4) !important;
-  backdrop-filter:blur(12px)}
-
-/* PROGRESS & CARDS */
-.prog-track,.progress-track{height:3px !important;background:rgba(255,255,255,0.07) !important;border-radius:999px !important;overflow:hidden !important}
-.prog-fill,.progress-bar-inner{height:100% !important;background:linear-gradient(90deg,#065F46,#10B981,#34D399) !important;
-  border-radius:999px !important;box-shadow:0 0 10px rgba(16,185,129,0.7) !important;
-  transition:width .55s cubic-bezier(.4,0,.2,1) !important}
-
-/* FLIP CARD */
-.flip-front{background:linear-gradient(145deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02)) !important;
-  border:1px solid rgba(16,185,129,0.30) !important;backdrop-filter:blur(20px) !important;
-  box-shadow:0 16px 48px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.07) !important}
-.flip-back{background:linear-gradient(145deg,rgba(6,78,59,0.45),rgba(4,120,87,0.55)) !important;
-  border:1px solid rgba(16,185,129,0.30) !important;backdrop-filter:blur(20px) !important;
-  box-shadow:0 16px 48px rgba(0,0,0,0.5),0 0 60px rgba(16,185,129,0.15) !important}
-
-/* BUTTONS */
-.primary-btn,.cta-btn,.start-btn,.enter-btn,.btn-main{
-  background:linear-gradient(135deg,#065F46,#10B981) !important;
-  box-shadow:0 0 0 1px rgba(16,185,129,0.15),0 0 40px rgba(16,185,129,0.45),0 8px 24px rgba(0,0,0,0.4) !important;
-  border:none !important;font-family:'Exo 2',sans-serif !important;
-  font-weight:700 !important;letter-spacing:.08em !important;text-transform:uppercase !important}
-.primary-btn:hover,.cta-btn:hover,.btn-main:hover{
-  box-shadow:0 0 0 1px rgba(16,185,129,0.30),0 0 60px rgba(16,185,129,0.6),0 12px 32px rgba(0,0,0,0.4) !important;
-  transform:translateY(-2px) !important}
-
-/* INPUT */
-.input-field,.name-input,.answer-input,#en-input,#student-name,#name-input{
-  background:rgba(255,255,255,0.05) !important;
-  border:1px solid rgba(16,185,129,0.30) !important;
-  border-radius:14px !important;color:#fff !important;
-  font-family:'Manrope',sans-serif !important;transition:all .25s !important}
-.input-field:focus,.name-input:focus,.answer-input:focus,#en-input:focus,#student-name:focus{
-  border-color:#10B981 !important;
-  box-shadow:0 0 0 3px rgba(16,185,129,0.10),0 0 24px rgba(16,185,129,0.15) !important;
-  background:rgba(255,255,255,0.08) !important}
-
-/* TITLE TEXT */
-.aurora-title,.hero-title{
-  font-family:'Exo 2',sans-serif !important;font-weight:900 !important;letter-spacing:-.02em !important;
-  background:linear-gradient(135deg,#fff 20%,#34D399 65%,#6EE7B7) !important;
-  -webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important}
-
-/* CAT LABELS / TAGS */
-.cat-pill,.eb-badge,.level-chip,.badge{color:#10B981 !important;
-  background:rgba(16,185,129,0.10) !important;border-color:rgba(16,185,129,0.25) !important}
-
-/* NAV BUTTONS */
-.nav-btn{background:rgba(255,255,255,0.04) !important;border:1px solid rgba(16,185,129,0.30) !important;backdrop-filter:blur(8px) !important}
-.nav-btn:hover{background:rgba(16,185,129,0.10) !important;border-color:#10B981 !important;box-shadow:0 0 18px rgba(16,185,129,0.15) !important}
-
-/* RESULT PANEL */
-.result-card,.result-panel,.cyber-shell,.glass-panel{
-  background:rgba(255,255,255,0.04) !important;
-  border:1px solid rgba(16,185,129,0.30) !important;backdrop-filter:blur(20px) !important;
-  box-shadow:0 8px 40px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.06) !important}
-
-/* GHOST BUTTON */
-.btn-ghost,.secondary-btn,.nav-btn-text{
-  background:rgba(255,255,255,0.04) !important;
-  border:1px solid rgba(16,185,129,0.30) !important;
-  color:rgba(255,255,255,0.45) !important;font-family:'Manrope',sans-serif !important}
-.btn-ghost:hover,.secondary-btn:hover{border-color:#10B981 !important;color:#34D399 !important}
-
-/* TYPOGRAPHY */
-body,p,span,div,button{font-family:'Manrope',sans-serif}
-h1,h2,h3,.title,.heading{font-family:'Exo 2',sans-serif !important}
-
+/* ───── MOBILE ───── */
+@media (max-width:640px){
+  nav{padding:0 20px;height:52px}
+  .nav-greeting{display:none}
+  main{padding:20px 16px}
+  .module-frame{gap:16px}
+  .flip-container{height:180px;max-width:320px}
+  .flip-face{padding:20px 18px}
+  .face-word{font-size:clamp(20px,5vw,26px)}
+  .face-example{font-size:11px;margin-top:8px}
+  footer{padding:18px 20px}
+  .footer-tagline{display:none}
+}
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script>if(new URLSearchParams(location.search).get('name')){document.documentElement.classList.add('eb-autostart');}</script><style>.eb-autostart #start-screen,.eb-autostart #s-start{display:none!important}</style>
+  <link rel="stylesheet" href="assets/eb-theme.css">
 </head>
 <body>
 
-<div class="bg-wrap">
-  <div class="mesh"></div>
-  <div class="light-rays"></div>
-  <div class="grid-bg"></div>
-  <div class="floor-glow"></div>
-</div>
-<div class="noise"></div>
+<!-- ══════════ NAV ══════════ -->
+<nav>
+  <a href="index.html" class="logo" id="logo-link">Entropy <span class="accent">Breakers</span></a>
+  <div class="nav-right">
+    <span class="nav-greeting">Szia, <b id="nav-name">—</b></span>
+    <a href="index.html" class="nav-btn" id="back-link"><span class="nav-btn-arrow">←</span> Vissza</a>
+  </div>
+</nav>
+
+<!-- ══════════ MAIN ══════════ -->
+<main>
+
+  <!-- KÁRTYA KÉPERNYŐ -->
+  <div class="module-frame active" id="card-screen">
+
+    <div class="module-head">
+      <h1 class="module-title">Igék <span class="accent">tanuló</span></h1>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-row">
+        <span class="category" id="cat-label">—</span>
+        <span id="counter">1 / 50</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:2%"></div>
+      </div>
+    </div>
+
+    <div class="flip-container" onclick="flipCard()">
+      <div class="flip-inner" id="flip-inner">
+        <div class="flip-face flip-front">
+          <div class="face-word" id="card-hu">—</div>
+        </div>
+        <div class="flip-face flip-back">
+          <div class="face-word" id="card-en">—</div>
+          <div class="face-example" id="card-example">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="arrow-btn" id="prev-btn" onclick="prevCard()" aria-label="Előző">←</button>
+      <span class="nav-hint">Kattints a kártyára</span>
+      <button class="arrow-btn" id="next-btn" onclick="nextCard()" aria-label="Következő">→</button>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn secondary" onclick="shuffleCards()">Keverés</button>
+      <button class="action-btn primary" onclick="showResult()">Befejezés</button>
+    </div>
+  </div>
+
+  <!-- EREDMÉNY KÉPERNYŐ -->
+  <div class="result-screen" id="result-screen">
+    <div class="result-badge">A2 · Igék</div>
+    <h2 class="result-title">Szép <span class="accent">munka</span>, <span class="result-name" id="result-name">—</span></h2>
+    <p class="result-subtitle">Átnézted a kártyákat.</p>
+
+    <div class="result-stats">
+      <div class="result-number" id="result-count">0</div>
+      <div class="result-meta">/ 50 szó</div>
+      <div class="result-feedback" id="result-feedback">—</div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn secondary" onclick="restartFromStart()">Újra</button>
+      <button class="action-btn primary" onclick="shuffleAndRestart()">Új sorrend</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Entropy <span class="accent">Breakers</span></div>
+    <div class="footer-tagline">Gyakorlás · Ismétlés · <span class="accent">Fejlődés</span></div>
+  </div>
+</footer>
 
 <script>
-// Auto-read student name from URL — injected by Entropy Breakers platform
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
+
+const MODULE_META = {
+  title: "A2 - 60 Essential Verbs",
+  level: "A2",
+  skill: "Verbs"
+};
+
+const CARDS = [
+  { cat:"Alapigék", hu:"Kérdez", en:"Ask", example:"Can I ask you something?" },
+  { cat:"Alapigék", hu:"Válaszol", en:"Answer", example:"She didn't answer my text." },
+  { cat:"Alapigék", hu:"Takarít", en:"Clean", example:"I clean my apartment on Saturdays." },
+  { cat:"Alapigék", hu:"Főz", en:"Cook", example:"My dad cooks dinner on Sundays." },
+  { cat:"Alapigék", hu:"Táncol", en:"Dance", example:"We danced all night at the wedding." },
+  { cat:"Alapigék", hu:"Iszik", en:"Drink", example:"He drinks coffee every morning." },
+  { cat:"Alapigék", hu:"Eszik", en:"Eat", example:"I usually eat lunch around noon." },
+  { cat:"Alapigék", hu:"Segít", en:"Help", example:"Can you help me with this?" },
+  { cat:"Alapigék", hu:"Ugrik", en:"Jump", example:"The dog can jump really high." },
+  { cat:"Alapigék", hu:"Hallgat", en:"Listen", example:"I listen to podcasts on the bus." },
+  { cat:"Alapigék", hu:"Néz", en:"Look", example:"Look at that sunset!" },
+  { cat:"Alapigék", hu:"Játszik", en:"Play", example:"The kids play in the backyard." },
+  { cat:"Alapigék", hu:"Olvas", en:"Read", example:"She reads before bed every night." },
+  { cat:"Alapigék", hu:"Fut", en:"Run", example:"I run in the park on weekends." },
+  { cat:"Alapigék", hu:"Énekel", en:"Sing", example:"My sister sings in the shower." },
+  { cat:"Alapigék", hu:"Alszik", en:"Sleep", example:"I try to sleep eight hours a night." },
+  { cat:"Alapigék", hu:"Mosolyog", en:"Smile", example:"She smiles whenever she sees him." },
+  { cat:"Alapigék", hu:"Beszél", en:"Speak", example:"Do you speak English?" },
+  { cat:"Alapigék", hu:"Úszik", en:"Swim", example:"We swim at the lake every summer." },
+  { cat:"Alapigék", hu:"Beszélget", en:"Talk", example:"We talked for hours last night." },
+  { cat:"Alapigék", hu:"Sétál", en:"Walk", example:"I walk to work every day." },
+  { cat:"Alapigék", hu:"Mos", en:"Wash", example:"He washes his car every Sunday." },
+  { cat:"Alapigék", hu:"Néz (TV)", en:"Watch", example:"We watch a movie on Friday nights." },
+  { cat:"Alapigék", hu:"Ír", en:"Write", example:"I write in my journal every morning." },
+  { cat:"Alapigék", hu:"Kinyit", en:"Open", example:"Can you open the window?" },
+  { cat:"Alapigék", hu:"Bezár", en:"Close", example:"Close the door, it's cold out." },
+  { cat:"Alapigék", hu:"Hív", en:"Call", example:"I'll call you tomorrow." },
+  { cat:"Alapigék", hu:"Ellenőriz", en:"Check", example:"Did you check your email?" },
+  { cat:"Alapigék", hu:"Számol", en:"Count", example:"My son can count to twenty." },
+  { cat:"Alapigék", hu:"Álmodik", en:"Dream", example:"I dream about the beach a lot." },
+  { cat:"Alapigék", hu:"Vezet", en:"Drive", example:"My mom drives to work every day." },
+  { cat:"Alapigék", hu:"Elesik", en:"Fall", example:"Be careful, don't fall!" },
+  { cat:"Alapigék", hu:"Érez", en:"Feel", example:"I feel tired after work." },
+  { cat:"Alapigék", hu:"Talál", en:"Find", example:"I can't find my keys." },
+  { cat:"Alapigék", hu:"Repül", en:"Fly", example:"Birds fly south for the winter." },
+  { cat:"Alapigék", hu:"Ad", en:"Give", example:"Let me give you my number." },
+  { cat:"Alapigék", hu:"Nő", en:"Grow", example:"We grow tomatoes in our yard." },
+  { cat:"Alapigék", hu:"Hall", en:"Hear", example:"I can hear the neighbors talking." },
+  { cat:"Alapigék", hu:"Tud", en:"Know", example:"I know his sister really well." },
+  { cat:"Alapigék", hu:"Tanul", en:"Learn", example:"She wants to learn Spanish." },
+  { cat:"Alapigék", hu:"Elveszít", en:"Lose", example:"Don't lose your ticket!" },
+  { cat:"Alapigék", hu:"Találkozik", en:"Meet", example:"Let's meet at the coffee shop." },
+  { cat:"Alapigék", hu:"Mozog", en:"Move", example:"We moved to a new apartment." },
+  { cat:"Alapigék", hu:"Fizet", en:"Pay", example:"I paid for lunch yesterday." },
+  { cat:"Alapigék", hu:"Lovagol", en:"Ride", example:"She rides her bike to school." },
+  { cat:"Alapigék", hu:"Elad", en:"Sell", example:"They sell fresh bread at the bakery." },
+  { cat:"Alapigék", hu:"Küld", en:"Send", example:"I'll send you the photos tonight." },
+  { cat:"Alapigék", hu:"Mutat", en:"Show", example:"Can you show me how to do this?" },
+  { cat:"Alapigék", hu:"Ül", en:"Sit", example:"Please, have a seat." },
+  { cat:"Alapigék", hu:"Áll", en:"Stand", example:"We stood in line for an hour." },
+];
+
+let studentName = '';
+let cardList = [...CARDS];
+let currentIndex = 0;
+let isFlipped = false;
+
+// Read student name from URL
 (function() {
-    var params = new URLSearchParams(window.location.search);
-    var urlName = params.get('name');
-    if (urlName) {
-        window.__eb_student_name = decodeURIComponent(urlName);
-    }
-})();
-</script>
-
-
-<div id="app" class="cyber-shell p-6 md:p-10">
-    <!-- START SCREEN -->
-    <div id="start-screen" class="text-center py-6">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-3xl bg-teal-500/10 mb-6 border border-teal-500/20">
-            <span class="text-2xl mint-glow-text">⚡</span>
-        </div>
-
-        <h1 onclick="adminAccess()" class="text-4xl md:text-5xl font-black mb-4 tracking-tighter cursor-pointer">
-            <span class="aurora-title uppercase">Entropy Breakers 🚀</span>
-        </h1>
-
-        <p class="text-xl md:text-2xl font-black text-white mb-2 uppercase tracking-tight">A2 Verb Learner</p>
-        <div class="space-y-4 max-w-sm mx-auto">
-            <input type="text" id="student-name" placeholder="Enter your name" class="input-field">
-            <button onclick="checkName()" class="w-full py-5 primary-btn text-white rounded-2xl font-black uppercase tracking-widest active:scale-95">
-                Játék indítása
-            </button>
-        </div>
-
-        </div>
-
-    <!-- GAME SCREEN -->
-    <div id="game-screen" class="hidden animate-slide">
-        <header class="flex justify-between items-center mb-6">
-            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-teal-300 tracking-widest">
-                Kör: <span id="round-info">1 / 5</span>
-            </div>
-            <div class="glass-panel px-4 py-2 text-[10px] font-black uppercase text-slate-300 tracking-widest">
-                Lépés: <span id="move-count">0</span>
-            </div>
-        </header>
-
-        <div id="card-grid" class="grid-container"></div>
-    </div>
-
-    <!-- NEXT ROUND MODAL -->
-    <div id="next-round-modal" class="hidden fixed inset-0 bg-slate-950/90 flex items-center justify-center z-50 p-6 backdrop-blur-md">
-        <div class="cyber-shell p-8 w-full max-w-md text-center">
-            <div class="text-4xl mb-4">✨</div>
-            <h2 class="text-2xl font-bold text-white mb-2">Szép volt!</h2>
-            <button onclick="loadNextChunk()" class="w-full py-4 primary-btn text-white font-black rounded-xl uppercase tracking-widest">
-                Next kör
-            </button>
-        </div>
-    </div>
-
-    <!-- RESULT SCREEN -->
-    <div id="result-screen" class="hidden text-center animate-slide">
-        <div class="text-6xl mb-6">🏆</div>
-        <h2 class="text-3xl font-black text-white mb-2">
-            Gratulálok, <span id="display-name" class="mint-glow-text"></span>!
-        </h2>
-        <div class="result-card p-8 mb-8">
-            <div class="text-teal-300 font-black uppercase text-xs mb-2 tracking-[0.2em]">Összesített lépésszám</div>
-            <div class="text-7xl font-black text-white" id="final-moves">0</div>
-            <div id="feedback-rating" class="mt-4 text-teal-200 font-bold italic">-</div>
-        </div>
-
-        <button onclick="restartQuiz()" class="w-full py-5 bg-white/5 text-slate-300 rounded-2xl font-black uppercase tracking-widest hover:bg-white/10 transition">
-            Restart
-        </button>
-    </div>
-</div>
-
-<script>
-    // ── API KEY STORED SAFELY IN MAKE.COM — NOT HERE ──
-    const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/ww4obw8ghb8h46ti1gi6yoy2qg1db7ad";
-
-    const QUIZ_NAME = "A2 Verb Learner";
-    const QUIZ_LEVEL = "A2";
-    const QUIZ_SKILL = "Vocabulary";
-
-    const VERB_DATA = [
-        {en:"Ask",hu:"Kérdez"},{en:"Answer",hu:"Válaszol"},{en:"Clean",hu:"Takarít"},{en:"Cook",hu:"Főz"},{en:"Dance",hu:"Táncol"},
-        {en:"Drink",hu:"Iszik"},{en:"Eat",hu:"Eszik"},{en:"Help",hu:"Segít"},{en:"Jump",hu:"Ugrik"},{en:"Listen",hu:"Hallgat"},
-        {en:"Look",hu:"Néz"},{en:"Play",hu:"Játszik"},{en:"Read",hu:"Olvas"},{en:"Run",hu:"Fut"},{en:"Sing",hu:"Énekel"},
-        {en:"Sleep",hu:"Alszik"},{en:"Smile",hu:"Mosolyog"},{en:"Speak",hu:"Beszél"},{en:"Swim",hu:"Úszik"},{en:"Talk",hu:"Beszélget"},
-        {en:"Walk",hu:"Sétál"},{en:"Wash",hu:"Mos"},{en:"Watch",hu:"Néz (TV)"},{en:"Write",hu:"Ír"},{en:"Open",hu:"Kinyit"},
-        {en:"Close",hu:"Bezár"},{en:"Call",hu:"Hív"},{en:"Check",hu:"Ellenőriz"},{en:"Count",hu:"Számol"},{en:"Dream",hu:"Álmodik"},
-        {en:"Drive",hu:"Vezet"},{en:"Fall",hu:"Elesik"},{en:"Feel",hu:"Érez"},{en:"Find",hu:"Talál"},{en:"Fly",hu:"Repül"},
-        {en:"Give",hu:"Ad"},{en:"Grow",hu:"Nő"},{en:"Hear",hu:"Hall"},{en:"Know",hu:"Tud"},{en:"Learn",hu:"Tanul"},
-        {en:"Lose",hu:"Elveszít"},{en:"Meet",hu:"Találkozik"},{en:"Move",hu:"Mozog"},{en:"Pay",hu:"Fizet"},{en:"Ride",hu:"Lovagol"},
-        {en:"Sell",hu:"Elad"},{en:"Send",hu:"Küld"},{en:"Show",hu:"Mutat"},{en:"Sit",hu:"Ül"},{en:"Stand",hu:"Áll"}
-    ];
-
-    const CHUNK_SIZE = 10;
-
-    let studentName = "";
-    let moves = 0;
-    let matchedInTotal = 0;
-    let currentChunk = [];
-    let flippedCards = [];
-    let isProcessing = false;
-    let fullList = [...VERB_DATA].sort(() => Math.random() - 0.5);
-
-    function checkName() {
-        const input = document.getElementById('student-name');
-        const name = (window.__eb_student_name || input.value.trim());
-
-        if (name.length < 2) { input.focus(); return; }
-
-        studentName = name;
-        document.getElementById('start-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        loadNextChunk();
-    }
-
-    document.getElementById('student-name').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') checkName();
-    });
-
-    function loadNextChunk() {
-        document.getElementById('next-round-modal').classList.add('hidden');
-
-        currentChunk = fullList.slice(matchedInTotal, matchedInTotal + CHUNK_SIZE);
-        const roundNum = Math.floor(matchedInTotal / CHUNK_SIZE) + 1;
-        document.getElementById('round-info').innerText = `${roundNum} / 5`;
-
-        let displayCards = [];
-        currentChunk.forEach((pair, idx) => {
-            displayCards.push({ id: idx, text: pair.en, pairId: idx });
-            displayCards.push({ id: idx + 100, text: pair.hu, pairId: idx });
-        });
-
-        displayCards.sort(() => Math.random() - 0.5);
-
-        const grid = document.getElementById('card-grid');
-        grid.innerHTML = '';
-
-        displayCards.forEach(card => {
-            const el = document.createElement('div');
-            el.className = 'card-flip';
-            el.innerHTML = `
-                <div class="card-inner" id="card-${card.id}" onclick="handleCardClick(${card.id}, ${card.pairId})">
-                    <div class="card-front">?</div>
-                    <div class="card-back">${card.text}</div>
-                </div>
-            `;
-            grid.appendChild(el);
-        });
-
-        window.scrollTo(0, 0);
-    }
-
-    function handleCardClick(id, pairId) {
-    var txt = arguments[0] && arguments[0].dataset ? arguments[0].dataset.en : ""; if(txt)
-        if (isProcessing) return;
-
-        const el = document.getElementById(`card-${id}`);
-        if (el.classList.contains('is-flipped') || el.classList.contains('is-matched')) return;
-
-        el.classList.add('is-flipped');
-        flippedCards.push({ id, pairId, el });
-
-        if (flippedCards.length === 2) {
-            moves++;
-            document.getElementById('move-count').innerText = moves;
-            isProcessing = true;
-
-            if (flippedCards[0].pairId === flippedCards[1].pairId) {
-                setTimeout(() => {
-                    flippedCards.forEach(c => c.el.classList.add('is-matched'));
-                    matchedInTotal++;
-                    flippedCards = [];
-                    isProcessing = false;
-
-                    if (matchedInTotal % CHUNK_SIZE === 0) {
-                        if (matchedInTotal === fullList.length) {
-                            finishGame();
-                        } else {
-                            document.getElementById('next-round-modal').classList.remove('hidden');
-                        }
-                    }
-                }, 400);
-            } else {
-                setTimeout(() => {
-                    flippedCards.forEach(c => c.el.classList.remove('is-flipped'));
-                    flippedCards = [];
-                    isProcessing = false;
-                }, 750);
-            }
-        }
-    }
-
-    async function finishGame() {
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('display-name').innerText = studentName;
-        document.getElementById('final-moves').innerText = moves;
-        document.getElementById('feedback-rating').innerText = "⚡ AI elemzés folyamatban...";
-
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 30000);
-
-            const response = await fetch(MAKE_WEBHOOK_URL, {
-                signal: controller.signal,
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    Student: studentName,
-                    Quiz: QUIZ_NAME,
-                    Score: moves,
-                    TotalQuestions: VERB_DATA.length,
-                    Level: QUIZ_LEVEL,
-                    Skill: QUIZ_SKILL,
-                    CompletedAt: new Date().toISOString()
-                })
-            });
-
-            clearTimeout(timeout);
-            const text = await response.text();
-            document.getElementById('feedback-rating').innerText = text || "Well done! Keep practising!";
-
-        } catch (e) {
-            console.error("Error:", e);
-            document.getElementById('feedback-rating').innerText =
-                moves <= 70 ? "Outstanding performance! You're ready for the next level!" :
-                moves <= 95 ? "Well done! Még egy kis gyakorlással tökéletes leszel!" :
-                "Don't give up — every review makes you stronger!";
-        }
-    }
-
-    function adminAccess() {
-        if (prompt("Jelszó:") === "bettina2026") {
-            alert("Az eredmények a Make → Airtable rendszerben mentődnek.");
-        }
-    }
-
-    function restartQuiz() {
-        studentName = "";
-        moves = 0;
-        matchedInTotal = 0;
-        currentChunk = [];
-        flippedCards = [];
-        isProcessing = false;
-        fullList = [...VERB_DATA].sort(() => Math.random() - 0.5);
-
-        document.getElementById('student-name').value = "";
-        document.getElementById('round-info').innerText = "1 / 5";
-        document.getElementById('move-count').innerText = "0";
-        document.getElementById('final-moves').innerText = "0";
-        document.getElementById('feedback-rating').innerText = "-";
-        document.getElementById('display-name').innerText = "";
-        document.getElementById('card-grid').innerHTML = "";
-
-        document.getElementById('next-round-modal').classList.add('hidden');
-        document.getElementById('result-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.add('hidden');
-        document.getElementById('start-screen').classList.remove('hidden');
-    }
-</script>
-
-
-<script>
-// ═══ ENTROPY BREAKERS — DEFINITIVE AUTO-START ═══
-(function() {
-  var p = new URLSearchParams(window.location.search);
-  var n = p.get('name');
-  if (!n || n.length < 1) return;
-  var name = decodeURIComponent(n);
-  window.__eb_student_name = name;
-
-  function doStart() {
-    // 1. Fill all possible name inputs
-    var inputIds = ['student-name','name-input','nameInput','studentName','player-name'];
-    for (var i = 0; i < inputIds.length; i++) {
-      var el = document.getElementById(inputIds[i]);
-      if (el) el.value = name;
-    }
-
-    // 2. Set global studentName variable if it exists
-    try { if (typeof studentName !== 'undefined') studentName = name; } catch(e) {}
-    try { if (typeof window.studentName !== 'undefined') window.studentName = name; } catch(e) {}
-
-    // 3. Hide start screen
-    var startEl = document.getElementById('start-screen');
-    if (startEl) startEl.classList.add('hidden');
-
-    // 4. Call whichever start function exists
-    var fns = ['startApp','checkName','startQuiz','startTest','start','startTraining','startPlatform'];
-    for (var j = 0; j < fns.length; j++) {
-      if (typeof window[fns[j]] === 'function') {
-        try { window[fns[j]](); } catch(e) {}
-        break;
-      }
-    }
-  }
-
-  // Run after full page load
-  if (document.readyState === 'complete') {
-    setTimeout(doStart, 100);
+  const params = new URLSearchParams(window.location.search);
+  const urlName = params.get('name');
+  if (urlName) {
+    studentName = decodeURIComponent(urlName);
   } else {
-    window.addEventListener('load', function() { setTimeout(doStart, 100); });
+    // No name = send them back to login
+    window.location.href = 'index.html';
+    return;
   }
-})();
-</script>
+  document.getElementById('nav-name').textContent = studentName;
 
-<script>
+  // Preserve name on back link, and include level so dashboard returns to same section
+  const nameParam = '?name=' + encodeURIComponent(studentName);
+  const backParam = nameParam + '&level=a2';
+  document.getElementById('back-link').setAttribute('href', 'index.html' + backParam);
+  document.getElementById('logo-link').setAttribute('href', 'index.html' + nameParam);
+
+  renderCard();
+})();
+
+function renderCard() {
+  const card = cardList[currentIndex];
+  const total = cardList.length;
+
+  document.getElementById('counter').textContent = `${currentIndex + 1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentIndex + 1) / total) * 100}%`;
+  document.getElementById('cat-label').textContent = card.cat;
+  document.getElementById('card-hu').textContent = card.hu;
+  document.getElementById('card-en').textContent = card.en;
+  document.getElementById('card-example').textContent = card.example;
+
+  // Un-flip on new card
+  isFlipped = false;
+  document.getElementById('flip-inner').classList.remove('is-flipped');
+
+  // Disable prev on first card
+  document.getElementById('prev-btn').disabled = currentIndex === 0;
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('flip-inner').classList.toggle('is-flipped', isFlipped);
+}
+
+function nextCard() {
+  if (currentIndex < cardList.length - 1) {
+    currentIndex++;
+    renderCard();
+  } else {
+    showResult();
+  }
+}
+
+function prevCard() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderCard();
+  }
+}
+
+function shuffleCards() {
+  for (let i = cardList.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cardList[i], cardList[j]] = [cardList[j], cardList[i]];
+  }
+  currentIndex = 0;
+  renderCard();
+}
+
+function showResult() {
+  document.getElementById('card-screen').style.display = 'none';
+  document.getElementById('result-screen').classList.add('active');
+
+  const seen = currentIndex + 1;
+  const total = cardList.length;
+  const pct = Math.round((seen / total) * 100);
+
+  document.getElementById('result-name').textContent = studentName;
+  document.getElementById('result-count').textContent = seen;
+
+  let feedback = '';
+  if (pct === 100) {
+    feedback = 'Végigmentél az összes szón. Szuper munka!';
+  } else if (pct >= 60) {
+    feedback = 'Szép haladás. Még pár kör, és rögzül!';
+  } else {
+    feedback = 'Jó kezdés. Térj vissza hamarosan — az ismétlés a kulcs.';
+  }
+  document.getElementById('result-feedback').textContent = feedback;
+
+  // Send to Make webhook (silently — ignore failures)
+  fetch(MAKE_WEBHOOK_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      Student: studentName,
+      Quiz: MODULE_META.title,
+      Score: seen,
+      TotalQuestions: total,
+      Level: MODULE_META.level,
+      Skill: MODULE_META.skill,
+      Percentage: pct,
+      CompletedAt: new Date().toISOString()
+    })
+  }).catch(() => {});
+}
+
+function restartFromStart() {
+  currentIndex = 0;
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('card-screen').style.display = 'flex';
+  renderCard();
+}
+
+function shuffleAndRestart() {
+  shuffleCards();
+  document.getElementById('result-screen').classList.remove('active');
+  document.getElementById('card-screen').style.display = 'flex';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (document.getElementById('result-screen').classList.contains('active')) return;
+  if (e.key === 'ArrowRight') nextCard();
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === ' ') { e.preventDefault(); flipCard(); }
+});
 </script>
+<script src="assets/eb-progress.js" defer></script>
+<script src="assets/eb-catalog.js" defer></script>
+
 </body>
 </html>
