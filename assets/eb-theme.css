@@ -209,9 +209,15 @@
   border-radius: var(--eb-radius-md);
   backdrop-filter: blur(6px);
 }
-.eb-heatmap.eb-heatmap-light {
-  background: #faf8f3; border: 1px solid rgba(26,22,18,0.06); backdrop-filter: none;
+.eb-heatmap.eb-heatmap-light,
+.screen.white-bg .eb-heatmap {
+  background: #faf8f3;
+  border: 1px solid rgba(26,22,18,0.06);
+  backdrop-filter: none;
 }
+.screen.white-bg .eb-heatmap-label { color: var(--eb-ink-dim); }
+.screen.white-bg .eb-heatmap-stats { color: var(--eb-ink-2); }
+.screen.white-bg .eb-heatmap-cell { background: rgba(26,22,18,0.05); }
 .eb-heatmap-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
 .eb-heatmap-label { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
 .eb-heatmap-light .eb-heatmap-label { color: var(--eb-ink-dim); }

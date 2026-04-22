@@ -360,6 +360,25 @@ main{
   to{opacity:1;transform:translateY(0)}
 }
 
+/* LOGIN — laptop kompakt center */
+.screen.login-dark .hero{
+  max-width:460px;
+  margin:0 auto;
+}
+.screen.login-dark .content-wrap{
+  max-width:460px;
+  margin:0 auto;
+  padding:0 24px !important;
+}
+.screen.login-dark .app-footer{
+  max-width:460px;
+  margin:0 auto;
+}
+@media(min-width:960px){
+  .screen.login-dark .hero{padding:56px 24px 24px 24px !important}
+  .screen.login-dark .content-wrap{padding:0 24px !important}
+}
+
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(12px)}
   to{opacity:1;transform:translateY(0)}
@@ -887,7 +906,7 @@ main{
     <div class="content-wrap">
       <div class="login-card">
         <input type="text" id="name-input" class="login-input" placeholder="Írd be a neved" autocomplete="off">
-        <input type="password" id="passcode-input" class="login-input" placeholder="Belépési kód" autocomplete="off">
+        <input type="password" id="passcode-input" class="login-input" placeholder="Jelszó" autocomplete="current-password">
         <div id="login-error" class="login-error"></div>
         <button type="button" class="login-btn" onclick="login()">Kezdés <span class="login-btn-arrow">→</span></button>
       </div>
