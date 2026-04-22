@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   Entropy Breakers — Theme & Progress UI Library
+   Entropy Breakers — Theme & Progress UI Library (v2)
    Safe to include everywhere; uses .eb-* prefix to avoid collisions.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -108,27 +108,142 @@
 .eb-bar-fill.eb-bar-fill-green { background: linear-gradient(90deg, #2fbf8f 0%, #1d9e75 100%); }
 .eb-bar-fill.eb-bar-fill-amber { background: linear-gradient(90deg, #e39a2f 0%, #ba7517 100%); }
 
-/* FLASHCARD — halvány barack angol oldal */
-.eb-flashcard { position: relative; perspective: 1400px; width: 100%; max-width: 380px; margin: 0 auto; aspect-ratio: 3 / 4; }
-.eb-flashcard-inner { position: absolute; inset: 0; transition: transform .6s var(--eb-ease); transform-style: preserve-3d; }
+/* ═══════════════════════════════════════════════════════════════
+   FLASHCARD — HU fehér/fekete, EN halvány barack + fehér-narancs
+   ═══════════════════════════════════════════════════════════════ */
+.eb-flashcard {
+  position: relative; perspective: 1400px;
+  width: 100%; max-width: 380px; margin: 0 auto;
+  aspect-ratio: 3 / 4; cursor: pointer;
+}
+.eb-flashcard-inner {
+  position: absolute; inset: 0;
+  transition: transform .7s var(--eb-ease); transform-style: preserve-3d;
+}
 .eb-flashcard.is-flipped .eb-flashcard-inner { transform: rotateY(180deg); }
 .eb-flashcard-face {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  padding: 32px; border-radius: var(--eb-radius-lg); box-shadow: var(--eb-shadow-lg);
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 36px 28px; border-radius: var(--eb-radius-xl); box-shadow: var(--eb-shadow-lg);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden;
 }
-.eb-flashcard-front {
-  background: linear-gradient(135deg, var(--eb-bg-peach) 0%, var(--eb-bg-peach-strong) 100%);
-  color: var(--eb-orange-dark);
-  font-family: 'DM Sans', 'Cormorant Garamond', serif;
-  font-size: clamp(28px, 6vw, 44px); font-weight: 600; text-align: center; letter-spacing: -0.01em;
+.eb-flashcard-face::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.08) 0%, transparent 65%);
+  pointer-events: none;
 }
-.eb-flashcard-back {
-  background: #1f1d1a; color: #faf8f3; transform: rotateY(180deg);
-  font-size: clamp(20px, 4.5vw, 30px); font-weight: 500; text-align: center; letter-spacing: -0.005em;
+.eb-flashcard-tag {
+  position: absolute; top: 18px; left: 18px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 5px 10px; border-radius: 20px; line-height: 1; z-index: 2;
 }
 
-/* APPEAR ANIMATIONS */
+/* EN oldal — halvány barack + fehér szöveg narancs kontúrral */
+.eb-flashcard-front {
+  background: linear-gradient(135deg, #fff0e0 0%, #ffd9b3 55%, #ffc897 100%);
+  color: #ffffff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(30px, 6.5vw, 48px); font-weight: 700;
+  text-align: center; letter-spacing: -0.015em; line-height: 1.15;
+  -webkit-text-stroke: 1.5px var(--eb-orange-2);
+  text-shadow: 0 2px 18px rgba(191,74,0,0.22);
+}
+.eb-flashcard-front .eb-flashcard-tag { background: rgba(255,255,255,0.8); color: var(--eb-orange-2); -webkit-text-stroke: 0; text-shadow: none; }
+.eb-flashcard-front .eb-flashcard-hint {
+  margin-top: 14px; font-size: 14px; font-weight: 500;
+  color: var(--eb-orange-2); -webkit-text-stroke: 0; text-shadow: none;
+  letter-spacing: 0.02em; opacity: .85;
+}
+.eb-flashcard-front .eb-flashcard-ipa {
+  margin-top: 8px; font-size: 15px; font-weight: 400;
+  color: var(--eb-orange-dark); -webkit-text-stroke: 0; text-shadow: none; opacity: .75;
+}
+
+/* HU oldal — fehér papír, fekete szöveg */
+.eb-flashcard-back {
+  background: #ffffff; color: #1a1612; transform: rotateY(180deg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(24px, 5.5vw, 36px); font-weight: 600;
+  text-align: center; letter-spacing: -0.01em; line-height: 1.25;
+  border: 1px solid rgba(26,22,18,0.06);
+}
+.eb-flashcard-back .eb-flashcard-tag { background: #1a1612; color: #faf8f3; }
+.eb-flashcard-back .eb-flashcard-hint {
+  margin-top: 14px; font-size: 14px; font-weight: 400;
+  color: var(--eb-ink-2); letter-spacing: 0.02em; opacity: .85;
+}
+
+/* Speak button */
+.eb-flashcard-speak {
+  position: absolute; bottom: 18px; right: 18px;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: inherit; font-size: 19px;
+  transition: transform .2s var(--eb-ease-bounce), box-shadow .2s var(--eb-ease);
+  z-index: 3;
+}
+.eb-flashcard-front .eb-flashcard-speak { background: rgba(255,255,255,0.92); color: var(--eb-orange-2); box-shadow: 0 4px 14px rgba(191,74,0,0.22); }
+.eb-flashcard-back .eb-flashcard-speak { background: #1a1612; color: #faf8f3; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+.eb-flashcard-speak:hover { transform: scale(1.08); }
+.eb-flashcard-speak:active { transform: scale(0.94); }
+.eb-flashcard-speak.is-speaking { animation: eb-speak-pulse 1.4s ease-in-out infinite; }
+@keyframes eb-speak-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+/* Flip hint */
+.eb-flashcard-flip-hint {
+  position: absolute; bottom: 22px; left: 22px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  opacity: .55; z-index: 3;
+}
+.eb-flashcard-front .eb-flashcard-flip-hint { color: var(--eb-orange-2); -webkit-text-stroke: 0; text-shadow: none; }
+.eb-flashcard-back .eb-flashcard-flip-hint { color: var(--eb-ink-2); }
+
+/* ═══════════════════════════════════════════════════════════════
+   STREAK HEATMAP — 14 napos mini contribution graph
+   ═══════════════════════════════════════════════════════════════ */
+.eb-heatmap {
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--eb-radius-md);
+  backdrop-filter: blur(6px);
+}
+.eb-heatmap.eb-heatmap-light {
+  background: #faf8f3; border: 1px solid rgba(26,22,18,0.06); backdrop-filter: none;
+}
+.eb-heatmap-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.eb-heatmap-label { font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.eb-heatmap-light .eb-heatmap-label { color: var(--eb-ink-dim); }
+.eb-heatmap-stats { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.72); }
+.eb-heatmap-light .eb-heatmap-stats { color: var(--eb-ink-2); }
+.eb-heatmap-stats strong { color: var(--eb-orange); font-weight: 700; font-variant-numeric: tabular-nums; }
+.eb-heatmap-row { display: flex; align-items: flex-end; gap: 4px; }
+.eb-heatmap-cell {
+  flex: 1; height: 24px; border-radius: 4px;
+  background: rgba(255,255,255,0.06); position: relative;
+  transition: transform .25s var(--eb-ease-bounce);
+}
+.eb-heatmap-light .eb-heatmap-cell { background: rgba(26,22,18,0.05); }
+.eb-heatmap-cell[data-level="1"] { background: rgba(255,122,46,0.35); }
+.eb-heatmap-cell[data-level="2"] { background: rgba(255,122,46,0.65); }
+.eb-heatmap-cell[data-level="3"] { background: var(--eb-orange); }
+.eb-heatmap-cell[data-today="1"] {
+  box-shadow: 0 0 0 2px var(--eb-orange), 0 0 18px rgba(255,122,46,0.55);
+  height: 28px;
+}
+.eb-heatmap-cell:hover { transform: scaleY(1.15); }
+
+/* Module chip — "utolsó alkalom" label */
+.eb-module-lastseen {
+  display: inline-block; margin-left: 8px;
+  font-size: 10px; font-weight: 500;
+  color: var(--eb-ink-dim); letter-spacing: 0.02em; vertical-align: middle;
+}
+.eb-module-lastseen.eb-module-lastseen-fresh { color: var(--eb-green); font-weight: 600; }
+.eb-module-lastseen.eb-module-lastseen-cold { color: var(--eb-amber); }
+
+/* Appear animations */
 @keyframes eb-pop-in {
   0% { opacity: 0; transform: scale(.6); }
   70% { opacity: 1; transform: scale(1.05); }
@@ -141,7 +256,7 @@
 }
 .eb-animate-up { animation: eb-fade-up .5s var(--eb-ease) both; }
 
-/* WIDE/LAPTOP variant — opt-in via body.eb-wide */
+/* WIDE variant — opt-in via body.eb-wide */
 body.eb-wide { background: linear-gradient(180deg, #faf8f3 0%, #fff 40%, #fff 100%); }
 body.eb-wide .app-shell {
   max-width: 1200px; display: grid; grid-template-columns: 320px 1fr;
@@ -149,4 +264,10 @@ body.eb-wide .app-shell {
 }
 @media (max-width: 900px) {
   body.eb-wide .app-shell { grid-template-columns: 1fr; padding: 0; }
+}
+
+/* Module row with chip */
+.eb-module-progress {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 4px;
 }
