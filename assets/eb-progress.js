@@ -240,9 +240,17 @@
       var qs = 'name=' + encodeURIComponent(name) +
                '&level=' + encodeURIComponent(urlInfo.level) +
                '&category=' + encodeURIComponent(urlInfo.category);
-      var links = document.querySelectorAll('a[href="index.html"], a[href="./index.html"], a[href="/index.html"]');
+      // Prefix-match so links already rewritten by page-local scripts
+      // (e.g. a2-theory-tobe.html sets href="index.html?name=…&level=a2"
+      // in an inline IIFE) still get picked up. Skip the logo link —
+      // clicking the brand should return to the levels chooser, not the
+      // current category.
+      var links = document.querySelectorAll(
+        'a[href^="index.html"], a[href^="./index.html"], a[href^="/index.html"]'
+      );
       for (var i = 0; i < links.length; i++) {
         var a = links[i];
+        if (a.id === 'logo-link') continue;
         var base = a.getAttribute('href').split('?')[0];
         a.setAttribute('href', base + '?' + qs);
       }
