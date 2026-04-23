@@ -1588,6 +1588,7 @@ function login() {
   }
   errorEl.classList.remove('show');
   studentName = name;
+  try { localStorage.setItem('eb.student', name); } catch(e) {}
   showLevelSelect();
 }
 
@@ -1688,6 +1689,7 @@ function backNav() {
 
 function logout() {
   studentName = '';
+  try { localStorage.removeItem('eb.student'); } catch(e) {}
   currentLevel = '';
   currentCategory = '';
   document.getElementById('name-input').value = '';
@@ -1738,7 +1740,10 @@ function logout() {
     var nav = readNav();
     if (!nav || !nav.screen) return;
     if (typeof studentName === 'undefined' || !studentName) {
-      try { var p = new URLSearchParams(location.search); var n = p.get('name'); if (n) window.studentName = decodeURIComponent(n); } catch (e) {}
+      try { var saved = localStorage.getItem('eb.student'); if (saved) window.studentName = saved; } catch(e) {}
+      if (!window.studentName) {
+        try { var p = new URLSearchParams(location.search); var n = p.get('name'); if (n) window.studentName = decodeURIComponent(n); } catch (e) {}
+      }
     }
     if (!window.studentName) return;
     if (nav.level) window.currentLevel = nav.level;
@@ -1787,7 +1792,7 @@ function logout() {
   }
 
   function renderHeatmapInto(el) {
-    var h = EB.getHeatmap(14);
+    var h = EB.getHeatmap(30);
     var active = 0; for (var i = 0; i < h.length; i++) if (h[i].count > 0) active++;
     var cellsHtml = h.map(function (d) {
       return '<div class="eb-heatmap-cell" data-level="' + d.level + '"' +
@@ -1796,7 +1801,7 @@ function logout() {
     }).join('');
     el.innerHTML =
       '<div class="eb-heatmap-head">' +
-        '<span class="eb-heatmap-label">Utolsó 14 nap</span>' +
+        '<span class="eb-heatmap-label">Utolsó 30 nap</span>' +
         '<span class="eb-heatmap-stats"><strong>' + active + '</strong> aktív nap</span>' +
       '</div>' +
       '<div class="eb-heatmap-row">' + cellsHtml + '</div>';

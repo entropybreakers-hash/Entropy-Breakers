@@ -91,7 +91,7 @@
     writeJSON(DAILY_KEY, m);
   }
   function getHeatmap(days) {
-    days = days || 14;
+    days = days || 30;
     var m = readJSON(DAILY_KEY, {});
     var out = [];
     var today = new Date(); today.setHours(0,0,0,0);
