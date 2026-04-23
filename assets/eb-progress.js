@@ -253,7 +253,7 @@
     try {
       var urlInfo = _parseUrlSlug();
       if (!urlInfo) return;
-      if (urlInfo.category !== 'vocab' && urlInfo.category !== 'flashcards') return;
+      if (urlInfo.category !== 'vocab' && urlInfo.category !== 'flashcards' && urlInfo.category !== 'theory') return;
       var container = document.querySelector('.flip-container, .flip-wrap');
       if (!container) return;
       var startX = null, startY = null, startTime = 0;
@@ -273,12 +273,16 @@
         if (Date.now() - startTime > 700) return;
         if (Math.abs(dx) < H_MIN) return;
         if (Math.abs(dy) > Math.abs(dx)) return;
-        if (dx > 0) {
+        // Swipe LEFT (dx < 0) → prev, swipe RIGHT (dx > 0) → next.
+        if (dx < 0) {
           if (typeof window.prevCard === 'function') window.prevCard();
         } else {
           if (typeof window.nextCard === 'function') window.nextCard();
         }
       }, { passive: true });
+      // Swipe replaces the visible prev/next buttons — hide .nav-row.
+      var navRow = document.querySelector('.nav-row');
+      if (navRow) navRow.style.display = 'none';
     } catch (e) {}
   }
 
