@@ -1535,12 +1535,17 @@ function initApp() {
     const params = new URLSearchParams(window.location.search);
     const urlName = params.get('name');
     const urlLevel = params.get('level');
+    const urlCategory = params.get('category');
     if (urlName) {
       studentName = decodeURIComponent(urlName);
+      try { localStorage.setItem('eb.student', studentName); } catch(e) {}
       showLevelSelect();
       if (urlLevel && ['a2','b1','b2','c1'].includes(urlLevel.toLowerCase())) {
         currentLevel = urlLevel.toLowerCase();
-        showLevel(currentLevel);
+        _doShowLevel(currentLevel);
+        if (urlCategory && ['theory','practice','vocab','flashcards'].includes(urlCategory.toLowerCase())) {
+          showCategoryCurrent(urlCategory.toLowerCase());
+        }
       }
     }
   } catch(err) {
