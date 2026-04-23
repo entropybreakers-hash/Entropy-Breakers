@@ -371,15 +371,14 @@ body.eb-wide .app-shell {
   text-shadow: none !important;
   font-style: italic;
   font-weight: 500;
-  position: relative;
-  z-index: 2;
+  /* NINCS position override — a vocab .face-example eredeti
+     `position:absolute; bottom:14px` pozíciója marad (elkülönülve a szótól),
+     a theory normál flow-ban, margin-bottom:12px-rel. */
 }
 .flip-back .face-example-hu {
   color: rgba(26,22,18,0.55) !important;
   font-style: italic;
   font-weight: 400;
-  position: relative;
-  z-index: 2;
 }
 .flip-back .face-label,
 .flip-back .flip-hint {
