@@ -273,11 +273,12 @@
         if (Date.now() - startTime > 700) return;
         if (Math.abs(dx) < H_MIN) return;
         if (Math.abs(dy) > Math.abs(dx)) return;
-        // Swipe LEFT (dx < 0) → prev, swipe RIGHT (dx > 0) → next.
+        // Swipe LEFT (dx < 0) → next (carousel convention: content slides
+        // leftward to reveal the next card). Swipe RIGHT (dx > 0) → prev.
         if (dx < 0) {
-          if (typeof window.prevCard === 'function') window.prevCard();
-        } else {
           if (typeof window.nextCard === 'function') window.nextCard();
+        } else {
+          if (typeof window.prevCard === 'function') window.prevCard();
         }
       }, { passive: true });
       // Swipe replaces the visible prev/next buttons on mobile — the
