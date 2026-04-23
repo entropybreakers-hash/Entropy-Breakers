@@ -388,3 +388,11 @@ body.eb-wide .app-shell {
   z-index: 2;
 }
 
+/* Swipe-es oldalakon (theory/vocab/flashcards) mobilon eltűnnek a prev/next
+   gombok, mert a gesztus átveszi a szerepüket. Desktopon megmaradnak. */
+@media (max-width: 720px) {
+  body.eb-swipe-active .nav-row {
+    display: none !important;
+  }
+}
+

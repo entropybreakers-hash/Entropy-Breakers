@@ -280,9 +280,10 @@
           if (typeof window.nextCard === 'function') window.nextCard();
         }
       }, { passive: true });
-      // Swipe replaces the visible prev/next buttons — hide .nav-row.
-      var navRow = document.querySelector('.nav-row');
-      if (navRow) navRow.style.display = 'none';
+      // Swipe replaces the visible prev/next buttons on mobile — the
+      // nav-row is hidden via CSS on narrow screens (see eb-theme.css,
+      // body.eb-swipe-active .nav-row). Desktop keeps the buttons.
+      document.body.classList.add('eb-swipe-active');
     } catch (e) {}
   }
 
