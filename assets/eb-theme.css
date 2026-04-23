@@ -279,10 +279,31 @@ body.eb-wide .app-shell {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   FLASHCARD OVERRIDE — meglévő .flip-front / .flip-back class-ekre
+   FLASHCARD OVERRIDE — .flip-front / .flip-back + theory class-ek
    .flip-front = HU oldal (fehér papír, fekete szöveg)
-   .flip-back  = EN oldal (halvány barack, fehér + narancs stroke)
+   .flip-back  = EN oldal (halvány barack, fekete szöveg, narancs példa)
+   Vocab class-ek: .face-word, .face-example
+   Theory class-ek: .face-explain-hu, .face-rule-en, .face-example, .face-example-hu
    ═══════════════════════════════════════════════════════════════ */
+
+/* Nagyobb, szimmetrikus kártyák (mind mobil, mind desktop) */
+.flip-container {
+  max-width: 520px !important;
+}
+.flip-inner {
+  min-height: 440px !important;
+}
+@media (max-width: 720px) {
+  .flip-container {
+    max-width: 100% !important;
+  }
+  .flip-inner {
+    min-height: 380px !important;
+  }
+}
+.flip-face {
+  padding: 40px 28px !important;
+}
 
 /* HU oldal — fehér papír, fekete szöveg */
 .flip-front {
@@ -290,7 +311,8 @@ body.eb-wide .app-shell {
   border: 1px solid rgba(26,22,18,0.06) !important;
   box-shadow: 0 12px 28px rgba(26,22,18,0.10) !important;
 }
-.flip-front .face-word {
+.flip-front .face-word,
+.flip-front .face-explain-hu {
   color: #1a1612 !important;
   font-family: 'DM Sans', sans-serif !important;
   font-weight: 600 !important;
@@ -299,32 +321,37 @@ body.eb-wide .app-shell {
   text-shadow: none !important;
 }
 .flip-front .face-example {
-  color: var(--ink2, #5a5248) !important;
+  color: rgba(26,22,18,0.60) !important;
   font-style: italic;
-  opacity: .85;
+}
+.flip-front .face-label,
+.flip-front .flip-hint {
+  color: rgba(26,22,18,0.45) !important;
 }
 
-/* EN oldal — halvány barack gradient, fehér szöveg narancs kontúrral */
+/* EN oldal — halvány barack, FEKETE szöveg, narancs példa.
+   Nincs `position: relative` override → örökli a .flip-face position:absolute; inset:0
+   szabályát, így a két oldal pontosan egyforma méretű marad. */
 .flip-back {
   background: linear-gradient(135deg, #fff0e0 0%, #ffd9b3 55%, #ffc897 100%) !important;
   border: none !important;
   box-shadow: 0 12px 28px rgba(191,74,0,0.15) !important;
-  position: relative;
   overflow: hidden;
 }
 .flip-back::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 65%);
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 65%);
   pointer-events: none;
 }
-.flip-back .face-word {
-  color: #ffffff !important;
+.flip-back .face-word,
+.flip-back .face-rule-en {
+  color: #1a1612 !important;
   font-family: 'DM Sans', sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: -0.015em !important;
-  -webkit-text-stroke: 1.5px #d14a00;
-  text-shadow: 0 2px 18px rgba(191,74,0,0.22);
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
   position: relative;
   z-index: 2;
 }
@@ -333,8 +360,21 @@ body.eb-wide .app-shell {
   -webkit-text-stroke: 0 !important;
   text-shadow: none !important;
   font-style: italic;
-  opacity: .9;
   font-weight: 500;
   position: relative;
   z-index: 2;
 }
+.flip-back .face-example-hu {
+  color: rgba(26,22,18,0.55) !important;
+  font-style: italic;
+  font-weight: 400;
+  position: relative;
+  z-index: 2;
+}
+.flip-back .face-label,
+.flip-back .flip-hint {
+  color: rgba(26,22,18,0.50) !important;
+  position: relative;
+  z-index: 2;
+}
+

@@ -230,10 +230,34 @@
     new MutationObserver(maybeLog).observe(screen, { attributes: true, attributeFilter: ['class'] });
     maybeLog();
   }
+  function _enrichBackLinks() {
+    try {
+      var urlInfo = _parseUrlSlug();
+      if (!urlInfo) return;
+      var params = new URLSearchParams(location.search);
+      var name = params.get('name');
+      if (!name) return;
+      var qs = 'name=' + encodeURIComponent(name) +
+               '&level=' + encodeURIComponent(urlInfo.level) +
+               '&category=' + encodeURIComponent(urlInfo.category);
+      var links = document.querySelectorAll('a[href="index.html"], a[href="./index.html"], a[href="/index.html"]');
+      for (var i = 0; i < links.length; i++) {
+        var a = links[i];
+        var base = a.getAttribute('href').split('?')[0];
+        a.setAttribute('href', base + '?' + qs);
+      }
+    } catch (e) {}
+  }
+
   function _bootPage() {
     try {
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _hookResultScreen);
-      else _hookResultScreen();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _hookResultScreen);
+        document.addEventListener('DOMContentLoaded', _enrichBackLinks);
+      } else {
+        _hookResultScreen();
+        _enrichBackLinks();
+      }
     } catch (e) {}
   }
 
