@@ -277,3 +277,64 @@ body.eb-wide .app-shell {
   display: flex; align-items: center; gap: 10px;
   margin-top: 4px;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FLASHCARD OVERRIDE — meglévő .flip-front / .flip-back class-ekre
+   .flip-front = HU oldal (fehér papír, fekete szöveg)
+   .flip-back  = EN oldal (halvány barack, fehér + narancs stroke)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* HU oldal — fehér papír, fekete szöveg */
+.flip-front {
+  background: #ffffff !important;
+  border: 1px solid rgba(26,22,18,0.06) !important;
+  box-shadow: 0 12px 28px rgba(26,22,18,0.10) !important;
+}
+.flip-front .face-word {
+  color: #1a1612 !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+.flip-front .face-example {
+  color: var(--ink2, #5a5248) !important;
+  font-style: italic;
+  opacity: .85;
+}
+
+/* EN oldal — halvány barack gradient, fehér szöveg narancs kontúrral */
+.flip-back {
+  background: linear-gradient(135deg, #fff0e0 0%, #ffd9b3 55%, #ffc897 100%) !important;
+  border: none !important;
+  box-shadow: 0 12px 28px rgba(191,74,0,0.15) !important;
+  position: relative;
+  overflow: hidden;
+}
+.flip-back::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+.flip-back .face-word {
+  color: #ffffff !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+  -webkit-text-stroke: 1.5px #d14a00;
+  text-shadow: 0 2px 18px rgba(191,74,0,0.22);
+  position: relative;
+  z-index: 2;
+}
+.flip-back .face-example {
+  color: #d14a00 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+  font-style: italic;
+  opacity: .9;
+  font-weight: 500;
+  position: relative;
+  z-index: 2;
+}
