@@ -396,3 +396,16 @@ body.eb-wide .app-shell {
   }
 }
 
+/* Egységes prev/next gomb: kör alakú 38×38px nyilas gomb (mint vocab-on).
+   Theory oldalak eredeti pill-szerű text-gombját felülírja. */
+.arrow-btn {
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+

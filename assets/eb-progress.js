@@ -288,16 +288,36 @@
     } catch (e) {}
   }
 
+  function _unifyNavButtons() {
+    try {
+      var urlInfo = _parseUrlSlug();
+      if (!urlInfo) return;
+      if (urlInfo.category !== 'theory') return;
+      var prevBtn = document.getElementById('prev-btn');
+      var nextBtn = document.getElementById('next-btn');
+      if (prevBtn && /\S/.test(prevBtn.textContent) && !/[←]/.test(prevBtn.textContent)) {
+        prevBtn.textContent = '←';
+        prevBtn.setAttribute('aria-label', 'Előző');
+      }
+      if (nextBtn && /\S/.test(nextBtn.textContent) && !/[→]/.test(nextBtn.textContent)) {
+        nextBtn.textContent = '→';
+        nextBtn.setAttribute('aria-label', 'Következő');
+      }
+    } catch (e) {}
+  }
+
   function _bootPage() {
     try {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', _hookResultScreen);
         document.addEventListener('DOMContentLoaded', _enrichBackLinks);
         document.addEventListener('DOMContentLoaded', _wireSwipe);
+        document.addEventListener('DOMContentLoaded', _unifyNavButtons);
       } else {
         _hookResultScreen();
         _enrichBackLinks();
         _wireSwipe();
+        _unifyNavButtons();
       }
     } catch (e) {}
   }
