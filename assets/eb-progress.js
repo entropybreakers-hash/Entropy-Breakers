@@ -300,7 +300,10 @@
     try {
       var urlInfo = _parseUrlSlug();
       if (!urlInfo) return;
-      if (urlInfo.category !== 'theory') return;
+      var cat = urlInfo.category;
+      if (cat !== 'theory' && cat !== 'vocab' && cat !== 'flashcards') return;
+
+      // Theory pages use text labels ("Előző"/"Következő") — swap to arrows.
       var prevBtn = document.getElementById('prev-btn');
       var nextBtn = document.getElementById('next-btn');
       if (prevBtn && /\S/.test(prevBtn.textContent) && !/[←]/.test(prevBtn.textContent)) {
@@ -310,6 +313,24 @@
       if (nextBtn && /\S/.test(nextBtn.textContent) && !/[→]/.test(nextBtn.textContent)) {
         nextBtn.textContent = '→';
         nextBtn.setAttribute('aria-label', 'Következő');
+      }
+
+      // Hide any on-card flip hints — the hint moves into the nav-row below.
+      var cardHints = document.querySelectorAll('.flip-hint');
+      for (var i = 0; i < cardHints.length; i++) cardHints[i].style.display = 'none';
+
+      // Ensure the nav-row has a unified hint between the prev/next buttons.
+      var navRow = document.querySelector('.nav-row');
+      if (navRow) {
+        var hint = navRow.querySelector('.nav-hint');
+        if (!hint) {
+          hint = document.createElement('span');
+          hint.className = 'nav-hint';
+          var prev = navRow.querySelector('#prev-btn');
+          if (prev && prev.nextSibling) navRow.insertBefore(hint, prev.nextSibling);
+          else navRow.appendChild(hint);
+        }
+        hint.textContent = 'Koppints a fordításért';
       }
     } catch (e) {}
   }
