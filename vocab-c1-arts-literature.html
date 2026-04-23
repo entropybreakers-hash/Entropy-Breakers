@@ -404,6 +404,7 @@ footer{
         <div class="flip-face flip-back">
           <div class="face-word" id="card-en">—</div>
           <div class="face-example" id="card-example">—</div>
+          <div class="face-example-hu" id="card-example-hu" style="display:none"></div>
         </div>
       </div>
     </div>
@@ -547,6 +548,11 @@ function renderCard() {
   document.getElementById('card-hu').textContent = card.hu;
   document.getElementById('card-en').textContent = card.en;
   document.getElementById('card-example').textContent = card.example;
+  var _huEl = document.getElementById('card-example-hu');
+  if (_huEl) {
+    if (card.exampleHu) { _huEl.textContent = card.exampleHu; _huEl.style.display = ''; }
+    else { _huEl.style.display = 'none'; }
+  }
 
   // Un-flip on new card
   isFlipped = false;
