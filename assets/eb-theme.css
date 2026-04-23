@@ -409,3 +409,29 @@ body.eb-wide .app-shell {
   text-transform: none !important;
 }
 
+/* Vocab EN oldal: a szó alatt a példamondat, alatta a magyar fordítás —
+   ugyanaz az elrendezés, mint a theory EN oldalon. Az eredeti vocab CSS
+   `.face-example`-et `position:absolute; bottom:14px`-re tette (a kártya
+   aljára pinelve); itt visszaállítjuk normál flex flow-ra, így a word +
+   example + exampleHu egymás alatt csoportosul, középre igazítva. */
+body.eb-cat-vocab .flip-back .face-example {
+  position: static !important;
+  margin-top: 20px !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  padding: 0 20px !important;
+  font-size: clamp(13px, 2.4vw, 16px) !important;
+  line-height: 1.45 !important;
+}
+body.eb-cat-vocab .flip-back .face-example-hu {
+  margin-top: 10px !important;
+  padding: 0 20px !important;
+  font-size: clamp(12px, 2.2vw, 15px) !important;
+  line-height: 1.4 !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  color: rgba(26,22,18,0.55) !important;
+  text-align: center;
+}
+

@@ -288,6 +288,14 @@
     } catch (e) {}
   }
 
+  function _tagBodyCategory() {
+    try {
+      var urlInfo = _parseUrlSlug();
+      if (!urlInfo || !urlInfo.category) return;
+      document.body.classList.add('eb-cat-' + urlInfo.category);
+    } catch (e) {}
+  }
+
   function _unifyNavButtons() {
     try {
       var urlInfo = _parseUrlSlug();
@@ -309,11 +317,13 @@
   function _bootPage() {
     try {
       if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _tagBodyCategory);
         document.addEventListener('DOMContentLoaded', _hookResultScreen);
         document.addEventListener('DOMContentLoaded', _enrichBackLinks);
         document.addEventListener('DOMContentLoaded', _wireSwipe);
         document.addEventListener('DOMContentLoaded', _unifyNavButtons);
       } else {
+        _tagBodyCategory();
         _hookResultScreen();
         _enrichBackLinks();
         _wireSwipe();
