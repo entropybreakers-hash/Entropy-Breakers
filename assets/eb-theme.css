@@ -286,16 +286,26 @@ body.eb-wide .app-shell {
    Theory class-ek: .face-explain-hu, .face-rule-en, .face-example, .face-example-hu
    ═══════════════════════════════════════════════════════════════ */
 
-/* Nagyobb, szimmetrikus kártyák (mind mobil, mind desktop) */
-.flip-container {
+/* Nagyobb, szimmetrikus kártyák. Vocab oldalakon .flip-container-nek
+   fix height:200px van, ezért azt is felül kell írni, különben a 440px
+   magasságú .flip-inner kilóg a 200px-es konténerből a nav gombokra. */
+.flip-container,
+.flip-wrap {
   max-width: 520px !important;
+}
+.flip-container {
+  height: 440px !important;
 }
 .flip-inner {
   min-height: 440px !important;
 }
 @media (max-width: 720px) {
-  .flip-container {
+  .flip-container,
+  .flip-wrap {
     max-width: 100% !important;
+  }
+  .flip-container {
+    height: 380px !important;
   }
   .flip-inner {
     min-height: 380px !important;
@@ -374,7 +384,8 @@ body.eb-wide .app-shell {
 .flip-back .face-label,
 .flip-back .flip-hint {
   color: rgba(26,22,18,0.50) !important;
-  position: relative;
+  /* NINCS position override — a .flip-hint eredeti `position:absolute; bottom:12px`
+     pozíciója érvényben marad, így az alján ül, nem a flex flow közepén. */
   z-index: 2;
 }
 
