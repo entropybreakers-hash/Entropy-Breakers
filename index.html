@@ -1531,15 +1531,51 @@ const CATEGORY_LABELS = {
   vocab: 'Szószedet'
 };
 
+/* ACCESS — verify the student name against the Supabase allowlist.
+   Resolves 'ok' (allowed), 'denied' (not enrolled), or 'error' (could
+   not check). A short-lived cache avoids re-checking on every page nav. */
+const ACCESS_CACHE_KEY = 'eb.access';
+const ACCESS_TTL_MS = 12 * 60 * 60 * 1000;
+function _normName(n) { return String(n || '').trim().toLowerCase(); }
+function _readAccessCache() {
+  try { return JSON.parse(localStorage.getItem(ACCESS_CACHE_KEY) || 'null'); }
+  catch (e) { return null; }
+}
+function verifyAccess(name, force) {
+  if (!window.EBSync || !EBSync.status || !EBSync.status().configured)
+    return Promise.resolve('ok');
+  const cached = _readAccessCache();
+  const matchesCache = !!cached && cached.name === _normName(name);
+  const fresh = matchesCache && (Date.now() - cached.at) < ACCESS_TTL_MS;
+  if (!force && fresh) return Promise.resolve('ok');
+  return EBSync.checkAccess(name).then(function (r) {
+    if (r.ok) {
+      try { localStorage.setItem(ACCESS_CACHE_KEY, JSON.stringify({ name: _normName(name), at: Date.now() })); } catch (e) {}
+      return 'ok';
+    }
+    if (r.error) return matchesCache ? 'ok' : 'error';
+    try { localStorage.removeItem(ACCESS_CACHE_KEY); } catch (e) {}
+    return 'denied';
+  }, function () {
+    return matchesCache ? 'ok' : 'error';
+  });
+}
+
 function initApp() {
   try {
     const params = new URLSearchParams(window.location.search);
     const urlName = params.get('name');
     const urlLevel = params.get('level');
     const urlCategory = params.get('category');
-    if (urlName) {
-      studentName = decodeURIComponent(urlName);
-      try { localStorage.setItem('eb.student', studentName); } catch(e) {}
+    if (!urlName) return;
+    const name = decodeURIComponent(urlName);
+    verifyAccess(name, false).then(function (result) {
+      if (result !== 'ok') {
+        try { localStorage.removeItem('eb.student'); } catch(e) {}
+        return;
+      }
+      studentName = name;
+      try { localStorage.setItem('eb.student', name); } catch(e) {}
       showLevelSelect();
       if (urlLevel && ['a2','b1','b2','c1'].includes(urlLevel.toLowerCase())) {
         currentLevel = urlLevel.toLowerCase();
@@ -1548,7 +1584,7 @@ function initApp() {
           showCategoryCurrent(urlCategory.toLowerCase());
         }
       }
-    }
+    });
   } catch(err) {
     console.error('Init error:', err);
   }
@@ -1577,6 +1613,8 @@ function login() {
   const nameInput = document.getElementById('name-input');
   const codeInput = document.getElementById('passcode-input');
   const errorEl = document.getElementById('login-error');
+  const btn = document.querySelector('.login-btn');
+  if (btn && btn.disabled) return;
   const name = nameInput.value.trim();
   const code = codeInput.value.trim().toLowerCase();
   if (name.length < 2) {
@@ -1593,9 +1631,37 @@ function login() {
     return;
   }
   errorEl.classList.remove('show');
-  studentName = name;
-  try { localStorage.setItem('eb.student', name); } catch(e) {}
-  showLevelSelect();
+
+  function setBusy(busy) {
+    if (!btn) return;
+    if (busy) {
+      btn.dataset.label = btn.innerHTML;
+      btn.disabled = true;
+      btn.textContent = 'Belépés…';
+    } else {
+      btn.disabled = false;
+      if (btn.dataset.label) btn.innerHTML = btn.dataset.label;
+    }
+  }
+
+  setBusy(true);
+  verifyAccess(name, true).then(function (result) {
+    setBusy(false);
+    if (result === 'denied') {
+      errorEl.textContent = 'Ez a név nincs a beiratkozott tanulók közt. Egyeztess a tanároddal.';
+      errorEl.classList.add('show');
+      nameInput.focus();
+      return;
+    }
+    if (result === 'error') {
+      errorEl.textContent = 'Most nem sikerült ellenőrizni a hozzáférést. Ellenőrizd a netkapcsolatot, és próbáld újra.';
+      errorEl.classList.add('show');
+      return;
+    }
+    studentName = name;
+    try { localStorage.setItem('eb.student', name); } catch(e) {}
+    showLevelSelect();
+  });
 }
 
 function switchScreen(screenId) {
@@ -1754,16 +1820,26 @@ function logout() {
       }
     }
     if (!window.studentName) return;
-    if (nav.level) window.currentLevel = nav.level;
-    if (nav.category) window.currentCategory = nav.category;
-    if (nav.screen === 'screen-category' && nav.level && nav.category) {
-      if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
-      if (typeof showCategoryCurrent === 'function') showCategoryCurrent(nav.category);
-    } else if (nav.screen === 'screen-dashboard' && nav.level) {
-      if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
-    } else if (nav.screen === 'screen-levels') {
-      if (typeof showLevelSelect === 'function') showLevelSelect();
-    }
+    var verify = (typeof verifyAccess === 'function')
+      ? verifyAccess(window.studentName, false)
+      : Promise.resolve('ok');
+    verify.then(function (result) {
+      if (result !== 'ok') {
+        try { localStorage.removeItem('eb.student'); } catch (e) {}
+        clearNav();
+        return;
+      }
+      if (nav.level) window.currentLevel = nav.level;
+      if (nav.category) window.currentCategory = nav.category;
+      if (nav.screen === 'screen-category' && nav.level && nav.category) {
+        if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
+        if (typeof showCategoryCurrent === 'function') showCategoryCurrent(nav.category);
+      } else if (nav.screen === 'screen-dashboard' && nav.level) {
+        if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
+      } else if (nav.screen === 'screen-levels') {
+        if (typeof showLevelSelect === 'function') showLevelSelect();
+      }
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restoreFromNav);
   else restoreFromNav();

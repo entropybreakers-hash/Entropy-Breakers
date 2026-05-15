@@ -139,6 +139,21 @@
     return client.auth.signOut().then(function () { user = null; emit(); });
   }
 
+  // Checks the enrolled-students allowlist via the eb_check_student RPC.
+  // Resolves { ok:true } if allowed, { ok:false } if not, or
+  // { ok:false, error } if the check could not be performed.
+  function checkAccess(name) {
+    if (!configured) return Promise.resolve({ ok: true });
+    return ensureClient().then(function (c) {
+      return c.rpc('eb_check_student', { p_name: name });
+    }).then(function (res) {
+      if (res.error) return { ok: false, error: res.error };
+      return { ok: res.data === true };
+    }, function (e) {
+      return { ok: false, error: e };
+    });
+  }
+
   function init() {
     if (!configured) { ready = true; emit(); return; }
     if (hasStoredSession() || returningFromMagicLink()) {
@@ -157,6 +172,7 @@
   window.EBSync = {
     status: status, onChange: onChange,
     signIn: signIn, signOut: signOut,
+    checkAccess: checkAccess,
     pull: pull, push: push
   };
 
