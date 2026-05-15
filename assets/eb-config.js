@@ -12,6 +12,6 @@
    és a platform a megszokott módon, localStorage-ból működik tovább.
    ═══════════════════════════════════════════════════════════════ */
 window.EB_SUPABASE = {
-  url:     'YOUR_SUPABASE_PROJECT_URL',
-  anonKey: 'YOUR_SUPABASE_ANON_KEY'
+  url:     'https://dgpkeqceeumhkrcidhph.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRncGtlcWNlZXVtaGtyY2lkaHBoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NzczODcsImV4cCI6MjA5NDI1MzM4N30.u0bO1cDKDKyhnVUHw5U_jNdQdpaoiTQ-7gMmqZuEmHM'
 };
