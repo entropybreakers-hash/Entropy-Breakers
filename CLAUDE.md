@@ -2,15 +2,23 @@
 
 Entry point: `index.html` at the repo root. All module HTMLs live at root too. Static site, deployed to `academy.entropybreakers.com` via GitHub Pages (`CNAME`).
 
-Shared UI/logic library: `assets/eb-*` (progress tracking, theme, catalog). Every module HTML includes them. New module HTML must include:
+Shared UI/logic library: `assets/eb-*` (progress tracking, theme, catalog, Supabase sync). Every module HTML includes them. New module HTML must include:
 
 ```html
 <link rel="stylesheet" href="assets/eb-theme.css">
+<script src="assets/eb-config.js"></script>
 <script src="assets/eb-progress.js" defer></script>
 <script src="assets/eb-catalog.js" defer></script>
+<script src="assets/eb-sync.js" defer></script>
 ```
 
-`apply-progress.sh` is an idempotent injector for batch-adding the tags to legacy HTML files.
+`apply-progress.sh` is an idempotent injector for batch-adding the tags to legacy HTML files (each tag inserted only when missing).
+
+## Progress sync (Supabase)
+
+Progress is stored in `localStorage` (`eb-progress.js`) as the primary, offline-capable layer. `eb-sync.js` adds an optional hybrid sync to Supabase: signed-in users (email magic link) get their progress merged across devices. Conflict-free merge — `best`/`firstAt`/`lastAt` are monotonic, so a stale snapshot can never lose data.
+
+Setup: run `supabase-schema.sql` in the Supabase SQL editor, then fill in `assets/eb-config.js` with the Project URL + anon key. Until configured (placeholder values present), the sync layer stays inert and the platform works localStorage-only. The Supabase SDK is lazy-loaded — only fetched when there is an active session, so non-synced page loads are unaffected.
 
 ## Design preferences — Bettina / Entropy Breakers
 
