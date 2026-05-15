@@ -902,7 +902,6 @@ main{
     <div class="content-wrap">
       <div class="login-card">
         <input type="text" id="name-input" class="login-input" placeholder="Írd be a neved" autocomplete="off">
-        <input type="email" id="email-input" class="login-input" placeholder="Email — eszközök közti szinkronhoz (opcionális)" autocomplete="email">
         <input type="password" id="passcode-input" class="login-input" placeholder="Jelszó" autocomplete="current-password">
         <div id="login-error" class="login-error"></div>
         <button type="button" class="login-btn" onclick="login()">Kezdés <span class="login-btn-arrow">→</span></button>
@@ -1596,14 +1595,6 @@ function login() {
   errorEl.classList.remove('show');
   studentName = name;
   try { localStorage.setItem('eb.student', name); } catch(e) {}
-
-  const emailInput = document.getElementById('email-input');
-  const email = emailInput ? emailInput.value.trim() : '';
-  if (email && window.EBSync && window.EBSync.status().configured) {
-    window.EBSync.signIn(email).then(function(r) {
-      if (r && r.error) console.error('Szinkron belépés:', r.error);
-    }).catch(function(e) { console.error('Szinkron belépés:', e); });
-  }
   showLevelSelect();
 }
 
@@ -1938,43 +1929,70 @@ function logout() {
 </script>
 
 <script>
-/* SYNC STATUS — small indicator on the level-select screen */
+/* SYNC STATUS — discreet cross-device sync control on the level screen */
 (function () {
-  function el() { return document.getElementById('eb-sync-status'); }
+  var expanded = false;
+  function node() { return document.getElementById('eb-sync-status'); }
+  function esc(s) { return String(s || '').replace(/[<>&"]/g, function (c) {
+    return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c];
+  }); }
+
   function render(st) {
-    var node = el();
-    if (!node) return;
-    var emailInput = document.getElementById('email-input');
-    if (!st || !st.configured) {
-      node.style.display = 'none';
-      if (emailInput) emailInput.style.display = 'none';
+    var el = node();
+    if (!el) return;
+    if (!st || !st.configured) { el.style.display = 'none'; return; }
+    el.style.display = '';
+
+    if (st.user) {
+      expanded = false;
+      el.innerHTML =
+        '<span class="eb-sync-dot eb-sync-on"></span>' +
+        '<span class="eb-sync-text">Szinkronizálva — ' + esc(st.user.email) + '</span>' +
+        '<button type="button" class="eb-sync-link" id="eb-sync-off">kilépés</button>';
+      document.getElementById('eb-sync-off').onclick = function () {
+        window.EBSync.signOut();
+      };
       return;
     }
-    node.style.display = '';
-    if (st.user) {
-      node.innerHTML =
-        '<span class="eb-sync-dot eb-sync-on"></span>' +
-        '<span>Szinkronizálva — ' + (st.user.email || '') + '</span>' +
-        '<button type="button" class="eb-sync-link" id="eb-sync-off">kijelentkezés a szinkronból</button>';
-      var off = document.getElementById('eb-sync-off');
-      if (off) off.onclick = function () { window.EBSync.signOut(); };
-    } else {
-      node.innerHTML =
+
+    if (!expanded) {
+      el.innerHTML =
         '<span class="eb-sync-dot"></span>' +
-        '<span>A haladás csak ezen az eszközön él</span>' +
+        '<span class="eb-sync-text">A haladás csak ezen az eszközön él</span>' +
         '<button type="button" class="eb-sync-link" id="eb-sync-on">szinkron bekapcsolása</button>';
-      var on = document.getElementById('eb-sync-on');
-      if (on) on.onclick = function () {
-        var email = prompt('Add meg az email-címed — küldünk egy belépő linket a szinkronhoz:');
-        if (!email) return;
-        email = email.trim();
-        window.EBSync.signIn(email).then(function (r) {
-          if (r && r.error) alert('Hiba: ' + r.error.message);
-          else alert('Elküldtük a belépő linket a(z) ' + email + ' címre. Kattints rá a szinkron aktiválásához.');
-        }).catch(function (e) { alert('Hiba: ' + e.message); });
+      document.getElementById('eb-sync-on').onclick = function () {
+        expanded = true; render(st);
+        var i = document.getElementById('eb-sync-email');
+        if (i) i.focus();
       };
+      return;
     }
+
+    el.innerHTML =
+      '<form class="eb-sync-form" id="eb-sync-form">' +
+        '<input type="email" id="eb-sync-email" class="eb-sync-input" ' +
+          'placeholder="email-címed" autocomplete="email" required>' +
+        '<button type="submit" class="eb-sync-send">Küldés</button>' +
+        '<button type="button" class="eb-sync-link" id="eb-sync-cancel">mégse</button>' +
+      '</form>' +
+      '<div class="eb-sync-note" id="eb-sync-note">Küldünk egy belépő linket — kattints rá, és a haladásod minden eszközön szinkronban lesz.</div>';
+
+    document.getElementById('eb-sync-cancel').onclick = function () {
+      expanded = false; render(st);
+    };
+    document.getElementById('eb-sync-form').onsubmit = function (e) {
+      e.preventDefault();
+      var email = document.getElementById('eb-sync-email').value.trim();
+      var note = document.getElementById('eb-sync-note');
+      if (!email) return;
+      note.textContent = 'Küldés…';
+      window.EBSync.signIn(email).then(function (r) {
+        if (r && r.error) { note.textContent = 'Hiba: ' + r.error.message; return; }
+        note.textContent = 'Elküldtük a linket ide: ' + email + '. Nyisd meg, és kész a szinkron.';
+      }).catch(function (err) { note.textContent = 'Hiba: ' + err.message; });
+    };
   }
+
   function boot() {
     if (window.EBSync) window.EBSync.onChange(render);
     else render(null);
