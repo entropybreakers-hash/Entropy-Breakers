@@ -435,3 +435,27 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   text-align: center;
 }
 
+
+/* ── Supabase sync status ──────────────────────────────────────── */
+.eb-sync-status {
+  margin-top: 14px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 7px;
+  font-family: var(--eb-font);
+  font-size: 12px; letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.6);
+}
+.eb-sync-dot {
+  width: 7px; height: 7px; border-radius: var(--eb-radius-full);
+  background: rgba(255,255,255,0.32); flex: none;
+}
+.eb-sync-dot.eb-sync-on {
+  background: #3fb950;
+  box-shadow: 0 0 8px rgba(63,185,80,0.55);
+}
+.eb-sync-link {
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: var(--eb-orange);
+  text-decoration: underline; text-underline-offset: 2px;
+  transition: color 0.18s var(--eb-ease);
+}
+.eb-sync-link:hover { color: var(--eb-orange-2); }

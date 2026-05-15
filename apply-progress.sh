@@ -1,38 +1,51 @@
 #!/usr/bin/env bash
-# Entropy Breakers — Inject eb-progress.js + eb-catalog.js + eb-theme.css
-# into every module HTML. Safe to re-run (idempotent).
+# Entropy Breakers — ensure every module HTML loads the shared eb-* assets.
 #
-# Usage: cd ujdizajn && bash apply-progress.sh
+# Usage: bash apply-progress.sh
 #
-# Skips: index.html (already wired by hand), any file that already
-# contains "assets/eb-progress.js".
+# Idempotent: each tag is inserted only when missing. Safe to re-run.
+# Skips index.html (wired by hand).
 set -euo pipefail
 DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$DIR"
 
-CSS_LINK='<link rel="stylesheet" href="assets/eb-theme.css">'
-JS_TAGS='<script src="assets/eb-progress.js" defer></script>
-<script src="assets/eb-catalog.js" defer></script>'
+python3 - <<'PY'
+import glob, re
 
-injected=0
-skipped=0
-for f in *.html; do
-  [[ "$f" == "index.html" ]] && continue
-  if grep -q 'assets/eb-progress.js' "$f"; then
-    skipped=$((skipped+1)); continue
-  fi
-  tmp="$(mktemp)"
-  python3 - "$f" "$tmp" "$CSS_LINK" "$JS_TAGS" <<'PY'
-import sys, re
-src_path, dst_path, css, js = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
-with open(src_path, 'r', encoding='utf-8') as f: html = f.read()
-if 'assets/eb-theme.css' not in html:
-    html = re.sub(r'(\s*)</head>', '\n  ' + css + r'\1</head>', html, count=1, flags=re.IGNORECASE)
-html = re.sub(r'(\s*)</body>', '\n' + js + r'\1</body>', html, count=1, flags=re.IGNORECASE)
-with open(dst_path, 'w', encoding='utf-8') as f: f.write(html)
+HEAD_TAG = '<link rel="stylesheet" href="assets/eb-theme.css">'
+# Order matters: eb-config defines window.EB_SUPABASE before eb-sync reads it;
+# eb-sync runs after eb-progress so window.EB is available.
+BODY_TAGS = [
+    '<script src="assets/eb-config.js"></script>',
+    '<script src="assets/eb-progress.js" defer></script>',
+    '<script src="assets/eb-catalog.js" defer></script>',
+    '<script src="assets/eb-sync.js" defer></script>',
+]
+
+def src_of(tag):
+    return tag.split('"')[1]
+
+changed = 0
+for path in sorted(glob.glob('*.html')):
+    if path == 'index.html':
+        continue
+    with open(path, encoding='utf-8') as f:
+        html = f.read()
+    original = html
+
+    if 'assets/eb-theme.css' not in html:
+        html = re.sub(r'(\s*)</head>', '\n  ' + HEAD_TAG + r'\1</head>',
+                      html, count=1, flags=re.IGNORECASE)
+
+    missing = [t for t in BODY_TAGS if src_of(t) not in html]
+    if missing:
+        html = re.sub(r'(\s*)</body>', '\n' + '\n'.join(missing) + r'\1</body>',
+                      html, count=1, flags=re.IGNORECASE)
+
+    if html != original:
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(html)
+        changed += 1
+
+print('Updated %d file(s).' % changed)
 PY
-  mv "$tmp" "$f"
-  injected=$((injected+1))
-done
-echo "Injected: $injected file(s)."
-echo "Skipped (already done): $skipped file(s)."

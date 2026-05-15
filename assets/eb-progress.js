@@ -13,7 +13,12 @@
     try { var raw = localStorage.getItem(key); if (!raw) return fallback; return JSON.parse(raw); }
     catch (e) { return fallback; }
   }
-  function writeJSON(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+  var _suspendEvents = false;
+  function writeJSON(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+    if (_suspendEvents) return;
+    try { window.dispatchEvent(new CustomEvent('eb:changed', { detail: { key: key } })); } catch (e) {}
+  }
 
   function todayISO() {
     var d = new Date();
@@ -173,6 +178,96 @@
   }
   function reset() {
     try { localStorage.removeItem(PROGRESS_KEY); localStorage.removeItem(STREAK_KEY); localStorage.removeItem(LAST_ACTIVITY_KEY); localStorage.removeItem(DAILY_KEY); } catch (e) {}
+  }
+
+  /* ── Sync support: snapshot + conflict-free merge ────────────── */
+  function snapshot() {
+    return {
+      progress: getAll(),
+      streak:   getStreak(),
+      daily:    readJSON(DAILY_KEY, {}),
+      activity: readJSON(LAST_ACTIVITY_KEY, null)
+    };
+  }
+  function _unionKeys(a, b) {
+    var set = {}, k;
+    for (k in (a || {})) if (Object.prototype.hasOwnProperty.call(a, k)) set[k] = 1;
+    for (k in (b || {})) if (Object.prototype.hasOwnProperty.call(b, k)) set[k] = 1;
+    return Object.keys(set);
+  }
+  function _minISO(a, b) { if (!a) return b || null; if (!b) return a; return a < b ? a : b; }
+  function _maxISO(a, b) { if (!a) return b || null; if (!b) return a; return a > b ? a : b; }
+  function _mergeModule(a, b) {
+    if (!a) return b || null;
+    if (!b) return a;
+    var newer = (a.lastAt || '') >= (b.lastAt || '') ? a : b;
+    return {
+      best:     Math.max(a.best || 0, b.best || 0),
+      last:     typeof newer.last === 'number' ? newer.last : 0,
+      attempts: Math.max(a.attempts || 0, b.attempts || 0),
+      firstAt:  _minISO(a.firstAt, b.firstAt),
+      lastAt:   _maxISO(a.lastAt, b.lastAt),
+      title:    a.title || b.title || null
+    };
+  }
+  // Merge a remote snapshot into local storage. Conflict-free: progress
+  // best/firstAt/lastAt are monotonic, so applying a stale snapshot can
+  // never lose data. Returns the merged snapshot.
+  function merge(remote) {
+    if (!remote || typeof remote !== 'object') return snapshot();
+    _suspendEvents = true;
+    try {
+      var local = getAll();
+      var lLevels = local.levels || {};
+      var rLevels = (remote.progress && remote.progress.levels) || {};
+      var out = { levels: {} };
+      var lvls = _unionKeys(lLevels, rLevels);
+      for (var i = 0; i < lvls.length; i++) {
+        var lv = lvls[i];
+        out.levels[lv] = {};
+        var cats = _unionKeys(lLevels[lv], rLevels[lv]);
+        for (var j = 0; j < cats.length; j++) {
+          var ct = cats[j];
+          out.levels[lv][ct] = {};
+          var lCat = (lLevels[lv] && lLevels[lv][ct]) || {};
+          var rCat = (rLevels[lv] && rLevels[lv][ct]) || {};
+          var slugs = _unionKeys(lCat, rCat);
+          for (var k = 0; k < slugs.length; k++) {
+            var sg = slugs[k];
+            out.levels[lv][ct][sg] = _mergeModule(lCat[sg], rCat[sg]);
+          }
+        }
+      }
+      writeAll(out);
+
+      var lS = getStreak();
+      var rS = remote.streak || { current: 0, best: 0, lastDate: null };
+      var lNewer = (lS.lastDate || '') >= (rS.lastDate || '');
+      writeJSON(STREAK_KEY, {
+        current:  lNewer ? (lS.current || 0) : (rS.current || 0),
+        best:     Math.max(lS.best || 0, rS.best || 0),
+        lastDate: _maxISO(lS.lastDate, rS.lastDate)
+      });
+
+      var lD = readJSON(DAILY_KEY, {});
+      var rD = remote.daily || {};
+      var mD = {}, dKeys = _unionKeys(lD, rD);
+      for (var d = 0; d < dKeys.length; d++) {
+        mD[dKeys[d]] = Math.max(lD[dKeys[d]] || 0, rD[dKeys[d]] || 0);
+      }
+      writeJSON(DAILY_KEY, mD);
+
+      var lA = readJSON(LAST_ACTIVITY_KEY, null);
+      var rA = remote.activity || null;
+      var mA = lA;
+      if (rA && (!lA || (rA.at || '') > (lA.at || ''))) mA = rA;
+      if (mA) writeJSON(LAST_ACTIVITY_KEY, mA);
+    } catch (e) {
+      console.error('[EB] merge', e);
+    }
+    _suspendEvents = false;
+    try { window.dispatchEvent(new CustomEvent('eb:changed', { detail: { key: 'merge' } })); } catch (e) {}
+    return snapshot();
   }
 
   function _parseUrlSlug() {
@@ -367,6 +462,7 @@
     registerCatalog: registerCatalog, listLevels: listLevels, listCategories: listCategories,
     getHeatmap: getHeatmap, getActiveDaysInLast: getActiveDaysInLast,
     lastSeenLabel: lastSeenLabel, lastSeenBucket: lastSeenBucket,
+    snapshot: snapshot, merge: merge,
     reset: reset,
     _debug: { getAll: getAll, parseUrlSlug: _parseUrlSlug, detectMeta: _detectMeta }
   };

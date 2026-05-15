@@ -902,6 +902,7 @@ main{
     <div class="content-wrap">
       <div class="login-card">
         <input type="text" id="name-input" class="login-input" placeholder="Írd be a neved" autocomplete="off">
+        <input type="email" id="email-input" class="login-input" placeholder="Email — eszközök közti szinkronhoz (opcionális)" autocomplete="email">
         <input type="password" id="passcode-input" class="login-input" placeholder="Jelszó" autocomplete="current-password">
         <div id="login-error" class="login-error"></div>
         <button type="button" class="login-btn" onclick="login()">Kezdés <span class="login-btn-arrow">→</span></button>
@@ -925,6 +926,7 @@ main{
         </div>
         <p class="hero-eyebrow">Szia, <span id="select-name">—</span> 👋</p>
         <div class="eb-heatmap" data-eb-heatmap style="margin-top:16px"></div>
+        <div class="eb-sync-status" id="eb-sync-status" style="display:none"></div>
       </div>
     </div>
 
@@ -1594,6 +1596,14 @@ function login() {
   errorEl.classList.remove('show');
   studentName = name;
   try { localStorage.setItem('eb.student', name); } catch(e) {}
+
+  const emailInput = document.getElementById('email-input');
+  const email = emailInput ? emailInput.value.trim() : '';
+  if (email && window.EBSync && window.EBSync.status().configured) {
+    window.EBSync.signIn(email).then(function(r) {
+      if (r && r.error) console.error('Szinkron belépés:', r.error);
+    }).catch(function(e) { console.error('Szinkron belépés:', e); });
+  }
   showLevelSelect();
 }
 
@@ -1716,8 +1726,10 @@ function logout() {
 <!-- ═══════════════════════════════════════════════════════════════
      Entropy Breakers — Progress wiring
      ═══════════════════════════════════════════════════════════════ -->
+<script src="assets/eb-config.js"></script>
 <script src="assets/eb-progress.js"></script>
 <script src="assets/eb-catalog.js"></script>
+<script src="assets/eb-sync.js"></script>
 <script>
 /* NAV STATE — remember which screen the student was on */
 (function () {
@@ -1917,6 +1929,58 @@ function logout() {
   _wrap('showLevel', function () { setTimeout(function () { var lvl = _currentLevelFromBadge(); if (lvl) renderDashboard(lvl); }, 30); });
   _wrap('showCategoryCurrent', function () { setTimeout(function () { var info = _currentLevelCatFromBadge(); if (info) renderCategoryList(info.level, info.category); }, 30); });
   document.addEventListener('DOMContentLoaded', function () { renderLevelSelect(); });
+  // Re-render after a Supabase sync pulled remote progress.
+  window.addEventListener('eb:sync', function () {
+    var active = document.querySelector('.screen.active');
+    if (active) onScreenActivate(active.id);
+  });
+})();
+</script>
+
+<script>
+/* SYNC STATUS — small indicator on the level-select screen */
+(function () {
+  function el() { return document.getElementById('eb-sync-status'); }
+  function render(st) {
+    var node = el();
+    if (!node) return;
+    var emailInput = document.getElementById('email-input');
+    if (!st || !st.configured) {
+      node.style.display = 'none';
+      if (emailInput) emailInput.style.display = 'none';
+      return;
+    }
+    node.style.display = '';
+    if (st.user) {
+      node.innerHTML =
+        '<span class="eb-sync-dot eb-sync-on"></span>' +
+        '<span>Szinkronizálva — ' + (st.user.email || '') + '</span>' +
+        '<button type="button" class="eb-sync-link" id="eb-sync-off">kijelentkezés a szinkronból</button>';
+      var off = document.getElementById('eb-sync-off');
+      if (off) off.onclick = function () { window.EBSync.signOut(); };
+    } else {
+      node.innerHTML =
+        '<span class="eb-sync-dot"></span>' +
+        '<span>A haladás csak ezen az eszközön él</span>' +
+        '<button type="button" class="eb-sync-link" id="eb-sync-on">szinkron bekapcsolása</button>';
+      var on = document.getElementById('eb-sync-on');
+      if (on) on.onclick = function () {
+        var email = prompt('Add meg az email-címed — küldünk egy belépő linket a szinkronhoz:');
+        if (!email) return;
+        email = email.trim();
+        window.EBSync.signIn(email).then(function (r) {
+          if (r && r.error) alert('Hiba: ' + r.error.message);
+          else alert('Elküldtük a belépő linket a(z) ' + email + ' címre. Kattints rá a szinkron aktiválásához.');
+        }).catch(function (e) { alert('Hiba: ' + e.message); });
+      };
+    }
+  }
+  function boot() {
+    if (window.EBSync) window.EBSync.onChange(render);
+    else render(null);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 
