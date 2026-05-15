@@ -298,7 +298,6 @@
       if ((m = path.match(/^(a2|b1|b2|c1)-verb-(learner|test)$/))) return { level: m[1], category: 'practice', slug: 'verb-' + m[2] };
       if ((m = path.match(/^(a2|b1|b2|c1)-phrase-(learner|test)$/))) return { level: m[1], category: 'practice', slug: 'phrase-' + m[2] };
       if ((m = path.match(/^traveling-guide-(a2|b1|b2|c1)-flashcards$/))) return { level: m[1], category: 'flashcards', slug: 'traveling-guide' };
-      if (path === 'traveling-guide-b1b2-flashcards') return { level: 'b1', category: 'flashcards', slug: 'traveling-guide-b1b2' };
       return null;
     } catch (e) { return null; }
   }

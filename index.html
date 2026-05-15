@@ -1552,11 +1552,13 @@ function verifyAccess(name, force) {
       try { localStorage.setItem(ACCESS_CACHE_KEY, JSON.stringify({ name: _normName(name), at: Date.now() })); } catch (e) {}
       return 'ok';
     }
-    if (r.error) return matchesCache ? 'ok' : 'error';
+    // On a check error, only fall back to the cache if it is still
+    // fresh — a stale entry must not keep a removed student in.
+    if (r.error) return fresh ? 'ok' : 'error';
     try { localStorage.removeItem(ACCESS_CACHE_KEY); } catch (e) {}
     return 'denied';
   }, function () {
-    return matchesCache ? 'ok' : 'error';
+    return fresh ? 'ok' : 'error';
   });
 }
 
@@ -1576,7 +1578,6 @@ function initApp() {
       studentName = name;
       try { localStorage.setItem('eb.student', name); } catch(e) {}
       showLevelSelect();
-      if (window.EBSync) EBSync.pull();
       if (urlLevel && ['a2','b1','b2','c1'].includes(urlLevel.toLowerCase())) {
         currentLevel = urlLevel.toLowerCase();
         _doShowLevel(currentLevel);
@@ -1840,7 +1841,6 @@ function logout() {
       } else if (nav.screen === 'screen-levels') {
         if (typeof showLevelSelect === 'function') showLevelSelect();
       }
-      if (window.EBSync) EBSync.pull();
     });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restoreFromNav);
