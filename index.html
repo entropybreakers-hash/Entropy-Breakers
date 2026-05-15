@@ -9,7 +9,7 @@
 <title>Entropy Breakers — Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/eb-theme.css">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -46,13 +46,31 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
   --radius-xl:28px;
   --radius-full:9999px;
   --font:'DM Sans',system-ui,-apple-system,sans-serif;
+  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
   --ease-out:cubic-bezier(0.2,0.8,0.2,1);
   --ease-bounce:cubic-bezier(0.34,1.56,0.64,1);
 }
 
+/* ── Editorial display type ── */
+.hero-title,
+.login-hero-title,
+.level-card-name,
+.category-name,
+.result-title{
+  font-family:var(--font-display);
+  font-optical-sizing:auto;
+  font-weight:500;
+  letter-spacing:-.02em;
+}
+.hero-title .accent,
+.login-hero-title .accent{
+  font-style:italic;
+  font-weight:500;
+}
+
 body{
   font-family:var(--font);
-  background:#fff;
+  background:var(--bg2);
   color:var(--ink);
   -webkit-font-smoothing:antialiased;
   line-height:1.5;
@@ -184,13 +202,13 @@ body{
 }
 .hero-title{
   color:var(--ink-light);
-  font-size:28px;
-  font-weight:600;
-  letter-spacing:-.025em;
-  line-height:1.15;
+  font-size:31px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  line-height:1.08;
   margin:0;
 }
-.hero-title-sm{font-size:24px}
+.hero-title-sm{font-size:26px}
 .hero-subtitle{
   color:var(--ink-light-2);
   font-size:13px;
@@ -226,7 +244,7 @@ main{
 
 /* Fehér hátterű screen (minden oldal ugyanaz) */
 .screen.white-bg{
-  background:#fff;
+  background:var(--bg2);
 }
 .screen.white-bg .hero-title,
 .screen.white-bg .hero-title.hero-title-sm{
@@ -300,10 +318,21 @@ main{
 .login-dark-bg{
   position:absolute;inset:0;z-index:0;pointer-events:none;
   background:#000000;
+  overflow:hidden;
+}
+.login-dark-bg::before{
+  content:'';
+  position:absolute;
+  left:50%;top:-12%;
+  width:115%;
+  aspect-ratio:1/1;
+  transform:translateX(-50%);
+  background:radial-gradient(circle at 50% 0%,rgba(255,122,46,0.22) 0%,rgba(255,122,46,0.07) 32%,transparent 62%);
+  animation:login-bg-breathe 7s ease-in-out infinite alternate;
 }
 @keyframes login-bg-breathe{
-  0%{transform:scale(1)}
-  100%{transform:scale(1.06)}
+  0%{transform:translateX(-50%) scale(1);opacity:.85}
+  100%{transform:translateX(-50%) scale(1.12);opacity:1}
 }
 .screen.login-dark .hero{padding-top:40px}
 .screen.login-dark .login-logo{
@@ -413,10 +442,10 @@ main{
 
 .login-hero-title{
   color:var(--ink-light);
-  font-size:30px;
-  font-weight:600;
-  letter-spacing:-.03em;
-  line-height:1.15;
+  font-size:32px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  line-height:1.1;
   margin:0;
   text-align:center;
 }
@@ -690,10 +719,11 @@ main{
   gap:12px;
 }
 .category-card{
-  background:var(--orange);
+  position:relative;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);
   border-radius:var(--radius-lg);
-  padding:18px 20px;
-  box-shadow:0 12px 30px rgba(209,74,0,0.25);
+  padding:20px;
+  box-shadow:0 12px 30px rgba(209,74,0,0.22);
   display:flex;
   align-items:center;
   gap:16px;
@@ -702,21 +732,35 @@ main{
   font-family:inherit;
   text-align:left;
   width:100%;
-  transition:transform .25s var(--ease-out),box-shadow .3s ease,background .3s ease;
+  overflow:hidden;
+  transition:transform .25s var(--ease-out),box-shadow .3s var(--ease-out);
   opacity:0;
   animation:cardIn .5s var(--ease-out) forwards;
+}
+/* soft light bloom in the corner */
+.category-card::after{
+  content:'';
+  position:absolute;
+  top:-40%;right:-10%;
+  width:160px;height:160px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.22) 0%,transparent 70%);
+  pointer-events:none;
+  transition:transform .5s var(--ease-out);
 }
 .category-card:nth-child(1){animation-delay:.05s}
 .category-card:nth-child(2){animation-delay:.12s}
 .category-card:nth-child(3){animation-delay:.19s}
 .category-card:hover{
-  transform:translateY(-3px);
-  background:var(--orange2);
-  box-shadow:0 18px 40px rgba(209,74,0,0.35);
+  transform:translateY(-4px);
+  box-shadow:0 22px 44px rgba(209,74,0,0.34);
 }
+.category-card:hover::after{transform:scale(1.5) translate(-10%,10%)}
 .category-card:active{transform:translateY(-1px) scale(.99)}
 
 .category-icon{
+  position:relative;
+  z-index:1;
   width:56px;
   height:56px;
   border-radius:var(--radius-md);
@@ -725,13 +769,15 @@ main{
   justify-content:center;
   flex-shrink:0;
   background:#fff;
+  transition:transform .22s var(--ease-bounce);
 }
+.category-card:hover .category-icon{transform:scale(1.06) rotate(-3deg)}
 .category-icon svg{width:28px;height:28px;fill:none;stroke:var(--orange2) !important}
 
-.category-body{flex:1;min-width:0}
+.category-body{flex:1;min-width:0;position:relative;z-index:1}
 .category-name{
-  font-size:17px;
-  font-weight:600;
+  font-size:19px;
+  font-weight:500;
   color:#fff;
   letter-spacing:-.015em;
   margin:0;
@@ -744,6 +790,8 @@ main{
 }
 
 .category-arrow{
+  position:relative;
+  z-index:1;
   font-size:22px;
   font-weight:400;
   transition:transform .2s var(--ease-out);
@@ -758,12 +806,21 @@ main{
 
 .skill-block{margin-bottom:8px}
 .skill-label{
-  font-size:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:11px;
   font-weight:700;
-  letter-spacing:.22em;
+  letter-spacing:.2em;
   text-transform:uppercase;
   color:#fff;
-  margin:0 6px 16px 6px;
+  margin:0 4px 14px 4px;
+}
+.skill-label::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--border2);
 }
 .module-list{
   display:flex;
@@ -771,60 +828,80 @@ main{
   gap:8px;
 }
 .module{
-  background:var(--orange);
+  position:relative;
+  background:#fff;
+  border:1px solid var(--border);
   border-radius:var(--radius-md);
-  padding:14px 16px;
-  box-shadow:0 8px 20px rgba(209,74,0,0.25);
+  padding:13px 15px;
+  box-shadow:var(--shadow-sm);
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:13px;
   text-decoration:none;
   color:inherit;
-  transition:transform .2s var(--ease-out),box-shadow .25s ease,background .25s ease;
-  border:none;
+  transition:transform .22s var(--ease-out),box-shadow .28s var(--ease-out),border-color .22s ease;
   opacity:0;
   animation:cardIn .4s var(--ease-out) forwards;
-  animation-delay:calc(var(--idx,0) * 40ms);
+  animation-delay:calc(var(--idx,0) * 45ms);
+  overflow:hidden;
+}
+/* hairline accent that wipes in on hover */
+.module::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,var(--orange) 0%,var(--orange2) 100%);
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:transform .28s var(--ease-out);
 }
 .module:hover{
-  transform:translateX(4px);
-  background:var(--orange2);
-  box-shadow:0 12px 24px rgba(209,74,0,0.35);
+  transform:translateY(-3px);
+  border-color:rgba(255,122,46,0.4);
+  box-shadow:0 14px 30px rgba(209,74,0,0.14);
 }
-.module:active{transform:translateX(2px) scale(.99)}
+.module:hover::before{transform:scaleY(1)}
+.module:active{transform:translateY(-1px) scale(.995)}
 
 .module-icon{
-  width:44px;
-  height:44px;
+  width:42px;
+  height:42px;
   border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
   flex-shrink:0;
-  background:#fff;
+  background:var(--orange-soft);
+  transition:transform .22s var(--ease-bounce);
 }
-.module-icon svg{width:22px;height:22px;fill:none;stroke:var(--orange2) !important}
+.module:hover .module-icon{transform:scale(1.07) rotate(-3deg)}
+.module-icon.test{background:var(--green-soft)}
+.module-icon.grammar{background:var(--amber-soft)}
+.module-icon.vocab{background:var(--amber-soft)}
+.module-icon svg{width:21px;height:21px;fill:none}
 
 .module-body{flex:1;min-width:0}
 .module-title{
   font-size:14px;
   font-weight:600;
-  color:#fff;
+  color:var(--ink);
   letter-spacing:-.005em;
   margin:0;
 }
 .module-meta{
   font-size:11px;
-  color:rgba(255,255,255,0.75);
+  color:var(--dim);
   margin:2px 0 0 0;
   font-weight:500;
+  letter-spacing:.02em;
 }
 .module-arrow{
-  font-size:18px;
-  color:rgba(255,255,255,0.7);
-  transition:transform .2s var(--ease-out),color .2s ease;
+  font-size:17px;
+  color:var(--dim);
+  transition:transform .22s var(--ease-out),color .22s ease;
 }
-.module:hover .module-arrow{color:#fff;transform:translateX(3px)}
+.module:hover .module-arrow{color:var(--orange2);transform:translateX(3px)}
 
 /* ═══════════════════════
    FOOTER
@@ -873,10 +950,28 @@ main{
 @media(max-width:380px){
   .hero{padding:26px 18px 54px 18px}
   .content-wrap{padding:0 14px}
-  .hero-title{font-size:24px}
-  .login-hero-title{font-size:26px}
+  .hero-title{font-size:25px}
+  .login-hero-title{font-size:27px}
   .level-card{padding:14px}
   .login-logo{width:72px;height:72px;font-size:32px}
+}
+
+/* ── White cards / heatmap pop on the cream surface ── */
+.screen.white-bg .eb-heatmap{
+  background:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.screen.white-bg .app-footer-tag{color:var(--ink2)}
+.screen.white-bg .app-footer-author{color:var(--dim)}
+
+/* ── Respect reduced-motion preference ── */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .login-dark-bg::before{animation:none !important}
 }
 </style>
 </head>
@@ -1055,7 +1150,7 @@ main{
 
         <!-- ═══ A2 · ELMÉLET ═══ -->
         <div class="category-section" data-level="a2" data-category="theory" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igeidők</div>
             <div class="module-list">
               <a class="module" href="a2-theory-tobe.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Létige (to be)</p><p class="module-meta">12 kártya · A2</p></div><span class="module-arrow">→</span></a>
@@ -1065,7 +1160,7 @@ main{
               <a class="module" href="a2-theory-future.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Jövő idő</p><p class="module-meta">10 kártya · A2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További szerkezetek</div>
             <div class="module-list">
               <a class="module" href="a2-theory-possession.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Birtoklás</p><p class="module-meta">10 kártya · A2</p></div><span class="module-arrow">→</span></a>
@@ -1077,7 +1172,7 @@ main{
 
         <!-- ═══ A2 · GYAKORLÁS ═══ -->
         <div class="category-section" data-level="a2" data-category="practice" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igeidők</div>
             <div class="module-list">
               <a class="module" href="a2-practice-tobe.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Létige gyakorlás</p><p class="module-meta">25 kérdés · A2</p></div><span class="module-arrow">→</span></a>
@@ -1087,7 +1182,7 @@ main{
               <a class="module" href="a2-practice-future.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Jövő idő gyakorlás</p><p class="module-meta">22 kérdés · A2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További szerkezetek</div>
             <div class="module-list">
               <a class="module" href="a2-practice-possession.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Birtoklás gyakorlás</p><p class="module-meta">25 kérdés · A2</p></div><span class="module-arrow">→</span></a>
@@ -1095,14 +1190,14 @@ main{
               <a class="module" href="a2-practice-prepositions.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Elöljárók gyakorlás</p><p class="module-meta">25 kérdés · A2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Nyelvtan — összefoglaló</div>
             <div class="module-list">
               <a class="module" href="a2-grammar-master.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Nyelvtan mester</p><p class="module-meta">60 kérdés · A2</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="wordorder-a2.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Szórend gyakorló</p><p class="module-meta">50 mondat · A2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igék</div>
             <div class="module-list">
               <a class="module" href="a2-verb-test.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></div><div class="module-body"><p class="module-title">Ige teszt</p><p class="module-meta">50 ige · A2</p></div><span class="module-arrow">→</span></a>
@@ -1113,7 +1208,7 @@ main{
 
         <!-- ═══ A2 · SZÓSZEDET ═══ -->
         <div class="category-section" data-level="a2" data-category="vocab" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szókincs</div>
             <div class="module-list">
               <a class="module" href="vocab-a2-home-daily-routine.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Otthon & Napi rutin</p><p class="module-meta">Szókincs · A2</p></div><span class="module-arrow">→</span></a>
@@ -1126,13 +1221,13 @@ main{
               <a class="module" href="vocab-a2-weather-seasons.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Időjárás & Évszakok</p><p class="module-meta">Szókincs · A2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igék</div>
             <div class="module-list">
               <a class="module" href="a2-verb-learner.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Ige tanuló</p><p class="module-meta">50 ige · A2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Utazás</div>
             <div class="module-list">
               <a class="module" href="traveling-guide-a2-flashcards.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Utazási kalauz</p><p class="module-meta">60 szituáció · A2</p></div><span class="module-arrow">→</span></a>
@@ -1142,7 +1237,7 @@ main{
 
         <!-- ═══ B1 · ELMÉLET ═══ -->
         <div class="category-section" data-level="b1" data-category="theory" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Present Perfect</div>
             <div class="module-list">
               <a class="module" href="b1-theory-present-perfect-basic.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Present Perfect — alap</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
@@ -1150,20 +1245,20 @@ main{
               <a class="module" href="b1-theory-present-perfect-forsince.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Present Perfect — for / since / already / yet</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További igeidők</div>
             <div class="module-list">
               <a class="module" href="b1-theory-past-continuous.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Past Continuous</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Feltételes mondatok</div>
             <div class="module-list">
               <a class="module" href="b1-theory-zero-first-conditional.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Zero + First Conditional</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b1-theory-second-conditional.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Second Conditional</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Modals</div>
             <div class="module-list">
               <a class="module" href="b1-theory-modal-ability.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Modals — képesség</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
@@ -1171,21 +1266,21 @@ main{
               <a class="module" href="b1-theory-modal-possibility.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Modals — lehetőség</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szenvedő szerkezet</div>
             <div class="module-list">
               <a class="module" href="b1-theory-passive-present.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Szenvedő — jelen idő</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b1-theory-passive-past.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Szenvedő — múlt idő</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Vonatkozó mondatok</div>
             <div class="module-list">
               <a class="module" href="b1-theory-relative-who.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Vonatkozó mondat — személy</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b1-theory-relative-which.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Vonatkozó mondat — tárgy / hely</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További szerkezetek</div>
             <div class="module-list">
               <a class="module" href="b1-theory-gerund-infinitive.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Gerund vs Infinitive — alap</p><p class="module-meta">10 kártya · B1</p></div><span class="module-arrow">→</span></a>
@@ -1197,7 +1292,7 @@ main{
 
         <!-- ═══ B1 · GYAKORLÁS ═══ -->
         <div class="category-section" data-level="b1" data-category="practice" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Present Perfect</div>
             <div class="module-list">
               <a class="module" href="b1-practice-present-perfect-basic.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Present Perfect — alap</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
@@ -1205,20 +1300,20 @@ main{
               <a class="module" href="b1-practice-present-perfect-forsince.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Present Perfect — for / since / already / yet</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További igeidők</div>
             <div class="module-list">
               <a class="module" href="b1-practice-past-continuous.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Past Continuous</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Feltételes mondatok</div>
             <div class="module-list">
               <a class="module" href="b1-practice-zero-first-conditional.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Zero + First Conditional</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b1-practice-second-conditional.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Second Conditional</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Modals</div>
             <div class="module-list">
               <a class="module" href="b1-practice-modal-ability.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Modals — képesség</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
@@ -1226,21 +1321,21 @@ main{
               <a class="module" href="b1-practice-modal-possibility.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Modals — lehetőség</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szenvedő szerkezet</div>
             <div class="module-list">
               <a class="module" href="b1-practice-passive-present.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Szenvedő — jelen idő</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b1-practice-passive-past.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Szenvedő — múlt idő</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Vonatkozó mondatok</div>
             <div class="module-list">
               <a class="module" href="b1-practice-relative-who.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Vonatkozó mondat — személy</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b1-practice-relative-which.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Vonatkozó mondat — tárgy / hely</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További szerkezetek</div>
             <div class="module-list">
               <a class="module" href="b1-practice-gerund-infinitive.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Gerund vs Infinitive</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
@@ -1248,14 +1343,14 @@ main{
               <a class="module" href="b1-practice-reported-speech.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Reported Speech</p><p class="module-meta">25 kérdés · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Nyelvtan — összefoglaló</div>
             <div class="module-list">
               <a class="module" href="b1-grammar-master.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Nyelvtan mester</p><p class="module-meta">40 kérdés · B1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="wordorder-b1.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Szórend gyakorló</p><p class="module-meta">50 mondat · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igék</div>
             <div class="module-list">
               <a class="module" href="b1-verb-test.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></div><div class="module-body"><p class="module-title">Ige teszt</p><p class="module-meta">50 ige · B1</p></div><span class="module-arrow">→</span></a>
@@ -1265,7 +1360,7 @@ main{
 
         <!-- ═══ B1 · SZÓSZEDET ═══ -->
         <div class="category-section" data-level="b1" data-category="vocab" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szókincs</div>
             <div class="module-list">
               <a class="module" href="vocab-b1-travel-sightseeing.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Utazás & Városnézés</p><p class="module-meta">Szókincs · B1</p></div><span class="module-arrow">→</span></a>
@@ -1278,13 +1373,13 @@ main{
               <a class="module" href="vocab-b1-relationships-society.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Kapcsolatok & Társadalom</p><p class="module-meta">Szókincs · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igék</div>
             <div class="module-list">
               <a class="module" href="b1-verb-learner.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Ige tanuló</p><p class="module-meta">50 ige · B1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Utazás</div>
             <div class="module-list">
               <a class="module" href="traveling-guide-b1-flashcards.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Utazási kalauz</p><p class="module-meta">60 szituáció · B1</p></div><span class="module-arrow">→</span></a>
@@ -1294,7 +1389,7 @@ main{
 
         <!-- ═══ B2 · ELMÉLET ═══ -->
         <div class="category-section" data-level="b2" data-category="theory" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igeidők</div>
             <div class="module-list">
               <a class="module" href="b2-theory-present-perfect-continuous.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Present Perfect Continuous</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
@@ -1303,7 +1398,7 @@ main{
               <a class="module" href="b2-theory-future-forms.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Jövő idejű formák</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Feltételes mondatok</div>
             <div class="module-list">
               <a class="module" href="b2-theory-third-conditional.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Third Conditional</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
@@ -1311,14 +1406,14 @@ main{
               <a class="module" href="b2-theory-wish-ifonly.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Wish / If only</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Modals</div>
             <div class="module-list">
               <a class="module" href="b2-theory-modal-perfect-deduction.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Modal Perfect — spekuláció</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="b2-theory-modal-perfect-regret.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Modal Perfect — szemrehányás</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szerkezetek</div>
             <div class="module-list">
               <a class="module" href="b2-theory-passive-all-tenses.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Szenvedő — minden igeidő</p><p class="module-meta">10 kártya · B2</p></div><span class="module-arrow">→</span></a>
@@ -1333,7 +1428,7 @@ main{
 
         <!-- ═══ B2 · GYAKORLÁS ═══ -->
         <div class="category-section" data-level="b2" data-category="practice" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Nyelvtan — tematikus gyakorlók</div>
             <div class="module-list">
               <a class="module" href="b2-practice-present-perfect-continuous.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Present Perfect Continuous</p><p class="module-meta">25 kérdés · B2</p></div><span class="module-arrow">→</span></a>
@@ -1353,14 +1448,14 @@ main{
               <a class="module" href="b2-practice-adverb-order.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Határozók és határozói sorrend</p><p class="module-meta">25 kérdés · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Nyelvtan — összefoglaló</div>
             <div class="module-list">
               <a class="module" href="b2-grammar-master.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Nyelvtan mester</p><p class="module-meta">60 kérdés · B2</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="wordorder-b2.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Szórend gyakorló</p><p class="module-meta">50 mondat · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igék</div>
             <div class="module-list">
               <a class="module" href="b2-verb-test.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></div><div class="module-body"><p class="module-title">Ige teszt</p><p class="module-meta">50 ige · B2</p></div><span class="module-arrow">→</span></a>
@@ -1370,7 +1465,7 @@ main{
 
         <!-- ═══ B2 · SZÓSZEDET ═══ -->
         <div class="category-section" data-level="b2" data-category="vocab" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szókincs</div>
             <div class="module-list">
               <a class="module" href="vocab-b2-psychology-emotions.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Pszichológia & Érzelmek</p><p class="module-meta">Szókincs · B2</p></div><span class="module-arrow">→</span></a>
@@ -1383,13 +1478,13 @@ main{
               <a class="module" href="vocab-b2-global-issues-travel.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Globális témák & Utazás</p><p class="module-meta">Szókincs · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Igék</div>
             <div class="module-list">
               <a class="module" href="b2-verb-learner.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Ige tanuló</p><p class="module-meta">50 ige · B2</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Utazás</div>
             <div class="module-list">
               <a class="module" href="traveling-guide-b2-flashcards.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Utazási kalauz</p><p class="module-meta">60 szituáció · B2</p></div><span class="module-arrow">→</span></a>
@@ -1399,35 +1494,35 @@ main{
 
         <!-- ═══ C1 · ELMÉLET ═══ -->
         <div class="category-section" data-level="c1" data-category="theory" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Inverzió</div>
             <div class="module-list">
               <a class="module" href="c1-theory-inversion-negative.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Inverzió — tagadó</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="c1-theory-inversion-conditional.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Inverzió — feltételes</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Hasított mondatok (Cleft)</div>
             <div class="module-list">
               <a class="module" href="c1-theory-cleft-it.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">It-cleft</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="c1-theory-cleft-wh.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Wh-cleft</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Participle clauses</div>
             <div class="module-list">
               <a class="module" href="c1-theory-participle-present.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Participle — jelen</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="c1-theory-participle-past.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Participle — múlt</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Hangsúly (Emphasis)</div>
             <div class="module-list">
               <a class="module" href="c1-theory-emphasis-do.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Do / Does / Did + verb</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="c1-theory-emphasis-words.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">The very / Indeed / szóismétlés</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">További szerkezetek</div>
             <div class="module-list">
               <a class="module" href="c1-theory-subjunctive.html"><div class="module-icon flash"><svg viewBox="0 0 24 24" fill="none" stroke="#d14a00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><div class="module-body"><p class="module-title">Subjunctive mood</p><p class="module-meta">10 kártya · C1</p></div><span class="module-arrow">→</span></a>
@@ -1441,7 +1536,7 @@ main{
 
         <!-- ═══ C1 · GYAKORLÁS ═══ -->
         <div class="category-section" data-level="c1" data-category="practice" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Nyelvtan — tematikus gyakorlók</div>
             <div class="module-list">
               <a class="module" href="c1-practice-inversion-negative.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Inverzió — tagadó</p><p class="module-meta">25 kérdés · C1</p></div><span class="module-arrow">→</span></a>
@@ -1459,14 +1554,14 @@ main{
               <a class="module" href="c1-practice-nominalisation.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="module-body"><p class="module-title">Nominalisation</p><p class="module-meta">25 kérdés · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Nyelvtan — összefoglaló</div>
             <div class="module-list">
               <a class="module" href="c1-grammar-master.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Nyelvtan mester</p><p class="module-meta">80 kérdés · C1</p></div><span class="module-arrow">→</span></a>
               <a class="module" href="wordorder-c1.html"><div class="module-icon grammar"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 3-2 5-4 7-1 1-2 2-2 3h-1c0-1-1-2-2-3-2-2-3-4-3-7z"/><path d="M10 22h4"/></svg></div><div class="module-body"><p class="module-title">Szórend gyakorló</p><p class="module-meta">50 mondat · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Kifejezések</div>
             <div class="module-list">
               <a class="module" href="c1-phrase-test.html"><div class="module-icon test"><svg viewBox="0 0 24 24" fill="none" stroke="#1d9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg></div><div class="module-body"><p class="module-title">Kifejezés teszt</p><p class="module-meta">50 kifejezés · C1</p></div><span class="module-arrow">→</span></a>
@@ -1476,7 +1571,7 @@ main{
 
         <!-- ═══ C1 · SZÓSZEDET ═══ -->
         <div class="category-section" data-level="c1" data-category="vocab" style="display:none">
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Szókincs</div>
             <div class="module-list">
               <a class="module" href="vocab-c1-academic.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Akadémiai nyelv</p><p class="module-meta">Szókincs · C1</p></div><span class="module-arrow">→</span></a>
@@ -1489,7 +1584,7 @@ main{
               <a class="module" href="vocab-c1-advanced-discourse.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Haladó szövegszervezés</p><p class="module-meta">Szókincs · C1</p></div><span class="module-arrow">→</span></a>
             </div>
           </div>
-          <div class="skill-block">
+          <div class="skill-block" data-eb-reveal>
             <div class="skill-label">Kifejezések</div>
             <div class="module-list">
               <a class="module" href="c1-phrase-learner.html"><div class="module-icon vocab"><svg viewBox="0 0 24 24" fill="none" stroke="#ba7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.9c0 .6.3 1.1.8 1.4.4.3.8.4 1.2.4h4c.4 0 .8-.1 1.2-.4.5-.3.8-.8.8-1.4A7 7 0 0 0 12 2z"/></svg></div><div class="module-body"><p class="module-title">Kifejezés tanuló</p><p class="module-meta">50 kifejezés · C1</p></div><span class="module-arrow">→</span></a>
@@ -1729,7 +1824,9 @@ function showCategory(level, category) {
     });
     const badge = document.getElementById('cat-badge');
     if (badge) badge.textContent = level.toUpperCase() + ' · ' + CATEGORY_LABELS[category];
-    
+
+    if (window.ebObserveReveal) window.ebObserveReveal();
+
     // Stagger animation for module items
     const visibleSection = document.querySelector('.category-section[style*="block"]');
     if (visibleSection) {
@@ -1778,6 +1875,31 @@ function logout() {
     window.history.replaceState({}, '', window.location.pathname);
   }
 }
+
+/* ── Scroll-reveal — fade/slide elements in as they enter the viewport ── */
+(function(){
+  var nodes = document.querySelectorAll('[data-eb-reveal]');
+  if (!nodes.length) return;
+  if (!('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    nodes.forEach(function(el){ el.classList.add('eb-revealed'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) {
+        e.target.classList.add('eb-revealed');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -7% 0px' });
+  window.ebObserveReveal = function(){
+    document.querySelectorAll('[data-eb-reveal]:not(.eb-revealed)').forEach(function(el){
+      io.observe(el);
+    });
+  };
+  window.ebObserveReveal();
+})();
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════════

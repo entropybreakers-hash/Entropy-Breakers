@@ -2,7 +2,10 @@
    Entropy Breakers — Theme & Progress UI Library (v2)
    Safe to include everywhere; uses .eb-* prefix to avoid collisions.
    ═══════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap');
+
 :root {
+  --eb-font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
   --eb-bg: #ffffff;
   --eb-bg-soft: #faf8f3;
   --eb-bg-peach: #fff0e0;
@@ -490,4 +493,26 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   margin-top: 4px;
   font-size: 11px; line-height: 1.5;
   color: var(--eb-ink-dim);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MOTION LAYER — scroll-reveal + shared entrance utilities.
+   Opt-in via [data-eb-reveal]; JS adds .eb-revealed when in view.
+   ═══════════════════════════════════════════════════════════════ */
+[data-eb-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s var(--eb-ease), transform .6s var(--eb-ease);
+  will-change: opacity, transform;
+}
+[data-eb-reveal].eb-revealed {
+  opacity: 1;
+  transform: none;
+}
+[data-eb-reveal="scale"] { transform: translateY(18px) scale(.97); }
+[data-eb-reveal="scale"].eb-revealed { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-eb-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .eb-animate-pop, .eb-animate-up { animation: none !important; }
 }
