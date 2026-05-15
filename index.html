@@ -925,6 +925,7 @@ main{
         </div>
         <p class="hero-eyebrow">Szia, <span id="select-name">—</span> 👋</p>
         <div class="eb-heatmap" data-eb-heatmap style="margin-top:16px"></div>
+        <button class="eb-results-btn" onclick="showResults()">Heti eredményeim <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
@@ -971,6 +972,26 @@ main{
       <div class="app-footer-brand">Entropy <span class="accent">Breakers</span></div>
       <p class="app-footer-tag">„A nyelvem határai a világom határai."</p>
       <p class="app-footer-author">— Ludwig Wittgenstein</p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       WEEKLY RESULTS
+       ═══════════════════════════════════════════════════ -->
+  <section class="screen white-bg" id="screen-results">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-nav">
+          <button class="hero-back" onclick="backNav()">←</button>
+          <span class="hero-badge">Eredmények</span>
+        </div>
+        <h1 class="hero-title hero-title-sm">Heti <span class="accent">eredményeid</span></h1>
+      </div>
+      <div class="hero-curve"></div>
+    </div>
+
+    <div class="content-wrap">
+      <div class="eb-results" id="eb-results-list"></div>
     </div>
   </section>
 
@@ -1761,6 +1782,12 @@ function backNav() {
   showLevelSelect();
 }
 
+function showResults() {
+  currentLevel = '';
+  currentCategory = '';
+  switchScreen('screen-results');
+}
+
 function logout() {
   studentName = '';
   try { localStorage.removeItem('eb.student'); } catch(e) {}
@@ -1840,6 +1867,8 @@ function logout() {
         if (typeof _doShowLevel === 'function') _doShowLevel(nav.level);
       } else if (nav.screen === 'screen-levels') {
         if (typeof showLevelSelect === 'function') showLevelSelect();
+      } else if (nav.screen === 'screen-results') {
+        if (typeof showResults === 'function') showResults();
       }
     });
   }
@@ -1990,10 +2019,52 @@ function logout() {
     var catMap = { 'elmélet':'theory', 'gyakorlás':'practice', 'szószedet':'vocab' };
     return { level: lvl, category: catMap[cat] || cat };
   }
+  function renderResults() {
+    var list = document.getElementById('eb-results-list');
+    if (!list || !window.EB || !EB.getWeeklyStats) return;
+    var weeks = EB.getWeeklyStats(12);
+    var lastActive = 0, totalSessions = 0;
+    for (var i = 0; i < weeks.length; i++) {
+      totalSessions += weeks[i].sessions;
+      if (weeks[i].sessions > 0) lastActive = i;
+    }
+    var streak = EB.getStreak ? EB.getStreak() : { current: 0 };
+    var head =
+      '<div class="eb-results-summary">' +
+        '<div class="eb-results-stat"><span class="eb-results-num">' + totalSessions + '</span>' +
+          '<span class="eb-results-cap">gyakorlás 12 hét alatt</span></div>' +
+        '<div class="eb-results-stat"><span class="eb-results-num">' + (streak.current || 0) + '</span>' +
+          '<span class="eb-results-cap">napos sorozat</span></div>' +
+      '</div>';
+    if (totalSessions === 0) {
+      list.innerHTML = head +
+        '<div class="eb-results-empty">Még nincs rögzített eredmény. Csinálj végig egy feladatsort, ' +
+        'és itt megjelenik hétről hétre a fejlődésed.</div>';
+      return;
+    }
+    var cards = weeks.slice(0, lastActive + 1).map(function (w) {
+      var hasScore = w.scoreCount > 0;
+      var score = hasScore
+        ? '<span class="eb-week-score">' + w.avgScore + '%</span>'
+        : '<span class="eb-week-score eb-week-score-empty">—</span>';
+      var stats = w.sessions > 0
+        ? '<div class="eb-week-stats"><span><strong>' + w.sessions + '</strong> gyakorlás</span>' +
+          '<span><strong>' + w.activeDays + '</strong> aktív nap</span></div>'
+        : '<div class="eb-week-stats eb-week-stats-idle">Nem volt aktivitás ezen a héten</div>';
+      var bar = hasScore
+        ? '<div class="eb-week-bar"><span style="width:' + w.avgScore + '%"></span></div>' : '';
+      return '<div class="eb-week' + (w.sessions === 0 ? ' eb-week-idle' : '') + '">' +
+               '<div class="eb-week-head"><span class="eb-week-label">' + w.label + '</span>' + score + '</div>' +
+               stats + bar +
+             '</div>';
+    }).join('');
+    list.innerHTML = head + cards;
+  }
   function onScreenActivate(id) {
     if (id === 'screen-levels') renderLevelSelect();
     else if (id === 'screen-dashboard') { var lvl = _currentLevelFromBadge(); if (lvl) renderDashboard(lvl); }
     else if (id === 'screen-category') { var info = _currentLevelCatFromBadge(); if (info) renderCategoryList(info.level, info.category); }
+    else if (id === 'screen-results') renderResults();
   }
   _wrap('switchScreen', function (id) { onScreenActivate(id); });
   _wrap('showLevel', function () { setTimeout(function () { var lvl = _currentLevelFromBadge(); if (lvl) renderDashboard(lvl); }, 30); });

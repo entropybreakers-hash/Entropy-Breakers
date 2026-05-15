@@ -8,6 +8,8 @@
   var STREAK_KEY   = 'eb.streak.v1';
   var LAST_ACTIVITY_KEY = 'eb.activity.v1';
   var DAILY_KEY    = 'eb.daily.v1';
+  var HISTORY_KEY  = 'eb.history.v1';
+  var HISTORY_CAP  = 600;
 
   function readJSON(key, fallback) {
     try { var raw = localStorage.getItem(key); if (!raw) return fallback; return JSON.parse(raw); }
@@ -84,9 +86,20 @@
     writeAll(all);
 
     writeJSON(LAST_ACTIVITY_KEY, { at: now, level: rec.level, category: rec.category, slug: rec.slug, pct: pct });
+    _appendHistory({ at: now, pct: pct, level: rec.level, category: rec.category, slug: rec.slug });
     _bumpDaily();
     touchStreak();
     return mod;
+  }
+
+  // Append-only score log — one entry per completion. Powers the
+  // week-by-week score trend in the results section.
+  function _appendHistory(entry) {
+    var h = readJSON(HISTORY_KEY, []);
+    if (!Array.isArray(h)) h = [];
+    h.push(entry);
+    if (h.length > HISTORY_CAP) h = h.slice(h.length - HISTORY_CAP);
+    writeJSON(HISTORY_KEY, h);
   }
 
   function _bumpDaily() {
@@ -177,7 +190,7 @@
     return out;
   }
   function reset() {
-    try { localStorage.removeItem(PROGRESS_KEY); localStorage.removeItem(STREAK_KEY); localStorage.removeItem(LAST_ACTIVITY_KEY); localStorage.removeItem(DAILY_KEY); } catch (e) {}
+    try { localStorage.removeItem(PROGRESS_KEY); localStorage.removeItem(STREAK_KEY); localStorage.removeItem(LAST_ACTIVITY_KEY); localStorage.removeItem(DAILY_KEY); localStorage.removeItem(HISTORY_KEY); } catch (e) {}
   }
 
   /* ── Sync support: snapshot + conflict-free merge ────────────── */
@@ -186,7 +199,8 @@
       progress: getAll(),
       streak:   getStreak(),
       daily:    readJSON(DAILY_KEY, {}),
-      activity: readJSON(LAST_ACTIVITY_KEY, null)
+      activity: readJSON(LAST_ACTIVITY_KEY, null),
+      history:  readJSON(HISTORY_KEY, [])
     };
   }
   function _unionKeys(a, b) {
@@ -262,6 +276,17 @@
       var mA = lA;
       if (rA && (!lA || (rA.at || '') > (lA.at || ''))) mA = rA;
       if (mA) writeJSON(LAST_ACTIVITY_KEY, mA);
+
+      // History: append-only union, deduped by timestamp.
+      var lH = readJSON(HISTORY_KEY, []); if (!Array.isArray(lH)) lH = [];
+      var rH = (remote.history && remote.history.length) ? remote.history : [];
+      var seen = {}, mH = [];
+      lH.concat(rH).forEach(function (e) {
+        if (e && e.at && !seen[e.at]) { seen[e.at] = 1; mH.push(e); }
+      });
+      mH.sort(function (a, b) { return a.at < b.at ? -1 : a.at > b.at ? 1 : 0; });
+      if (mH.length > HISTORY_CAP) mH = mH.slice(mH.length - HISTORY_CAP);
+      writeJSON(HISTORY_KEY, mH);
     } catch (e) {
       console.error('[EB] merge', e);
     }
@@ -284,6 +309,61 @@
       .replace(/[.!?;:]+$/g, '')
       .replace(/\s+/g, ' ')
       .trim();
+  }
+
+  /* ── Week-by-week results ────────────────────────────────────── */
+  var HU_MONTHS = ['jan.','feb.','márc.','ápr.','máj.','jún.','júl.','aug.','szept.','okt.','nov.','dec.'];
+  function _mondayOf(d) {
+    var x = new Date(d); x.setHours(0, 0, 0, 0);
+    x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
+    return x;
+  }
+  function _isoOf(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function _weekLabel(start, i) {
+    if (i === 0) return 'Ez a hét';
+    if (i === 1) return 'Múlt hét';
+    var end = new Date(start); end.setDate(end.getDate() + 6);
+    if (start.getMonth() === end.getMonth())
+      return HU_MONTHS[start.getMonth()] + ' ' + start.getDate() + '–' + end.getDate() + '.';
+    return HU_MONTHS[start.getMonth()] + ' ' + start.getDate() + '. – ' +
+           HU_MONTHS[end.getMonth()] + ' ' + end.getDate() + '.';
+  }
+  // Returns the last `weeks` weeks, newest first. Each: { weekStart,
+  // label, sessions, activeDays, avgScore (null if no score that week) }.
+  function getWeeklyStats(weeks) {
+    weeks = weeks || 8;
+    var daily = readJSON(DAILY_KEY, {});
+    var history = readJSON(HISTORY_KEY, []);
+    if (!Array.isArray(history)) history = [];
+    var thisMonday = _mondayOf(new Date());
+    var out = [];
+    for (var i = 0; i < weeks; i++) {
+      var start = new Date(thisMonday); start.setDate(start.getDate() - i * 7);
+      var end = new Date(start); end.setDate(end.getDate() + 7);
+      var sessions = 0, activeDays = 0;
+      for (var d = 0; d < 7; d++) {
+        var day = new Date(start); day.setDate(day.getDate() + d);
+        var c = daily[_isoOf(day)] || 0;
+        sessions += c;
+        if (c > 0) activeDays++;
+      }
+      var sum = 0, n = 0;
+      for (var h = 0; h < history.length; h++) {
+        var t = new Date(history[h].at);
+        if (t >= start && t < end && typeof history[h].pct === 'number') { sum += history[h].pct; n++; }
+      }
+      out.push({
+        weekStart: _isoOf(start),
+        label: _weekLabel(start, i),
+        sessions: sessions,
+        activeDays: activeDays,
+        avgScore: n ? Math.round(sum / n) : null,
+        scoreCount: n
+      });
+    }
+    return out;
   }
 
   function _parseUrlSlug() {
@@ -477,6 +557,7 @@
     getCategoryPct: getCategoryPct, getLevelPct: getLevelPct, getOverallPct: getOverallPct, getAllLevelPcts: getAllLevelPcts,
     registerCatalog: registerCatalog, listLevels: listLevels, listCategories: listCategories,
     getHeatmap: getHeatmap, getActiveDaysInLast: getActiveDaysInLast,
+    getWeeklyStats: getWeeklyStats,
     lastSeenLabel: lastSeenLabel, lastSeenBucket: lastSeenBucket,
     snapshot: snapshot, merge: merge,
     normalizeAnswer: normalizeAnswer,
