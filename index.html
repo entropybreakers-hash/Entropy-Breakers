@@ -1957,8 +1957,7 @@ function logout() {
 
     if (!expanded) {
       el.innerHTML =
-        '<span class="eb-sync-dot"></span>' +
-        '<span class="eb-sync-text">A haladás csak ezen az eszközön él</span>' +
+        '<span class="eb-sync-text">Haladás mentése másik eszközre is —</span>' +
         '<button type="button" class="eb-sync-link" id="eb-sync-on">szinkron bekapcsolása</button>';
       document.getElementById('eb-sync-on').onclick = function () {
         expanded = true; render(st);
