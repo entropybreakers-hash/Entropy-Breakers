@@ -72,10 +72,13 @@
     if (!configured || !name) return Promise.resolve();
     return rpc('eb_progress_load', { p_name: name }).then(function (data) {
       if (data && window.EB && EB.merge) {
+        // merge() dispatches 'eb:changed', which schedules the push
+        // that writes the merged state back — no explicit push here.
         EB.merge(data);
         try { window.dispatchEvent(new CustomEvent('eb:sync')); } catch (e) {}
+      } else {
+        push();
       }
-      push();
     }, function (e) { console.error('[EBSync] pull', e); });
   }
 
