@@ -20,6 +20,10 @@ Progress is stored in `localStorage` (`eb-progress.js`) as the primary, offline-
 
 Setup: run `supabase-schema.sql` in the Supabase SQL editor, then fill in `assets/eb-config.js` with the Project URL + anon key. Until configured (placeholder values present), the sync layer stays inert and the platform works localStorage-only. The Supabase SDK is lazy-loaded — only fetched when there is an active session, so non-synced page loads are unaffected.
 
+## Access control (student allowlist)
+
+Login is name + a shared passcode (`ACCESS_CODE` in `index.html`). On top of that, the typed name must appear in the Supabase `eb_students` table — checked via the `eb_check_student` RPC. Removing a name from `eb_students` (Table Editor) revokes that student's access. The result is cached in `localStorage` (`eb.access`) for 12h so normal navigation isn't slowed. When Supabase is unconfigured the gate is bypassed (localStorage-only fallback).
+
 ## Design preferences — Bettina / Entropy Breakers
 
 Minden új felületet, komponenst, oldalt a következő dizájn-elveknek megfelelően készíts.
