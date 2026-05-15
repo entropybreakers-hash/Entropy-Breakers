@@ -5,7 +5,7 @@
   var CATALOG = {
     "a2": {
       "flashcards": ["traveling-guide"],
-      "practice":   ["articles","future","grammar-master","past-simple","past-simple-regular","possession","prepositions","present-continuous","present-simple","tobe","verb-learner","verb-test","wordorder"],
+      "practice":   ["articles","future","grammar-master","past-simple","past-simple-regular","possession","prepositions","present-continuous","present-simple","test-verb-forms","tobe","verb-learner","verb-test","wordorder"],
       "theory":     ["articles","future","past-simple","past-simple-regular","possession","prepositions","present-continuous","present-simple","tobe"],
       "vocab":      ["family-relationships","food-shopping","free-time-hobbies","health-body","home-daily-routine","school-learning","weather-seasons","work-jobs"]
     },

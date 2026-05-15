@@ -1900,6 +1900,7 @@ function logout() {
   }
   function _slugFromHref(href, level, category) {
     var file = href.split('/').pop().replace(/\.html.*$/, '');
+    if (file === 'test-verb-forms') return 'test-verb-forms';
     var patterns = [
       new RegExp('^' + level + '-theory-(.+)$'),
       new RegExp('^' + level + '-practice-(.+)$'),
