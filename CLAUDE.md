@@ -16,9 +16,9 @@ Shared UI/logic library: `assets/eb-*` (progress tracking, theme, catalog, Supab
 
 ## Progress sync (Supabase)
 
-Progress is stored in `localStorage` (`eb-progress.js`) as the primary, offline-capable layer. `eb-sync.js` adds an optional hybrid sync to Supabase: signed-in users (email magic link) get their progress merged across devices. Conflict-free merge — `best`/`firstAt`/`lastAt` are monotonic, so a stale snapshot can never lose data.
+Progress is stored in `localStorage` (`eb-progress.js`) as the primary, offline-capable layer. `eb-sync.js` adds an automatic hybrid sync to Supabase, keyed by the student's **name** — no separate login. On entry it pulls the remote snapshot and conflict-free merges it (`best`/`firstAt`/`lastAt` are monotonic, so a stale snapshot can never lose data); subsequent progress changes are debounce-pushed. Access goes through the `eb_progress_load` / `eb_progress_save` security-definer RPCs via plain `fetch` — no Supabase SDK is loaded.
 
-Setup: run `supabase-schema.sql` in the Supabase SQL editor, then fill in `assets/eb-config.js` with the Project URL + anon key. Until configured (placeholder values present), the sync layer stays inert and the platform works localStorage-only. The Supabase SDK is lazy-loaded — only fetched when there is an active session, so non-synced page loads are unaffected.
+Setup: run `supabase-schema.sql` in the Supabase SQL editor, then fill in `assets/eb-config.js` with the Project URL + anon key. Until configured (placeholder values present), the sync layer stays inert and the platform works localStorage-only.
 
 ## Access control (student allowlist)
 

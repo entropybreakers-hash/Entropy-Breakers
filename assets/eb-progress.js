@@ -270,6 +270,22 @@
     return snapshot();
   }
 
+  // Normalize a typed answer for forgiving comparison: unifies curly
+  // apostrophes/quotes to straight, lowercases, trims, drops trailing
+  // sentence punctuation and collapses inner whitespace. Without this a
+  // straight ' vs curly ’ (common on mobile keyboards) marks a correct
+  // answer wrong.
+  function normalizeAnswer(s) {
+    return (s == null ? '' : String(s))
+      .replace(/[‘’ʼ′`´]/g, "'")
+      .replace(/[“”″]/g, '"')
+      .trim()
+      .toLowerCase()
+      .replace(/[.!?;:]+$/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   function _parseUrlSlug() {
     try {
       var path = location.pathname.split('/').pop() || ''; path = path.replace(/\.html$/i, '');
@@ -282,7 +298,7 @@
       if ((m = path.match(/^(a2|b1|b2|c1)-verb-(learner|test)$/))) return { level: m[1], category: 'practice', slug: 'verb-' + m[2] };
       if ((m = path.match(/^(a2|b1|b2|c1)-phrase-(learner|test)$/))) return { level: m[1], category: 'practice', slug: 'phrase-' + m[2] };
       if ((m = path.match(/^traveling-guide-(a2|b1|b2|c1)-flashcards$/))) return { level: m[1], category: 'flashcards', slug: 'traveling-guide' };
-      if (path === 'traveling-guide-b1b2-flashcards') return { level: 'b1', category: 'flashcards', slug: 'traveling-guide-b1b2' };
+      if (path === 'test-verb-forms') return { level: 'a2', category: 'practice', slug: 'test-verb-forms' };
       return null;
     } catch (e) { return null; }
   }
@@ -463,6 +479,7 @@
     getHeatmap: getHeatmap, getActiveDaysInLast: getActiveDaysInLast,
     lastSeenLabel: lastSeenLabel, lastSeenBucket: lastSeenBucket,
     snapshot: snapshot, merge: merge,
+    normalizeAnswer: normalizeAnswer,
     reset: reset,
     _debug: { getAll: getAll, parseUrlSlug: _parseUrlSlug, detectMeta: _detectMeta }
   };

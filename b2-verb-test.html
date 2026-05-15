@@ -541,11 +541,7 @@ function selectOption(btn, value) {
 }
 
 function normalizeFillAnswer(s) {
-  // Lowercase, trim, remove trailing punctuation, collapse multiple spaces.
-  // Keeps commas (some answers use them, e.g. "a, The").
-  return (s || '').toString().trim().toLowerCase()
-    .replace(/[.!?;:]+$/g, '')
-    .replace(/\s+/g, ' ');
+  return EB.normalizeAnswer(s);
 }
 
 function submitAnswer() {
@@ -564,7 +560,7 @@ function submitAnswer() {
     userAnswer = parts.join(' · ');
     const expected = [q.answer.v1, q.answer.v2, q.answer.v3];
     correctAnswer = expected.join(' · ');
-    isCorrect = parts.every((p, i) => p.toLowerCase() === expected[i].toLowerCase() && p !== '');
+    isCorrect = parts.every((p, i) => normalizeFillAnswer(p) === normalizeFillAnswer(expected[i]) && p !== '');
   } else {
     userAnswer = currentAnswer || '';
     correctAnswer = q.answer;
