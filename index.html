@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#0f0e0c">
+<meta name="theme-color" content="#faf8f3">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Entropy Breakers — Academy</title>
@@ -94,30 +94,32 @@ body{
   overflow:hidden;
 }
 
+/* Desktop — full-bleed: the background runs edge-to-edge while the
+   readable content stays in a centered editorial column. */
 @media(min-width:720px){
-  body{
-    padding:0;
+  body{ padding:0; }
+  .app-shell{ max-width:100%; }
+  .hero,
+  .content-wrap,
+  .app-footer{
+    width:100%;
+    max-width:1160px;
+    margin-left:auto;
+    margin-right:auto;
   }
-  .app-shell{
-    max-width:480px;
-    min-height:100vh;
-    min-height:100dvh;
-    border-left:1px solid rgba(26,22,18,0.06);
-    border-right:1px solid rgba(26,22,18,0.06);
-  }
+  .hero{ padding:52px 40px 38px 40px; }
+  .content-wrap{ padding:0 40px; }
+  .hero-title{ font-size:42px; }
+  .hero-title-sm{ font-size:34px; }
 }
 
-/* Laptop / tablet — szélesebb layout, több oszlopos gridek */
+/* Laptop / tablet — több oszlopos gridek */
 @media(min-width:960px){
-  .app-shell{ max-width:880px; }
   .level-grid{ grid-template-columns:repeat(4, 1fr) !important; gap:18px !important; }
   .category-grid{ grid-template-columns:repeat(3, 1fr) !important; gap:18px !important; }
   .module-list{ display:grid !important; grid-template-columns:repeat(2, 1fr) !important; gap:12px !important; }
-  .hero{ padding:40px 36px 32px 36px !important; }
-  .content-wrap{ padding:0 36px !important; }
 }
 @media(min-width:1280px){
-  .app-shell{ max-width:1040px; }
   .module-list{ grid-template-columns:repeat(3, 1fr) !important; }
 }
 
@@ -227,7 +229,7 @@ main{
   overflow-y:auto;
 }
 
-.screen{display:none}
+.screen{display:none;position:relative}
 .screen.active{
   display:flex;
   flex-direction:column;
@@ -245,6 +247,60 @@ main{
 /* Fehér hátterű screen (minden oldal ugyanaz) */
 .screen.white-bg{
   background:var(--bg2);
+  overflow:hidden;
+}
+
+/* ── Full-bleed gradient ribbon — the signature visual.
+   Two crossing, blurred elliptical strands sweep across the top;
+   the rest of the page stays clean cream. Content sits above (z-index). ── */
+.screen.white-bg::before,
+.screen.white-bg::after{
+  content:'';
+  position:absolute;
+  z-index:0;
+  border-radius:50%;
+  pointer-events:none;
+}
+.screen.white-bg::before{
+  top:-388px;
+  right:-300px;
+  width:1020px;
+  height:660px;
+  transform:rotate(-29deg);
+  background:linear-gradient(120deg,
+    transparent 10%,
+    rgba(255,168,86,0.96) 34%,
+    rgba(255,122,46,1) 53%,
+    rgba(209,74,0,0.95) 70%,
+    transparent 92%);
+  filter:blur(46px) saturate(1.12);
+}
+.screen.white-bg::after{
+  top:-256px;
+  right:-130px;
+  width:640px;
+  height:430px;
+  transform:rotate(-20deg);
+  background:linear-gradient(112deg,
+    transparent 16%,
+    rgba(255,206,144,0.95) 44%,
+    rgba(255,138,60,0.9) 64%,
+    transparent 88%);
+  filter:blur(50px);
+}
+.screen.white-bg.active::before{
+  animation:ribbon-drift 24s ease-in-out infinite alternate;
+}
+.screen.white-bg.active::after{
+  animation:ribbon-drift2 29s ease-in-out infinite alternate;
+}
+@keyframes ribbon-drift{
+  0%{transform:rotate(-29deg) translate(0,0)}
+  100%{transform:rotate(-24deg) translate(-22px,28px)}
+}
+@keyframes ribbon-drift2{
+  0%{transform:rotate(-20deg) translate(0,0)}
+  100%{transform:rotate(-26deg) translate(16px,32px)}
 }
 .screen.white-bg .hero-title,
 .screen.white-bg .hero-title.hero-title-sm{
@@ -258,8 +314,9 @@ main{
   background:rgba(26,22,18,0.12);
 }
 .screen.white-bg .hero-badge{
-  background:var(--orange);
-  color:#fff;
+  background:#fff;
+  color:var(--orange2);
+  box-shadow:var(--shadow-sm);
 }
 .screen.white-bg .app-footer-brand{
   color:var(--ink);
@@ -308,100 +365,59 @@ main{
   background:var(--bg3);
 }
 
-/* LOGIN — DARK redesigned */
-.screen.login-dark{
-  background:transparent;
-  position:relative;
-  overflow:hidden;
-  color:var(--ink-light);
+/* ═══════════════════════
+   LOGIN SCREEN — light, centered, full-bleed ribbon behind
+   ═══════════════════════ */
+.login-screen .hero,
+.login-screen .content-wrap,
+.login-screen .app-footer{
+  max-width:460px;
+  margin-left:auto;
+  margin-right:auto;
+  width:100%;
 }
-.login-dark-bg{
-  position:absolute;inset:0;z-index:0;pointer-events:none;
-  background:#000000;
-  overflow:hidden;
+.login-screen .hero{padding-top:48px}
+.login-screen .content-wrap{padding:0 24px !important}
+.login-screen .app-footer{position:relative;z-index:3}
+.login-screen .login-logo{
+  box-shadow:0 18px 50px rgba(209,74,0,0.26);
 }
-.login-dark-bg::before{
-  content:'';
-  position:absolute;
-  left:50%;top:-12%;
-  width:115%;
-  aspect-ratio:1/1;
-  transform:translateX(-50%);
-  background:radial-gradient(circle at 50% 0%,rgba(255,122,46,0.22) 0%,rgba(255,122,46,0.07) 32%,transparent 62%);
-  animation:login-bg-breathe 7s ease-in-out infinite alternate;
+.login-screen .login-hero-title{
+  font-size:36px; letter-spacing:-.02em;
+  margin-top:8px;
+  animation:login-fade-up .8s var(--ease-out) both .1s;
 }
-@keyframes login-bg-breathe{
-  0%{transform:translateX(-50%) scale(1);opacity:.85}
-  100%{transform:translateX(-50%) scale(1.12);opacity:1}
+.login-screen .login-hero-sub{
+  color:var(--ink2);
+  margin:12px 0 0 0; font-size:14px;
+  animation:login-fade-up .8s var(--ease-out) both .25s;
 }
-.screen.login-dark .hero{padding-top:40px}
-.screen.login-dark .login-logo{
-  background:rgba(255,255,255,0.04);
-  border-color:rgba(255,122,46,0.8);
-  box-shadow:0 0 60px rgba(255,122,46,0.25), inset 0 0 20px rgba(255,255,255,0.03);
+.login-screen .login-card{
+  gap:14px; margin-top:26px;
+  animation:login-fade-up .8s var(--ease-out) both .4s;
 }
-.screen.login-dark .login-hero-title{
-  color:#faf8f3; font-size:34px; letter-spacing:-.02em;
-  margin-top:6px;
-  animation: login-fade-up .8s var(--ease-out) both .1s;
+.login-screen .login-input{
+  border:1.5px solid var(--border2);
 }
-.screen.login-dark .login-hero-title .accent{color:var(--orange)}
-.screen.login-dark .login-hero-sub{
-  color:rgba(250,248,243,0.55);
-  margin:10px 0 0 0; font-size:14px;
-  animation: login-fade-up .8s var(--ease-out) both .25s;
-}
-.screen.login-dark .login-card{
-  background:transparent; box-shadow:none; padding:0;
-  gap:14px; margin-top:24px;
-  animation: login-fade-up .8s var(--ease-out) both .4s;
-}
-.screen.login-dark .login-input{
-  background:rgba(255,255,255,0.05);
-  color:#faf8f3;
-  border:1.5px solid rgba(255,255,255,0.1);
-  backdrop-filter:blur(6px);
-}
-.screen.login-dark .login-input::placeholder{color:rgba(255,255,255,0.38)}
-.screen.login-dark .login-input:focus{
+.login-screen .login-input:focus{
   border-color:var(--orange);
-  background:rgba(255,255,255,0.08);
-  box-shadow:0 0 0 4px rgba(255,122,46,0.15);
+  box-shadow:0 0 0 4px rgba(255,122,46,0.12);
 }
-.screen.login-dark .login-btn{
-  background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);
-  color:#fff; margin-top:6px;
-  box-shadow:0 12px 36px rgba(255,122,46,0.35);
+.login-screen .login-btn{
+  margin-top:6px;
+  box-shadow:0 14px 36px rgba(209,74,0,0.32);
 }
-.screen.login-dark .login-btn:hover{
+.login-screen .login-btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 16px 40px rgba(255,122,46,0.45);
+  box-shadow:0 18px 42px rgba(209,74,0,0.42);
 }
-.screen.login-dark .app-footer{position:relative;z-index:2}
-.screen.login-dark .app-footer-brand{color:rgba(250,248,243,0.85)}
-.screen.login-dark .app-footer-brand .accent{color:var(--orange)}
 @keyframes login-fade-up{
   from{opacity:0;transform:translateY(16px)}
   to{opacity:1;transform:translateY(0)}
 }
-
-/* LOGIN — laptop kompakt center */
-.screen.login-dark .hero{
-  max-width:460px;
-  margin:0 auto;
-}
-.screen.login-dark .content-wrap{
-  max-width:460px;
-  margin:0 auto;
-  padding:0 24px !important;
-}
-.screen.login-dark .app-footer{
-  max-width:460px;
-  margin:0 auto;
-}
 @media(min-width:960px){
-  .screen.login-dark .hero{padding:56px 24px 24px 24px !important}
-  .screen.login-dark .content-wrap{padding:0 24px !important}
+  .login-screen .hero{padding:64px 24px 24px 24px !important}
+  .login-screen .content-wrap{padding:0 24px !important}
 }
 
 @keyframes fadeUp{
@@ -605,20 +621,22 @@ main{
 }
 .level-card{
   aspect-ratio:1/1;
+  background:#fff;
+  border:1px solid var(--border);
   border-radius:var(--radius-lg);
-  padding:16px;
+  box-shadow:var(--shadow-sm);
+  padding:18px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
   cursor:pointer;
-  border:none;
   font-family:inherit;
   text-align:left;
   position:relative;
   overflow:hidden;
   transition:transform .25s var(--ease-out),
-             box-shadow .3s ease,
-             background .3s ease;
+             box-shadow .3s var(--ease-out),
+             border-color .22s ease;
   opacity:0;
   animation:cardIn .5s var(--ease-out) forwards;
 }
@@ -632,83 +650,59 @@ main{
   to{opacity:1;transform:translateY(0) scale(1)}
 }
 
-.level-card.highlight{
-  background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);
-  box-shadow:0 12px 28px rgba(209,74,0,0.35);
-}
-.level-card.soft{
-  background:var(--bg3);
-}
 .level-card:hover{
-  transform:translateY(-4px) scale(1.02);
+  transform:translateY(-4px);
+  border-color:rgba(255,122,46,0.45);
+  box-shadow:0 16px 34px rgba(209,74,0,0.15);
 }
-.level-card.highlight:hover{
-  box-shadow:0 18px 36px rgba(209,74,0,0.5);
-}
-.level-card.soft:hover{
-  background:#ede5d4;
-  box-shadow:var(--shadow-md);
-}
-.level-card:active{transform:translateY(-2px) scale(1.01)}
+.level-card:active{transform:translateY(-2px) scale(1.005)}
 .level-card.launching{
   animation:cardLaunch .45s var(--ease-out) forwards;
 }
 @keyframes cardLaunch{
   0%{transform:scale(1)}
-  40%{transform:scale(1.08);box-shadow:0 0 48px 12px rgba(255,122,46,0.55)}
+  40%{transform:scale(1.06);box-shadow:0 0 44px 10px rgba(255,122,46,0.45)}
   100%{transform:scale(.94);opacity:.5}
 }
 
 .level-card-deco{
   position:absolute;
-  bottom:-8px;
-  right:-8px;
-  width:64px;
-  height:64px;
+  bottom:-24px;
+  right:-24px;
+  width:90px;
+  height:90px;
   border-radius:50%;
-  opacity:.25;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);
+  opacity:.1;
   pointer-events:none;
+  transition:transform .3s var(--ease-out),opacity .3s ease;
 }
-.level-card.highlight .level-card-deco{
-  background:rgba(255,255,255,0.5);
-  opacity:.3;
-}
-.level-card.soft .level-card-deco{
-  background:var(--orange);
-  opacity:.2;
-}
+.level-card:hover .level-card-deco{transform:scale(1.3);opacity:.16}
 
 .level-card-tag{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:5px 11px;
+  padding:5px 12px;
   font-size:11px;
   font-weight:700;
   letter-spacing:.08em;
-  border-radius:8px;
+  border-radius:var(--radius-full);
   align-self:flex-start;
   position:relative;
   z-index:2;
-}
-.level-card.highlight .level-card-tag{
-  background:rgba(0,0,0,0.3);
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);
   color:#fff;
-}
-.level-card.soft .level-card-tag{
-  background:#fff;
-  color:var(--orange2);
 }
 .level-card-body{position:relative;z-index:2}
 .level-card-name{
-  font-size:16px;
-  font-weight:600;
+  font-size:18px;
+  font-weight:500;
+  color:var(--ink);
   letter-spacing:-.015em;
   line-height:1.2;
-  margin:0;
+  margin:0 0 6px 0;
 }
-.level-card.highlight .level-card-name{color:#fff}
-.level-card.soft .level-card-name{color:var(--ink)}
 
 /* ═══════════════════════
    CATEGORY GRID (Elmélet/Gyakorlás/Szószedet)
@@ -720,43 +714,44 @@ main{
 }
 .category-card{
   position:relative;
-  background:linear-gradient(135deg,var(--orange) 0%,var(--orange2) 100%);
+  background:#fff;
+  border:1px solid var(--border);
   border-radius:var(--radius-lg);
   padding:20px;
-  box-shadow:0 12px 30px rgba(209,74,0,0.22);
+  box-shadow:var(--shadow-sm);
   display:flex;
   align-items:center;
   gap:16px;
   cursor:pointer;
-  border:none;
   font-family:inherit;
   text-align:left;
   width:100%;
   overflow:hidden;
-  transition:transform .25s var(--ease-out),box-shadow .3s var(--ease-out);
+  transition:transform .25s var(--ease-out),box-shadow .3s var(--ease-out),border-color .22s ease;
   opacity:0;
   animation:cardIn .5s var(--ease-out) forwards;
 }
-/* soft light bloom in the corner */
-.category-card::after{
+/* accent bar wipes in on hover */
+.category-card::before{
   content:'';
   position:absolute;
-  top:-40%;right:-10%;
-  width:160px;height:160px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,0.22) 0%,transparent 70%);
-  pointer-events:none;
-  transition:transform .5s var(--ease-out);
+  left:0;top:0;bottom:0;
+  width:4px;
+  background:linear-gradient(180deg,var(--orange) 0%,var(--orange2) 100%);
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:transform .3s var(--ease-out);
 }
 .category-card:nth-child(1){animation-delay:.05s}
 .category-card:nth-child(2){animation-delay:.12s}
 .category-card:nth-child(3){animation-delay:.19s}
 .category-card:hover{
   transform:translateY(-4px);
-  box-shadow:0 22px 44px rgba(209,74,0,0.34);
+  border-color:rgba(255,122,46,0.45);
+  box-shadow:0 18px 38px rgba(209,74,0,0.16);
 }
-.category-card:hover::after{transform:scale(1.5) translate(-10%,10%)}
-.category-card:active{transform:translateY(-1px) scale(.99)}
+.category-card:hover::before{transform:scaleY(1)}
+.category-card:active{transform:translateY(-1px) scale(.995)}
 
 .category-icon{
   position:relative;
@@ -768,23 +763,25 @@ main{
   align-items:center;
   justify-content:center;
   flex-shrink:0;
-  background:#fff;
+  background:var(--orange-soft);
   transition:transform .22s var(--ease-bounce);
 }
-.category-card:hover .category-icon{transform:scale(1.06) rotate(-3deg)}
-.category-icon svg{width:28px;height:28px;fill:none;stroke:var(--orange2) !important}
+.category-icon.practice{background:var(--green-soft)}
+.category-icon.vocab{background:var(--amber-soft)}
+.category-card:hover .category-icon{transform:scale(1.07) rotate(-3deg)}
+.category-icon svg{width:27px;height:27px;fill:none}
 
 .category-body{flex:1;min-width:0;position:relative;z-index:1}
 .category-name{
   font-size:19px;
   font-weight:500;
-  color:#fff;
+  color:var(--ink);
   letter-spacing:-.015em;
   margin:0;
 }
 .category-desc{
-  font-size:12px;
-  color:rgba(255,255,255,0.8);
+  font-size:12.5px;
+  color:var(--dim);
   margin:3px 0 0 0;
   line-height:1.4;
 }
@@ -792,12 +789,12 @@ main{
 .category-arrow{
   position:relative;
   z-index:1;
-  font-size:22px;
+  font-size:20px;
   font-weight:400;
-  transition:transform .2s var(--ease-out);
-  color:#fff;
+  transition:transform .2s var(--ease-out),color .2s ease;
+  color:var(--dim);
 }
-.category-card:hover .category-arrow{transform:translateX(4px)}
+.category-card:hover .category-arrow{transform:translateX(4px);color:var(--orange2)}
 
 /* ═══════════════════════
    MODULE LIST (témalista)
@@ -971,7 +968,7 @@ main{
     animation-iteration-count:1 !important;
     transition-duration:.01ms !important;
   }
-  .login-dark-bg::before{animation:none !important}
+  .screen.white-bg::before{animation:none !important}
 }
 </style>
 </head>
@@ -982,8 +979,7 @@ main{
   <!-- ═══════════════════════════════════════════════════
        LOGIN SCREEN
        ═══════════════════════════════════════════════════ -->
-  <section class="screen login-dark active" id="screen-login">
-    <div class="login-dark-bg"></div>
+  <section class="screen white-bg login-screen active" id="screen-login">
     <div class="hero hero-compact">
       <div class="hero-content">
         <div class="login-logo-wrap">
