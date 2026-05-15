@@ -541,11 +541,7 @@ function selectOption(btn, value) {
 }
 
 function normalizeFillAnswer(s) {
-  // Lowercase, trim, remove trailing punctuation, collapse multiple spaces.
-  // Keeps commas (some answers use them, e.g. "a, The").
-  return (s || '').toString().trim().toLowerCase()
-    .replace(/[.!?;:]+$/g, '')
-    .replace(/\s+/g, ' ');
+  return EB.normalizeAnswer(s);
 }
 
 function submitAnswer() {

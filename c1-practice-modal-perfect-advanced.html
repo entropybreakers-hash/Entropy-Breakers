@@ -490,8 +490,8 @@ function submitAnswer() {
   } else {
     userAnswer = currentAnswer || '';
   }
-  const correct = q.answer.toString().trim().toLowerCase();
-  const given = userAnswer.toString().trim().toLowerCase();
+  const correct = EB.normalizeAnswer(q.answer);
+  const given = EB.normalizeAnswer(userAnswer);
   const isCorrect = (correct === given);
 
   answersLog.push({
