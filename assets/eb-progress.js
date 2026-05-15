@@ -270,6 +270,22 @@
     return snapshot();
   }
 
+  // Normalize a typed answer for forgiving comparison: unifies curly
+  // apostrophes/quotes to straight, lowercases, trims, drops trailing
+  // sentence punctuation and collapses inner whitespace. Without this a
+  // straight ' vs curly ’ (common on mobile keyboards) marks a correct
+  // answer wrong.
+  function normalizeAnswer(s) {
+    return (s == null ? '' : String(s))
+      .replace(/[‘’ʼ′`´]/g, "'")
+      .replace(/[“”″]/g, '"')
+      .trim()
+      .toLowerCase()
+      .replace(/[.!?;:]+$/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   function _parseUrlSlug() {
     try {
       var path = location.pathname.split('/').pop() || ''; path = path.replace(/\.html$/i, '');
@@ -463,6 +479,7 @@
     getHeatmap: getHeatmap, getActiveDaysInLast: getActiveDaysInLast,
     lastSeenLabel: lastSeenLabel, lastSeenBucket: lastSeenBucket,
     snapshot: snapshot, merge: merge,
+    normalizeAnswer: normalizeAnswer,
     reset: reset,
     _debug: { getAll: getAll, parseUrlSlug: _parseUrlSlug, detectMeta: _detectMeta }
   };
