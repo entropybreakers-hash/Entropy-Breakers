@@ -459,3 +459,35 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   transition: color 0.18s var(--eb-ease);
 }
 .eb-sync-link:hover { color: var(--eb-orange-2); }
+
+.eb-sync-form {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  width: 100%;
+}
+.eb-sync-input {
+  flex: 1 1 180px; min-width: 0;
+  padding: 9px 14px;
+  border-radius: var(--eb-radius-sm);
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: #fff; font-family: var(--eb-font); font-size: 13px;
+  outline: none; transition: border-color 0.18s var(--eb-ease);
+}
+.eb-sync-input::placeholder { color: rgba(255,255,255,0.4); }
+.eb-sync-input:focus { border-color: var(--eb-orange); }
+.eb-sync-send {
+  flex: none;
+  padding: 9px 18px;
+  border: none; border-radius: var(--eb-radius-sm);
+  background: var(--eb-orange); color: #fff;
+  font-family: var(--eb-font); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.01em; cursor: pointer;
+  transition: background 0.18s var(--eb-ease);
+}
+.eb-sync-send:hover { background: var(--eb-orange-2); }
+.eb-sync-note {
+  flex-basis: 100%;
+  margin-top: 4px;
+  font-size: 11.5px; line-height: 1.5;
+  color: rgba(255,255,255,0.5);
+}
