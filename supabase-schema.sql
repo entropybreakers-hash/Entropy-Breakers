@@ -1,54 +1,25 @@
 -- ═══════════════════════════════════════════════════════════════
--- Entropy Breakers — Supabase séma a haladás (progress) szinkronhoz
+-- Entropy Breakers — Supabase séma
 -- ───────────────────────────────────────────────────────────────
--- Futtasd le egyszer a Supabase SQL editorban:
---   Dashboard → SQL Editor → New query → ide bemásolod → Run
+-- Futtasd le a Supabase SQL editorban (Dashboard → SQL Editor).
 --
--- Egy sor / felhasználó. A teljes haladási állapot (szintek,
--- kategóriák, modulok, streak, heatmap) egyetlen jsonb mezőben él.
--- A hozzáférést Row Level Security védi: mindenki csak a saját
--- sorát látja és írja.
--- ═══════════════════════════════════════════════════════════════
-
-create table if not exists public.eb_progress (
-  user_id    uuid primary key references auth.users (id) on delete cascade,
-  data       jsonb       not null default '{}'::jsonb,
-  updated_at timestamptz not null default now()
-);
-
-alter table public.eb_progress enable row level security;
-
-drop policy if exists "eb_progress own select" on public.eb_progress;
-create policy "eb_progress own select" on public.eb_progress
-  for select using (auth.uid() = user_id);
-
-drop policy if exists "eb_progress own insert" on public.eb_progress;
-create policy "eb_progress own insert" on public.eb_progress
-  for insert with check (auth.uid() = user_id);
-
-drop policy if exists "eb_progress own update" on public.eb_progress;
-create policy "eb_progress own update" on public.eb_progress
-  for update using (auth.uid() = user_id)
-  with check (auth.uid() = user_id);
-
--- ───────────────────────────────────────────────────────────────
--- Auth beállítás (Dashboard → Authentication):
---   • Email provider engedélyezve (magic link / OTP).
---   • URL Configuration → Site URL: https://academy.entropybreakers.com
---   • Redirect URLs közé vedd fel ugyanezt (és teszthez a localhost-ot).
--- ───────────────────────────────────────────────────────────────
-
-
--- ═══════════════════════════════════════════════════════════════
--- Beiratkozott tanulók — hozzáférési névlista
--- ───────────────────────────────────────────────────────────────
--- A belépés továbbra is név + közös jelszó, DE a névnek rajta kell
--- lennie ezen a listán. Aki lekerül róla, nem tud belépni.
+-- Két táblát hoz létre:
+--   1) eb_students  — beiratkozott tanulók névlistája (hozzáférés)
+--   2) eb_progress  — tanulók haladása, NÉV alapján szinkronizálva
 --
--- Kezelés: Supabase → Table Editor → eb_students. Egy sor = egy
--- tanuló. Új sor = új tanuló; sor törlése = hozzáférés visszavonva.
--- A névegyezés kis/nagybetűt nem néz, és levágja a szóközöket.
+-- Egyik táblát sem lehet közvetlenül olvasni/írni az anon kulccsal:
+-- minden hozzáférés a lenti security-definer függvényeken át megy.
+--
+-- Megjegyzés: ha korábban a régi, auth-alapú eb_progress táblát
+-- hoztad létre, előbb futtasd le egyszer:  drop table if exists
+-- public.eb_progress cascade;
 -- ═══════════════════════════════════════════════════════════════
+
+
+-- ── 1. Hozzáférési névlista ──────────────────────────────────────
+-- Kezelés: Supabase → Table Editor → eb_students.
+-- Egy sor = egy tanuló. Új sor = új tanuló; sor törlése = a
+-- hozzáférés visszavonva. A névegyezés kis/nagybetűt nem néz.
 
 create table if not exists public.eb_students (
   name       text primary key,
@@ -57,9 +28,6 @@ create table if not exists public.eb_students (
 );
 
 alter table public.eb_students enable row level security;
--- Szándékosan NINCS anon olvasási policy: a kliens nem tudja
--- lekérni a teljes névsort, csak az alábbi függvényen keresztül
--- kérdezheti meg, hogy egy adott név engedélyezett-e.
 
 create or replace function public.eb_check_student(p_name text)
 returns boolean
@@ -74,3 +42,43 @@ as $$
 $$;
 
 grant execute on function public.eb_check_student(text) to anon, authenticated;
+
+
+-- ── 2. Haladás-szinkron (név alapú) ──────────────────────────────
+-- A haladás a tanuló neve alapján tárolódik, egy sor / tanuló.
+-- Nincs külön bejelentkezés — aki belép, annak a haladása
+-- automatikusan szinkronizál minden eszközön.
+
+create table if not exists public.eb_progress (
+  name       text primary key,
+  data       jsonb       not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.eb_progress enable row level security;
+
+create or replace function public.eb_progress_load(p_name text)
+returns jsonb
+language sql
+security definer
+set search_path = public
+as $$
+  select data from public.eb_progress
+  where name = lower(trim(p_name));
+$$;
+
+grant execute on function public.eb_progress_load(text) to anon, authenticated;
+
+create or replace function public.eb_progress_save(p_name text, p_data jsonb)
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  insert into public.eb_progress (name, data, updated_at)
+  values (lower(trim(p_name)), p_data, now())
+  on conflict (name) do update
+    set data = excluded.data, updated_at = excluded.updated_at;
+$$;
+
+grant execute on function public.eb_progress_save(text, jsonb) to anon, authenticated;
