@@ -156,11 +156,18 @@
     if (!all.levels[level] || !all.levels[level][category]) return [];
     return Object.keys(all.levels[level][category]);
   }
+  // Category progress = how much of the category is completed (modules
+  // attempted at least once) — not the average score. A finished
+  // category reads 100%, which keeps the dashboard motivating.
   function getCategoryPct(level, category) {
     var slugs = _moduleSlugsFor(level, category);
     if (!slugs.length) return 0;
-    var sum = 0; for (var i = 0; i < slugs.length; i++) { var m = getModule(level, category, slugs[i]); sum += m ? m.best : 0; }
-    return Math.round(sum / slugs.length);
+    var done = 0;
+    for (var i = 0; i < slugs.length; i++) {
+      var m = getModule(level, category, slugs[i]);
+      if (m && (m.attempts || 0) > 0) done++;
+    }
+    return Math.round(done / slugs.length * 100);
   }
   function _levelCategories(level) {
     if (_catalog && _catalog[level]) return Object.keys(_catalog[level]);
@@ -366,6 +373,53 @@
     return out;
   }
 
+  // Per-test results — one entry per module the student attempted,
+  // with the full chronological list of attempt scores (a student
+  // may repeat the same practice several times).
+  function getTestResults() {
+    var all = getAll();
+    var history = readJSON(HISTORY_KEY, []);
+    if (!Array.isArray(history)) history = [];
+    var byKey = {};
+    for (var i = 0; i < history.length; i++) {
+      var e = history[i];
+      if (!e || !e.slug) continue;
+      var k = (e.level || '') + '|' + (e.category || '') + '|' + e.slug;
+      if (!byKey[k]) byKey[k] = [];
+      byKey[k].push({ at: e.at, pct: (typeof e.pct === 'number' ? e.pct : null) });
+    }
+    var out = [];
+    var levels = all.levels || {};
+    for (var lv in levels) {
+      if (!levels.hasOwnProperty(lv)) continue;
+      for (var cat in levels[lv]) {
+        if (!levels[lv].hasOwnProperty(cat)) continue;
+        var mods = levels[lv][cat];
+        for (var slug in mods) {
+          if (!mods.hasOwnProperty(slug)) continue;
+          var m = mods[slug];
+          var att = (byKey[lv + '|' + cat + '|' + slug] || []).slice();
+          att.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
+          var scores = [];
+          for (var s = 0; s < att.length; s++) {
+            if (att[s].pct != null) scores.push(att[s].pct);
+          }
+          out.push({
+            level: lv, category: cat, slug: slug,
+            title: m.title || slug,
+            best: m.best || 0, last: m.last || 0,
+            attempts: m.attempts || att.length || 0,
+            firstAt: m.firstAt || (att[0] && att[0].at) || null,
+            lastAt: m.lastAt || (att.length && att[att.length - 1].at) || null,
+            scores: scores
+          });
+        }
+      }
+    }
+    out.sort(function (a, b) { return new Date(b.lastAt || 0) - new Date(a.lastAt || 0); });
+    return out;
+  }
+
   function _parseUrlSlug() {
     try {
       var path = location.pathname.split('/').pop() || ''; path = path.replace(/\.html$/i, '');
@@ -557,7 +611,7 @@
     getCategoryPct: getCategoryPct, getLevelPct: getLevelPct, getOverallPct: getOverallPct, getAllLevelPcts: getAllLevelPcts,
     registerCatalog: registerCatalog, listLevels: listLevels, listCategories: listCategories,
     getHeatmap: getHeatmap, getActiveDaysInLast: getActiveDaysInLast,
-    getWeeklyStats: getWeeklyStats,
+    getWeeklyStats: getWeeklyStats, getTestResults: getTestResults,
     lastSeenLabel: lastSeenLabel, lastSeenBucket: lastSeenBucket,
     snapshot: snapshot, merge: merge,
     normalizeAnswer: normalizeAnswer,
