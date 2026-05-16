@@ -318,60 +318,6 @@
       .trim();
   }
 
-  /* ── Week-by-week results ────────────────────────────────────── */
-  var HU_MONTHS = ['jan.','feb.','márc.','ápr.','máj.','jún.','júl.','aug.','szept.','okt.','nov.','dec.'];
-  function _mondayOf(d) {
-    var x = new Date(d); x.setHours(0, 0, 0, 0);
-    x.setDate(x.getDate() - ((x.getDay() + 6) % 7));
-    return x;
-  }
-  function _isoOf(d) {
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
-  function _weekLabel(start, i) {
-    if (i === 0) return 'Ez a hét';
-    if (i === 1) return 'Múlt hét';
-    var end = new Date(start); end.setDate(end.getDate() + 6);
-    if (start.getMonth() === end.getMonth())
-      return HU_MONTHS[start.getMonth()] + ' ' + start.getDate() + '–' + end.getDate() + '.';
-    return HU_MONTHS[start.getMonth()] + ' ' + start.getDate() + '. – ' +
-           HU_MONTHS[end.getMonth()] + ' ' + end.getDate() + '.';
-  }
-  // Returns the last `weeks` weeks, newest first. Each: { weekStart,
-  // label, sessions, activeDays, avgScore (null if no score that week) }.
-  function getWeeklyStats(weeks) {
-    weeks = weeks || 8;
-    var daily = readJSON(DAILY_KEY, {});
-    var history = readJSON(HISTORY_KEY, []);
-    if (!Array.isArray(history)) history = [];
-    var thisMonday = _mondayOf(new Date());
-    var out = [];
-    for (var i = 0; i < weeks; i++) {
-      var start = new Date(thisMonday); start.setDate(start.getDate() - i * 7);
-      var end = new Date(start); end.setDate(end.getDate() + 7);
-      var sessions = 0, activeDays = 0;
-      for (var d = 0; d < 7; d++) {
-        var day = new Date(start); day.setDate(day.getDate() + d);
-        var c = daily[_isoOf(day)] || 0;
-        sessions += c;
-        if (c > 0) activeDays++;
-      }
-      var sum = 0, n = 0;
-      for (var h = 0; h < history.length; h++) {
-        var t = new Date(history[h].at);
-        if (t >= start && t < end && typeof history[h].pct === 'number') { sum += history[h].pct; n++; }
-      }
-      out.push({
-        weekStart: _isoOf(start),
-        label: _weekLabel(start, i),
-        sessions: sessions,
-        activeDays: activeDays,
-        avgScore: n ? Math.round(sum / n) : null,
-        scoreCount: n
-      });
-    }
-    return out;
-  }
 
   // Per-test results — one entry per module the student attempted,
   // with the full chronological list of attempt scores (a student
@@ -611,7 +557,7 @@
     getCategoryPct: getCategoryPct, getLevelPct: getLevelPct, getOverallPct: getOverallPct, getAllLevelPcts: getAllLevelPcts,
     registerCatalog: registerCatalog, listLevels: listLevels, listCategories: listCategories,
     getHeatmap: getHeatmap, getActiveDaysInLast: getActiveDaysInLast,
-    getWeeklyStats: getWeeklyStats, getTestResults: getTestResults,
+    getTestResults: getTestResults,
     lastSeenLabel: lastSeenLabel, lastSeenBucket: lastSeenBucket,
     snapshot: snapshot, merge: merge,
     normalizeAnswer: normalizeAnswer,
