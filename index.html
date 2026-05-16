@@ -1142,7 +1142,7 @@ main{
         </span>
         <span class="eb-results-card-body">
           <span class="eb-results-card-name">Eredményeim</span>
-          <span class="eb-results-card-desc">Heti fejlődés, pontszámok, sorozat</span>
+          <span class="eb-results-card-desc">Teszteredményeid és pontszámaid</span>
         </span>
         <span class="eb-results-card-arrow">→</span>
       </button>
@@ -2149,57 +2149,23 @@ function logout() {
     var catMap = { 'elmélet':'theory', 'gyakorlás':'practice', 'szószedet':'vocab' };
     return { level: lvl, category: catMap[cat] || cat };
   }
-  function _scoreChartCard(chrono) {
-    var W = 360, H = 142, padL = 26, padR = 12, padT = 14, padB = 18;
-    var iw = W - padL - padR, ih = H - padT - padB, n = chrono.length;
-    var xAt = function (i) { return padL + (n <= 1 ? iw / 2 : iw * i / (n - 1)); };
-    var yAt = function (v) { return padT + ih * (1 - v / 100); };
-    var scored = [];
-    chrono.forEach(function (w, i) {
-      if (w.avgScore != null) scored.push([xAt(i), yAt(w.avgScore), w.avgScore]);
-    });
-    if (scored.length === 0) {
-      return '<div class="eb-chart-card"><div class="eb-chart-title">' +
-        '<span class="eb-chart-name">Pontszám-trend</span></div>' +
-        '<div class="eb-chart-note">A pontszám-trend a kvízek és tesztek kitöltése után jelenik meg.</div></div>';
-    }
-    var grid = '';
-    [0, 50, 100].forEach(function (g) {
-      var gy = yAt(g).toFixed(1);
-      grid += '<line class="eb-chart-grid" x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '"/>';
-      grid += '<text class="eb-chart-axis" x="' + (padL - 6) + '" y="' + (yAt(g) + 3).toFixed(1) + '" text-anchor="end">' + g + '</text>';
-    });
-    var d = 'M' + scored[0][0].toFixed(1) + ' ' + scored[0][1].toFixed(1);
-    for (var i = 1; i < scored.length; i++) d += ' L' + scored[i][0].toFixed(1) + ' ' + scored[i][1].toFixed(1);
-    var base = yAt(0).toFixed(1);
-    var area = '<path d="' + d + ' L' + scored[scored.length - 1][0].toFixed(1) + ' ' + base +
-      ' L' + scored[0][0].toFixed(1) + ' ' + base + ' Z" fill="url(#ebScoreGrad)"/>';
-    var dots = '';
-    scored.forEach(function (p) {
-      dots += '<circle class="eb-chart-dot" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.4"/>';
-    });
-    var trend = '';
-    if (scored.length >= 2) {
-      var diff = scored[scored.length - 1][2] - scored[0][2];
-      var cls = diff > 1 ? 'eb-chart-trend-up' : (diff < -1 ? 'eb-chart-trend-down' : 'eb-chart-trend-flat');
-      var txt = diff > 0 ? '+' + diff + '%' : (diff < 0 ? '−' + Math.abs(diff) + '%' : '0%');
-      trend = '<span class="eb-chart-trend ' + cls + '">' + txt + '</span>';
-    }
-    var svg = '<svg class="eb-chart-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
-      '<defs><linearGradient id="ebScoreGrad" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#ff7a2e" stop-opacity="0.30"/>' +
-      '<stop offset="100%" stop-color="#ff7a2e" stop-opacity="0"/></linearGradient></defs>' +
-      grid + area + '<path class="eb-chart-line" d="' + d + '"/>' + dots + '</svg>';
-    return '<div class="eb-chart-card"><div class="eb-chart-title">' +
-      '<span class="eb-chart-name">Pontszám-trend</span>' + trend + '</div>' + svg +
-      '<div class="eb-chart-note">Heti átlagos pontszám az elmúlt ' + n + ' hétben</div></div>';
-  }
   function _esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
     });
   }
-  var _CAT_LABEL = { theory: 'Elmélet', practice: 'Gyakorlás', vocab: 'Szószedet', flashcards: 'Szókártya' };
+  var _HU_MON = ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.',
+    'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'];
+  function _fmtDate(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return _HU_MON[d.getMonth()] + ' ' + d.getDate() + '.';
+  }
+  function _pctOf(score, max) {
+    var mx = Number(max), sc = Number(score);
+    if (mx > 0 && isFinite(sc)) return Math.max(0, Math.min(100, Math.round(sc / mx * 100)));
+    return null;
+  }
   function _sparkline(scores) {
     var W = 640, H = 66, padX = 12, padT = 16, padB = 12;
     var iw = W - padX * 2, ih = H - padT - padB, n = scores.length;
@@ -2222,70 +2188,134 @@ function logout() {
     return '<svg class="eb-spark-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
       area + '<path class="eb-spark-line" d="' + d + '"/>' + dots + '</svg>';
   }
-  function _testItem(r) {
-    var cat = _CAT_LABEL[r.category] || r.category;
-    var n = r.scores.length;
-    var lastScore = n ? r.scores[n - 1] : r.last;
-    var scoreCls = lastScore >= 80 ? 'eb-test-score-hi' : (lastScore >= 50 ? '' : 'eb-test-score-lo');
-    var body = '', foot;
-    if (n >= 2) {
-      var diff = r.scores[n - 1] - r.scores[0];
+  function _resultsTrendCard(subs) {
+    var pts = subs.filter(function (s) { return s.pct != null; });
+    if (pts.length < 2) return '';
+    var W = 360, H = 142, padL = 26, padR = 12, padT = 14, padB = 18;
+    var iw = W - padL - padR, ih = H - padT - padB, n = pts.length;
+    var xAt = function (i) { return padL + iw * i / (n - 1); };
+    var yAt = function (v) { return padT + ih * (1 - v / 100); };
+    var grid = '';
+    [0, 50, 100].forEach(function (g) {
+      var gy = yAt(g).toFixed(1);
+      grid += '<line class="eb-chart-grid" x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '"/>';
+      grid += '<text class="eb-chart-axis" x="' + (padL - 6) + '" y="' + (yAt(g) + 3).toFixed(1) + '" text-anchor="end">' + g + '</text>';
+    });
+    var d = '';
+    pts.forEach(function (s, i) { d += (i ? ' L' : 'M') + xAt(i).toFixed(1) + ' ' + yAt(s.pct).toFixed(1); });
+    var base = yAt(0).toFixed(1);
+    var area = '<path d="' + d + ' L' + xAt(n - 1).toFixed(1) + ' ' + base +
+      ' L' + xAt(0).toFixed(1) + ' ' + base + ' Z" fill="url(#ebScoreGrad)"/>';
+    var dots = '';
+    pts.forEach(function (s, i) {
+      dots += '<circle class="eb-chart-dot" cx="' + xAt(i).toFixed(1) + '" cy="' + yAt(s.pct).toFixed(1) + '" r="3.2"/>';
+    });
+    var diff = pts[n - 1].pct - pts[0].pct;
+    var cls = diff > 1 ? 'eb-chart-trend-up' : (diff < -1 ? 'eb-chart-trend-down' : 'eb-chart-trend-flat');
+    var txt = diff > 0 ? '+' + diff + '%' : (diff < 0 ? '−' + Math.abs(diff) + '%' : '0%');
+    var svg = '<svg class="eb-chart-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<defs><linearGradient id="ebScoreGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#ff7a2e" stop-opacity="0.30"/>' +
+      '<stop offset="100%" stop-color="#ff7a2e" stop-opacity="0"/></linearGradient></defs>' +
+      grid + area + '<path class="eb-chart-line" d="' + d + '"/>' + dots + '</svg>';
+    return '<div class="eb-chart-card"><div class="eb-chart-title">' +
+      '<span class="eb-chart-name">Pontszám-trend</span>' +
+      '<span class="eb-chart-trend ' + cls + '">' + txt + '</span></div>' + svg +
+      '<div class="eb-chart-note">Minden beérkezett teszteredményed időrendben</div></div>';
+  }
+  function _testResultCard(group) {
+    var a = group.attempts, n = a.length;
+    var pcts = a.map(function (x) { return x.pct; }).filter(function (p) { return p != null; });
+    var lastPct = a[n - 1].pct;
+    var scoreCls = lastPct == null ? '' : (lastPct >= 80 ? 'eb-test-score-hi' : (lastPct >= 50 ? '' : 'eb-test-score-lo'));
+    var body = pcts.length >= 2 ? _sparkline(pcts) : '';
+    var chips = a.map(function (x) {
+      var raw = (x.score != null && x.max != null) ? (x.score + '/' + x.max)
+        : (x.pct != null ? x.pct + '%' : '—');
+      return '<span class="eb-attempt"><span class="eb-attempt-date">' + _esc(_fmtDate(x.at)) +
+        '</span><span class="eb-attempt-score">' + _esc(raw) + '</span></span>';
+    }).join('');
+    var foot = '';
+    if (pcts.length >= 2) {
+      var diff = pcts[pcts.length - 1] - pcts[0];
       var tcls = diff > 1 ? 'eb-chart-trend-up' : (diff < -1 ? 'eb-chart-trend-down' : 'eb-chart-trend-flat');
       var ttxt = diff > 0 ? '+' + diff + '%' : (diff < 0 ? '−' + Math.abs(diff) + '%' : '0%');
-      body = _sparkline(r.scores);
+      var best = Math.max.apply(null, pcts);
       foot = '<div class="eb-test-foot">' +
-        '<span>Első: <strong>' + r.scores[0] + '%</strong></span>' +
-        '<span>Legjobb: <strong>' + r.best + '%</strong></span>' +
+        '<span>Legjobb: <strong>' + best + '%</strong></span>' +
         '<span class="eb-test-delta ' + tcls + '">' + ttxt + ' fejlődés</span></div>';
-    } else {
-      foot = '<div class="eb-test-foot eb-test-foot-single">Egyszer elvégezve · legjobb ' + r.best + '%</div>';
     }
     return '<div class="eb-test">' +
       '<div class="eb-test-head">' +
         '<div class="eb-test-titles">' +
-          '<span class="eb-test-name">' + _esc(r.title) + '</span>' +
-          '<span class="eb-test-meta">' + _esc(r.level.toUpperCase()) + ' · ' + _esc(cat) + ' · ' +
-            r.attempts + ' próbálkozás</span>' +
+          '<span class="eb-test-name">' + _esc(group.test) + '</span>' +
+          '<span class="eb-test-meta">' + n + ' kitöltés</span>' +
         '</div>' +
-        '<span class="eb-test-score ' + scoreCls + '">' + lastScore + '%</span>' +
-      '</div>' + body + foot + '</div>';
+        '<span class="eb-test-score ' + scoreCls + '">' + (lastPct == null ? '—' : lastPct + '%') + '</span>' +
+      '</div>' + body +
+      '<div class="eb-attempts">' + chips + '</div>' + foot + '</div>';
   }
-  function renderResults() {
-    var list = document.getElementById('eb-results-list');
-    if (!list || !window.EB || !EB.getTestResults) return;
-    var results = EB.getTestResults();
-    var streak = EB.getStreak ? EB.getStreak() : { current: 0 };
-    var totalAttempts = 0;
-    results.forEach(function (r) { totalAttempts += r.attempts; });
-    var head =
-      '<div class="eb-results-summary">' +
-        '<div class="eb-results-stat"><span class="eb-results-num">' + totalAttempts + '</span>' +
-          '<span class="eb-results-cap">elvégzett teszt</span></div>' +
-        '<div class="eb-results-stat"><span class="eb-results-num">' + (streak.current || 0) + '</span>' +
-          '<span class="eb-results-cap">napos sorozat</span></div>' +
-      '</div>';
-    if (results.length === 0) {
-      list.innerHTML = head +
-        '<div class="eb-results-empty">Még nincs elvégzett teszt. Csinálj végig egy feladatsort, ' +
-        'és itt megjelenik az eredményed — és ahogy újra megcsinálod, a fejlődésed is.</div>';
+  function _renderResultsData(list, rows) {
+    var subs = rows.map(function (r) {
+      return {
+        test: String(r.test_name == null ? '' : r.test_name).trim() || 'Névtelen teszt',
+        score: (r.score == null ? null : Number(r.score)),
+        max: (r.max_score == null ? null : Number(r.max_score)),
+        at: r.completed_at,
+        pct: _pctOf(r.score, r.max_score)
+      };
+    }).sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
+    if (subs.length === 0) {
+      list.innerHTML =
+        '<div class="eb-results-empty">Még nem érkezett teszteredményed. ' +
+        'Amint kitöltesz egy tesztet, itt megjelenik — és ahogy újra megcsinálod, a fejlődésed is.</div>';
       return;
     }
-    var trend = '';
-    if (EB.getWeeklyStats) {
-      var weeks = EB.getWeeklyStats(12);
-      var lastActive = 0;
-      for (var i = 0; i < weeks.length; i++) if (weeks[i].sessions > 0) lastActive = i;
-      var count = Math.min(12, Math.max(lastActive + 1, 6));
-      trend = _scoreChartCard(weeks.slice(0, count).reverse());
-    }
+    var pctVals = subs.map(function (s) { return s.pct; }).filter(function (p) { return p != null; });
+    var avg = pctVals.length
+      ? Math.round(pctVals.reduce(function (a, b) { return a + b; }, 0) / pctVals.length) : null;
+    var head =
+      '<div class="eb-results-summary">' +
+        '<div class="eb-results-stat"><span class="eb-results-num">' + subs.length + '</span>' +
+          '<span class="eb-results-cap">kitöltött teszt</span></div>' +
+        '<div class="eb-results-stat"><span class="eb-results-num">' +
+          (avg == null ? '—' : avg + '%') + '</span>' +
+          '<span class="eb-results-cap">átlagos eredmény</span></div>' +
+      '</div>';
+    var trend = _resultsTrendCard(subs);
+    var groups = {}, order = [];
+    subs.forEach(function (s) {
+      if (!groups[s.test]) { groups[s.test] = { test: s.test, attempts: [] }; order.push(s.test); }
+      groups[s.test].attempts.push(s);
+    });
+    order.sort(function (x, y) {
+      var ax = groups[x].attempts, ay = groups[y].attempts;
+      return new Date(ay[ay.length - 1].at) - new Date(ax[ax.length - 1].at);
+    });
     var defs = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>' +
       '<linearGradient id="ebSparkGrad" x1="0" y1="0" x2="0" y2="1">' +
       '<stop offset="0%" stop-color="#ff7a2e" stop-opacity="0.26"/>' +
       '<stop offset="100%" stop-color="#ff7a2e" stop-opacity="0"/></linearGradient></defs></svg>';
-    var tests = results.map(_testItem).join('');
+    var cards = order.map(function (t) { return _testResultCard(groups[t]); }).join('');
     list.innerHTML = head + trend +
-      '<div class="eb-results-subhead">Teszteredmények · ' + results.length + ' feladatsor</div>' +
-      defs + tests;
+      '<div class="eb-results-subhead">Teszteredmények · ' + order.length + ' teszt</div>' +
+      defs + cards;
+  }
+  function renderResults() {
+    var list = document.getElementById('eb-results-list');
+    if (!list) return;
+    var name = (typeof studentName !== 'undefined' && studentName) ? studentName : '';
+    if (!name) { try { name = localStorage.getItem('eb.student') || ''; } catch (e) {} }
+    if (!window.EBSync || !EBSync.status || !EBSync.status().configured || !EBSync.getTestResults) {
+      list.innerHTML = '<div class="eb-results-empty">A teszteredmények megjelenítése még nincs beállítva.</div>';
+      return;
+    }
+    list.innerHTML = '<div class="eb-results-loading">Eredmények betöltése…</div>';
+    EBSync.getTestResults(name).then(function (rows) {
+      _renderResultsData(list, rows || []);
+    }, function () {
+      list.innerHTML = '<div class="eb-results-empty">Az eredmények most nem érhetők el. Próbáld újra később.</div>';
+    });
   }
   function onScreenActivate(id) {
     if (id === 'screen-levels') renderLevelSelect();
