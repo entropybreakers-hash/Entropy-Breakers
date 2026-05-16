@@ -95,6 +95,16 @@
     pushTimer = setTimeout(function () { pushTimer = null; push(); }, 1500);
   }
 
+  // Test results synced from Airtable into Supabase — read-only.
+  // Returns a promise of [{ test_name, score, max_score, completed_at }].
+  function getTestResults(name) {
+    var who = (name && name.trim()) || currentName();
+    if (!configured || !who) return Promise.resolve([]);
+    return rpc('eb_test_results_load', { p_name: who }).then(function (rows) {
+      return Array.isArray(rows) ? rows : [];
+    });
+  }
+
   function status() { return { configured: configured }; }
 
   window.addEventListener('eb:changed', schedulePush);
@@ -102,7 +112,8 @@
   window.EBSync = {
     status: status,
     checkAccess: checkAccess,
-    pull: pull, push: push
+    pull: pull, push: push,
+    getTestResults: getTestResults
   };
 
   function init() {
