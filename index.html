@@ -1013,7 +1013,6 @@ main{
         </div>
         <p class="hero-eyebrow">Szia, <span id="select-name">—</span> 👋</p>
         <div class="eb-heatmap" data-eb-heatmap style="margin-top:16px"></div>
-        <button class="eb-results-btn" onclick="showResults()">Heti eredményeim <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
@@ -1073,7 +1072,7 @@ main{
           <button class="hero-back" onclick="backNav()">←</button>
           <span class="hero-badge">Eredmények</span>
         </div>
-        <h1 class="hero-title hero-title-sm">Heti <span class="accent">eredményeid</span></h1>
+        <h1 class="hero-title hero-title-sm">Az <span class="accent">eredményeim</span></h1>
       </div>
       <div class="hero-curve"></div>
     </div>
@@ -1136,6 +1135,17 @@ main{
           <span class="category-arrow">→</span>
         </button>
       </div>
+
+      <button class="eb-results-card" onclick="showResults()">
+        <span class="eb-results-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 13l3.5-4 3.5 2.5 5-6.5"/></svg>
+        </span>
+        <span class="eb-results-card-body">
+          <span class="eb-results-card-name">Eredményeim</span>
+          <span class="eb-results-card-desc">Heti fejlődés, pontszámok, sorozat</span>
+        </span>
+        <span class="eb-results-card-arrow">→</span>
+      </button>
     </div>
 
     <div class="app-footer">
@@ -1860,6 +1870,12 @@ function showCategory(level, category) {
 }
 
 function backNav() {
+  const active = document.querySelector('.screen.active');
+  if (active && active.id === 'screen-results') {
+    if (currentLevel) { _doShowLevel(currentLevel); return; }
+    showLevelSelect();
+    return;
+  }
   if (currentCategory && currentLevel) {
     currentCategory = '';
     _doShowLevel(currentLevel);
@@ -1873,7 +1889,6 @@ function backNav() {
 }
 
 function showResults() {
-  currentLevel = '';
   currentCategory = '';
   switchScreen('screen-results');
 }
@@ -2134,6 +2149,82 @@ function logout() {
     var catMap = { 'elmélet':'theory', 'gyakorlás':'practice', 'szószedet':'vocab' };
     return { level: lvl, category: catMap[cat] || cat };
   }
+  function _scoreChartCard(chrono) {
+    var W = 360, H = 142, padL = 26, padR = 12, padT = 14, padB = 18;
+    var iw = W - padL - padR, ih = H - padT - padB, n = chrono.length;
+    var xAt = function (i) { return padL + (n <= 1 ? iw / 2 : iw * i / (n - 1)); };
+    var yAt = function (v) { return padT + ih * (1 - v / 100); };
+    var scored = [];
+    chrono.forEach(function (w, i) {
+      if (w.avgScore != null) scored.push([xAt(i), yAt(w.avgScore), w.avgScore]);
+    });
+    if (scored.length === 0) {
+      return '<div class="eb-chart-card"><div class="eb-chart-title">' +
+        '<span class="eb-chart-name">Pontszám-trend</span></div>' +
+        '<div class="eb-chart-note">A pontszám-trend a kvízek és tesztek kitöltése után jelenik meg.</div></div>';
+    }
+    var grid = '';
+    [0, 50, 100].forEach(function (g) {
+      var gy = yAt(g).toFixed(1);
+      grid += '<line class="eb-chart-grid" x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '"/>';
+      grid += '<text class="eb-chart-axis" x="' + (padL - 6) + '" y="' + (yAt(g) + 3).toFixed(1) + '" text-anchor="end">' + g + '</text>';
+    });
+    var d = 'M' + scored[0][0].toFixed(1) + ' ' + scored[0][1].toFixed(1);
+    for (var i = 1; i < scored.length; i++) d += ' L' + scored[i][0].toFixed(1) + ' ' + scored[i][1].toFixed(1);
+    var base = yAt(0).toFixed(1);
+    var area = '<path d="' + d + ' L' + scored[scored.length - 1][0].toFixed(1) + ' ' + base +
+      ' L' + scored[0][0].toFixed(1) + ' ' + base + ' Z" fill="url(#ebScoreGrad)"/>';
+    var dots = '';
+    scored.forEach(function (p) {
+      dots += '<circle class="eb-chart-dot" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.4"/>';
+    });
+    var trend = '';
+    if (scored.length >= 2) {
+      var diff = scored[scored.length - 1][2] - scored[0][2];
+      var cls = diff > 1 ? 'eb-chart-trend-up' : (diff < -1 ? 'eb-chart-trend-down' : 'eb-chart-trend-flat');
+      var txt = diff > 0 ? '+' + diff + '%' : (diff < 0 ? '−' + Math.abs(diff) + '%' : '0%');
+      trend = '<span class="eb-chart-trend ' + cls + '">' + txt + '</span>';
+    }
+    var svg = '<svg class="eb-chart-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<defs><linearGradient id="ebScoreGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#ff7a2e" stop-opacity="0.30"/>' +
+      '<stop offset="100%" stop-color="#ff7a2e" stop-opacity="0"/></linearGradient></defs>' +
+      grid + area + '<path class="eb-chart-line" d="' + d + '"/>' + dots + '</svg>';
+    return '<div class="eb-chart-card"><div class="eb-chart-title">' +
+      '<span class="eb-chart-name">Pontszám-trend</span>' + trend + '</div>' + svg +
+      '<div class="eb-chart-note">Heti átlagos pontszám az elmúlt ' + n + ' hétben</div></div>';
+  }
+  function _activityChartCard(chrono) {
+    var W = 360, H = 142, padL = 14, padR = 12, padT = 18, padB = 14;
+    var iw = W - padL - padR, ih = H - padT - padB, n = chrono.length;
+    var maxS = 1;
+    chrono.forEach(function (w) { if (w.sessions > maxS) maxS = w.sessions; });
+    var slot = iw / n, bw = Math.min(slot * 0.6, 30), base = padT + ih;
+    var bars = '', activeWeeks = 0;
+    chrono.forEach(function (w, i) {
+      var cx = padL + slot * i + slot / 2;
+      if (w.sessions > 0) {
+        activeWeeks++;
+        var h = Math.max(4, ih * w.sessions / maxS);
+        var y = base - h;
+        bars += '<rect class="eb-chart-bar" x="' + (cx - bw / 2).toFixed(1) + '" y="' + y.toFixed(1) +
+          '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="3"/>';
+        bars += '<text class="eb-chart-val" x="' + cx.toFixed(1) + '" y="' + (y - 4).toFixed(1) +
+          '" text-anchor="middle">' + w.sessions + '</text>';
+      } else {
+        bars += '<circle cx="' + cx.toFixed(1) + '" cy="' + (base - 2) + '" r="1.7" fill="#d8cfbf"/>';
+      }
+    });
+    var svg = '<svg class="eb-chart-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+      '<defs><linearGradient id="ebBarGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#ff7a2e"/><stop offset="100%" stop-color="#d14a00"/></linearGradient></defs>' +
+      '<line class="eb-chart-grid" x1="' + padL + '" y1="' + base + '" x2="' + (W - padR) + '" y2="' + base + '"/>' +
+      bars + '</svg>';
+    return '<div class="eb-chart-card"><div class="eb-chart-title">' +
+      '<span class="eb-chart-name">Heti aktivitás</span>' +
+      '<span class="eb-chart-trend eb-chart-trend-flat">' + activeWeeks + '/' + n + ' aktív hét</span></div>' +
+      svg + '<div class="eb-chart-note">Gyakorlások száma hetente</div></div>';
+  }
   function renderResults() {
     var list = document.getElementById('eb-results-list');
     if (!list || !window.EB || !EB.getWeeklyStats) return;
@@ -2157,6 +2248,9 @@ function logout() {
         'és itt megjelenik hétről hétre a fejlődésed.</div>';
       return;
     }
+    var count = Math.min(12, Math.max(lastActive + 1, 6));
+    var chrono = weeks.slice(0, count).reverse();
+    var charts = _scoreChartCard(chrono) + _activityChartCard(chrono);
     var cards = weeks.slice(0, lastActive + 1).map(function (w) {
       var hasScore = w.scoreCount > 0;
       var score = hasScore
@@ -2173,7 +2267,8 @@ function logout() {
                stats + bar +
              '</div>';
     }).join('');
-    list.innerHTML = head + cards;
+    list.innerHTML = head + charts +
+      '<div class="eb-results-subhead">Heti bontás</div>' + cards;
   }
   function onScreenActivate(id) {
     if (id === 'screen-levels') renderLevelSelect();
