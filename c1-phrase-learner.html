@@ -185,13 +185,23 @@ main{
 
 .face-example{
   font-family:'Inter',sans-serif;
-  font-size:11px;
+  font-size:clamp(13px,2.4vw,16px);
   max-width:100%;
   line-height:1.45;
   color:var(--cream2);
-  position:absolute;
-  bottom:14px;left:16px;right:16px;
-  padding:0 8px;
+  margin-top:20px;
+  padding:0 20px;
+}
+.face-example-hu{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(12px,2.2vw,15px);
+  line-height:1.4;
+  font-weight:400;
+  font-style:italic;
+  color:rgba(26,22,18,0.55);
+  margin-top:10px;
+  padding:0 20px;
+  text-align:center;
 }
 .face-example::before,.face-example::after{
   content:'"';color:var(--orange);
@@ -404,6 +414,7 @@ footer{
         <div class="flip-face flip-back">
           <div class="face-word" id="card-en">—</div>
           <div class="face-example" id="card-example">—</div>
+          <div class="face-example-hu" id="card-example-hu" style="display:none"></div>
         </div>
       </div>
     </div>
@@ -458,56 +469,56 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Vélemény", hu:"Szempontomból...", en:"From my perspective...", example:"From my perspective, remote work has changed everything." },
-  { cat:"Vélemény", hu:"Úgy vélem, hogy...", en:"I am of the opinion that...", example:"I am of the opinion that education should be free." },
-  { cat:"Vélemény", hu:"Határozottan úgy gondolom...", en:"It is my firm belief that...", example:"It is my firm belief that creativity can't be forced." },
-  { cat:"Vélemény", hu:"Azt állítanám, hogy...", en:"I would argue that...", example:"I would argue that technology has done more good than harm." },
-  { cat:"Vélemény", hu:"Ami engem illet...", en:"As far as I'm concerned...", example:"As far as I'm concerned, the decision was the right call." },
-  { cat:"Vélemény", hu:"Érvelni lehet amellett, hogy...", en:"It could be argued that...", example:"It could be argued that social media has hurt real friendships." },
-  { cat:"Vélemény", hu:"Hajlok arra, hogy azt gondoljam...", en:"I am inclined to think that...", example:"I am inclined to think the project needs more time." },
-  { cat:"Vélemény", hu:"Az én megítélésem szerint...", en:"To my mind...", example:"To my mind, this is the biggest issue of our time." },
-  { cat:"Vélemény", hu:"Az én nézetem az, hogy...", en:"It is my view that...", example:"It is my view that young people today face unique challenges." },
-  { cat:"Vélemény", hu:"Általánosságban véve...", en:"Broadly speaking...", example:"Broadly speaking, the results exceeded our expectations." },
-  { cat:"Egyetértés", hu:"Teljes mértékben egyetértek.", en:"I couldn't agree more.", example:"You're absolutely right — I couldn't agree more." },
-  { cat:"Egyetértés", hu:"Érvényes pontot vetett fel.", en:"You raise a valid point.", example:"You raise a valid point about the budget." },
-  { cat:"Egyetértés", hu:"Hajlok az egyetértésre.", en:"I am inclined to agree.", example:"After hearing your side, I am inclined to agree." },
-  { cat:"Egyetértés", hu:"Ez teljesen helytálló.", en:"That is absolutely right.", example:"That is absolutely right, and we should act on it." },
-  { cat:"Egyetértés", hu:"Ezt teljes mértékben támogatom.", en:"I second that entirely.", example:"I second that entirely — that's the best idea so far." },
-  { cat:"Ellentmondás", hu:"Engedje meg, hogy vitatkozzam.", en:"I beg to differ.", example:"I beg to differ — the numbers actually show the opposite." },
-  { cat:"Ellentmondás", hu:"Nem vagyok teljesen meggyőzve.", en:"I'm not entirely convinced.", example:"I'm not entirely convinced this is the right approach." },
-  { cat:"Ellentmondás", hu:"Én ezt másképp látom.", en:"I see it differently.", example:"I see it differently — I think we need more data first." },
-  { cat:"Ellentmondás", hu:"Minden tiszteletem megadva...", en:"With all due respect...", example:"With all due respect, your information is outdated." },
-  { cat:"Ellentmondás", hu:"Ez nem egészen az én álláspontom.", en:"That's not quite my view.", example:"That's not quite my view — I'd frame it differently." },
-  { cat:"Összekötők", hu:"Mindazonáltal...", en:"Nevertheless...", example:"It was risky; nevertheless, we decided to go ahead." },
-  { cat:"Összekötők", hu:"Ráadásul / Emellett...", en:"Furthermore...", example:"It saves money. Furthermore, it saves a lot of time." },
-  { cat:"Összekötők", hu:"Következésképpen...", en:"Consequently...", example:"The flight was delayed; consequently, we missed our connection." },
-  { cat:"Összekötők", hu:"Ezzel szemben...", en:"In contrast...", example:"In contrast, last year's numbers were much lower." },
-  { cat:"Összekötők", hu:"Másrészt...", en:"On the other hand...", example:"It's expensive. On the other hand, the quality is amazing." },
-  { cat:"Összekötők", hu:"Továbbá...", en:"Moreover...", example:"She speaks three languages. Moreover, she's a great negotiator." },
-  { cat:"Összekötők", hu:"Ennek ellenére...", en:"Nonetheless...", example:"He was nervous; nonetheless, his speech was impressive." },
-  { cat:"Összekötők", hu:"Ennek eredményeként...", en:"As a result...", example:"Traffic was crazy. As a result, I was an hour late." },
-  { cat:"Összekötők", hu:"Ezen kívül...", en:"In addition to this...", example:"In addition to this, we also offer free support." },
-  { cat:"Összekötők", hu:"Ezzel ellentétben...", en:"By contrast...", example:"City life is hectic. By contrast, small-town life is peaceful." },
-  { cat:"Mondatnyitók", hu:"Magától értetődő, hogy...", en:"It goes without saying that...", example:"It goes without saying that safety comes first." },
-  { cat:"Mondatnyitók", hu:"Érdemes megjegyezni, hogy...", en:"It is worth noting that...", example:"It is worth noting that prices may change without notice." },
-  { cat:"Mondatnyitók", hu:"Nem tagadható, hogy...", en:"There is no denying that...", example:"There is no denying that remote work has its perks." },
-  { cat:"Mondatnyitók", hu:"Logikus, hogy...", en:"It stands to reason that...", example:"It stands to reason that experience makes you better." },
-  { cat:"Mondatnyitók", hu:"Közismert, hogy...", en:"It is widely acknowledged that...", example:"It is widely acknowledged that sleep is essential for health." },
-  { cat:"Lezárók", hu:"Összefoglalva...", en:"To sum up...", example:"To sum up, the project was a huge success." },
-  { cat:"Lezárók", hu:"Mindent egybevetve...", en:"All things considered...", example:"All things considered, we handled the situation well." },
-  { cat:"Lezárók", hu:"Összességében...", en:"On balance...", example:"On balance, the pros outweigh the cons." },
-  { cat:"Lezárók", hu:"Más szóval...", en:"To put it another way...", example:"To put it another way, we need a new strategy." },
-  { cat:"Lezárók", hu:"Végső elemzésben...", en:"In the final analysis...", example:"In the final analysis, the results speak for themselves." },
-  { cat:"Árnyalás", hu:"Bizonyos mértékig...", en:"To a certain extent...", example:"To a certain extent, I agree with his argument." },
-  { cat:"Árnyalás", hu:"Nagyjából / Általában véve...", en:"By and large...", example:"By and large, customers have been happy with the change." },
-  { cat:"Árnyalás", hu:"Elméletileg...", en:"In theory...", example:"In theory, the system should work perfectly." },
-  { cat:"Árnyalás", hu:"Ahogy én gondolom...", en:"To my way of thinking...", example:"To my way of thinking, remote work is here to stay." },
-  { cat:"Árnyalás", hu:"Igazságos megközelítéssel...", en:"To be fair...", example:"To be fair, he didn't have much time to prepare." },
-  { cat:"Hangsúlyozás", hu:"Mindenekelőtt...", en:"Above all...", example:"Above all, we value honesty and transparency." },
-  { cat:"Hangsúlyozás", hu:"Különösen így...", en:"Particularly so...", example:"Particularly so, given the recent changes." },
-  { cat:"Hangsúlyozás", hu:"Valójában / Tulajdonképpen...", en:"As a matter of fact...", example:"As a matter of fact, I was just about to call you." },
-  { cat:"Hangsúlyozás", hu:"Hosszabb távon...", en:"Over the long haul...", example:"Over the long haul, consistency wins." },
-  { cat:"Hangsúlyozás", hu:"Ugyanakkor...", en:"At the same time...", example:"She's tough but, at the same time, really supportive." },
+  { cat:"Vélemény", hu:"Szempontomból...", en:"From my perspective...", example:"From my perspective, remote work has changed everything.", exampleHu:"Az én szemszögemből a távmunka mindent megváltoztatott." },
+  { cat:"Vélemény", hu:"Úgy vélem, hogy...", en:"I am of the opinion that...", example:"I am of the opinion that education should be free.", exampleHu:"Az a véleményem, hogy az oktatásnak ingyenesnek kellene lennie." },
+  { cat:"Vélemény", hu:"Határozottan úgy gondolom...", en:"It is my firm belief that...", example:"It is my firm belief that creativity can't be forced.", exampleHu:"Szilárd meggyőződésem, hogy a kreativitást nem lehet kikényszeríteni." },
+  { cat:"Vélemény", hu:"Azt állítanám, hogy...", en:"I would argue that...", example:"I would argue that technology has done more good than harm.", exampleHu:"Azt mondanám, hogy a technológia több jót tett, mint kárt." },
+  { cat:"Vélemény", hu:"Ami engem illet...", en:"As far as I'm concerned...", example:"As far as I'm concerned, the decision was the right call.", exampleHu:"Ami engem illet, a döntés helyes volt." },
+  { cat:"Vélemény", hu:"Érvelni lehet amellett, hogy...", en:"It could be argued that...", example:"It could be argued that social media has hurt real friendships.", exampleHu:"Érvelni lehetne amellett, hogy a közösségi média ártott a valódi barátságoknak." },
+  { cat:"Vélemény", hu:"Hajlok arra, hogy azt gondoljam...", en:"I am inclined to think that...", example:"I am inclined to think the project needs more time.", exampleHu:"Hajlok arra, hogy a projektnek több időre van szüksége." },
+  { cat:"Vélemény", hu:"Az én megítélésem szerint...", en:"To my mind...", example:"To my mind, this is the biggest issue of our time.", exampleHu:"Az én megítélésem szerint ez korunk legnagyobb problémája." },
+  { cat:"Vélemény", hu:"Az én nézetem az, hogy...", en:"It is my view that...", example:"It is my view that young people today face unique challenges.", exampleHu:"Az a nézetem, hogy a mai fiatalok egyedülálló kihívásokkal néznek szembe." },
+  { cat:"Vélemény", hu:"Általánosságban véve...", en:"Broadly speaking...", example:"Broadly speaking, the results exceeded our expectations.", exampleHu:"Általánosságban véve az eredmények felülmúlták a várakozásainkat." },
+  { cat:"Egyetértés", hu:"Teljes mértékben egyetértek.", en:"I couldn't agree more.", example:"You're absolutely right — I couldn't agree more.", exampleHu:"Teljesen igazad van — jobban már nem is érthetnék egyet." },
+  { cat:"Egyetértés", hu:"Érvényes pontot vetett fel.", en:"You raise a valid point.", example:"You raise a valid point about the budget.", exampleHu:"Érvényes szempontot vetsz fel a költségvetéssel kapcsolatban." },
+  { cat:"Egyetértés", hu:"Hajlok az egyetértésre.", en:"I am inclined to agree.", example:"After hearing your side, I am inclined to agree.", exampleHu:"Miután meghallgattam a te oldaladat, hajlok az egyetértésre." },
+  { cat:"Egyetértés", hu:"Ez teljesen helytálló.", en:"That is absolutely right.", example:"That is absolutely right, and we should act on it.", exampleHu:"Ez teljesen helytálló, és ennek megfelelően kellene cselekednünk." },
+  { cat:"Egyetértés", hu:"Ezt teljes mértékben támogatom.", en:"I second that entirely.", example:"I second that entirely — that's the best idea so far.", exampleHu:"Ezt teljes mértékben támogatom — ez eddig a legjobb ötlet." },
+  { cat:"Ellentmondás", hu:"Engedje meg, hogy vitatkozzam.", en:"I beg to differ.", example:"I beg to differ — the numbers actually show the opposite.", exampleHu:"Engedd meg, hogy ne értsek egyet — a számok valójában az ellenkezőjét mutatják." },
+  { cat:"Ellentmondás", hu:"Nem vagyok teljesen meggyőzve.", en:"I'm not entirely convinced.", example:"I'm not entirely convinced this is the right approach.", exampleHu:"Nem vagyok teljesen meggyőződve arról, hogy ez a helyes megközelítés." },
+  { cat:"Ellentmondás", hu:"Én ezt másképp látom.", en:"I see it differently.", example:"I see it differently — I think we need more data first.", exampleHu:"Én másképp látom — szerintem előbb több adatra van szükségünk." },
+  { cat:"Ellentmondás", hu:"Minden tiszteletem megadva...", en:"With all due respect...", example:"With all due respect, your information is outdated.", exampleHu:"Minden tiszteletem megadva, az információid elavultak." },
+  { cat:"Ellentmondás", hu:"Ez nem egészen az én álláspontom.", en:"That's not quite my view.", example:"That's not quite my view — I'd frame it differently.", exampleHu:"Ez nem egészen az én álláspontom — én másképp fogalmaznám meg." },
+  { cat:"Összekötők", hu:"Mindazonáltal...", en:"Nevertheless...", example:"It was risky; nevertheless, we decided to go ahead.", exampleHu:"Kockázatos volt; mindazonáltal úgy döntöttünk, hogy belevágunk." },
+  { cat:"Összekötők", hu:"Ráadásul / Emellett...", en:"Furthermore...", example:"It saves money. Furthermore, it saves a lot of time.", exampleHu:"Pénzt takarít meg. Ráadásul rengeteg időt is megspórol." },
+  { cat:"Összekötők", hu:"Következésképpen...", en:"Consequently...", example:"The flight was delayed; consequently, we missed our connection.", exampleHu:"A járat késett; következésképpen lekéstük a csatlakozást." },
+  { cat:"Összekötők", hu:"Ezzel szemben...", en:"In contrast...", example:"In contrast, last year's numbers were much lower.", exampleHu:"Ezzel szemben a tavalyi számok jóval alacsonyabbak voltak." },
+  { cat:"Összekötők", hu:"Másrészt...", en:"On the other hand...", example:"It's expensive. On the other hand, the quality is amazing.", exampleHu:"Drága. Másrészt viszont a minőség fantasztikus." },
+  { cat:"Összekötők", hu:"Továbbá...", en:"Moreover...", example:"She speaks three languages. Moreover, she's a great negotiator.", exampleHu:"Három nyelvet beszél. Továbbá kiváló tárgyaló is." },
+  { cat:"Összekötők", hu:"Ennek ellenére...", en:"Nonetheless...", example:"He was nervous; nonetheless, his speech was impressive.", exampleHu:"Ideges volt; ennek ellenére a beszéde lenyűgöző volt." },
+  { cat:"Összekötők", hu:"Ennek eredményeként...", en:"As a result...", example:"Traffic was crazy. As a result, I was an hour late.", exampleHu:"Őrült volt a forgalom. Ennek eredményeként egy órát késtem." },
+  { cat:"Összekötők", hu:"Ezen kívül...", en:"In addition to this...", example:"In addition to this, we also offer free support.", exampleHu:"Ezen kívül ingyenes támogatást is kínálunk." },
+  { cat:"Összekötők", hu:"Ezzel ellentétben...", en:"By contrast...", example:"City life is hectic. By contrast, small-town life is peaceful.", exampleHu:"A városi élet hektikus. Ezzel ellentétben a kisvárosi élet nyugodt." },
+  { cat:"Mondatnyitók", hu:"Magától értetődő, hogy...", en:"It goes without saying that...", example:"It goes without saying that safety comes first.", exampleHu:"Magától értetődő, hogy a biztonság az első." },
+  { cat:"Mondatnyitók", hu:"Érdemes megjegyezni, hogy...", en:"It is worth noting that...", example:"It is worth noting that prices may change without notice.", exampleHu:"Érdemes megjegyezni, hogy az árak előzetes értesítés nélkül változhatnak." },
+  { cat:"Mondatnyitók", hu:"Nem tagadható, hogy...", en:"There is no denying that...", example:"There is no denying that remote work has its perks.", exampleHu:"Nem tagadható, hogy a távmunkának megvannak az előnyei." },
+  { cat:"Mondatnyitók", hu:"Logikus, hogy...", en:"It stands to reason that...", example:"It stands to reason that experience makes you better.", exampleHu:"Logikus, hogy a tapasztalat jobbá tesz." },
+  { cat:"Mondatnyitók", hu:"Közismert, hogy...", en:"It is widely acknowledged that...", example:"It is widely acknowledged that sleep is essential for health.", exampleHu:"Közismert, hogy az alvás elengedhetetlen az egészséghez." },
+  { cat:"Lezárók", hu:"Összefoglalva...", en:"To sum up...", example:"To sum up, the project was a huge success.", exampleHu:"Összefoglalva, a projekt hatalmas siker volt." },
+  { cat:"Lezárók", hu:"Mindent egybevetve...", en:"All things considered...", example:"All things considered, we handled the situation well.", exampleHu:"Mindent egybevetve jól kezeltük a helyzetet." },
+  { cat:"Lezárók", hu:"Összességében...", en:"On balance...", example:"On balance, the pros outweigh the cons.", exampleHu:"Összességében az előnyök felülmúlják a hátrányokat." },
+  { cat:"Lezárók", hu:"Más szóval...", en:"To put it another way...", example:"To put it another way, we need a new strategy.", exampleHu:"Más szóval, új stratégiára van szükségünk." },
+  { cat:"Lezárók", hu:"Végső elemzésben...", en:"In the final analysis...", example:"In the final analysis, the results speak for themselves.", exampleHu:"Végső elemzésben az eredmények magukért beszélnek." },
+  { cat:"Árnyalás", hu:"Bizonyos mértékig...", en:"To a certain extent...", example:"To a certain extent, I agree with his argument.", exampleHu:"Bizonyos mértékig egyetértek az érvelésével." },
+  { cat:"Árnyalás", hu:"Nagyjából / Általában véve...", en:"By and large...", example:"By and large, customers have been happy with the change.", exampleHu:"Nagyjából véve az ügyfelek elégedettek voltak a változással." },
+  { cat:"Árnyalás", hu:"Elméletileg...", en:"In theory...", example:"In theory, the system should work perfectly.", exampleHu:"Elméletileg a rendszernek tökéletesen kellene működnie." },
+  { cat:"Árnyalás", hu:"Ahogy én gondolom...", en:"To my way of thinking...", example:"To my way of thinking, remote work is here to stay.", exampleHu:"Ahogy én gondolom, a távmunka tartósan velünk marad." },
+  { cat:"Árnyalás", hu:"Igazságos megközelítéssel...", en:"To be fair...", example:"To be fair, he didn't have much time to prepare.", exampleHu:"Az igazsághoz hozzátartozik, hogy nem volt sok ideje felkészülni." },
+  { cat:"Hangsúlyozás", hu:"Mindenekelőtt...", en:"Above all...", example:"Above all, we value honesty and transparency.", exampleHu:"Mindenekelőtt a becsületességet és az átláthatóságot értékeljük." },
+  { cat:"Hangsúlyozás", hu:"Különösen így...", en:"Particularly so...", example:"Particularly so, given the recent changes.", exampleHu:"Különösen így, tekintettel a közelmúlt változásaira." },
+  { cat:"Hangsúlyozás", hu:"Valójában / Tulajdonképpen...", en:"As a matter of fact...", example:"As a matter of fact, I was just about to call you.", exampleHu:"Valójában éppen fel akartalak hívni." },
+  { cat:"Hangsúlyozás", hu:"Hosszabb távon...", en:"Over the long haul...", example:"Over the long haul, consistency wins.", exampleHu:"Hosszabb távon a következetesség győz." },
+  { cat:"Hangsúlyozás", hu:"Ugyanakkor...", en:"At the same time...", example:"She's tough but, at the same time, really supportive.", exampleHu:"Kemény, de ugyanakkor nagyon támogató." },
 ];
 
 let studentName = '';
@@ -547,6 +558,9 @@ function renderCard() {
   document.getElementById('card-hu').textContent = card.hu;
   document.getElementById('card-en').textContent = card.en;
   document.getElementById('card-example').textContent = card.example;
+  var huEx = document.getElementById('card-example-hu');
+  if (card.exampleHu) { huEx.textContent = card.exampleHu; huEx.style.display = ''; }
+  else { huEx.textContent = ''; huEx.style.display = 'none'; }
 
   // Un-flip on new card
   isFlipped = false;
