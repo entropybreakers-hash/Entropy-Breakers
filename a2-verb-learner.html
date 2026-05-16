@@ -185,13 +185,23 @@ main{
 
 .face-example{
   font-family:'Inter',sans-serif;
-  font-size:11px;
+  font-size:clamp(13px,2.4vw,16px);
   max-width:100%;
   line-height:1.45;
   color:var(--cream2);
-  position:absolute;
-  bottom:14px;left:16px;right:16px;
-  padding:0 8px;
+  margin-top:20px;
+  padding:0 20px;
+}
+.face-example-hu{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(12px,2.2vw,15px);
+  line-height:1.4;
+  font-weight:400;
+  font-style:italic;
+  color:rgba(26,22,18,0.55);
+  margin-top:10px;
+  padding:0 20px;
+  text-align:center;
 }
 .face-example::before,.face-example::after{
   content:'"';color:var(--orange);
@@ -404,6 +414,7 @@ footer{
         <div class="flip-face flip-back">
           <div class="face-word" id="card-en">—</div>
           <div class="face-example" id="card-example">—</div>
+          <div class="face-example-hu" id="card-example-hu" style="display:none"></div>
         </div>
       </div>
     </div>
@@ -458,56 +469,56 @@ const MODULE_META = {
 };
 
 const CARDS = [
-  { cat:"Alapigék", hu:"Kérdez", en:"Ask", example:"Can I ask you something?" },
-  { cat:"Alapigék", hu:"Válaszol", en:"Answer", example:"She didn't answer my text." },
-  { cat:"Alapigék", hu:"Takarít", en:"Clean", example:"I clean my apartment on Saturdays." },
-  { cat:"Alapigék", hu:"Főz", en:"Cook", example:"My dad cooks dinner on Sundays." },
-  { cat:"Alapigék", hu:"Táncol", en:"Dance", example:"We danced all night at the wedding." },
-  { cat:"Alapigék", hu:"Iszik", en:"Drink", example:"He drinks coffee every morning." },
-  { cat:"Alapigék", hu:"Eszik", en:"Eat", example:"I usually eat lunch around noon." },
-  { cat:"Alapigék", hu:"Segít", en:"Help", example:"Can you help me with this?" },
-  { cat:"Alapigék", hu:"Ugrik", en:"Jump", example:"The dog can jump really high." },
-  { cat:"Alapigék", hu:"Hallgat", en:"Listen", example:"I listen to podcasts on the bus." },
-  { cat:"Alapigék", hu:"Néz", en:"Look", example:"Look at that sunset!" },
-  { cat:"Alapigék", hu:"Játszik", en:"Play", example:"The kids play in the backyard." },
-  { cat:"Alapigék", hu:"Olvas", en:"Read", example:"She reads before bed every night." },
-  { cat:"Alapigék", hu:"Fut", en:"Run", example:"I run in the park on weekends." },
-  { cat:"Alapigék", hu:"Énekel", en:"Sing", example:"My sister sings in the shower." },
-  { cat:"Alapigék", hu:"Alszik", en:"Sleep", example:"I try to sleep eight hours a night." },
-  { cat:"Alapigék", hu:"Mosolyog", en:"Smile", example:"She smiles whenever she sees him." },
-  { cat:"Alapigék", hu:"Beszél", en:"Speak", example:"Do you speak English?" },
-  { cat:"Alapigék", hu:"Úszik", en:"Swim", example:"We swim at the lake every summer." },
-  { cat:"Alapigék", hu:"Beszélget", en:"Talk", example:"We talked for hours last night." },
-  { cat:"Alapigék", hu:"Sétál", en:"Walk", example:"I walk to work every day." },
-  { cat:"Alapigék", hu:"Mos", en:"Wash", example:"He washes his car every Sunday." },
-  { cat:"Alapigék", hu:"Néz (TV)", en:"Watch", example:"We watch a movie on Friday nights." },
-  { cat:"Alapigék", hu:"Ír", en:"Write", example:"I write in my journal every morning." },
-  { cat:"Alapigék", hu:"Kinyit", en:"Open", example:"Can you open the window?" },
-  { cat:"Alapigék", hu:"Bezár", en:"Close", example:"Close the door, it's cold out." },
-  { cat:"Alapigék", hu:"Hív", en:"Call", example:"I'll call you tomorrow." },
-  { cat:"Alapigék", hu:"Ellenőriz", en:"Check", example:"Did you check your email?" },
-  { cat:"Alapigék", hu:"Számol", en:"Count", example:"My son can count to twenty." },
-  { cat:"Alapigék", hu:"Álmodik", en:"Dream", example:"I dream about the beach a lot." },
-  { cat:"Alapigék", hu:"Vezet", en:"Drive", example:"My mom drives to work every day." },
-  { cat:"Alapigék", hu:"Elesik", en:"Fall", example:"Be careful, don't fall!" },
-  { cat:"Alapigék", hu:"Érez", en:"Feel", example:"I feel tired after work." },
-  { cat:"Alapigék", hu:"Talál", en:"Find", example:"I can't find my keys." },
-  { cat:"Alapigék", hu:"Repül", en:"Fly", example:"Birds fly south for the winter." },
-  { cat:"Alapigék", hu:"Ad", en:"Give", example:"Let me give you my number." },
-  { cat:"Alapigék", hu:"Nő", en:"Grow", example:"We grow tomatoes in our yard." },
-  { cat:"Alapigék", hu:"Hall", en:"Hear", example:"I can hear the neighbors talking." },
-  { cat:"Alapigék", hu:"Tud", en:"Know", example:"I know his sister really well." },
-  { cat:"Alapigék", hu:"Tanul", en:"Learn", example:"She wants to learn Spanish." },
-  { cat:"Alapigék", hu:"Elveszít", en:"Lose", example:"Don't lose your ticket!" },
-  { cat:"Alapigék", hu:"Találkozik", en:"Meet", example:"Let's meet at the coffee shop." },
-  { cat:"Alapigék", hu:"Mozog", en:"Move", example:"We moved to a new apartment." },
-  { cat:"Alapigék", hu:"Fizet", en:"Pay", example:"I paid for lunch yesterday." },
-  { cat:"Alapigék", hu:"Lovagol", en:"Ride", example:"She rides her bike to school." },
-  { cat:"Alapigék", hu:"Elad", en:"Sell", example:"They sell fresh bread at the bakery." },
-  { cat:"Alapigék", hu:"Küld", en:"Send", example:"I'll send you the photos tonight." },
-  { cat:"Alapigék", hu:"Mutat", en:"Show", example:"Can you show me how to do this?" },
-  { cat:"Alapigék", hu:"Ül", en:"Sit", example:"Please, have a seat." },
-  { cat:"Alapigék", hu:"Áll", en:"Stand", example:"We stood in line for an hour." },
+  { cat:"Alapigék", hu:"Kérdez", en:"Ask", example:"Can I ask you something?", exampleHu:"Kérdezhetek tőled valamit?" },
+  { cat:"Alapigék", hu:"Válaszol", en:"Answer", example:"She didn't answer my text.", exampleHu:"Nem válaszolt az üzenetemre." },
+  { cat:"Alapigék", hu:"Takarít", en:"Clean", example:"I clean my apartment on Saturdays.", exampleHu:"Szombatonként takarítom a lakásomat." },
+  { cat:"Alapigék", hu:"Főz", en:"Cook", example:"My dad cooks dinner on Sundays.", exampleHu:"Apukám vasárnaponként főz vacsorát." },
+  { cat:"Alapigék", hu:"Táncol", en:"Dance", example:"We danced all night at the wedding.", exampleHu:"Egész éjjel táncoltunk az esküvőn." },
+  { cat:"Alapigék", hu:"Iszik", en:"Drink", example:"He drinks coffee every morning.", exampleHu:"Minden reggel kávét iszik." },
+  { cat:"Alapigék", hu:"Eszik", en:"Eat", example:"I usually eat lunch around noon.", exampleHu:"Általában dél körül ebédelek." },
+  { cat:"Alapigék", hu:"Segít", en:"Help", example:"Can you help me with this?", exampleHu:"Tudsz nekem segíteni ebben?" },
+  { cat:"Alapigék", hu:"Ugrik", en:"Jump", example:"The dog can jump really high.", exampleHu:"A kutya nagyon magasra tud ugrani." },
+  { cat:"Alapigék", hu:"Hallgat", en:"Listen", example:"I listen to podcasts on the bus.", exampleHu:"Podcastokat hallgatok a buszon." },
+  { cat:"Alapigék", hu:"Néz", en:"Look", example:"Look at that sunset!", exampleHu:"Nézd azt a naplementét!" },
+  { cat:"Alapigék", hu:"Játszik", en:"Play", example:"The kids play in the backyard.", exampleHu:"A gyerekek a hátsó udvarban játszanak." },
+  { cat:"Alapigék", hu:"Olvas", en:"Read", example:"She reads before bed every night.", exampleHu:"Minden este olvas lefekvés előtt." },
+  { cat:"Alapigék", hu:"Fut", en:"Run", example:"I run in the park on weekends.", exampleHu:"Hétvégente a parkban futok." },
+  { cat:"Alapigék", hu:"Énekel", en:"Sing", example:"My sister sings in the shower.", exampleHu:"A nővérem a zuhany alatt énekel." },
+  { cat:"Alapigék", hu:"Alszik", en:"Sleep", example:"I try to sleep eight hours a night.", exampleHu:"Igyekszem nyolc órát aludni éjjel." },
+  { cat:"Alapigék", hu:"Mosolyog", en:"Smile", example:"She smiles whenever she sees him.", exampleHu:"Mosolyog, valahányszor meglátja őt." },
+  { cat:"Alapigék", hu:"Beszél", en:"Speak", example:"Do you speak English?", exampleHu:"Beszélsz angolul?" },
+  { cat:"Alapigék", hu:"Úszik", en:"Swim", example:"We swim at the lake every summer.", exampleHu:"Minden nyáron a tóban úszunk." },
+  { cat:"Alapigék", hu:"Beszélget", en:"Talk", example:"We talked for hours last night.", exampleHu:"Tegnap este órákig beszélgettünk." },
+  { cat:"Alapigék", hu:"Sétál", en:"Walk", example:"I walk to work every day.", exampleHu:"Minden nap gyalog megyek dolgozni." },
+  { cat:"Alapigék", hu:"Mos", en:"Wash", example:"He washes his car every Sunday.", exampleHu:"Minden vasárnap megmossa az autóját." },
+  { cat:"Alapigék", hu:"Néz (TV)", en:"Watch", example:"We watch a movie on Friday nights.", exampleHu:"Péntek esténként filmet nézünk." },
+  { cat:"Alapigék", hu:"Ír", en:"Write", example:"I write in my journal every morning.", exampleHu:"Minden reggel írok a naplómba." },
+  { cat:"Alapigék", hu:"Kinyit", en:"Open", example:"Can you open the window?", exampleHu:"Ki tudod nyitni az ablakot?" },
+  { cat:"Alapigék", hu:"Bezár", en:"Close", example:"Close the door, it's cold out.", exampleHu:"Csukd be az ajtót, hideg van kint." },
+  { cat:"Alapigék", hu:"Hív", en:"Call", example:"I'll call you tomorrow.", exampleHu:"Holnap felhívlak." },
+  { cat:"Alapigék", hu:"Ellenőriz", en:"Check", example:"Did you check your email?", exampleHu:"Megnézted az e-mailedet?" },
+  { cat:"Alapigék", hu:"Számol", en:"Count", example:"My son can count to twenty.", exampleHu:"A fiam el tud számolni húszig." },
+  { cat:"Alapigék", hu:"Álmodik", en:"Dream", example:"I dream about the beach a lot.", exampleHu:"Sokat álmodom a tengerpartról." },
+  { cat:"Alapigék", hu:"Vezet", en:"Drive", example:"My mom drives to work every day.", exampleHu:"Anyukám minden nap autóval megy dolgozni." },
+  { cat:"Alapigék", hu:"Elesik", en:"Fall", example:"Be careful, don't fall!", exampleHu:"Vigyázz, el ne ess!" },
+  { cat:"Alapigék", hu:"Érez", en:"Feel", example:"I feel tired after work.", exampleHu:"Fáradtnak érzem magam munka után." },
+  { cat:"Alapigék", hu:"Talál", en:"Find", example:"I can't find my keys.", exampleHu:"Nem találom a kulcsaimat." },
+  { cat:"Alapigék", hu:"Repül", en:"Fly", example:"Birds fly south for the winter.", exampleHu:"A madarak télre délre repülnek." },
+  { cat:"Alapigék", hu:"Ad", en:"Give", example:"Let me give you my number.", exampleHu:"Hadd adjam meg a telefonszámomat." },
+  { cat:"Alapigék", hu:"Nő", en:"Grow", example:"We grow tomatoes in our yard.", exampleHu:"Paradicsomot termesztünk az udvarunkban." },
+  { cat:"Alapigék", hu:"Hall", en:"Hear", example:"I can hear the neighbors talking.", exampleHu:"Hallom, ahogy a szomszédok beszélgetnek." },
+  { cat:"Alapigék", hu:"Tud", en:"Know", example:"I know his sister really well.", exampleHu:"Nagyon jól ismerem a nővérét." },
+  { cat:"Alapigék", hu:"Tanul", en:"Learn", example:"She wants to learn Spanish.", exampleHu:"Spanyolul akar tanulni." },
+  { cat:"Alapigék", hu:"Elveszít", en:"Lose", example:"Don't lose your ticket!", exampleHu:"El ne veszítsd a jegyedet!" },
+  { cat:"Alapigék", hu:"Találkozik", en:"Meet", example:"Let's meet at the coffee shop.", exampleHu:"Találkozzunk a kávézóban." },
+  { cat:"Alapigék", hu:"Mozog", en:"Move", example:"We moved to a new apartment.", exampleHu:"Új lakásba költöztünk." },
+  { cat:"Alapigék", hu:"Fizet", en:"Pay", example:"I paid for lunch yesterday.", exampleHu:"Tegnap én fizettem az ebédet." },
+  { cat:"Alapigék", hu:"Lovagol", en:"Ride", example:"She rides her bike to school.", exampleHu:"Biciklivel jár iskolába." },
+  { cat:"Alapigék", hu:"Elad", en:"Sell", example:"They sell fresh bread at the bakery.", exampleHu:"Friss kenyeret árulnak a pékségben." },
+  { cat:"Alapigék", hu:"Küld", en:"Send", example:"I'll send you the photos tonight.", exampleHu:"Ma este elküldöm neked a fotókat." },
+  { cat:"Alapigék", hu:"Mutat", en:"Show", example:"Can you show me how to do this?", exampleHu:"Meg tudod mutatni, hogyan csináljam ezt?" },
+  { cat:"Alapigék", hu:"Ül", en:"Sit", example:"Please, have a seat.", exampleHu:"Kérlek, foglalj helyet." },
+  { cat:"Alapigék", hu:"Áll", en:"Stand", example:"We stood in line for an hour.", exampleHu:"Egy órát álltunk sorban." },
 ];
 
 let studentName = '';
@@ -547,6 +558,9 @@ function renderCard() {
   document.getElementById('card-hu').textContent = card.hu;
   document.getElementById('card-en').textContent = card.en;
   document.getElementById('card-example').textContent = card.example;
+  var huEx = document.getElementById('card-example-hu');
+  if (card.exampleHu) { huEx.textContent = card.exampleHu; huEx.style.display = ''; }
+  else { huEx.textContent = ''; huEx.style.display = 'none'; }
 
   // Un-flip on new card
   isFlipped = false;
