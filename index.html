@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/eb-theme.css">
+<link rel="stylesheet" href="assets/eb-theme.css?v=2">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
@@ -344,7 +344,7 @@ main{
 .screen.white-bg .login-logo .b{color:var(--orange)}
 /* Szintválasztón hero-eyebrow sötét */
 .screen.white-bg .hero-eyebrow{
-  color:var(--dim);
+  color:var(--ink2);
 }
 /* Kilépés gomb sötét */
 .screen.white-bg .hero-logout{
@@ -2194,81 +2194,98 @@ function logout() {
       '<span class="eb-chart-name">Pontszám-trend</span>' + trend + '</div>' + svg +
       '<div class="eb-chart-note">Heti átlagos pontszám az elmúlt ' + n + ' hétben</div></div>';
   }
-  function _activityChartCard(chrono) {
-    var W = 360, H = 142, padL = 14, padR = 12, padT = 18, padB = 14;
-    var iw = W - padL - padR, ih = H - padT - padB, n = chrono.length;
-    var maxS = 1;
-    chrono.forEach(function (w) { if (w.sessions > maxS) maxS = w.sessions; });
-    var slot = iw / n, bw = Math.min(slot * 0.6, 30), base = padT + ih;
-    var bars = '', activeWeeks = 0;
-    chrono.forEach(function (w, i) {
-      var cx = padL + slot * i + slot / 2;
-      if (w.sessions > 0) {
-        activeWeeks++;
-        var h = Math.max(4, ih * w.sessions / maxS);
-        var y = base - h;
-        bars += '<rect class="eb-chart-bar" x="' + (cx - bw / 2).toFixed(1) + '" y="' + y.toFixed(1) +
-          '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="3"/>';
-        bars += '<text class="eb-chart-val" x="' + cx.toFixed(1) + '" y="' + (y - 4).toFixed(1) +
-          '" text-anchor="middle">' + w.sessions + '</text>';
-      } else {
-        bars += '<circle cx="' + cx.toFixed(1) + '" cy="' + (base - 2) + '" r="1.7" fill="#d8cfbf"/>';
-      }
+  function _esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
     });
-    var svg = '<svg class="eb-chart-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
-      '<defs><linearGradient id="ebBarGrad" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#ff7a2e"/><stop offset="100%" stop-color="#d14a00"/></linearGradient></defs>' +
-      '<line class="eb-chart-grid" x1="' + padL + '" y1="' + base + '" x2="' + (W - padR) + '" y2="' + base + '"/>' +
-      bars + '</svg>';
-    return '<div class="eb-chart-card"><div class="eb-chart-title">' +
-      '<span class="eb-chart-name">Heti aktivitás</span>' +
-      '<span class="eb-chart-trend eb-chart-trend-flat">' + activeWeeks + '/' + n + ' aktív hét</span></div>' +
-      svg + '<div class="eb-chart-note">Gyakorlások száma hetente</div></div>';
+  }
+  var _CAT_LABEL = { theory: 'Elmélet', practice: 'Gyakorlás', vocab: 'Szószedet', flashcards: 'Szókártya' };
+  function _sparkline(scores) {
+    var W = 640, H = 66, padX = 12, padT = 16, padB = 12;
+    var iw = W - padX * 2, ih = H - padT - padB, n = scores.length;
+    var xAt = function (i) { return padX + (n <= 1 ? iw / 2 : iw * i / (n - 1)); };
+    var yAt = function (v) { return padT + ih * (1 - v / 100); };
+    var pts = scores.map(function (v, i) { return [xAt(i), yAt(v)]; });
+    var d = 'M' + pts[0][0].toFixed(1) + ' ' + pts[0][1].toFixed(1);
+    for (var i = 1; i < pts.length; i++) d += ' L' + pts[i][0].toFixed(1) + ' ' + pts[i][1].toFixed(1);
+    var base = (padT + ih).toFixed(1);
+    var area = '<path d="' + d + ' L' + pts[pts.length - 1][0].toFixed(1) + ' ' + base +
+      ' L' + pts[0][0].toFixed(1) + ' ' + base + ' Z" fill="url(#ebSparkGrad)"/>';
+    var dots = '';
+    pts.forEach(function (p, i) {
+      var last = i === pts.length - 1;
+      dots += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="' +
+        (last ? 4 : 3) + '" class="' + (last ? 'eb-spark-dot-last' : 'eb-spark-dot') + '"/>';
+      dots += '<text class="eb-spark-val" x="' + p[0].toFixed(1) + '" y="' +
+        (p[1] - 8).toFixed(1) + '" text-anchor="middle">' + scores[i] + '</text>';
+    });
+    return '<svg class="eb-spark-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+      area + '<path class="eb-spark-line" d="' + d + '"/>' + dots + '</svg>';
+  }
+  function _testItem(r) {
+    var cat = _CAT_LABEL[r.category] || r.category;
+    var n = r.scores.length;
+    var lastScore = n ? r.scores[n - 1] : r.last;
+    var scoreCls = lastScore >= 80 ? 'eb-test-score-hi' : (lastScore >= 50 ? '' : 'eb-test-score-lo');
+    var body = '', foot;
+    if (n >= 2) {
+      var diff = r.scores[n - 1] - r.scores[0];
+      var tcls = diff > 1 ? 'eb-chart-trend-up' : (diff < -1 ? 'eb-chart-trend-down' : 'eb-chart-trend-flat');
+      var ttxt = diff > 0 ? '+' + diff + '%' : (diff < 0 ? '−' + Math.abs(diff) + '%' : '0%');
+      body = _sparkline(r.scores);
+      foot = '<div class="eb-test-foot">' +
+        '<span>Első: <strong>' + r.scores[0] + '%</strong></span>' +
+        '<span>Legjobb: <strong>' + r.best + '%</strong></span>' +
+        '<span class="eb-test-delta ' + tcls + '">' + ttxt + ' fejlődés</span></div>';
+    } else {
+      foot = '<div class="eb-test-foot eb-test-foot-single">Egyszer elvégezve · legjobb ' + r.best + '%</div>';
+    }
+    return '<div class="eb-test">' +
+      '<div class="eb-test-head">' +
+        '<div class="eb-test-titles">' +
+          '<span class="eb-test-name">' + _esc(r.title) + '</span>' +
+          '<span class="eb-test-meta">' + _esc(r.level.toUpperCase()) + ' · ' + _esc(cat) + ' · ' +
+            r.attempts + ' próbálkozás</span>' +
+        '</div>' +
+        '<span class="eb-test-score ' + scoreCls + '">' + lastScore + '%</span>' +
+      '</div>' + body + foot + '</div>';
   }
   function renderResults() {
     var list = document.getElementById('eb-results-list');
-    if (!list || !window.EB || !EB.getWeeklyStats) return;
-    var weeks = EB.getWeeklyStats(12);
-    var lastActive = 0, totalSessions = 0;
-    for (var i = 0; i < weeks.length; i++) {
-      totalSessions += weeks[i].sessions;
-      if (weeks[i].sessions > 0) lastActive = i;
-    }
+    if (!list || !window.EB || !EB.getTestResults) return;
+    var results = EB.getTestResults();
     var streak = EB.getStreak ? EB.getStreak() : { current: 0 };
+    var totalAttempts = 0;
+    results.forEach(function (r) { totalAttempts += r.attempts; });
     var head =
       '<div class="eb-results-summary">' +
-        '<div class="eb-results-stat"><span class="eb-results-num">' + totalSessions + '</span>' +
-          '<span class="eb-results-cap">gyakorlás 12 hét alatt</span></div>' +
+        '<div class="eb-results-stat"><span class="eb-results-num">' + totalAttempts + '</span>' +
+          '<span class="eb-results-cap">elvégzett teszt</span></div>' +
         '<div class="eb-results-stat"><span class="eb-results-num">' + (streak.current || 0) + '</span>' +
           '<span class="eb-results-cap">napos sorozat</span></div>' +
       '</div>';
-    if (totalSessions === 0) {
+    if (results.length === 0) {
       list.innerHTML = head +
-        '<div class="eb-results-empty">Még nincs rögzített eredmény. Csinálj végig egy feladatsort, ' +
-        'és itt megjelenik hétről hétre a fejlődésed.</div>';
+        '<div class="eb-results-empty">Még nincs elvégzett teszt. Csinálj végig egy feladatsort, ' +
+        'és itt megjelenik az eredményed — és ahogy újra megcsinálod, a fejlődésed is.</div>';
       return;
     }
-    var count = Math.min(12, Math.max(lastActive + 1, 6));
-    var chrono = weeks.slice(0, count).reverse();
-    var charts = _scoreChartCard(chrono) + _activityChartCard(chrono);
-    var cards = weeks.slice(0, lastActive + 1).map(function (w) {
-      var hasScore = w.scoreCount > 0;
-      var score = hasScore
-        ? '<span class="eb-week-score">' + w.avgScore + '%</span>'
-        : '<span class="eb-week-score eb-week-score-empty">—</span>';
-      var stats = w.sessions > 0
-        ? '<div class="eb-week-stats"><span><strong>' + w.sessions + '</strong> gyakorlás</span>' +
-          '<span><strong>' + w.activeDays + '</strong> aktív nap</span></div>'
-        : '<div class="eb-week-stats eb-week-stats-idle">Nem volt aktivitás ezen a héten</div>';
-      var bar = hasScore
-        ? '<div class="eb-week-bar"><span style="width:' + w.avgScore + '%"></span></div>' : '';
-      return '<div class="eb-week' + (w.sessions === 0 ? ' eb-week-idle' : '') + '">' +
-               '<div class="eb-week-head"><span class="eb-week-label">' + w.label + '</span>' + score + '</div>' +
-               stats + bar +
-             '</div>';
-    }).join('');
-    list.innerHTML = head + charts +
-      '<div class="eb-results-subhead">Heti bontás</div>' + cards;
+    var trend = '';
+    if (EB.getWeeklyStats) {
+      var weeks = EB.getWeeklyStats(12);
+      var lastActive = 0;
+      for (var i = 0; i < weeks.length; i++) if (weeks[i].sessions > 0) lastActive = i;
+      var count = Math.min(12, Math.max(lastActive + 1, 6));
+      trend = _scoreChartCard(weeks.slice(0, count).reverse());
+    }
+    var defs = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>' +
+      '<linearGradient id="ebSparkGrad" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#ff7a2e" stop-opacity="0.26"/>' +
+      '<stop offset="100%" stop-color="#ff7a2e" stop-opacity="0"/></linearGradient></defs></svg>';
+    var tests = results.map(_testItem).join('');
+    list.innerHTML = head + trend +
+      '<div class="eb-results-subhead">Teszteredmények · ' + results.length + ' feladatsor</div>' +
+      defs + tests;
   }
   function onScreenActivate(id) {
     if (id === 'screen-levels') renderLevelSelect();

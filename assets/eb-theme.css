@@ -37,12 +37,13 @@
 /* STREAK CHIP */
 .eb-streak {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 7px 14px 7px 11px; border-radius: var(--eb-radius-full);
-  background: linear-gradient(135deg, #ffdbb8 0%, #ffb07a 100%);
-  color: #5a2b00; font-weight: 600; font-size: 13px; letter-spacing: 0.01em;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 2px 6px rgba(255,122,46,.25);
+  padding: 7px 15px 7px 12px; border-radius: var(--eb-radius-full);
+  background: linear-gradient(135deg, #ff9436 0%, #ed6410 100%);
+  color: #fff; font-weight: 600; font-size: 13px; letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(209,74,0,0.32);
   transition: transform .2s var(--eb-ease-bounce);
 }
+.eb-streak .eb-streak-num { font-weight: 800; }
 .eb-streak:active { transform: scale(.97); }
 .eb-streak.eb-streak-zero { background: #f5efe3; color: var(--eb-ink-dim); box-shadow: none; }
 .eb-streak-icon { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1; }
@@ -532,8 +533,6 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   stroke-linecap: round; stroke-linejoin: round;
 }
 .eb-chart-dot { fill: #fff; stroke: var(--eb-orange-2); stroke-width: 2; }
-.eb-chart-bar { fill: url(#ebBarGrad); }
-.eb-chart-val { fill: var(--eb-ink-2); font-size: 9px; font-weight: 700; font-family: var(--eb-font); }
 .eb-chart-note {
   margin-top: 8px; font-size: 11.5px; color: var(--eb-ink-dim); text-align: center;
 }
@@ -557,37 +556,50 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   color: var(--eb-ink-dim);
 }
 
-.eb-week {
-  padding: 16px 18px;
+/* ── Results page — per-test result item with repeat-attempt sparkline ── */
+.eb-test {
+  padding: 15px 17px 13px;
   background: var(--eb-bg);
   border: 1px solid var(--eb-track);
   border-radius: var(--eb-radius-md);
   box-shadow: var(--eb-shadow-sm);
 }
-.eb-week-idle { background: var(--eb-bg-soft); box-shadow: none; }
-.eb-week-head {
-  display: flex; align-items: baseline; justify-content: space-between;
-  gap: 12px; margin-bottom: 8px;
+.eb-test-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
 }
-.eb-week-label {
-  font-size: 15px; font-weight: 600; color: var(--eb-ink);
-  letter-spacing: -0.01em;
+.eb-test-titles { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.eb-test-name {
+  font-size: 15px; font-weight: 600; color: var(--eb-ink); letter-spacing: -0.01em;
 }
-.eb-week-score { font-size: 19px; font-weight: 700; color: var(--eb-orange-2); }
-.eb-week-score-empty { color: var(--eb-ink-dim); font-weight: 600; font-size: 17px; }
-.eb-week-stats { display: flex; gap: 18px; font-size: 13px; color: var(--eb-ink-2); }
-.eb-week-stats strong { color: var(--eb-ink); font-weight: 700; }
-.eb-week-stats-idle { color: var(--eb-ink-dim); font-style: italic; }
-.eb-week-bar {
-  margin-top: 11px; height: 6px;
-  background: var(--eb-track); border-radius: var(--eb-radius-full);
-  overflow: hidden;
+.eb-test-meta {
+  font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--eb-ink-dim);
 }
-.eb-week-bar span {
-  display: block; height: 100%;
-  background: linear-gradient(90deg, var(--eb-orange) 0%, var(--eb-orange-2) 100%);
-  border-radius: var(--eb-radius-full);
+.eb-test-score {
+  flex: none; line-height: 1;
+  font-size: 22px; font-weight: 800; color: var(--eb-orange-2);
+  font-variant-numeric: tabular-nums;
 }
+.eb-test-score-hi { color: var(--eb-green); }
+.eb-test-score-lo { color: var(--eb-amber); }
+.eb-spark-svg { display: block; width: 100%; height: auto; margin: 10px 0 2px; overflow: visible; }
+.eb-spark-line {
+  fill: none; stroke: var(--eb-orange-2); stroke-width: 3;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.eb-spark-dot { fill: #fff; stroke: var(--eb-orange); stroke-width: 2.6; }
+.eb-spark-dot-last { fill: var(--eb-orange-2); stroke: #fff; stroke-width: 2.4; }
+.eb-spark-val {
+  fill: var(--eb-ink-dim); font-size: 11px; font-weight: 700;
+  font-family: var(--eb-font);
+}
+.eb-test-foot {
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px;
+  font-size: 12px; color: var(--eb-ink-2);
+}
+.eb-test-foot strong { color: var(--eb-ink); font-weight: 700; }
+.eb-test-foot-single { color: var(--eb-ink-dim); }
+.eb-test-delta { font-weight: 800; font-variant-numeric: tabular-nums; }
 .eb-results-empty {
   padding: 30px 24px; text-align: center;
   background: var(--eb-bg-soft); border: 1px solid var(--eb-track);
