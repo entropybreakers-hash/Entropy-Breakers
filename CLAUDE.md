@@ -10,7 +10,10 @@ Shared UI/logic library: `assets/eb-*` (progress tracking, theme, catalog, Supab
 <script src="assets/eb-progress.js" defer></script>
 <script src="assets/eb-catalog.js" defer></script>
 <script src="assets/eb-sync.js" defer></script>
+<script src="assets/eb-speak.js" defer></script>
 ```
+
+`eb-speak.js` adds a browser-based text-to-speech button to every flashcard-type page (any page with `#card-en`) — vocab, traveling-guide flashcards, verb/phrase learners. It self-wires at runtime and is inert elsewhere.
 
 `apply-progress.sh` is an idempotent injector for batch-adding the tags to legacy HTML files (each tag inserted only when missing).
 
