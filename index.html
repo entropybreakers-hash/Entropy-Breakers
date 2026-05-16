@@ -346,6 +346,9 @@ main{
 .screen.white-bg .hero-eyebrow{
   color:var(--ink2);
 }
+.screen.white-bg .hero-subtitle{
+  color:var(--ink2);
+}
 /* Kilépés gomb sötét */
 .screen.white-bg .hero-logout{
   border-color:rgba(26,22,18,0.2);
@@ -918,18 +921,6 @@ main{
   color:#faf8f3;
 }
 .app-footer-brand .accent{color:var(--orange);font-weight:700}
-.app-footer-tag{
-  font-size:13px;
-  color:rgba(255,255,255,0.75);
-  margin:10px 0 4px 0;
-  line-height:1.5;
-}
-.app-footer-author{
-  font-size:11px;
-  color:rgba(255,255,255,0.55);
-  letter-spacing:.05em;
-  margin:0;
-}
 
 /* "Hamarosan" fallback */
 .soon-msg{
@@ -955,8 +946,6 @@ main{
   background:#fff;
   box-shadow:var(--shadow-sm);
 }
-.screen.white-bg .app-footer-tag{color:var(--ink2)}
-.screen.white-bg .app-footer-author{color:var(--dim)}
 
 /* ── Respect reduced-motion preference ── */
 @media(prefers-reduced-motion:reduce){
@@ -1056,8 +1045,6 @@ main{
 
     <div class="app-footer">
       <div class="app-footer-brand">Entropy <span class="accent">Breakers</span></div>
-      <p class="app-footer-tag">„A nyelvem határai a világom határai."</p>
-      <p class="app-footer-author">— Ludwig Wittgenstein</p>
     </div>
   </section>
 
@@ -1091,7 +1078,8 @@ main{
           <button class="hero-back" onclick="backNav()">←</button>
           <span class="hero-badge" id="dash-badge">A2</span>
         </div>
-        <h1 class="hero-title hero-title-sm">Mit szeretnél <span class="accent">tanulni</span>?</h1>
+        <h1 class="hero-title hero-title-sm" id="dash-title">Csak így tovább!</h1>
+        <p class="hero-subtitle" id="dash-subtitle"></p>
       </div>
       <div class="hero-curve"></div>
     </div>
@@ -1831,6 +1819,27 @@ function _doShowLevel(level) {
   switchScreen('screen-dashboard');
   const badge = document.getElementById('dash-badge');
   if (badge) badge.textContent = LEVEL_LABELS[level] || level.toUpperCase();
+  updateDashboardGreeting(level);
+}
+
+function updateDashboardGreeting(level) {
+  const titleEl = document.getElementById('dash-title');
+  const subEl = document.getElementById('dash-subtitle');
+  if (!titleEl) return;
+  const name = (studentName || '').trim();
+  const nameHtml = name ? ', <span class="accent">' + name.replace(/[&<>]/g, '') + '</span>' : '';
+  const pct = (window.EB && EB.getLevelPct) ? EB.getLevelPct(level) : 0;
+  const levelName = (LEVEL_LABELS[level] || '').split('·').pop().trim() || level.toUpperCase();
+  let title;
+  if (pct === 0) title = 'Vágjunk bele' + nameHtml + '!';
+  else if (pct >= 100) title = 'Szép munka' + nameHtml + '!';
+  else title = 'Csak így tovább' + nameHtml + '!';
+  titleEl.innerHTML = title;
+  if (subEl) {
+    if (pct === 0) subEl.textContent = levelName + ' szint — kezdd el az első modullal.';
+    else if (pct >= 100) subEl.textContent = levelName + ' · az egész szintet teljesítetted!';
+    else subEl.textContent = levelName + ' · ' + pct + '% kész';
+  }
 }
 
 function showCategoryCurrent(category) {
@@ -2055,6 +2064,7 @@ function logout() {
       var key = el.getAttribute('data-eb-chip'); var m = key.match(/^cat:(.+)$/); if (!m) return;
       renderChipInto(el, EB.getCategoryPct(level, m[1]));
     });
+    if (typeof updateDashboardGreeting === 'function') updateDashboardGreeting(level);
   }
   function _slugFromHref(href, level, category) {
     var file = href.split('/').pop().replace(/\.html.*$/, '');
