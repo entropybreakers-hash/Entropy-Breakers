@@ -20,6 +20,7 @@ BODY_TAGS = [
     '<script src="assets/eb-progress.js" defer></script>',
     '<script src="assets/eb-catalog.js" defer></script>',
     '<script src="assets/eb-sync.js" defer></script>',
+    '<script src="assets/eb-speak.js" defer></script>',
 ]
 
 def src_of(tag):
