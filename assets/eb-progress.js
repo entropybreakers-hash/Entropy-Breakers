@@ -156,11 +156,18 @@
     if (!all.levels[level] || !all.levels[level][category]) return [];
     return Object.keys(all.levels[level][category]);
   }
+  // Category progress = how much of the category is completed (modules
+  // attempted at least once) — not the average score. A finished
+  // category reads 100%, which keeps the dashboard motivating.
   function getCategoryPct(level, category) {
     var slugs = _moduleSlugsFor(level, category);
     if (!slugs.length) return 0;
-    var sum = 0; for (var i = 0; i < slugs.length; i++) { var m = getModule(level, category, slugs[i]); sum += m ? m.best : 0; }
-    return Math.round(sum / slugs.length);
+    var done = 0;
+    for (var i = 0; i < slugs.length; i++) {
+      var m = getModule(level, category, slugs[i]);
+      if (m && (m.attempts || 0) > 0) done++;
+    }
+    return Math.round(done / slugs.length * 100);
   }
   function _levelCategories(level) {
     if (_catalog && _catalog[level]) return Object.keys(_catalog[level]);
