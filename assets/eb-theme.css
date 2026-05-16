@@ -460,27 +460,87 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   .eb-animate-pop, .eb-animate-up { animation: none !important; }
 }
 
-/* ── Weekly results section ───────────────────────────────────── */
-.eb-results-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 16px;
-  padding: 10px 22px;
+/* ── Results — dashboard entry card (distinct from learning categories) ── */
+.eb-results-card {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  margin-top: 14px;
+  padding: 16px 18px;
   border: 1px solid var(--eb-track-strong);
-  border-radius: var(--eb-radius-full);
-  background: var(--eb-bg);
-  color: var(--eb-ink-2);
-  font-family: var(--eb-font); font-size: 13px; font-weight: 600;
-  letter-spacing: 0.04em; cursor: pointer;
-  transition: border-color .18s var(--eb-ease), color .18s var(--eb-ease), transform .18s var(--eb-ease), box-shadow .18s var(--eb-ease);
+  border-radius: var(--eb-radius-lg);
+  background: transparent;
+  font-family: var(--eb-font); text-align: left; cursor: pointer;
+  transition: border-color .2s var(--eb-ease), transform .22s var(--eb-ease),
+              box-shadow .28s var(--eb-ease), background .2s var(--eb-ease);
 }
-.eb-results-btn:hover {
-  border-color: var(--eb-orange);
+.eb-results-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,122,46,0.5);
+  background: var(--eb-bg);
+  box-shadow: 0 14px 30px rgba(209,74,0,0.13);
+}
+.eb-results-card:active { transform: translateY(-1px); }
+.eb-results-card-icon {
+  width: 46px; height: 46px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--eb-radius-md);
+  border: 1px solid var(--eb-track-strong);
   color: var(--eb-orange-2);
-  transform: translateY(-2px);
-  box-shadow: var(--eb-shadow-sm);
+}
+.eb-results-card-icon svg { width: 22px; height: 22px; }
+.eb-results-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.eb-results-card-name {
+  font-family: var(--eb-font-display);
+  font-size: 18px; font-weight: 500; color: var(--eb-ink); letter-spacing: -0.01em;
+}
+.eb-results-card-desc { font-size: 12.5px; color: var(--eb-ink-dim); }
+.eb-results-card-arrow {
+  font-size: 18px; color: var(--eb-ink-dim);
+  transition: transform .2s var(--eb-ease), color .2s var(--eb-ease);
+}
+.eb-results-card:hover .eb-results-card-arrow { transform: translateX(3px); color: var(--eb-orange-2); }
+
+.eb-results {
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 680px; margin-left: auto; margin-right: auto;
 }
 
-.eb-results { display: flex; flex-direction: column; gap: 12px; }
+/* ── Results page — week-over-week charts ────────────────────── */
+.eb-chart-card {
+  padding: 18px 18px 14px;
+  background: var(--eb-bg);
+  border: 1px solid var(--eb-track);
+  border-radius: var(--eb-radius-md);
+  box-shadow: var(--eb-shadow-sm);
+}
+.eb-chart-title {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 10px;
+}
+.eb-chart-name {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--eb-ink-dim);
+}
+.eb-chart-trend { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.eb-chart-trend-up { color: var(--eb-green); }
+.eb-chart-trend-down { color: var(--eb-orange-2); }
+.eb-chart-trend-flat { color: var(--eb-ink-dim); }
+.eb-chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.eb-chart-grid { stroke: var(--eb-track-strong); stroke-width: 1; }
+.eb-chart-axis { fill: var(--eb-ink-dim); font-size: 9px; font-family: var(--eb-font); }
+.eb-chart-line {
+  fill: none; stroke: var(--eb-orange-2); stroke-width: 2.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.eb-chart-dot { fill: #fff; stroke: var(--eb-orange-2); stroke-width: 2; }
+.eb-chart-bar { fill: url(#ebBarGrad); }
+.eb-chart-val { fill: var(--eb-ink-2); font-size: 9px; font-weight: 700; font-family: var(--eb-font); }
+.eb-chart-note {
+  margin-top: 8px; font-size: 11.5px; color: var(--eb-ink-dim); text-align: center;
+}
+.eb-results-subhead {
+  margin-top: 8px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--eb-ink-dim);
+}
 
 .eb-results-summary { display: flex; gap: 12px; margin-bottom: 4px; }
 .eb-results-stat {
