@@ -526,8 +526,6 @@ main{
   transform:translateY(-2px);
 }
 .login-btn:active{transform:translateY(0) scale(.98)}
-.login-btn-arrow{width:18px;height:18px;flex:none;transition:transform .2s var(--ease-out)}
-.login-btn:hover .login-btn-arrow{transform:translateX(3px)}
 
 .login-error{
   color:#d9534f;
@@ -994,7 +992,7 @@ main{
         <input type="text" id="name-input" class="login-input" placeholder="Írd be a neved" autocomplete="off">
         <input type="password" id="passcode-input" class="login-input" placeholder="Jelszó" autocomplete="current-password">
         <div id="login-error" class="login-error"></div>
-        <button type="button" class="login-btn" onclick="login()">Kezdés <svg class="login-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 5l7 7-7 7"/></svg></button>
+        <button type="button" class="login-btn" onclick="login()">Kezdés</button>
       </div>
     </div>
 
