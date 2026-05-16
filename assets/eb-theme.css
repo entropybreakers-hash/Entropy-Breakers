@@ -594,3 +594,21 @@ body.eb-cat-vocab .flip-back .face-example-hu {
   border-radius: var(--eb-radius-md);
   font-size: 14px; line-height: 1.65; color: var(--eb-ink-dim);
 }
+
+/* ── Pronunciation (text-to-speech) button ────────────────────── */
+.eb-speak-btn {
+  position: absolute; top: 12px; right: 12px; z-index: 5;
+  width: 38px; height: 38px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: var(--eb-radius-full);
+  background: rgba(255,255,255,0.92);
+  color: var(--eb-orange-2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .18s var(--eb-ease-bounce), background .18s var(--eb-ease), color .18s var(--eb-ease);
+}
+.eb-speak-btn svg { width: 20px; height: 20px; }
+.eb-speak-btn:hover { transform: scale(1.08); }
+.eb-speak-btn.eb-speak-active {
+  background: var(--eb-orange); color: #fff; transform: scale(1.14);
+}
