@@ -237,9 +237,15 @@
   transition: transform .25s var(--eb-ease-bounce);
 }
 .eb-heatmap-light .eb-heatmap-cell { background: rgba(26,22,18,0.05); }
-.eb-heatmap-cell[data-level="1"] { background: rgba(255,122,46,0.35); }
-.eb-heatmap-cell[data-level="2"] { background: rgba(255,122,46,0.65); }
-.eb-heatmap-cell[data-level="3"] { background: var(--eb-orange); }
+.eb-heatmap-cell[data-level="1"],
+.eb-heatmap-light .eb-heatmap-cell[data-level="1"],
+.screen.white-bg .eb-heatmap-cell[data-level="1"] { background: rgba(255,122,46,0.40); }
+.eb-heatmap-cell[data-level="2"],
+.eb-heatmap-light .eb-heatmap-cell[data-level="2"],
+.screen.white-bg .eb-heatmap-cell[data-level="2"] { background: rgba(255,122,46,0.70); }
+.eb-heatmap-cell[data-level="3"],
+.eb-heatmap-light .eb-heatmap-cell[data-level="3"],
+.screen.white-bg .eb-heatmap-cell[data-level="3"] { background: var(--eb-orange); }
 .eb-heatmap-cell[data-today="1"] {
   box-shadow: 0 0 0 2px var(--eb-orange), 0 0 18px rgba(255,122,46,0.55);
   height: 28px;
