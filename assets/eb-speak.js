@@ -22,9 +22,10 @@
   function pickVoice() {
     var vs = synth.getVoices() || [];
     if (!vs.length) return;
+    function lang(v) { return (v.lang || '').toLowerCase().replace('_', '-'); }
     function byPrefix(p) {
       for (var i = 0; i < vs.length; i++) {
-        if ((vs[i].lang || '').toLowerCase().replace('_', '-').indexOf(p) === 0) return vs[i];
+        if (lang(vs[i]).indexOf(p) === 0) return vs[i];
       }
       return null;
     }
@@ -39,11 +40,16 @@
     if (!text) return;
     text = String(text).trim();
     if (!text || text === '—') return;
+    // Re-pick at speak time: at page load getVoices() is often still
+    // empty, so without this the engine falls back to the system
+    // default voice — which on a Hungarian Mac reads English text
+    // with Hungarian phonetics.
+    if (!voice) pickVoice();
     try {
       synth.cancel();
       var u = new SpeechSynthesisUtterance(text);
-      u.lang = LANG;
-      if (voice) u.voice = voice;
+      if (voice) { u.voice = voice; u.lang = voice.lang || LANG; }
+      else { u.lang = LANG; }
       u.rate = 0.95;
       synth.speak(u);
     } catch (e) {}
