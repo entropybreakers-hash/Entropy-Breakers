@@ -512,8 +512,11 @@ let isFlipped = false;
     studentName = decodeURIComponent(urlName);
   } else {
     // No name = send them back to login
-    window.location.href = 'index.html';
-    return;
+    try { studentName = (localStorage.getItem('eb.student') || '').trim(); } catch(e) {}
+    if (!studentName) {
+      window.location.href = 'index.html';
+      return;
+    }
   }
   document.getElementById('nav-name').textContent = studentName;
 

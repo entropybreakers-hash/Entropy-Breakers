@@ -423,8 +423,11 @@ let cardList = [];
   const params = new URLSearchParams(window.location.search);
   studentName = params.get('name') || '';
   if (!studentName) {
-    window.location.href = 'index.html';
-    return;
+    try { studentName = (localStorage.getItem('eb.student') || '').trim(); } catch(e) {}
+    if (!studentName) {
+      window.location.href = 'index.html';
+      return;
+    }
   }
   document.getElementById('nav-name').textContent = studentName;
 
