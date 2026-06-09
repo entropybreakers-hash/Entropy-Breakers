@@ -1668,6 +1668,24 @@ function verifyAccess(name, force) {
   });
 }
 
+// Cross-user pollution guard: localStorage progress is per-device.
+// If a different student previously used this browser, reset before
+// the new student's data is pulled in — otherwise their progress
+// silently merges with the new student's record on the next push.
+function _claimDeviceForStudent(name) {
+  try {
+    var norm = String(name || '').trim().toLowerCase();
+    if (!norm) return;
+    var prev = localStorage.getItem('eb.owner');
+    if (prev && prev !== norm) {
+      if (window.EB && EB.reset) EB.reset();
+      localStorage.removeItem('eb.access');
+      localStorage.removeItem('eb.nav');
+    }
+    localStorage.setItem('eb.owner', norm);
+  } catch (e) {}
+}
+
 function initApp() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -1681,6 +1699,7 @@ function initApp() {
         try { localStorage.removeItem('eb.student'); } catch(e) {}
         return;
       }
+      _claimDeviceForStudent(name);
       studentName = name;
       try { localStorage.setItem('eb.student', name); } catch(e) {}
       showLevelSelect();
@@ -1765,6 +1784,7 @@ function login() {
       errorEl.classList.add('show');
       return;
     }
+    _claimDeviceForStudent(name);
     studentName = name;
     try { localStorage.setItem('eb.student', name); } catch(e) {}
     showLevelSelect();
@@ -1903,7 +1923,12 @@ function showResults() {
 
 function logout() {
   studentName = '';
-  try { localStorage.removeItem('eb.student'); } catch(e) {}
+  try {
+    localStorage.removeItem('eb.student');
+    localStorage.removeItem('eb.owner');
+    localStorage.removeItem('eb.access');
+    if (window.EB && EB.reset) EB.reset();
+  } catch(e) {}
   currentLevel = '';
   currentCategory = '';
   document.getElementById('name-input').value = '';
