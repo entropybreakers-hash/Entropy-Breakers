@@ -1881,6 +1881,15 @@ function showCategory(level, category) {
 
     if (window.ebObserveReveal) window.ebObserveReveal();
 
+    // Belt-and-suspenders: IntersectionObserver sometimes fails to fire
+    // for elements that were inside a display:none ancestor at the time
+    // they were observed (especially on mobile after a screen switch).
+    // Force-reveal anything in the now-visible section so the modules
+    // never get stuck at opacity:0.
+    document.querySelectorAll(
+      '.category-section[data-level="' + level + '"][data-category="' + category + '"] [data-eb-reveal]'
+    ).forEach(function (el) { el.classList.add('eb-revealed'); });
+
     // Stagger animation for module items
     const visibleSection = document.querySelector('.category-section[style*="block"]');
     if (visibleSection) {
